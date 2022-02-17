@@ -32,7 +32,7 @@
 <A
  HREF="node2.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html72"
+<A ID="tex2html74"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,7 +42,7 @@
  HREF="node2.html">Writing C++ device driver</A>
 <B> Previous:</B> <A
  HREF="node2.html">Writing C++ device driver</A>
- &nbsp; <B>  <A ID="tex2html73"
+ &nbsp; <B>  <A ID="tex2html75"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -51,22 +51,20 @@
 <H1><A ID="SECTION00210000000000000000">
 Introduction</A>
 </H1>
-Fig.&nbsp;<A HREF="node2.html#timing">1.1</A> shows the basic dataflow and how event timing
-is established. While it's obvious that data needs to flow
-from/to the hardware it's even more important to guarantee
-its timing. On the hardware-side the timing is guaranteed
-by event signals, data-ready signals and also by the timing
-of a serial interface. The Linux kernel translates this
-timing info into blocking I/O on pseudo filesystems such as /dev or /sys
-which means that a read
-operation blocks till data has arrived or an event has
-happened. Some low level libraries such as pigpio
-translate them back into callbacks but generally that
-needs to be done by you within a C++ class.
+Fig.&nbsp;<A HREF="node2.html#timing">1.1</A> shows the basic dataflow and how event timing is
+established. While it's obvious that data needs to flow from/to the
+hardware it's even more important to guarantee its timing in realtime
+applications. On the hardware-side the timing is guaranteed by event
+signals, data-ready signals and also by the timing of a serial
+interface. The Linux kernel translates this timing info into blocking
+I/O on pseudo filesystems such as /dev or /sys which means that a read
+operation blocks till data has arrived or an event has happened. Some
+low level libraries such as pigpio translate them back into callbacks
+but generally that needs to be done by you within a C++ class.
 
 <P>
-This lecture focusses on you writing your own C++ class hiding away
-the complexity (and messy) low level C APIs and raw device
+This chapter focuses on writing your own C++ class hiding away
+the complexity (and messy) low level C APIs and/or raw device
 access to /dev and /sys.
 
 <P>

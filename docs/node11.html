@@ -32,7 +32,7 @@
 <A
  HREF="node10.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html106"
+<A ID="tex2html108"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,7 +42,7 @@
  HREF="node10.html">Access GPIO pins</A>
 <B> Previous:</B> <A
  HREF="node10.html">Access GPIO pins</A>
- &nbsp; <B>  <A ID="tex2html107"
+ &nbsp; <B>  <A ID="tex2html109"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -53,17 +53,15 @@
 </H3>
 The GPIO of the raspberry PI can easily be controlled via
 the /sys filesystem. This is slow but good for
-debugging as you can directly write a numerical
-&ldquo;0&rdquo; or &ldquo;1&rdquo; to it and print the result. The
+debugging as you can directly write a
+&ldquo;0&rdquo; or &ldquo;1&rdquo; string to it and print the result. The
 pseudo files are here:
 <PRE>
 /sys/class/gpio
 </PRE>
-
-<P>
-/sys contains files which directly relate to individual pins.
+which contains files which directly relate to individual pins.
 To be able to access a pin we need to tell Linux to make
-is visible:
+it visible:
 <PRE>
 /sys/class/gpio/export
 </PRE>
@@ -77,6 +75,8 @@ Then reading from
 </PRE>
 would give you the status of GPIO pin 5 and writing
 to it would change it.
+A thin wrapper around the GPIO sys filesystem is here: <kbd><A ID="tex2html7"
+  HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>.
 
 <P>
 <BR><HR>
@@ -84,7 +84,7 @@ to it would change it.
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html108"
+<LI><A ID="tex2html110"
   HREF="node12.html">GPIO interrupt handling via /sys</A>
 </UL>
 <!--End of Table of Child-Links-->

@@ -31,7 +31,7 @@
 <A
  HREF="node13.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html114"
+<A ID="tex2html116"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -41,7 +41,7 @@
  HREF="node13.html">pigpio</A>
 <B> Previous:</B> <A
  HREF="node13.html">pigpio</A>
- &nbsp; <B>  <A ID="tex2html115"
+ &nbsp; <B>  <A ID="tex2html117"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -50,10 +50,19 @@
 <H4><A ID="SECTION00233210000000000000">
 interrupt handling via pigpio</A>
 </H4>
-pigpio can call a function whenever a change has occurred on a GPIO pin.
-A function of the form:
-&ldquo;static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)&rdquo;
-can be registered with pigpio:
+pigpio manages GPIO interrupt handling by wrapping all the above
+functionality into a single command where the client registers a
+callback function which is called whenever a change has occurred on a
+GPIO pin.
+Specifically a method of the form:
+<PRE>
+class mySensorClass {
+  ...
+  static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)
+  ...
+}
+</PRE>
+is registered with pigpio:
 <PRE>
 gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
 </PRE>
@@ -64,14 +73,13 @@ class LSM9DS1 {
   void dataReady();
   static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
     {
-      if (level) {
         ((LSM9DS1*)userdata)-&gt;dataReady();
-      }
     }
 };
 </PRE>
-See <kbd><A ID="tex2html7"
-  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library</A></kbd> for the code.
+where here within the static function the void pointer is cast back into the instance pointer.
+See <kbd><A ID="tex2html9"
+  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library</A></kbd> for the complete code.
 
 <P>
 <BR><HR>

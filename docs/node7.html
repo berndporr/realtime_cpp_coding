@@ -32,7 +32,7 @@
 <A
  HREF="node6.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html92"
+<A ID="tex2html94"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,7 +42,7 @@
  HREF="node5.html">Low level userspace device</A>
 <B> Previous:</B> <A
  HREF="node6.html">SPI</A>
- &nbsp; <B>  <A ID="tex2html93"
+ &nbsp; <B>  <A ID="tex2html95"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -53,7 +53,7 @@ I2C</A>
 </H2>
 The I2C bus has two signal lines (SDA &amp; SDL) which must be pulled up
 by resistors. Every I2C device has an address on the bus. You can scan
-a bus with the &ldquo;i2cdetect&rdquo; (part of the i2c-tools package):
+a bus with &ldquo;i2cdetect&rdquo; (part of the i2c-tools package):
 <PRE>
 root@raspberrypi:/home/pi# i2cdetect -y 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -67,8 +67,8 @@ root@raspberrypi:/home/pi# i2cdetect -y 1
 70: -- -- -- -- -- -- -- --                         
 root@raspberrypi:/home/pi#
 </PRE>
-In this case there are 3 I2C devices on the bus at addresses
-1E, 58 and 6B. The address needs to be specified when
+In this case there are 3 I2C devices on the I2C bus at addresses
+1E, 58 and 6B and need to be specified when
 accessing the I2C device.
 
 <P>
@@ -77,9 +77,9 @@ accessing the I2C device.
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html94"
+<LI><A ID="tex2html96"
   HREF="node8.html">Raw /dev/i2c access</A>
-<LI><A ID="tex2html95"
+<LI><A ID="tex2html97"
   HREF="node9.html">I2C access via pigpio</A>
 </UL>
 <!--End of Table of Child-Links-->

@@ -32,7 +32,7 @@
 <A
  HREF="node5.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html90"
+<A ID="tex2html92"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,7 +42,7 @@
  HREF="node5.html">Low level userspace device</A>
 <B> Previous:</B> <A
  HREF="node5.html">Low level userspace device</A>
- &nbsp; <B>  <A ID="tex2html91"
+ &nbsp; <B>  <A ID="tex2html93"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,7 +52,7 @@
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="131"></A>
+  <A ID="133"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 1.1:</STRONG>
 SPI modes</CAPTION>
@@ -84,25 +84,30 @@ SPI modes</CAPTION>
 </TABLE>
 </DIV>
 <BR>
+SPI is a protocol which usually transmits and receives at the same
+time. Even that data might not be used it needs to be matched up. So
+for example sending 8 byes and recieving 8 bytes at the same time.
+
+<P>
 Transfer to/from SPI is best managed by the low level access to /dev.
-Open the SPI device with the standard file operations:
+Open the SPI device with the standard open() function:
 <PRE>
-fd = open(spiDevice, O_RDWR);
+int fd = open( "/dev/spidev0.0", O_RDWR);
 </PRE>
 
 <P>
-Then it's important to set the SPI mode (see table.&nbsp;<A HREF="#spimodes">1.1</A>):
+Then set the SPI mode (see table.&nbsp;<A HREF="#spimodes">1.1</A>):
 <PRE>
-ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);
+int ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);
 </PRE>
-which are explained, for example, here:
-<kbd><A ID="tex2html3"
+which is explained, for example, here:
+<kbd><A ID="tex2html4"
   HREF="https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html">https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html</A></kbd>.
 
 <P>
-SPI transmits and receives at the same time so we need to
-use ioctl to do the communication. There is a special structure
-which needs to be filled:
+Since SPI transmits and receives at the same time we need to
+use ioctl to do the communication.
+Populate this struct:
 <PRE>
 struct spi_ioc_transfer tr = {
   .tx_buf = (unsigned long)tx1,
@@ -117,32 +122,24 @@ which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with
 same length.
 
 <P>
-Then open the SPI device in the /dev filesystem:
-<PRE>
-fd = open( "/dev/spidev0.0", O_RDWR);
-</PRE>
-
-<P>
 Reading and simultaneous writing is happening then via the ioctrl
 function:
 <PRE>
-ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
-if (ret &lt; 1)
-  pabort("can't send spi message");
+int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
 </PRE>
 
 <P>
 Sometimes the SPI protocol of a chip is so odd that even the raw
 I/O via /dev won't work and you need to write your own bit banging
 interface, for example done here for the ADC on the alphabot:
-<kbd><A ID="tex2html4"
+<kbd><A ID="tex2html5"
   HREF="https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58">https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58</A></kbd>.
 This is obviously far from ideal as it might require &ldquo;usleep&rdquo; commands
 so that acquisition needs to be run in a separate thread (the alphabot
 uses a timer callback in a separate thread).
 
 <P>
-Overall the SPI protocol is often device dependent and calls often
+Overall the SPI protocol is often device dependent and calls
 for experimentation to get it to work. Often the SPI clock is also
 the ADC conversion clock which requires a longer lasting clock signal
 by transmitting dummy bytes in addition to the payload.
@@ -166,7 +163,7 @@ have their own clock signal.
 <A
  HREF="node5.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html90"
+<A ID="tex2html92"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -176,7 +173,7 @@ have their own clock signal.
  HREF="node5.html">Low level userspace device</A>
 <B> Previous:</B> <A
  HREF="node5.html">Low level userspace device</A>
- &nbsp; <B>  <A ID="tex2html91"
+ &nbsp; <B>  <A ID="tex2html93"
   HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>

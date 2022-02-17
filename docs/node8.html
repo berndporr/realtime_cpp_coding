@@ -32,7 +32,7 @@
 <A
  HREF="node7.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html96"
+<A ID="tex2html98"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,7 +42,7 @@
  HREF="node7.html">I2C</A>
 <B> Previous:</B> <A
  HREF="node7.html">I2C</A>
- &nbsp; <B>  <A ID="tex2html97"
+ &nbsp; <B>  <A ID="tex2html99"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -53,7 +53,7 @@ Raw /dev/i2c access</A>
 </H3>
 I2C either transmits or receives but never at the same time so here we
 can use the standard C read/write commands. However, we need to use ioctrl to tell
-the kernel to which I2C address we are talking:
+the kernel the I2C address:
 <PRE>
 char buf[2];
 int file = open("/dev/i2c-2",O_RDWR);

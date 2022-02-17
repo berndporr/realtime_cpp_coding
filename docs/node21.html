@@ -32,7 +32,7 @@
 <A
  HREF="node20.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html130"
+<A ID="tex2html132"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,7 +42,7 @@
  HREF="node2.html">Writing C++ device driver</A>
 <B> Previous:</B> <A
  HREF="node20.html">Thread with a blocking</A>
- &nbsp; <B>  <A ID="tex2html131"
+ &nbsp; <B>  <A ID="tex2html133"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -51,11 +51,11 @@
 <H1><A ID="SECTION00250000000000000000">
 Kernel driver programming</A>
 </H1>
-
-<P>
-This is beyond the scope of this lecture but we can help you to write
-your own Linux driver if needed. This is for example the case if you
-do high speed data acquisition higher than 10kHz.
+This is beyond the scope of this handout put the best approach is to find a kernel
+driver which does approximately what you want and then modify it for your purposes.
+Kernel drivers then create an special device in /dev or /sys and then your userspace
+C++ can then communicate with it. For example the COMEDI framework for data acquisition
+has many drivers for data acquisition cards and it shows up as /dev/comedi0,1,2 etc.
 
 <P>
 <BR><HR>

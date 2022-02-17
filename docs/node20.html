@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll operation&rdquo;</TITLE>
-<META NAME="description" CONTENT="Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll operation&rdquo;">
+<TITLE>Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll&rdquo; operation</TITLE>
+<META NAME="description" CONTENT="Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll&rdquo; operation">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -31,7 +31,7 @@
 <A
  HREF="node19.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html128"
+<A ID="tex2html130"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -40,21 +40,21 @@
 <B> Up:</B> <A
  HREF="node18.html">Callbacks in C++ sensor</A>
 <B> Previous:</B> <A
- HREF="node19.html">With pigpio library callback</A>
- &nbsp; <B>  <A ID="tex2html129"
+ HREF="node19.html">Creating an callback interface</A>
+ &nbsp; <B>  <A ID="tex2html131"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
 <H2><A ID="SECTION00242000000000000000">
-Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll operation&rdquo;</A>
+Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll&rdquo; operation</A>
 </H2>
 Again we'll be handing the data over via a <SPAN  CLASS="textsl">callback</SPAN> class:
 <PRE>
 class AD7705callback {
 public:
-  virtual void hasSample(int sample) = 0;
+  virtual void hasSample(float sample) = 0;
 };
 </PRE>
 
@@ -85,7 +85,7 @@ abstract callback class and then registers this:
 Finally create a separate thread which runs in a loop
 where the thread is put to sleep either by &ldquo;poll()&rdquo; or &ldquo;read()&rdquo;
 and woken up periodically after a data ready
-signal as been received:
+signal as been received via a GPIO pin:
 <PRE>
   SysGPIO dataReadyGPIO(22);
   int sysfs_fd = dataReadyGPIO.gpio_fd_open();	
@@ -99,7 +99,7 @@ signal as been received:
   close(sysfs_fd);
 </PRE>
 where the GPIO port 22 is monitored for new data by a thin wrapper class for the /sys filesystem
-found here: <kbd><A ID="tex2html10"
+found here: <kbd><A ID="tex2html12"
   HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>. The flag &ldquo;running&rdquo; keeps
 the loop going till the main program stops it by setting it to false and then the thread
 terminates. The thread goes to sleep at &ldquo;gpio_poll&rdquo; and wakes up when the data-ready
@@ -107,7 +107,7 @@ pin triggers GPIO pin 22. Then, the data is read and if the callback has been re
 by the main program &ldquo;hasSample&rdquo; is called.
 
 <P>
-The full example is here: <kbd><A ID="tex2html11"
+The full example is here: <kbd><A ID="tex2html13"
   HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd>.
 
 <P>

@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>With pigpio library callback</TITLE>
-<META NAME="description" CONTENT="With pigpio library callback">
+<TITLE>Creating an callback interface with With pigpio</TITLE>
+<META NAME="description" CONTENT="Creating an callback interface with With pigpio">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -32,7 +32,7 @@
 <A
  HREF="node18.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html126"
+<A ID="tex2html128"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,19 +42,19 @@
  HREF="node18.html">Callbacks in C++ sensor</A>
 <B> Previous:</B> <A
  HREF="node18.html">Callbacks in C++ sensor</A>
- &nbsp; <B>  <A ID="tex2html127"
+ &nbsp; <B>  <A ID="tex2html129"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
 <H2><A ID="SECTION00241000000000000000">
-With pigpio library callback</A>
+Creating an callback interface with With pigpio</A>
 </H2>
-As shown above pipgio provides a callback mechanism for GPIO interrupts
-so that you just need
-to offer that callback to the main program. That's done by a <SPAN  CLASS="textsl">callback</SPAN>
-class or often called &ldquo;interface&rdquo;:
+As shown above pipgio provides a callback mechanism for GPIO
+interrupts so that you just need to offer that callback to the client.
+That's done by a <SPAN  CLASS="textsl">callback</SPAN> class or often called
+&ldquo;interface&rdquo;:
 <PRE>
 class LSM9DS1callback {
 public:
