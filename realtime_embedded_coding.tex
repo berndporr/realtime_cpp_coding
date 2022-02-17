@@ -1,21 +1,34 @@
-\documentclass[12pt]{article}
-
+\documentclass[12pt]{report}
+\usepackage{caption}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\hypersetup{%
+    pdfborder = {0 0 0}
+}
+\hypersetup{
+    colorlinks,
+    citecolor=blue,
+    filecolor=blue,
+    linkcolor=blue,
+    urlcolor=blue
+}
+\renewcommand{\familydefault}{\sfdefault}
+\renewcommand{\captionfont}{\small}
 
 \author{Bernd Porr}
-
-\date{2022}
-
-\title{Lecture 1 - low level userspace device access}
+\title{Realtime embedded coding under Linux}
 
 \begin{document}
 
 \maketitle
 
+\tableofcontents
+
+\chapter{Low level userspace device C++ classes}
+
 \begin{figure}[!hbt]
 \begin{center}
-\mbox{\includegraphics[width=\textwidth]{timing}}
+\mbox{\includegraphics[width=\textwidth]{signals-timings}}
 \end{center}
 \caption{Dataflow and timing in low level realtime coding
 \label{timing}}
@@ -80,8 +93,34 @@ and accelerometer inherits it.
 The following sections provide pointers of how to write
 the C++ driver classes for different hardware protocols.
 
+\begin{table}[!ht]
+  \begin{center}
+  \caption{SPI modes\label{spimodes}}
+  \begin{tabular}{l|l|l|l}
+    SPI Mode & 	CPOL & 	CPHA & Idle state \\
+    \hline
+    0& 	0&	0& 	L \\
+    1& 	0&	1& 	L \\
+    2& 	1&	1& 	H \\
+    3& 	1&	0& 	H \\
+  \end{tabular}
+  \end{center}
+\end{table}
+
 \subsection{SPI}
 Transfer to/from SPI is best managed by the low level access to /dev.
+Open the SPI device with the standard file operations:
+\begin{verbatim}
+fd = open(spiDevice, O_RDWR);
+\end{verbatim}
+
+Then it's important to set the SPI mode (see table.~\ref{spimodes}):
+\begin{verbatim}
+ioctl(fd, SPI_IOC_WR_MODE, &mode);
+\end{verbatim}
+which are explained, for example, here:
+\url{https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html}.
+
 SPI transmits and receives at the same time so we need to
 use ioctl to do the communication. There is a special structure
 which needs to be filled:
@@ -96,8 +135,7 @@ struct spi_ioc_transfer tr = {
 };
 \end{verbatim}
 which points to two character buffers ``tx'' and ``rx'' with the
-same length. See the Linux kernel docs for the other parameters,
-in particular the 4 different modes of SPI.
+same length.
 
 Then open the SPI device in the /dev filesystem:
 \begin{verbatim}
@@ -128,7 +166,7 @@ by transmitting dummy bytes in addition to the payload.
 As a general recommendation do not use SAR converters which use the
 SPI data clock also as acquisition clock as they are often not compatible
 with the standard SPI transfers via /dev. Use sensors or ADCs which
-have their own clock signal and output a data-ready signal.
+have their own clock signal.
 
 
 \subsection{I2C}
@@ -154,7 +192,8 @@ or write commands. Usually the 1st write operation tells the chip
 which register to read or write to.
 
 \subsubsection{I2C access via pigpio}
-Access via pigpio is preferred in contrast to the direct
+Access via pigpio (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
+is preferred in contrast to the direct
 access of the raw /dev/i2c because many different devices
 can be connected to the I2C bus and pigpio manages this.
 Simply install the development package:
@@ -224,7 +263,7 @@ GPIO pin 5. Then the program wakes up and continues.
 \subsubsection{GPIO via pigpio}
 The above section gives you a deep understanding what's happening
 on the /sys - level but it's recommended to
-use the pigpio library \url{http://abyz.me.uk/rpi/pigpio/cif.html}
+use the pigpio library (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
 to read/write to GPIO pins or do interrupt programming.
 
 For example to set GPIO pin 24 as an input just call:
@@ -270,9 +309,93 @@ cat /sys/class/thermal/thermal_zone0/temp
 gives you the temperature of the CPU.
 
 
-\section{Writing a low level data acquisition class with callback}
+
+
+\subsection{I2S: Audio}
+The Linux sound system works packet based where a read command
+returns a chunk of audio or a chunk is written to.
+
+First the parameters are requested and the driver can modify or
+reject them:
+\begin{verbatim}
+/* Signed 16-bit little-endian format */
+  snd_pcm_hw_params_set_format(handle, params,
+                              SND_PCM_FORMAT_S16_LE);
+
+  /* One channel (mono) */
+  snd_pcm_hw_params_set_channels(handle, params, 1);
+
+  /* 44100 bits/second sampling rate (CD quality) */
+  val = 44100;
+  snd_pcm_hw_params_set_rate_near(handle, params,
+                                  &val, &dir);
+\end{verbatim}
+
+Then playing sound is done in an endless loop were a read()
+or write() command is issued. Both are blocking so that
+it needs to run in a thread:
+
+\begin{verbatim}
+while(running) {
+    rc = snd_pcm_writei(handle, buffer, frames);
+    if (rc == -EPIPE) {
+      /* EPIPE means underrun */
+      fprintf(stderr, "underrun occurred\n");
+      snd_pcm_prepare(handle);
+    } else if (rc < 0) {
+      fprintf(stderr,
+              "error from writei: %s\n",
+              snd_strerror(rc));
+    }  else if (rc != (int)frames) {
+      fprintf(stderr,
+              "short write, write %d frames\n", rc);
+    }
+}
+\end{verbatim}
+
+For a full coding example ``aplay'' is a very
+good start or ``arecord''. Both are open source.
+
+
+
+
+\subsection{Accessing physical memory locations (danger!)}
+In case you really need to access registers you can access
+also memory directly. This should only be used as a last resort.
+For example, setting the clock for the AD converter requires
+turning a GPIO pin into a clock output pin. This is not yet
+supported by the drivers so we need to program registers
+on the RPI.
+\begin{itemize}
+\item Linux uses virtual addressed so that a pointer won't
+point to a physical address. It points to three page
+tables with an offset.
+\item Special device /dev/mem which allows access of physical
+memory.
+\item The command ``mmap'' provides a pointer to a physical
+address by opening /dev/mem.
+\item Example:
+\begin{verbatim}
+int *addr;
+if ((fd = open("/dev/mem", O_RDWR|O_SYNC)) < 0 ) {
+    printf("Error opening file. \n");
+    close(fd);
+    return (-1);
+}
+addr = (int *)mmap(0, num*STRUCT_PAGE_SIZE, PROT_READ, MAP_PRIVATE,
+            fd, 0x0000620000000000);
+printf("addr: %p \n",addr);
+printf("addr: %d \n",*addr);
+\end{verbatim}
+\item Use this with care! It's dangerous if not used properly.
+\end{itemize}
+
+
+
+
+\section{Callbacks in C++ sensor classes}
 \subsection{With pigpio library callback}
-As shown above pipgio provides an callback mechanism for GPIO interrupts
+As shown above pipgio provides a callback mechanism for GPIO interrupts
 so that you just need
 to offer that callback to the main program. That's done by a \textsl{callback}
 class or often called ``interface'':
@@ -351,88 +474,7 @@ by the main program ``hasSample'' is called.
 The full example is here: \url{https://github.com/berndporr/rpi_AD7705_daq}.
 
 
-
-
-\subsection{I2S: Audio}
-The Linux sound system works packet based where a read command
-returns a chunk of audio or a chunk is written to.
-
-First the parameters are requested and the driver can modify or
-reject them:
-\begin{verbatim}
-/* Signed 16-bit little-endian format */
-  snd_pcm_hw_params_set_format(handle, params,
-                              SND_PCM_FORMAT_S16_LE);
-
-  /* One channel (mono) */
-  snd_pcm_hw_params_set_channels(handle, params, 1);
-
-  /* 44100 bits/second sampling rate (CD quality) */
-  val = 44100;
-  snd_pcm_hw_params_set_rate_near(handle, params,
-                                  &val, &dir);
-\end{verbatim}
-
-Then playing sound is done in an endless loop were a read()
-or write() command is issued. Both are blocking so that
-it needs to run in a thread:
-
-\begin{verbatim}
-while(running) {
-    rc = snd_pcm_writei(handle, buffer, frames);
-    if (rc == -EPIPE) {
-      /* EPIPE means underrun */
-      fprintf(stderr, "underrun occurred\n");
-      snd_pcm_prepare(handle);
-    } else if (rc < 0) {
-      fprintf(stderr,
-              "error from writei: %s\n",
-              snd_strerror(rc));
-    }  else if (rc != (int)frames) {
-      fprintf(stderr,
-              "short write, write %d frames\n", rc);
-    }
-}
-\end{verbatim}
-
-For a full coding example ``aplay'' is a very
-good start or ``arecord''. Both are open source.
-
-
-
-
-\subsection{Accessing physical memory locations via mmap (danger!)}
-In case you really need to access registers you can access
-also memory directly. This should only be used as a last resort.
-For example, setting the clock for the AD converter requires
-turning a GPIO pin into a clock output pin. This is not yet
-supported by the drivers so we need to program registers
-on the RPI.
-\begin{itemize}
-\item Linux uses virtual addressed so that a pointer won't
-point to a physical address. It points to three page
-tables with an offset.
-\item Special device /dev/mem which allows access of physical
-memory.
-\item The command ``mmap'' provides a pointer to a physical
-address by opening /dev/mem.
-\item Example:
-\begin{verbatim}
-int *addr;
-if ((fd = open("/dev/mem", O_RDWR|O_SYNC)) < 0 ) {
-    printf("Error opening file. \n");
-    close(fd);
-    return (-1);
-}
-addr = (int *)mmap(0, num*STRUCT_PAGE_SIZE, PROT_READ, MAP_PRIVATE,
-            fd, 0x0000620000000000);
-printf("addr: %p \n",addr);
-printf("addr: %d \n",*addr);
-\end{verbatim}
-\item Use this with care! It's dangerous if not used properly.
-\end{itemize}
-
-\subsection{Kernel driver programming}
+\section{Kernel driver programming}
 
 This is beyond the scope of this lecture but we can help you to write
 your own Linux driver if needed. This is for example the case if you
