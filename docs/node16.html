@@ -32,7 +32,7 @@
 <A
  HREF="node15.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html116"
+<A ID="tex2html118"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,7 +42,7 @@
  HREF="node5.html">Low level userspace device</A>
 <B> Previous:</B> <A
  HREF="node15.html">Access to hardware via</A>
- &nbsp; <B>  <A ID="tex2html117"
+ &nbsp; <B>  <A ID="tex2html119"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -51,7 +51,11 @@
 <H2><A ID="SECTION00235000000000000000">
 I2S: Audio</A>
 </H2>
-The Linux sound system works packet based where a read command
+The standard framework is alsa: <kbd><A ID="tex2html8"
+  HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
+
+<P>
+ALSA works packet based where a read command
 returns a chunk of audio or a chunk is written to.
 
 <P>
@@ -60,7 +64,7 @@ reject them:
 <PRE>
 /* Signed 16-bit little-endian format */
   snd_pcm_hw_params_set_format(handle, params,
-                              SND_PCM_FORMAT_S16_LE);
+                               SND_PCM_FORMAT_S16_LE);
 
   /* One channel (mono) */
   snd_pcm_hw_params_set_channels(handle, params, 1);
@@ -97,7 +101,9 @@ while(running) {
 
 <P>
 For a full coding example &ldquo;aplay&rdquo; is a very
-good start or &ldquo;arecord&rdquo;. Both are open source.
+good start or &ldquo;arecord&rdquo; which can be found here:
+<kbd><A ID="tex2html9"
+  HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
 
 <P>
 <BR><HR>

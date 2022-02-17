@@ -31,7 +31,7 @@
 <A
  HREF="node19.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html126"
+<A ID="tex2html128"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -41,7 +41,7 @@
  HREF="node18.html">Callbacks in C++ sensor</A>
 <B> Previous:</B> <A
  HREF="node19.html">With pigpio library callback</A>
- &nbsp; <B>  <A ID="tex2html127"
+ &nbsp; <B>  <A ID="tex2html129"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -99,7 +99,7 @@ signal as been received:
   close(sysfs_fd);
 </PRE>
 where the GPIO port 22 is monitored for new data by a thin wrapper class for the /sys filesystem
-found here: <kbd><A ID="tex2html8"
+found here: <kbd><A ID="tex2html10"
   HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>. The flag &ldquo;running&rdquo; keeps
 the loop going till the main program stops it by setting it to false and then the thread
 terminates. The thread goes to sleep at &ldquo;gpio_poll&rdquo; and wakes up when the data-ready
@@ -107,7 +107,7 @@ pin triggers GPIO pin 22. Then, the data is read and if the callback has been re
 by the main program &ldquo;hasSample&rdquo; is called.
 
 <P>
-The full example is here: <kbd><A ID="tex2html9"
+The full example is here: <kbd><A ID="tex2html11"
   HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd>.
 
 <P>

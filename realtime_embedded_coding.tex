@@ -275,7 +275,7 @@ if (fdset[0].revents & POLLPRI) {
 makes the program go to sleep until an interrupt has occurred on
 GPIO pin 5. Then the program wakes up and continues.
 
-\subsubsection{GPIO via pigpio}
+\subsubsection{pigpio}
 The above section gives you a deep understanding what's happening
 on the /sys - level but it's recommended to
 use the pigpio library (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
@@ -291,7 +291,7 @@ To read from GPIO pin 24 just call:
 int a = gpioRead(24)
 \end{verbatim}
 
-\subsubsection{GPIO interrupt handling via pigpio}
+\paragraph{interrupt handling via pigpio}
 pigpio can call a function whenever a change has occurred on a GPIO pin.
 A function of the form:
 ``static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)''
@@ -327,7 +327,9 @@ gives you the temperature of the CPU.
 
 
 \subsection{I2S: Audio}
-The Linux sound system works packet based where a read command
+The standard framework is alsa: \url{https://github.com/alsa-project}.
+
+ALSA works packet based where a read command
 returns a chunk of audio or a chunk is written to.
 
 First the parameters are requested and the driver can modify or
@@ -335,7 +337,7 @@ reject them:
 \begin{verbatim}
 /* Signed 16-bit little-endian format */
   snd_pcm_hw_params_set_format(handle, params,
-                              SND_PCM_FORMAT_S16_LE);
+                               SND_PCM_FORMAT_S16_LE);
 
   /* One channel (mono) */
   snd_pcm_hw_params_set_channels(handle, params, 1);
@@ -369,7 +371,8 @@ while(running) {
 \end{verbatim}
 
 For a full coding example ``aplay'' is a very
-good start or ``arecord''. Both are open source.
+good start or ``arecord'' which can be found here:
+\url{https://github.com/alsa-project}.
 
 
 
