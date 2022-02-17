@@ -51,6 +51,39 @@
 <H2><A ID="SECTION00231000000000000000">
 SPI</A>
 </H2>
+<BR>  <DIV class="CENTER">
+  <A ID="129"></A>
+<TABLE class="PAD  BORDER" style="">
+<CAPTION><STRONG>Table 1.1:</STRONG>
+SPI modes</CAPTION>
+<TR><TD CLASS="LEFT">SPI Mode</TD>
+<TD CLASS="LEFT">CPOL</TD>
+<TD CLASS="LEFT">CPHA</TD>
+<TD CLASS="LEFT">Idle state</TD>
+</TR>
+<TR><TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">L</TD>
+</TR>
+<TR><TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">L</TD>
+</TR>
+<TR><TD CLASS="LEFT">2</TD>
+<TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">H</TD>
+</TR>
+<TR><TD CLASS="LEFT">3</TD>
+<TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">H</TD>
+</TR>
+</TABLE>
+</DIV>
+<BR>
 Transfer to/from SPI is best managed by the low level access to /dev.
 Open the SPI device with the standard file operations:
 <PRE>

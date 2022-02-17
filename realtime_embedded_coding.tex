@@ -93,6 +93,7 @@ and accelerometer inherits it.
 The following sections provide pointers of how to write
 the C++ driver classes for different hardware protocols.
 
+\subsection{SPI}
 \begin{table}[!ht]
   \begin{center}
   \caption{SPI modes\label{spimodes}}
@@ -106,8 +107,6 @@ the C++ driver classes for different hardware protocols.
   \end{tabular}
   \end{center}
 \end{table}
-
-\subsection{SPI}
 Transfer to/from SPI is best managed by the low level access to /dev.
 Open the SPI device with the standard file operations:
 \begin{verbatim}
