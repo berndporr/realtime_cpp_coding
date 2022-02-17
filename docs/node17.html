@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>Accessing physical memory locations (danger!)</TITLE>
+<META NAME="description" CONTENT="Accessing physical memory locations (danger!)">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="previous" HREF="node16.html">
+<LINK REL="next" HREF="node18.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node18.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node5.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node16.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html118"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node18.html">Callbacks in C++ sensor</A>
+<B> Up:</B> <A
+ HREF="node5.html">Low level userspace device</A>
+<B> Previous:</B> <A
+ HREF="node16.html">I2S: Audio</A>
+ &nbsp; <B>  <A ID="tex2html119"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION00236000000000000000">
+Accessing physical memory locations (danger!)</A>
+</H2>
+In case you really need to access registers you can access
+also memory directly. This should only be used as a last resort.
+For example, setting the clock for the AD converter requires
+turning a GPIO pin into a clock output pin. This is not yet
+supported by the drivers so we need to program registers
+on the RPI.
+
+<UL>
+<LI>Linux uses virtual addressed so that a pointer won't
+point to a physical address. It points to three page
+tables with an offset.
+</LI>
+<LI>Special device /dev/mem which allows access of physical
+memory.
+</LI>
+<LI>The command &ldquo;mmap&rdquo; provides a pointer to a physical
+address by opening /dev/mem.
+</LI>
+<LI>Example:
+<PRE>
+int *addr;
+if ((fd = open("/dev/mem", O_RDWR|O_SYNC)) &lt; 0 ) {
+    printf("Error opening file. \n");
+    close(fd);
+    return (-1);
+}
+addr = (int *)mmap(0, num*STRUCT_PAGE_SIZE, PROT_READ, MAP_PRIVATE,
+            fd, 0x0000620000000000);
+printf("addr: %p \n",addr);
+printf("addr: %d \n",*addr);
+</PRE>
+</LI>
+<LI>Use this with care! It's dangerous if not used properly.
+</LI>
+</UL>
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/realtime_embedded_coding">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

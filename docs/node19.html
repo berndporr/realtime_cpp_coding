@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>With pigpio library callback</TITLE>
+<META NAME="description" CONTENT="With pigpio library callback">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="next" HREF="node20.html">
+<LINK REL="previous" HREF="node18.html">
+<LINK REL="next" HREF="node20.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node20.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node18.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node18.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html124"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node20.html">Thread with a blocking</A>
+<B> Up:</B> <A
+ HREF="node18.html">Callbacks in C++ sensor</A>
+<B> Previous:</B> <A
+ HREF="node18.html">Callbacks in C++ sensor</A>
+ &nbsp; <B>  <A ID="tex2html125"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION00241000000000000000">
+With pigpio library callback</A>
+</H2>
+As shown above pipgio provides a callback mechanism for GPIO interrupts
+so that you just need
+to offer that callback to the main program. That's done by a <SPAN  CLASS="textsl">callback</SPAN>
+class or often called &ldquo;interface&rdquo;:
+<PRE>
+class LSM9DS1callback {
+public:
+        virtual void hasSample(LSM9DS1Sample sample) = 0;
+};
+</PRE>
+
+<P>
+The main program then implements the abstract method &ldquo;hasSample()&rdquo;, instantiates
+the class and then saves its pointer in the driver class, here called &ldquo;lsm9ds1Callback&rdquo;.
+The pigpio callback then simply calls the method &ldquo;hasSample()&rdquo;:
+<PRE>
+void LSM9DS1::dataReady() {
+  LSM9DS1Sample sample;
+  // fills the sample struct with data
+  // ...
+  lsm9ds1Callback-&gt;hasSample(sample);
+}
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/realtime_embedded_coding">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>Introduction</TITLE>
+<META NAME="description" CONTENT="Introduction">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="next" HREF="node4.html">
+<LINK REL="previous" HREF="node2.html">
+<LINK REL="next" HREF="node4.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html71"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node4.html">General recommendations how to</A>
+<B> Up:</B> <A
+ HREF="node2.html">Writing C++ device driver</A>
+<B> Previous:</B> <A
+ HREF="node2.html">Writing C++ device driver</A>
+ &nbsp; <B>  <A ID="tex2html72"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A ID="SECTION00210000000000000000">
+Introduction</A>
+</H1>
+Fig.&nbsp;<A HREF="node2.html#timing">1.1</A> shows the basic dataflow and how event timing
+is established. While it's obvious that data needs to flow
+from/to the hardware it's even more important to guarantee
+its timing. On the hardware-side the timing is guaranteed
+by event signals, data-ready signals and also by the timing
+of a serial interface. The Linux kernel translates this
+timing info into blocking I/O on pseudo filesystems such as /dev or /sys
+which means that a read
+operation blocks till data has arrived or an event has
+happened. Some low level libraries such as pigpio
+translate them back into callbacks but generally that
+needs to be done by you within a C++ class.
+
+<P>
+This lecture focusses on you writing your own C++ class hiding away
+the complexity (and messy) low level C APIs and raw device
+access to /dev and /sys.
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/realtime_embedded_coding">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

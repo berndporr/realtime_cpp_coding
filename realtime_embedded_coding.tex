@@ -24,7 +24,7 @@
 
 \tableofcontents
 
-\chapter{Low level userspace device C++ classes}
+\chapter{Writing C++ device driver classes}
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -170,26 +170,41 @@ have their own clock signal.
 
 
 \subsection{I2C}
+The I2C bus has two signal lines (SDA \& SDL) which must be pulled up
+by resistors. Every I2C device has an address on the bus. You can scan
+a bus with the ``i2cdetect'' (part of the i2c-tools package):
+\begin{verbatim}
+root@raspberrypi:/home/pi# i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- 1e -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- 58 -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- 6b -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+root@raspberrypi:/home/pi# 
+\end{verbatim}
+In this case there are 3 I2C devices on the bus at addresses
+1E, 58 and 6B. The address needs to be specified when
+accessing the I2C device.
+
 \subsubsection{Raw /dev/i2c access}
 I2C either transmits or receives but never at the same time so here we
-can use the standard read/write commands. However, we need to use ioctrl to tell
-the kernel to which I2C address it's talking:
+can use the standard C read/write commands. However, we need to use ioctrl to tell
+the kernel to which I2C address we are talking:
 \begin{verbatim}
-// data buffer
 char buf[2];
-// open the I2C device (check with "ls -l/ dev/i2c*")
 int file = open("/dev/i2c-2",O_RDWR);
-// tell the kernel which I2C address it is
 int addr = 0x58;
 ioctl(file, I2C_SLAVE, addr);
-// write one byte
 write(file,buf,1)
-// read two bytes
 read(file,buf,2)
 \end{verbatim}
-where ``addr'' is the I2C address. The you can use standard read
-or write commands. Usually the 1st write operation tells the chip
-which register to read or write to.
+where ``addr'' is the I2C address. Then use standard read()
+or write() commands. Usually the 1st write() operation tells the chip
+which register to read or write to. Then write/read its register.
 
 \subsubsection{I2C access via pigpio}
 Access via pigpio (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
@@ -200,15 +215,16 @@ Simply install the development package:
 \begin{verbatim}
 sudo apt-get install libpigpio-dev
 \end{verbatim}
-For example writing a byte to a register in a device can be done with a
+which triggers then the install of the other relevant packages.
+For example writing a byte to a register in an I2C sensor can be done with a
 few commands:
 \begin{verbatim}
 int fd = i2cOpen(i2c_bus, address, 0);
 i2cWriteByteData(fd, subAddress, data);
 i2cClose(fd);
 \end{verbatim}
-where i2c\_bus is the I2C bus number (usually one)
-and the address is the I2C address of the device.
+where i2c\_bus is the I2C bus number (usually one on the RPI)
+and the address is the I2C address of the device on that bus.
 The subAddress here is the register address in the device.
 
 \subsection{Access GPIO pins}

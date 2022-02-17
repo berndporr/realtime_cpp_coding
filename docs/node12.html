@@ -1,0 +1,80 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>GPIO interrupt handling via /sys</TITLE>
+<META NAME="description" CONTENT="GPIO interrupt handling via /sys">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="previous" HREF="node11.html">
+<LINK REL="next" HREF="node13.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node13.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node11.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node11.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html108"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node13.html">GPIO via pigpio</A>
+<B> Up:</B> <A
+ HREF="node11.html">/sys filesystem</A>
+<B> Previous:</B> <A
+ HREF="node11.html">/sys filesystem</A>
+ &nbsp; <B>  <A ID="tex2html109"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H4><A ID="SECTION00233110000000000000">
+GPIO interrupt handling via /sys</A>
+</H4>
+The most important application for the /sys filesystem is to
+do interrupt processing in userspace.
+A thread can be put to sleep until an interrupt has happend on one of
+the GPIO pins. This is done by monitoring the &ldquo;value&rdquo;
+of a GPIO pin in the /sys filesystem with the &ldquo;poll&rdquo; command:
+<PRE>
+struct pollfd fdset[1];
+int nfds = 1;
+int gpio_fd = open("/sys/class/gpio/gpio5/value", O_RDONLY | O_NONBLOCK );
+memset((void*)fdset, 0, sizeof(fdset));
+fdset[0].fd = gpio_fd;
+fdset[0].events = POLLPRI;
+int rc = poll(fdset, nfds, timeout);
+if (fdset[0].revents &amp; POLLPRI) {
+   // dummy
+   read(fdset[0].fd, buf, MAX_BUF);
+}
+</PRE>
+makes the program go to sleep until an interrupt has occurred on
+GPIO pin 5. Then the program wakes up and continues.
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/realtime_embedded_coding">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll operation&rdquo;</TITLE>
+<META NAME="description" CONTENT="Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll operation&rdquo;">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="previous" HREF="node19.html">
+<LINK REL="next" HREF="node21.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node18.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html126"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node21.html">Kernel driver programming</A>
+<B> Up:</B> <A
+ HREF="node18.html">Callbacks in C++ sensor</A>
+<B> Previous:</B> <A
+ HREF="node19.html">With pigpio library callback</A>
+ &nbsp; <B>  <A ID="tex2html127"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION00242000000000000000">
+Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll operation&rdquo;</A>
+</H2>
+Again we'll be handing the data over via a <SPAN  CLASS="textsl">callback</SPAN> class:
+<PRE>
+class AD7705callback {
+public:
+  virtual void hasSample(int sample) = 0;
+};
+</PRE>
+
+<P>
+and the header of the main class looks like:
+<PRE>
+class AD7705Comm {
+  AD7705Comm(const char* spiDevice = "/dev/spidev0.0");
+  void setCallback(AD7705callback* cb);
+  void start();
+  void stop();
+}
+</PRE>
+where we provide a pointer to the callback class.
+
+<P>
+The main program then creates a derived class from the
+abstract callback class and then registers this:
+<PRE>
+  class AD7705printSampleCallback : public AD7705callback {
+    virtual void hasSample(int v) {
+      // process the sample here
+    }
+};
+</PRE>
+
+<P>
+Finally create a separate thread which runs in a loop
+where the thread is put to sleep either by &ldquo;poll()&rdquo; or &ldquo;read()&rdquo;
+and woken up periodically after a data ready
+signal as been received:
+<PRE>
+  SysGPIO dataReadyGPIO(22);
+  int sysfs_fd = dataReadyGPIO.gpio_fd_open();	
+  ad7705comm-&gt;running = 1;
+  while (ad7705comm-&gt;running) {
+    dataReadyGPIO.gpio_poll(sysfs_fd,1000);
+    int value = ad7705comm-&gt;readData(ad7705comm-&gt;fd)-0x8000;
+    if (ad7705comm-&gt;ad7705callback) {
+      ad7705comm-&gt;ad7705callback-&gt;hasSample(value);		}
+    }
+  close(sysfs_fd);
+</PRE>
+where the GPIO port 22 is monitored for new data by a thin wrapper class for the /sys filesystem
+found here: <kbd><A ID="tex2html8"
+  HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>. The flag &ldquo;running&rdquo; keeps
+the loop going till the main program stops it by setting it to false and then the thread
+terminates. The thread goes to sleep at &ldquo;gpio_poll&rdquo; and wakes up when the data-ready
+pin triggers GPIO pin 22. Then, the data is read and if the callback has been registered
+by the main program &ldquo;hasSample&rdquo; is called.
+
+<P>
+The full example is here: <kbd><A ID="tex2html9"
+  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd>.
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/realtime_embedded_coding">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

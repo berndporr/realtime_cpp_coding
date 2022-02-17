@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>GPIO interrupt handling via pigpio</TITLE>
+<META NAME="description" CONTENT="GPIO interrupt handling via pigpio">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="previous" HREF="node13.html">
+<LINK REL="next" HREF="node15.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node15.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node13.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html112"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node15.html">Access to hardware via</A>
+<B> Up:</B> <A
+ HREF="node10.html">Access GPIO pins</A>
+<B> Previous:</B> <A
+ HREF="node13.html">GPIO via pigpio</A>
+ &nbsp; <B>  <A ID="tex2html113"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00233300000000000000">
+GPIO interrupt handling via pigpio</A>
+</H3>
+pigpio can call a function whenever a change has occurred on a GPIO pin.
+A function of the form:
+&ldquo;static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)&rdquo;
+can be registered with pigpio:
+<PRE>
+gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
+</PRE>
+where &ldquo;this&rdquo; is the pointer to your class instance which is then used
+to call a class method, here: &ldquo;dataReady()&rdquo;.
+<PRE>
+class LSM9DS1 {
+  void dataReady();
+  static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
+    {
+      if (level) {
+        ((LSM9DS1*)userdata)-&gt;dataReady();
+      }
+    }
+};
+</PRE>
+See <kbd><A ID="tex2html7"
+  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library</A></kbd> for the code.
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/realtime_embedded_coding">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

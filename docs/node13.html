@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>GPIO via pigpio</TITLE>
+<META NAME="description" CONTENT="GPIO via pigpio">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="next" HREF="node14.html">
+<LINK REL="previous" HREF="node11.html">
+<LINK REL="next" HREF="node14.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node14.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node10.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node12.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html110"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node14.html">GPIO interrupt handling via</A>
+<B> Up:</B> <A
+ HREF="node10.html">Access GPIO pins</A>
+<B> Previous:</B> <A
+ HREF="node12.html">GPIO interrupt handling via</A>
+ &nbsp; <B>  <A ID="tex2html111"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H3><A ID="SECTION00233200000000000000">
+GPIO via pigpio</A>
+</H3>
+The above section gives you a deep understanding what's happening
+on the /sys - level but it's recommended to
+use the pigpio library (<kbd><A ID="tex2html6"
+  HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
+to read/write to GPIO pins or do interrupt programming.
+
+<P>
+For example to set GPIO pin 24 as an input just call:
+<PRE>
+gpioSetMode(24,PI_INPUT);
+</PRE>
+
+<P>
+To read from GPIO pin 24 just call:
+<PRE>
+int a = gpioRead(24)
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/realtime_embedded_coding">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>
