@@ -422,15 +422,19 @@ printf("addr: %d \n",*addr);
 
 
 
-\section{Callbacks in C++ sensor classes}
+\section{Callbacks in C++ device classes}
 As said in the introduction the hardware device class has callback interfaces
 which are more complicated as setters as they call the client.
 
-\subsection{Creating an callback interface with With pigpio}
-As shown above pipgio provides a callback mechanism for GPIO
-interrupts so that you just need to offer that callback to the client.
-That's done by a \textsl{callback} class or often called
-``interface'':
+There are different ways of tackling the issue of callbacks but the
+simplest one is defining a method as \textsl{abstract} and asking
+the client to implement it in a derived class. That abstract
+function can either be in a separate class or part of the device class itself.
+
+
+\subsection{Creating an callback interface}
+Here, we create a separate interface class containing a callback
+as an abstract method:
 \begin{verbatim}
 class LSM9DS1callback {
 public:
@@ -438,72 +442,40 @@ public:
 };
 \end{verbatim}
 
-The main program then implements the abstract method ``hasSample()'', instantiates
-the class and then saves its pointer in the driver class, here called ``lsm9ds1Callback''.
-The pigpio callback then simply calls the method ``hasSample()'':
+The client then implements the abstract method ``hasSample()'', instantiates
+the interface class and then saves its pointer in the device class, here called ``lsm9ds1Callback''.
 \begin{verbatim}
 void LSM9DS1::dataReady() {
-  LSM9DS1Sample sample;
-  // fills the sample struct with data
-  // ...
-  lsm9ds1Callback->hasSample(sample);
+        LSM9DS1Sample sample;
+        // fills the sample struct with data
+        // ...
+        lsm9ds1Callback->hasSample(sample);
 }
 \end{verbatim}
-
-\subsection{Thread with a blocking ``read'' or ``poll'' operation}
-Again we'll be handing the data over via a \textsl{callback} class:
+The pointer to the interface instance is transmitted via a setter which
+receives the pointer of the interface as an argument, for example:
 \begin{verbatim}
-class AD7705callback {
-public:
-  virtual void hasSample(float sample) = 0;
+        void registerCallback(LSM9DS1callback* cb);
+\end{verbatim}
+This allows to register a callback optionally. The client might not need
+one or not always.
+
+
+\subsection{Adding directly an abstract method to the device driver class}
+Instead of creating a separate class containing the callback you
+can also add the callback straight to the device driver class.
+\begin{verbatim}
+class ADS1115rpi {
+        ...
+        virtual void hasSample(float sample) = 0;
+        ...
 };
 \end{verbatim}
+This forces the client to implement the callback to be able to use
+the class. This creates a very safe environment as all dependencies
+are set at compile time and the abstract nature of the base class
+makes clear what needs to be implemented.
 
-and the header of the main class looks like:
-\begin{verbatim}
-class AD7705Comm {
-  AD7705Comm(const char* spiDevice = "/dev/spidev0.0");
-  void setCallback(AD7705callback* cb);
-  void start();
-  void stop();
-}
-\end{verbatim}
-where we provide a pointer to the callback class.
-
-The main program then creates a derived class from the
-abstract callback class and then registers this:
-\begin{verbatim}
-  class AD7705printSampleCallback : public AD7705callback {
-    virtual void hasSample(int v) {
-      // process the sample here
-    }
-};
-\end{verbatim}
-
-Finally create a separate thread which runs in a loop
-where the thread is put to sleep either by ``poll()'' or ``read()''
-and woken up periodically after a data ready
-signal as been received via a GPIO pin:
-\begin{verbatim}
-  SysGPIO dataReadyGPIO(22);
-  int sysfs_fd = dataReadyGPIO.gpio_fd_open();	
-  ad7705comm->running = 1;
-  while (ad7705comm->running) {
-    dataReadyGPIO.gpio_poll(sysfs_fd,1000);
-    int value = ad7705comm->readData(ad7705comm->fd)-0x8000;
-    if (ad7705comm->ad7705callback) {
-      ad7705comm->ad7705callback->hasSample(value);		}
-    }
-  close(sysfs_fd);
-\end{verbatim}
-where the GPIO port 22 is monitored for new data by a thin wrapper class for the /sys filesystem
-found here: \url{https://github.com/berndporr/gpio-sysfs}. The flag ``running'' keeps
-the loop going till the main program stops it by setting it to false and then the thread
-terminates. The thread goes to sleep at ``gpio\_poll'' and wakes up when the data-ready
-pin triggers GPIO pin 22. Then, the data is read and if the callback has been registered
-by the main program ``hasSample'' is called.
-
-The full example is here: \url{https://github.com/berndporr/rpi_AD7705_daq}.
 
 
 \section{Kernel driver programming}

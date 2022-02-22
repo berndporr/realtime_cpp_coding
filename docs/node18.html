@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Callbacks in C++ sensor classes</TITLE>
-<META NAME="description" CONTENT="Callbacks in C++ sensor classes">
+<TITLE>Callbacks in C++ device classes</TITLE>
+<META NAME="description" CONTENT="Callbacks in C++ device classes">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -32,7 +32,7 @@
 <A
  HREF="node17.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html124"
+<A ID="tex2html122"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,17 +42,23 @@
  HREF="node2.html">Writing C++ device driver</A>
 <B> Previous:</B> <A
  HREF="node17.html">Accessing physical memory locations</A>
- &nbsp; <B>  <A ID="tex2html125"
+ &nbsp; <B>  <A ID="tex2html123"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
 <H1><A ID="SECTION00240000000000000000">
-Callbacks in C++ sensor classes</A>
+Callbacks in C++ device classes</A>
 </H1>
 As said in the introduction the hardware device class has callback interfaces
 which are more complicated as setters as they call the client.
+
+<P>
+There are different ways of tackling the issue of callbacks but the
+simplest one is defining a method as <SPAN  CLASS="textsl">abstract</SPAN> and asking
+the client to implement it in a derived class. That abstract
+function can either be in a separate class or part of the device class itself.
 
 <P>
 <BR><HR>
@@ -60,10 +66,10 @@ which are more complicated as setters as they call the client.
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html126"
-  HREF="node19.html">Creating an callback interface with With pigpio</A>
-<LI><A ID="tex2html127"
-  HREF="node20.html">Thread with a blocking &ldquo;read&rdquo; or &ldquo;poll&rdquo; operation</A>
+<LI><A ID="tex2html124"
+  HREF="node19.html">Creating an callback interface</A>
+<LI><A ID="tex2html125"
+  HREF="node20.html">Adding directly an abstract method to the device driver class</A>
 </UL>
 <!--End of Table of Child-Links-->
 <BR><HR>
