@@ -32,7 +32,7 @@
 <A
  HREF="node2.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html72"
+<A ID="tex2html74"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,7 +42,7 @@
  HREF="node2.html">Writing C++ device driver</A>
 <B> Previous:</B> <A
  HREF="node2.html">Writing C++ device driver</A>
- &nbsp; <B>  <A ID="tex2html73"
+ &nbsp; <B>  <A ID="tex2html75"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -61,6 +61,19 @@ I/O on pseudo filesystems such as /dev or /sys which means that a read
 operation blocks till data has arrived or an event has happened. Some
 low level libraries such as pigpio translate them back into callbacks
 but generally that needs to be done by you within a C++ class.
+
+<P>
+Ultimately, data transmission between the client and the C++ device
+driver is achieved with <SPAN  CLASS="textsl">setters</SPAN> and <SPAN  CLASS="textsl">callbacks</SPAN>:
+
+<UL>
+<LI>C++ device driver class <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img2.svg"
+ ALT="$\to$"></SPAN> client <SPAN  CLASS="textbf">Callbacks</SPAN>
+</LI>
+<LI>Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img2.svg"
+ ALT="$\to$"></SPAN> C++ device driver class <SPAN  CLASS="textbf">Setters</SPAN>
+</LI>
+</UL>
 
 <P>
 This chapter focuses on writing your own C++ class hiding away

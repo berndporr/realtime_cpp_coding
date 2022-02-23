@@ -32,17 +32,17 @@
 <A
  HREF="node17.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html122"
+<A ID="tex2html124"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node19.html">Creating an callback interface</A>
+ HREF="node19.html">Creating a callback interface</A>
 <B> Up:</B> <A
  HREF="node2.html">Writing C++ device driver</A>
 <B> Previous:</B> <A
  HREF="node17.html">Accessing physical memory locations</A>
- &nbsp; <B>  <A ID="tex2html123"
+ &nbsp; <B>  <A ID="tex2html125"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -59,6 +59,33 @@ There are different ways of tackling the issue of callbacks but the
 simplest one is defining a method as <SPAN  CLASS="textsl">abstract</SPAN> and asking
 the client to implement it in a derived class. That abstract
 function can either be in a separate class or part of the device class itself.
+So, we have two options:
+
+<OL>
+<LI>The callback is part of the device driver class:
+<PRE>
+class MyDriver {
+          void start(DevSettings settings = DevSettings() );
+          void stop();
+          virtual void callback(float sample) = 0;
+};
+</PRE>
+</LI>
+<LI>The callback is port of an interface class:
+<PRE>
+class CallbackInterface {
+          virtual void callback(float sample) = 0;
+};
+</PRE>
+and then registering it in the main device driver class:
+<PRE>
+class MyDriver {
+          void registerCallback(CallbackInterface* cb);
+};
+</PRE>
+</LI>
+</OL>
+These two options are now explained in greater detail.
 
 <P>
 <BR><HR>
@@ -66,9 +93,9 @@ function can either be in a separate class or part of the device class itself.
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html124"
-  HREF="node19.html">Creating an callback interface</A>
-<LI><A ID="tex2html125"
+<LI><A ID="tex2html126"
+  HREF="node19.html">Creating a callback interface</A>
+<LI><A ID="tex2html127"
   HREF="node20.html">Adding directly an abstract method to the device driver class</A>
 </UL>
 <!--End of Table of Child-Links-->

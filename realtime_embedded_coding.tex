@@ -46,6 +46,13 @@ operation blocks till data has arrived or an event has happened. Some
 low level libraries such as pigpio translate them back into callbacks
 but generally that needs to be done by you within a C++ class.
 
+Ultimately, data transmission between the client and the C++ device
+driver is achieved with \textsl{setters} and \textsl{callbacks}:
+\begin{itemize}
+\item C++ device driver class $\to$ client \textbf{Callbacks}
+\item Client $\to$ C++ device driver class \textbf{Setters}
+\end{itemize}
+
 This chapter focuses on writing your own C++ class hiding away
 the complexity (and messy) low level C APIs and/or raw device
 access to /dev and /sys.
@@ -430,9 +437,33 @@ There are different ways of tackling the issue of callbacks but the
 simplest one is defining a method as \textsl{abstract} and asking
 the client to implement it in a derived class. That abstract
 function can either be in a separate class or part of the device class itself.
+So, we have two options:
+\begin{enumerate}
+\item The callback is part of the device driver class:
+\begin{verbatim}
+class MyDriver {
+          void start(DevSettings settings = DevSettings() );
+          void stop();
+          virtual void callback(float sample) = 0;
+};
+\end{verbatim}
+\item The callback is port of an interface class:
+\begin{verbatim}
+class CallbackInterface {
+          virtual void callback(float sample) = 0;
+};
+\end{verbatim}
+and then registering it in the main device driver class:
+\begin{verbatim}
+class MyDriver {
+          void registerCallback(CallbackInterface* cb);
+};
+\end{verbatim}
+\end{enumerate}
+These two options are now explained in greater detail.
 
 
-\subsection{Creating an callback interface}
+\subsection{Creating a callback interface}
 Here, we create a separate interface class containing a callback
 as an abstract method:
 \begin{verbatim}
@@ -459,7 +490,7 @@ receives the pointer of the interface as an argument, for example:
 \end{verbatim}
 This allows to register a callback optionally. The client might not need
 one or not always.
-
+See \url{https://github.com/berndporr/rpi_AD7705_daq} for a complete example.
 
 \subsection{Adding directly an abstract method to the device driver class}
 Instead of creating a separate class containing the callback you
@@ -475,7 +506,7 @@ This forces the client to implement the callback to be able to use
 the class. This creates a very safe environment as all dependencies
 are set at compile time and the abstract nature of the base class
 makes clear what needs to be implemented.
-
+See \url{https://github.com/berndporr/rpi_ads1115} for a complete example.
 
 
 \section{Kernel driver programming}
@@ -490,8 +521,7 @@ From the sections above it's clear that Linux userspace low level
 device access is complex, even without taking into account the
 complexity of contemporary chips which have often a multitude of
 registers and pages of documentation. Your task is to hide away
-all this (scary) complexity in a C++ class and offer the client
-an easy to understand interface.
-
+all this (scary) complexity in a C++ class with a callback and
+manage the settings with a struct.
 
 \end{document}
