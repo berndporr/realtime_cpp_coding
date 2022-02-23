@@ -68,20 +68,46 @@ driver is achieved with <SPAN  CLASS="textsl">setters</SPAN> and <SPAN  CLASS="t
 
 <UL>
 <LI>C++ device driver class <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img2.svg"
- ALT="$\to$"></SPAN> client <SPAN  CLASS="textbf">Callbacks</SPAN>
+ ALT="$\to$"></SPAN> client: <SPAN  CLASS="textbf">Callbacks</SPAN>
 </LI>
 <LI>Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img2.svg"
- ALT="$\to$"></SPAN> C++ device driver class <SPAN  CLASS="textbf">Setters</SPAN>
+ ALT="$\to$"></SPAN> C++ device driver class: <SPAN  CLASS="textbf">Setters</SPAN>
 </LI>
 </UL>
 
 <P>
-This chapter focuses on writing your own C++ class hiding away
-the complexity (and messy) low level C APIs and/or raw device
-access to /dev and /sys.
+This chapter focuses on writing your own C++ device driver class
+hiding away the complexity (and messy) low level C APIs and/or raw
+device access to /dev and /sys. In order to get there we 1st need
+to talk about the low level interfaces and then introduce callback
+handlers to hand over data in a C++ framework.
 
 <P>
-<BR><HR>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node2.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html74"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node4.html">General recommendations how to</A>
+<B> Up:</B> <A
+ HREF="node2.html">Writing C++ device driver</A>
+<B> Previous:</B> <A
+ HREF="node2.html">Writing C++ device driver</A>
+ &nbsp; <B>  <A ID="tex2html75"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
 </ADDRESS>

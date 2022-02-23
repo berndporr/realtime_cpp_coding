@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Kernel driver programming</TITLE>
-<META NAME="description" CONTENT="Kernel driver programming">
+<TITLE>Adding directly an abstract method to the device driver class</TITLE>
+<META NAME="description" CONTENT="Adding directly an abstract method to the device driver class">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,8 +15,7 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node22.html">
-<LINK REL="previous" HREF="node18.html">
+<LINK REL="previous" HREF="node20.html">
 <LINK REL="next" HREF="node22.html">
 </HEAD>
 
@@ -27,7 +26,7 @@
  HREF="node22.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node2.html">
+ HREF="node19.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node20.html">
@@ -39,23 +38,34 @@
 <B> Next:</B> <A
  HREF="node22.html">Conclusion</A>
 <B> Up:</B> <A
- HREF="node2.html">Writing C++ device driver</A>
+ HREF="node19.html">Callbacks in C++ device</A>
 <B> Previous:</B> <A
- HREF="node20.html">Adding directly an abstract</A>
+ HREF="node20.html">Creating a callback interface</A>
  &nbsp; <B>  <A ID="tex2html133"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A ID="SECTION00250000000000000000">
-Kernel driver programming</A>
-</H1>
-This is beyond the scope of this handout put the best approach is to find a kernel
-driver which does approximately what you want and then modify it for your purposes.
-Kernel drivers then create an special device in /dev or /sys and then your userspace
-C++ can then communicate with it. For example the COMEDI framework for data acquisition
-has many drivers for data acquisition cards and it shows up as /dev/comedi0,1,2 etc.
+<H2><A ID="SECTION00252000000000000000">
+Adding directly an abstract method to the device driver class</A>
+</H2>
+Instead of creating a separate class containing the callback you
+can also add the callback straight to the device driver class.
+<PRE>
+class ADS1115rpi {
+        ...
+        virtual void hasSample(float sample) = 0;
+        ...
+};
+</PRE>
+This forces the client to implement the callback to be able to use
+the class. This creates a very safe environment as all dependencies
+are set at compile time and the abstract nature of the base class
+makes clear what needs to be implemented.
+See
+<kbd><A ID="tex2html13"
+  HREF="https://github.com/berndporr/rpi_ads1115">https://github.com/berndporr/rpi_ads1115</A></kbd> for a complete example.
 
 <P>
 <BR><HR>

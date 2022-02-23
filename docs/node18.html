@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Callbacks in C++ device classes</TITLE>
-<META NAME="description" CONTENT="Callbacks in C++ device classes">
+<TITLE>Kernel driver programming</TITLE>
+<META NAME="description" CONTENT="Kernel driver programming">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,7 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node21.html">
+<LINK REL="next" HREF="node19.html">
 <LINK REL="previous" HREF="node5.html">
 <LINK REL="next" HREF="node19.html">
 </HEAD>
@@ -37,7 +37,7 @@
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node19.html">Creating a callback interface</A>
+ HREF="node19.html">Callbacks in C++ device</A>
 <B> Up:</B> <A
  HREF="node2.html">Writing C++ device driver</A>
 <B> Previous:</B> <A
@@ -49,56 +49,18 @@
 <!--End of Navigation Panel-->
 
 <H1><A ID="SECTION00240000000000000000">
-Callbacks in C++ device classes</A>
+Kernel driver programming</A>
 </H1>
-As said in the introduction the hardware device class has callback interfaces
-which are more complicated as setters as they call the client.
+You can also create your own /dev/mydevice in the /dev filesystem
+by writing a kernel driver and a matching userspace library. For
+example the USB mouse has a driver in kernel space and translates
+the raw data from the mouse into coordinates. However,
+this is beyond the scope of this handout. If you want to embark
+on this adventure then the best approach is to
+find a kernel driver which does approximately what you want and then
+modify it for your purposes.
 
 <P>
-There are different ways of tackling the issue of callbacks but the
-simplest one is defining a method as <SPAN  CLASS="textsl">abstract</SPAN> and asking
-the client to implement it in a derived class. That abstract
-function can either be in a separate class or part of the device class itself.
-So, we have two options:
-
-<OL>
-<LI>The callback is part of the device driver class:
-<PRE>
-class MyDriver {
-          void start(DevSettings settings = DevSettings() );
-          void stop();
-          virtual void callback(float sample) = 0;
-};
-</PRE>
-</LI>
-<LI>The callback is port of an interface class:
-<PRE>
-class CallbackInterface {
-          virtual void callback(float sample) = 0;
-};
-</PRE>
-and then registering it in the main device driver class:
-<PRE>
-class MyDriver {
-          void registerCallback(CallbackInterface* cb);
-};
-</PRE>
-</LI>
-</OL>
-These two options are now explained in greater detail.
-
-<P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL CLASS="ChildLinks">
-<LI><A ID="tex2html126"
-  HREF="node19.html">Creating a callback interface</A>
-<LI><A ID="tex2html127"
-  HREF="node20.html">Adding directly an abstract method to the device driver class</A>
-</UL>
-<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

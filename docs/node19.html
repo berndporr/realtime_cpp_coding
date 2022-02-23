@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Creating a callback interface</TITLE>
-<META NAME="description" CONTENT="Creating a callback interface">
+<TITLE>Callbacks in C++ device classes</TITLE>
+<META NAME="description" CONTENT="Callbacks in C++ device classes">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,7 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node20.html">
+<LINK REL="next" HREF="node22.html">
 <LINK REL="previous" HREF="node18.html">
 <LINK REL="next" HREF="node20.html">
 </HEAD>
@@ -27,61 +27,78 @@
  HREF="node20.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node18.html">
+ HREF="node2.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node18.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html128"
+<A ID="tex2html126"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node20.html">Adding directly an abstract</A>
+ HREF="node20.html">Creating a callback interface</A>
 <B> Up:</B> <A
- HREF="node18.html">Callbacks in C++ device</A>
+ HREF="node2.html">Writing C++ device driver</A>
 <B> Previous:</B> <A
- HREF="node18.html">Callbacks in C++ device</A>
- &nbsp; <B>  <A ID="tex2html129"
+ HREF="node18.html">Kernel driver programming</A>
+ &nbsp; <B>  <A ID="tex2html127"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00241000000000000000">
-Creating a callback interface</A>
-</H2>
-Here, we create a separate interface class containing a callback
-as an abstract method:
+<H1><A ID="SECTION00250000000000000000">
+Callbacks in C++ device classes</A>
+</H1>
+As said in the introduction your hardware device class has callback interfaces
+to hand back the data to the client.
+
+<P>
+There are different ways of tackling the issue of callbacks but the
+simplest one is defining a method as <SPAN  CLASS="textsl">abstract</SPAN> and asking the
+client to implement it in a derived class. That abstract function can
+either be in a separate inteface class or part of the device class
+itself. So, we have two options:
+
+<OL>
+<LI>The callback is part of the device driver class:
 <PRE>
-class LSM9DS1callback {
-public:
-        virtual void hasSample(LSM9DS1Sample sample) = 0;
+class MyDriver {
+          void start(DevSettings settings = DevSettings() );
+          void stop();
+          virtual void callback(float sample) = 0;
 };
 </PRE>
+</LI>
+<LI>The callback is port of an interface class:
+<PRE>
+class CallbackInterface {
+          virtual void callback(float sample) = 0;
+};
+</PRE>
+and then registering it in the main device driver class:
+<PRE>
+class MyDriver {
+          void registerCallback(CallbackInterface* cb);
+};
+</PRE>
+</LI>
+</OL>
+These two options are now explained in greater detail.
 
 <P>
-The client then implements the abstract method &ldquo;hasSample()&rdquo;, instantiates
-the interface class and then saves its pointer in the device class, here called &ldquo;lsm9ds1Callback&rdquo;.
-<PRE>
-void LSM9DS1::dataReady() {
-        LSM9DS1Sample sample;
-        // fills the sample struct with data
-        // ...
-        lsm9ds1Callback-&gt;hasSample(sample);
-}
-</PRE>
-The pointer to the interface instance is transmitted via a setter which
-receives the pointer of the interface as an argument, for example:
-<PRE>
-        void registerCallback(LSM9DS1callback* cb);
-</PRE>
-This allows to register a callback optionally. The client might not need
-one or not always.
-See <kbd><A ID="tex2html12"
-  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd> for a complete example.
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<P>
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html128"
+  HREF="node20.html">Creating a callback interface</A>
+<LI><A ID="tex2html129"
+  HREF="node21.html">Adding directly an abstract method to the device driver class</A>
+</UL>
+<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
