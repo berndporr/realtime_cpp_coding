@@ -50,41 +50,17 @@
 <H1><A ID="SECTION00260000000000000000">
 Conclusion</A>
 </H1>
+In conclusion, the communication between C++ is done via callbacks and
+setters where the event from the sensor traverses through the C++
+classes via callbacks and then back to the control output via setters.
 
-<DIV class="CENTER"><A ID="gettersetters"></A><A ID="153"></A>
-<TABLE>
-<CAPTION class="BOTTOM"><STRONG>Figure 1.2:</STRONG>
-A realtime system with two C++ classes. Communication
-  between classes is achieved with callbacks (not getters) for incoming events
-  and setters to send out control events. The control output itself
-  receives its timing from the events so that the loop is traversed
-  as quickly as possible.
-</CAPTION>
-<TR><TD>
-<DIV class="CENTER">
-<IMG STYLE=""
- SRC="img3.svg"
- ALT="\includegraphics[width=\textwidth]{gettersetters}">
-
-</DIV></TD></TR>
-</TABLE>
-</DIV>
+<P>
 From the sections above it's clear that Linux userspace low level
 device access is complex, even without taking into account the
 complexity of contemporary chips which have often a multitude of
 registers and pages of documentation. Your task is to hide away
 all this (scary) complexity in a C++ class and offer the client
 an easy to understand interface.
-
-<P>
-Fig.&nbsp;<A HREF="#gettersetters">1.2</A> shows the overall communication between C++
-classes.  The communication between C++ is done via callbacks
-(<SPAN  CLASS="textsl">not</SPAN> getters) and setters where the event from the sensor
-  traverses according to the realtime requirements through the class
-  via callbacks and then back to the control output via setters.  For
-  example at a robot a collision sensor triggers a GPIO, this then
-  triggers a callback to issue an avoidance action which in turn then
-  sets the motors in reverse.
 
 <P>
 <BR><HR>

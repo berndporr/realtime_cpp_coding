@@ -3,7 +3,7 @@
 
 
 $key = q/gettersetters/;
-$ref_files{$key} = "$dir".q|node22.html|; 
+$ref_files{$key} = "$dir".q|node3.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/timing/;

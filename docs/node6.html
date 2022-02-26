@@ -52,7 +52,7 @@
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="151"></A>
+  <A ID="147"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 1.1:</STRONG>
 SPI modes</CAPTION>
@@ -101,7 +101,7 @@ Then set the SPI mode (see table.&nbsp;<A HREF="#spimodes">1.1</A>):
 int ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);
 </PRE>
 which is explained, for example, here:
-<kbd><A ID="tex2html4"
+<kbd><A ID="tex2html5"
   HREF="https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html">https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html</A></kbd>.
 
 <P>
@@ -132,7 +132,7 @@ int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
 Sometimes the SPI protocol of a chip is so odd that even the raw
 I/O via /dev won't work and you need to write your own bit banging
 interface, for example done here for the ADC on the alphabot:
-<kbd><A ID="tex2html5"
+<kbd><A ID="tex2html6"
   HREF="https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58">https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58</A></kbd>.
 This is obviously far from ideal as it might require &ldquo;usleep&rdquo; commands
 so that acquisition needs to be run in a separate thread (the alphabot

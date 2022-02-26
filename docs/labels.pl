@@ -3,7 +3,7 @@
 
 
 $key = q/gettersetters/;
-$external_labels{$key} = "$URL/" . q|node22.html|; 
+$external_labels{$key} = "$URL/" . q|node3.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/timing/;

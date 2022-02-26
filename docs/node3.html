@@ -59,28 +59,44 @@ signals, data-ready signals and also by the timing of a serial
 interface. The Linux kernel translates this timing info into blocking
 I/O on pseudo filesystems such as /dev or /sys which means that a read
 operation blocks till data has arrived or an event has happened. Some
-low level libraries such as pigpio translate them back into callbacks
-but generally that needs to be done by you within a C++ class.
+low level libraries such as pigpio translate them back into C
+callbacks.  Your task is to hide this complexity and these quite
+different approaches in C++ classes which communicate via callbacks
+and setters with the client classes.
 
 <P>
-Ultimately, data transmission between the client and the C++ device
-driver is achieved with <SPAN  CLASS="textsl">setters</SPAN> and <SPAN  CLASS="textsl">callbacks</SPAN>:
 
-<UL>
-<LI>C++ device driver class <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img2.svg"
- ALT="$\to$"></SPAN> client: <SPAN  CLASS="textbf">Callbacks</SPAN>
-</LI>
-<LI>Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img2.svg"
- ALT="$\to$"></SPAN> C++ device driver class: <SPAN  CLASS="textbf">Setters</SPAN>
-</LI>
-</UL>
+<DIV class="CENTER"><A ID="gettersetters"></A><A ID="146"></A>
+<TABLE>
+<CAPTION class="BOTTOM"><STRONG>Figure 1.2:</STRONG>
+A realtime system with two C++ classes. Communication
+  between classes is achieved with callbacks (not getters) for incoming events
+  and setters to send out control events. The control output itself
+  receives its timing from the events so that the loop is traversed
+  as quickly as possible.
+</CAPTION>
+<TR><TD>
+<DIV class="CENTER">
+<IMG STYLE=""
+ SRC="img2.svg"
+ ALT="\includegraphics[width=\textwidth]{gettersetters}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+Fig.&nbsp;<A HREF="#gettersetters">1.2</A> shows the overall communication between C++
+classes in a realtime system. This communication is done via callbacks
+(<SPAN  CLASS="textsl">not</SPAN> getters) and setters where an event from a sensor
+traverses according to its realtime requirements through the classes via
+callbacks and then back to the control output via setters. For example
+a collision sensor at a robot triggers a GPIO pin, which then triggers a
+callback to issue an avoidance action which in turn then sets the
+motors in reverse.
 
 <P>
 This chapter focuses on writing your own C++ device driver class
 hiding away the complexity (and messy) low level C APIs and/or raw
-device access to /dev and /sys. In order to get there we 1st need
-to talk about the low level interfaces and then introduce callback
-handlers to hand over data in a C++ framework.
+device access to /dev and /sys.
 
 <P>
 
