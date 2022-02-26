@@ -2,6 +2,10 @@
 # Associate internals original text with physical files.
 
 
+$key = q/gettersetters/;
+$ref_files{$key} = "$dir".q|node22.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/timing/;
 $ref_files{$key} = "$dir".q|node2.html|; 
 $noresave{$key} = "$nosave";

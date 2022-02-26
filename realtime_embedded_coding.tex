@@ -65,7 +65,7 @@ hide away the complexity of low level driver access and offer the
 client a simple and safe way of connecting to the sensor. In
 particular:
 \begin{enumerate}
-\item Getters, setters and callbacks hand over \textsl{physical units}
+\item Setters and callbacks hand over \textsl{physical units}
   (temperature, acceleration, \ldots) and not raw integer values which
   have no meaning.
 \item The sensor is configured by specifying physical units (time,
@@ -528,11 +528,32 @@ See
 
 
 \section{Conclusion}
+\begin{figure}[!hbt]
+\begin{center}
+\mbox{\includegraphics[width=\textwidth]{gettersetters}}
+\end{center}
+\caption{A realtime system with two C++ classes. Communication
+  between classes is achieved with callbacks (not getters) for incoming events
+  and setters to send out control events. The control output itself
+  receives its timing from the events so that the loop is traversed
+  as quickly as possible.
+\label{gettersetters}}
+\end{figure}
 From the sections above it's clear that Linux userspace low level
 device access is complex, even without taking into account the
 complexity of contemporary chips which have often a multitude of
 registers and pages of documentation. Your task is to hide away
-all this (scary) complexity in a C++ class with a callback and
-manage the settings with a struct.
+all this (scary) complexity in a C++ class and offer the client
+an easy to understand interface.
+
+Fig.~\ref{gettersetters} shows the overall communication between C++
+classes.  The communication between C++ is done via callbacks
+(\textsl{not} getters) and setters where the event from the sensor
+  traverses according to the realtime requirements through the class
+  via callbacks and then back to the control output via setters.  For
+  example at a robot a collision sensor triggers a GPIO, this then
+  triggers a callback to issue an avoidance action which in turn then
+  sets the motors in reverse.
+
 
 \end{document}

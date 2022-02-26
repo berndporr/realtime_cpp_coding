@@ -2,6 +2,10 @@
 # Associate labels original text with physical files.
 
 
+$key = q/gettersetters/;
+$external_labels{$key} = "$URL/" . q|node22.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/timing/;
 $external_labels{$key} = "$URL/" . q|node2.html|; 
 $noresave{$key} = "$nosave";
@@ -15,6 +19,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/_/;
 $external_latex_labels{$key} = q|<|; 
+$noresave{$key} = "$nosave";
+
+$key = q/gettersetters/;
+$external_latex_labels{$key} = q|1.2|; 
 $noresave{$key} = "$nosave";
 
 $key = q/spimodes/;
