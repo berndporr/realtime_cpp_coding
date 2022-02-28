@@ -107,21 +107,34 @@ in mind when writing your C++ device classes:
 \item \textsl{Single responsibility}: If you have a temperature
 sensor and an accelerometer then write two classes, one for the
 temperature sensor and one of the accelerometer. In terms of
-\item \textsl{Open-Closed principle} For example an ADC class
+\item \textsl{Open-Closed principle} Your class is open to extension but
+  closed to modification. For example an ADC class
   has a callback which returns voltage to the client. However,
   you'll be connecting for example a temperature sensor to
   it so you'd like to be able to extend the class by for example
   overloading the callback methods so that you add the conversion
   from volt to degrees but not hacking the existing ADC class.
-\item \textsl{Liskov substitution principle} Use abstract classes
-  with abstract virtual functions for the callback
-  handlers.
+\item \textsl{Liskov substitution principle} Any derived class from
+  your device driver class can be used in place of the base class if
+  the base class is all that's required, because the extra
+  functionality in the derived class shouldn't break the basic
+  required functionality of the base class. For example, if you have a
+  super duper DAC with lots of extra features, it shouldn't stop you
+  using it when you only need a very simple one. This also means
+  that sensible default values should be set so that the client
+  won't need to understand the nerdy features of that super duper DAC.
 \item \textsl{Interface Segregation Principle}:
   Keep functionality separate and rather divide it up in different
   classes. Imagine you have a universal IO class with SPI and I2C
   but your client really just needs SPI. Then the client is forced
   to deactivate I2C or in the worst case the class causes collateral
   damage without the client knowing why.
+\item \textsl{Dependency inversion}: That is about obstructing the
+  essential features of of a class of interfaces. For example ideally
+  you want, for example, a base class for covering a range of simuliar
+  ADC converters from the same manufacturer and not a base class being
+  a driver for a particular chip. Instead you want all ADC chip driver
+  classes to inherit from the abstract ADC driver.
 \end{enumerate}
 
 \section{Low level userspace device access}
