@@ -53,14 +53,9 @@ Blocking I/O</A>
 </H3>
 I/O operations can be blocking (thread goes to sleep and wakes up when
 data is available) or non-blocking where the I/O operation returns
-immediately (perhaps with an error). I/O blocking can be used to time
+immediately (perhaps with an error). Blocking I/O can be used to time
 the data coming in as the thread goes to sleep when it's waiting for
-I/O but wakes up very quickly then new data arrives. This depends on
-the hardware if this is able to deliver data in a timed
-fashion. If samples are stored in kernel
-space in a buffer then blocking I/O is very efficient way if, for
-example 1000 samples are collected before the thread is woken up.
-This leads us to the kernel driver.
+I/O but wakes up very quickly after new data has arrived.
 
 <P>
 In this example from above the blocking &ldquo;read&rdquo; command creates

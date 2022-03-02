@@ -51,15 +51,14 @@
 <H2><A ID="SECTION00322000000000000000">
 Lifetime of a thread</A>
 </H2>
-Threads terminate simply once the static thread (&ldquo;exec()&rdquo;) method has finished.
-To tell the caller that a thread has finished you can use another <SPAN  CLASS="textsl">callback</SPAN>
-as it's an event. For example if you do an FFT analysis you can add at the
-end of the &ldquo;run()&rdquo; function calling a callback.
+Threads terminate simply once the static thread method has finished.
+To tell the client that a thread has finished use another <SPAN  CLASS="textsl">callback</SPAN>
+to trigger an event.
 
 <P>
 Sometimes it's important to wait for the termination of the thread, for example
-when your program is terminating or for example you stop the data acquisition from
-your ADC. To wait for the
+when your whole program is terminating or for example when you stop the data acquisition of
+the ADC. To wait for the
 termination of the thread use the &ldquo;join()&rdquo; method:
 <PRE>
         void stop() {

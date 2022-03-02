@@ -51,26 +51,27 @@
 <H2><A ID="SECTION00321000000000000000">
 Creating threads</A>
 </H2>
-In C++ threads are executed as methods within a class. However, the thread needs
-to be a <SPAN  CLASS="textsl">static</SPAN> method which means it won't be able to access the
+In C++ a thread is a method within a class which needs
+to be a <SPAN  CLASS="textsl">static</SPAN> which means it won't be able to directly access the
 instance variables of a class. The trick is to pass a pointer to
 the instance of the class as the argument of the static method running
-the thread:
+the thread, for example called &ldquo;exec&rdquo; here:
+<PRE>
+uthread = new std::thread(MyClassWithAThread::exec, this);
+</PRE>
+where <SPAN  CLASS="texttt">MyClassWithAThread</SPAN> is a class containing the static function &ldquo;exec&rdquo;:
 <PRE>
 class MyClassWithAThread {
+        void run();
         static void exec(MyClassWithAThread* cppThread) {
                 cppThread-&gt;run();
         }
 }
 </PRE>
-<SPAN  CLASS="texttt">MyClassWithAThread</SPAN> is your class containing the static function &ldquo;exec&rdquo;.
-The thread is started for example in a method &ldquo;start()&rdquo;:
-<PRE>
-uthread = new std::thread(MyClassWithAThread::exec, this);
-</PRE>
-See for example the AD7705 driver for a complete example:
-<kbd><A ID="tex2html15"
-  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd>.
+which in turn then calls a non-static class method &ldquo;run()&rdquo; which
+then has access to the instances variables.
+See <kbd><A ID="tex2html15"
+  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd> for an example.
 
 <P>
 <BR><HR>
