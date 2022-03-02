@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Dealing with competition / concurrency</TITLE>
-<META NAME="description" CONTENT="Dealing with competition / concurrency">
+<TITLE>Running/stopping workers with endless loops</TITLE>
+<META NAME="description" CONTENT="Running/stopping workers with endless loops">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,55 +27,55 @@
  HREF="node30.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node25.html">
+ HREF="node26.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node28.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html187"
+<A ID="tex2html190"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node30.html">Timing within threads</A>
+ HREF="node30.html">Dealing with competition /</A>
 <B> Up:</B> <A
- HREF="node25.html">Processes and Threads</A>
+ HREF="node26.html">Thread and worker</A>
 <B> Previous:</B> <A
- HREF="node28.html">Running/stopping threads with endless</A>
- &nbsp; <B>  <A ID="tex2html188"
+ HREF="node28.html">Lifetime of a thread</A>
+ &nbsp; <B>  <A ID="tex2html191"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00324000000000000000">
-Dealing with competition / concurrency</A>
+<H2><A ID="SECTION00333000000000000000">
+Running/stopping workers with endless loops</A>
 </H2>
-
-<P>
-To avoid that two threads manipulating data at the same
-time one can employ a &ldquo;mutex&rdquo;:
-
-<P>
+Threads with endless loops are often used in conjunction with blocking
+I/O which provide the timing:
 <PRE>
-std::mutex cmdMtx;
+void run() {
+       running = 1;
+       while (running) {
+              read(buffer); // blocking
+              doCallback(buffer); // hand data to client
+       }
+}
 </PRE>
-
-<P>
-Thread 1:
+You need to implement a flag (here: &ldquo;running&rdquo;) which is set to zero to terminate
+the thread. This is then done a method
+which terminates the thread by setting
+&ldquo;running&rdquo; to zero before calling &ldquo;join()&rdquo;:
 <PRE>
-cmdMtx.lock();
-a = 1
-cmdMtx.unlock();
+        void stop() {
+                running = 0; // &lt;----- HERE!!
+                uthread-&gt;join();
+                delete uthread;
+                uthread = NULL;
+        }
 </PRE>
-
-<P>
-Thread 2:
-<PRE>
-cmdMtx.lock();
-if (a = 2) { do dangerous stuff };
-cmdMtx.unlock();
-</PRE>
+Generally a thread should terminate as soon as possible once the flag &ldquo;running&rdquo;
+has been set to zero.
 
 <P>
 <BR><HR>

@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Lifetime of a thread</TITLE>
-<META NAME="description" CONTENT="Lifetime of a thread">
+<TITLE>Creating threads</TITLE>
+<META NAME="description" CONTENT="Creating threads">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,46 +27,51 @@
  HREF="node28.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node25.html">
+ HREF="node26.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node26.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html183"
+<A ID="tex2html186"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node28.html">Running/stopping threads with endless</A>
+ HREF="node28.html">Lifetime of a thread</A>
 <B> Up:</B> <A
- HREF="node25.html">Processes and Threads</A>
+ HREF="node26.html">Thread and worker</A>
 <B> Previous:</B> <A
- HREF="node26.html">Creating threads</A>
- &nbsp; <B>  <A ID="tex2html184"
+ HREF="node26.html">Thread and worker</A>
+ &nbsp; <B>  <A ID="tex2html187"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00322000000000000000">
-Lifetime of a thread</A>
+<H2><A ID="SECTION00331000000000000000">
+Creating threads</A>
 </H2>
-Threads terminate simply once the static thread method has finished.
-To tell the client that a thread has finished use another <SPAN  CLASS="textsl">callback</SPAN>
-to trigger an event.
-
-<P>
-Sometimes it's important to wait for the termination of the thread, for example
-when your whole program is terminating or for example when you stop the data acquisition of
-the ADC. To wait for the
-termination of the thread use the &ldquo;join()&rdquo; method:
+In C++ a worker is a method within
+a class and needs to be <SPAN  CLASS="textsl">static</SPAN> which means it won't be
+able to access the instance variables of a class. The trick
+is to pass a pointer to the instance of the class (&ldquo;this&rdquo;) as the argument of
+the worker, for example, here called &ldquo;exec&rdquo;:
 <PRE>
-        void stop() {
-                uthread-&gt;join();
-                delete uthread;
-                uthread = NULL;
-        }
+uthread = new std::thread(MyClassWithAThread::exec, this);
 </PRE>
+where <SPAN  CLASS="texttt">MyClassWithAThread</SPAN> is a class containing the static function &ldquo;exec&rdquo;:
+<PRE>
+class MyClassWithAThread {
+        void run();
+        static void exec(MyClassWithAThread* cppThread) {
+                cppThread-&gt;run();
+        }
+}
+</PRE>
+which in turn then calls a non-static class method &ldquo;run()&rdquo; which
+then has access to the instances variables.
+See <kbd><A ID="tex2html15"
+  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd> for an example.
 
 <P>
 <BR><HR>

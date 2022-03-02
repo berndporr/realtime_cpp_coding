@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>select/poll commands</TITLE>
-<META NAME="description" CONTENT="select/poll commands">
+<TITLE>Timing within threads</TITLE>
+<META NAME="description" CONTENT="Timing within threads">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,6 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node32.html">
 <LINK REL="previous" HREF="node30.html">
 <LINK REL="next" HREF="node32.html">
 </HEAD>
@@ -27,7 +26,7 @@
  HREF="node32.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node30.html">
+ HREF="node26.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node30.html">
@@ -37,54 +36,37 @@
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node32.html">Blocking I/O</A>
+ HREF="node32.html">select/poll commands waiting for</A>
 <B> Up:</B> <A
- HREF="node30.html">Timing within threads</A>
+ HREF="node26.html">Thread and worker</A>
 <B> Previous:</B> <A
- HREF="node30.html">Timing within threads</A>
+ HREF="node30.html">Dealing with competition /</A>
  &nbsp; <B>  <A ID="tex2html195"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A ID="SECTION00325100000000000000">
-select/poll commands</A>
-</H3>
-These commands put the thread to sleep until an interrupt has been
-triggered at a GPIO pin. This is the fastest way of reacting to an
-external event. ADC converters can trigger an interrupt whenever data
-is available.  This is the preferred method for low latency and can be
-even tuned more by requesting a Linux realtime scheduler.
-<PRE>
- struct pollfd fdset[1];
-  int nfds = 1;
-  int rc;
-  char buf[MAX_BUF];
-
-  memset((void*)fdset, 0, sizeof(fdset));
-
-  fdset[0].fd = gpiofd;
-  fdset[0].events = POLLPRI;
-
-  rc = poll(fdset, nfds, timeout);
-
-  if (fdset[0].revents &amp; POLLPRI) {
-    // dummy read
-    read(fdset[0].fd, buf, MAX_BUF);
-  }
-</PRE>
-...where <SPAN  CLASS="texttt">gpiofd</SPAN> is a file descriptor pointing to a GPIO pin
-which is usually under <SPAN  CLASS="texttt">/sys/bus/gpio/</SPAN>. This fragment
-waits till there has been an interrupt on an IO pin. In a similar
-fashion you can also monitor other file descriptors if they
-support the poll command (BTW: this is <SPAN  CLASS="textsl">not polling</SPAN>).
+<H2><A ID="SECTION00335000000000000000">
+Timing within threads</A>
+</H2>
+Threads are perfect to create timing without using sleep commands
+with the help of blocking I/O.
 
 <P>
-Please use pigpio on a Raspberry PI which provides a wrapper
-for the code above and offers a simple callback interface.
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<P>
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html196"
+  HREF="node32.html">select/poll commands waiting for GPIO interrupts</A>
+<LI><A ID="tex2html197"
+  HREF="node33.html">Timing with blocking I/O</A>
+<LI><A ID="tex2html198"
+  HREF="node34.html">Timing with Linux/pigpio timers</A>
+</UL>
+<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
