@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Threads</TITLE>
-<META NAME="description" CONTENT="Threads">
+<TITLE>Processes and Threads</TITLE>
+<META NAME="description" CONTENT="Processes and Threads">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,42 +15,50 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node34.html">
-<LINK REL="previous" HREF="node2.html">
-<LINK REL="next" HREF="node24.html">
+<LINK REL="previous" HREF="node24.html">
+<LINK REL="next" HREF="node26.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
 <A
- HREF="node24.html">
+ HREF="node26.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="realtime_embedded_coding.html">
+ HREF="node23.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
- HREF="node22.html">
+ HREF="node24.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html157"
+<A ID="tex2html171"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node24.html">Introduction</A>
+ HREF="node26.html">Creating threads</A>
 <B> Up:</B> <A
- HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+ HREF="node23.html">Threads</A>
 <B> Previous:</B> <A
- HREF="node22.html">Conclusion</A>
- &nbsp; <B>  <A ID="tex2html158"
+ HREF="node24.html">Introduction</A>
+ &nbsp; <B>  <A ID="tex2html172"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A ID="SECTION00300000000000000000">
-Threads</A>
+<H1><A ID="SECTION00320000000000000000">
+Processes and Threads</A>
 </H1>
+Processes are different programs which seem to be running at the same
+time. However this is done by the operating system which switches approximately
+every 10ms from one process to the next so it feels as if they are running
+at the same time.
+A thread is a lightweight process where multiple threads share the same memory
+and started from within the parent process.
+As with processes the threads seem to be running at the same time. When a thread
+is started it runs simultaneously to the main process which created it. The main
+program can wait for a thread to finish, usually with a function called &ldquo;join&rdquo;.
 
 <P>
 <BR><HR>
@@ -58,29 +66,24 @@ Threads</A>
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html159"
-  HREF="node24.html">Introduction</A>
-<LI><A ID="tex2html160"
-  HREF="node25.html">Processes and Threads</A>
-<UL>
-<LI><A ID="tex2html161"
+<LI><A ID="tex2html173"
   HREF="node26.html">Creating threads</A>
-<LI><A ID="tex2html162"
+<LI><A ID="tex2html174"
   HREF="node27.html">Lifetime of a thread</A>
-<LI><A ID="tex2html163"
+<LI><A ID="tex2html175"
   HREF="node28.html">Running/stopping threads with endless loops</A>
-<LI><A ID="tex2html164"
+<LI><A ID="tex2html176"
   HREF="node29.html">Dealing with competition / concurrency</A>
-<LI><A ID="tex2html165"
+<LI><A ID="tex2html177"
   HREF="node30.html">Timing within threads</A>
 <UL>
-<LI><A ID="tex2html166"
+<LI><A ID="tex2html178"
   HREF="node31.html">select/poll commands</A>
-<LI><A ID="tex2html167"
+<LI><A ID="tex2html179"
   HREF="node32.html">Blocking I/O</A>
-<LI><A ID="tex2html168"
+<LI><A ID="tex2html180"
   HREF="node33.html">Timing with Linux/pigpio timers</A>
-</UL></UL></UL>
+</UL></UL>
 <!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>

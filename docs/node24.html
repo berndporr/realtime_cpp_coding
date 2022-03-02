@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Raw /dev/i2c access</TITLE>
-<META NAME="description" CONTENT="Raw /dev/i2c access">
+<TITLE>Introduction</TITLE>
+<META NAME="description" CONTENT="Introduction">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,56 +15,52 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node9.html">
-<LINK REL="previous" HREF="node7.html">
-<LINK REL="next" HREF="node9.html">
+<LINK REL="next" HREF="node25.html">
+<LINK REL="previous" HREF="node23.html">
+<LINK REL="next" HREF="node25.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
 <A
- HREF="node9.html">
+ HREF="node25.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node7.html">
+ HREF="node23.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
- HREF="node7.html">
+ HREF="node23.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html119"
+<A ID="tex2html169"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node9.html">I2C access via pigpio</A>
+ HREF="node25.html">Processes and Threads</A>
 <B> Up:</B> <A
- HREF="node7.html">I2C</A>
+ HREF="node23.html">Threads</A>
 <B> Previous:</B> <A
- HREF="node7.html">I2C</A>
- &nbsp; <B>  <A ID="tex2html120"
+ HREF="node23.html">Threads</A>
+ &nbsp; <B>  <A ID="tex2html170"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A ID="SECTION00232100000000000000">
-Raw /dev/i2c access</A>
-</H3>
-I2C either transmits or receives but never at the same time so here we
-can use the standard C read/write commands. However, we need to use ioctrl to tell
-the kernel the I2C address:
-<PRE>
-char buf[2];
-int file = open("/dev/i2c-2",O_RDWR);
-int addr = 0x58;
-ioctl(file, I2C_SLAVE, addr);
-write(file,buf,1)
-read(file,buf,2)
-</PRE>
-where &ldquo;addr&rdquo; is the I2C address. Then use standard read()
-or write() commands. Usually the 1st write() operation tells the chip
-which register to read or write to. Then write/read its register.
+<H1><A ID="SECTION00310000000000000000">
+Introduction</A>
+</H1>
+In a realtime system events need to be dealt with as soon as possible while
+also interacting with the user and performing other background tasks.
+
+<P>
+However, certain operations might take considerable computing time (FFT), I/O might be
+locking up while waiting for data or fault conditions might arise also locking
+up a program.
+
+<P>
+The solution are threads.
 
 <P>
 <BR><HR>

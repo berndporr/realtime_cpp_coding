@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>Lifetime of a thread</TITLE>
+<META NAME="description" CONTENT="Lifetime of a thread">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="next" HREF="node28.html">
+<LINK REL="previous" HREF="node26.html">
+<LINK REL="next" HREF="node28.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node28.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node25.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node26.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html183"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node28.html">Running/stopping threads with endless</A>
+<B> Up:</B> <A
+ HREF="node25.html">Processes and Threads</A>
+<B> Previous:</B> <A
+ HREF="node26.html">Creating threads</A>
+ &nbsp; <B>  <A ID="tex2html184"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION00322000000000000000">
+Lifetime of a thread</A>
+</H2>
+Threads terminate simply once the static thread (&ldquo;exec()&rdquo;) method has finished.
+To tell the caller that a thread has finished you can use another <SPAN  CLASS="textsl">callback</SPAN>
+as it's an event. For example if you do an FFT analysis you can add at the
+end of the &ldquo;run()&rdquo; function calling a callback.
+
+<P>
+Sometimes it's important to wait for the termination of the thread, for example
+when your program is terminating or for example you stop the data acquisition from
+your ADC. To wait for the
+termination of the thread use the &ldquo;join()&rdquo; method:
+<PRE>
+        void stop() {
+                uthread-&gt;join();
+                delete uthread;
+                uthread = NULL;
+        }
+</PRE>
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

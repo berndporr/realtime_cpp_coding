@@ -572,4 +572,190 @@ an easy to understand interface.
 
 
 
+
+
+\chapter{Threads}
+
+\section{Introduction}
+In a realtime system events need to be dealt with as soon as possible
+while also interacting with the user and performing other background
+tasks.  However, certain operations might take considerable computing
+time (FFT, etc) or I/O might be blocking while waiting for data. The
+solution are threads.
+
+
+\section{Processes and Threads}
+Processes are different programs which seem to be running at the same
+time. However this is done by the operating system which switches
+approximately every 10ms from one process to the next so it feels as
+if they are running at the same time. A thread is a lightweight
+process where multiple threads share the same memory and started from
+within the parent process. As with processes the threads seem to be
+running at the same time. When a thread is started it runs
+simultaneously to the main process which created it.
+
+\subsection{Creating threads}
+In C++ a thread is a method within a class which needs
+to be a \textsl{static} which means it won't be able to directly access the
+instance variables of a class. The trick is to pass a pointer to
+the instance of the class as the argument of the static method running
+the thread, for example called ``exec'' here:
+\begin{verbatim}
+uthread = new std::thread(MyClassWithAThread::exec, this);
+\end{verbatim}
+where \texttt{MyClassWithAThread} is a class containing the static function ``exec'':
+\begin{verbatim}
+class MyClassWithAThread {
+        void run();
+        static void exec(MyClassWithAThread* cppThread) {
+                cppThread->run();
+        }
+}
+\end{verbatim}
+which in turn then calls a non-static class method ``run()'' which
+then has access to the instances variables.
+See \url{https://github.com/berndporr/rpi_AD7705_daq} for an example.
+
+
+\subsection{Lifetime of a thread}
+Threads terminate simply once the static thread method has finished.
+To tell the client that a thread has finished use another \textsl{callback}
+to trigger an event.
+
+Sometimes it's important to wait for the termination of the thread, for example
+when your whole program is terminating or for example when you stop the data acquisition of
+the ADC. To wait for the
+termination of the thread use the ``join()'' method:
+\begin{verbatim}
+        void stop() {
+                uthread->join();
+                delete uthread;
+                uthread = NULL;
+        }
+\end{verbatim}
+
+
+
+\subsection{Running/stopping threads with endless loops}
+Threads with endless loops are often used in conjunction with blocking
+I/O which provide the timing:
+\begin{verbatim}
+void run() {
+       running = 1;
+       while (running) {
+              read(buffer); // blocking
+              doCallback(buffer); // hand data to client
+       }
+}
+\end{verbatim}
+You need to implement a flag (here: ``running'') which is set to zero to terminate
+the thread. This is then done a method
+which terminates the thread by setting
+``running'' to zero before calling ``join()'':
+\begin{verbatim}
+        void stop() {
+                running = 0; // <----- HERE!!
+                uthread->join();
+                delete uthread;
+                uthread = NULL;
+        }
+\end{verbatim}
+Generally a thread should terminate as soon as possible once the flag ``running''
+has been set to zero.
+
+
+\subsection{Dealing with competition / concurrency}
+
+To avoid that two threads manipulating data at the same
+time one can employ a ``mutex'':
+
+\begin{verbatim}
+std::mutex cmdMtx;
+\end{verbatim}
+
+Thread 1:
+\begin{verbatim}
+cmdMtx.lock();
+a = 1
+cmdMtx.unlock();
+\end{verbatim}
+
+Thread 2:
+\begin{verbatim}
+cmdMtx.lock();
+if (a = 2) { do dangerous stuff };
+cmdMtx.unlock();
+\end{verbatim}
+
+
+
+
+\subsection{Timing within threads}
+
+\subsubsection{select/poll commands}
+These commands put the thread to sleep until an interrupt has been
+triggered at a GPIO pin. This is the fastest way of reacting to an
+external event. ADC converters can trigger an interrupt whenever data
+is available.  This is the preferred method for low latency and can be
+even tuned more by requesting a Linux realtime scheduler.
+\begin{verbatim}
+ struct pollfd fdset[1];
+  int nfds = 1;
+  int rc;
+  char buf[MAX_BUF];
+
+  memset((void*)fdset, 0, sizeof(fdset));
+
+  fdset[0].fd = gpiofd;
+  fdset[0].events = POLLPRI;
+
+  rc = poll(fdset, nfds, timeout);
+
+  if (fdset[0].revents & POLLPRI) {
+    // dummy read
+    read(fdset[0].fd, buf, MAX_BUF);
+  }
+\end{verbatim}
+...where \texttt{gpiofd} is a file descriptor pointing to a GPIO pin
+which is usually under \texttt{/sys/bus/gpio/}. This fragment
+waits till there has been an interrupt on an IO pin. In a similar
+fashion you can also monitor other file descriptors if they
+support the poll command (BTW: this is \textsl{not polling}).
+
+Please use pigpio on a Raspberry PI which provides a wrapper
+for the code above and offers a simple callback interface.
+
+
+\subsubsection{Blocking I/O}
+I/O operations can be blocking (thread goes to sleep and wakes up when
+data is available) or non-blocking where the I/O operation returns
+immediately (perhaps with an error). Blocking I/O can be used to time
+the data coming in as the thread goes to sleep when it's waiting for
+I/O but wakes up very quickly after new data has arrived.
+
+In this example from above the blocking ``read'' command creates
+the timing of the callback.
+\begin{verbatim}
+void run() {
+       running = 1;
+       while (running) {
+              read(buffer); // blocking
+              doCallback(buffer); // hand data to client
+       }
+}
+\end{verbatim}
+
+
+\subsubsection{Timing with Linux/pigpio timers}
+Similar to threads one can create timers which are called at certain
+intervals. These timers emit a Linux signal at a specified interval
+and then this signal is caught by a global (static) function.
+On the raspberry PI it's recommended to use the pigpio library
+and its timer callbacks which create the most reliable timing.
+However, anything beyond 50Hz approximately is most likely not
+precise.
+
+
+
+
 \end{document}
