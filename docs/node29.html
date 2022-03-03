@@ -55,27 +55,26 @@ Threads with endless loops are often used in conjunction with blocking
 I/O which provide the timing:
 <PRE>
 void run() {
-       running = 1;
+       running = true;
        while (running) {
               read(buffer); // blocking
               doCallback(buffer); // hand data to client
        }
 }
 </PRE>
-You need to implement a flag (here: &ldquo;running&rdquo;) which is set to zero to terminate
-the thread. This is then done a method
-which terminates the thread by setting
-&ldquo;running&rdquo; to zero before calling &ldquo;join()&rdquo;:
+Note the flag &ldquo;running&rdquo; which is controlled by the main program and is set to zero to terminate
+the thread:
 <PRE>
         void stop() {
-                running = 0; // &lt;----- HERE!!
+                running = false; // &lt;----- HERE!!
                 uthread-&gt;join();
                 delete uthread;
-                uthread = NULL;
         }
 </PRE>
-Generally a thread should terminate as soon as possible once the flag &ldquo;running&rdquo;
-has been set to zero.
+Note that &ldquo;join()&rdquo; is a blocking operation and needs to be used with care not to
+lock up the main program. You probably only need it when your program is terminating.
+See <kbd><A ID="tex2html15"
+  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd> for an example.
 
 <P>
 <BR><HR>

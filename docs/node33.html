@@ -56,8 +56,8 @@ the data coming in because the thread goes to sleep when it's waiting for
 I/O but wakes up very quickly after new data has arrived.
 
 <P>
-In this example from above the blocking &ldquo;read&rdquo; command creates
-the timing of the callback.
+In this example the blocking &ldquo;read&rdquo; command creates
+the timing of the callback:
 <PRE>
 void run() {
        running = 1;

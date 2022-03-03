@@ -52,15 +52,14 @@
 select/poll commands waiting for GPIO interrupts</A>
 </H3>
 In section&nbsp;<A HREF="node12.html#gpioIRQ">1.3.3</A> we introduced the so called &ldquo;poll&rdquo; command
-which is not polling an IRQ pin but putting a thread to sleep till en
+which is not polling an IRQ pin but <SPAN  CLASS="textsl">putting a thread to sleep</SPAN> till an
 external event has happened. Then of course a callback function should
 be called reacting to the external event. This is the preferred method
-for low latency and can be even tuned more by requesting a Linux
-realtime scheduler.
+for low latency responses.
 
 <P>
-As said previously, please use <SPAN  CLASS="textsl">pigpio</SPAN> on the Raspberry PI
-which wraps the select/poll commands in a thread and calls a
+As said previously, use <SPAN  CLASS="textsl">pigpio</SPAN> on the Raspberry PI
+which wraps the select/poll commands into a thread and calls a
 <SPAN  CLASS="textsl">callback</SPAN> function whenever an GPIO pin has been triggered.
 
 <P>

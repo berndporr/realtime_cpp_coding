@@ -53,10 +53,10 @@ Timing with Linux/pigpio timers</A>
 Similar to threads one can create timers which are called at certain
 intervals. These timers emit a Linux signal at a specified interval
 and then this signal is caught by a global (static) function.
-On the raspberry PI it's recommended to use the pigpio library
-and its timer callbacks which create the most reliable timing.
-However, anything beyond 50Hz approximately is most likely not
-precise.
+Generally it's <SPAN  CLASS="textsl">not recommended</SPAN> to use timers for anything
+which needs to be reliably sampled, for example ADC converters or
+sensors with sampling rates higher than a few Hz. On the raspberry PI
+use the pigpio library and its timer callbacks &ndash; if needed at all.
 
 <P>
 <BR><HR>

@@ -579,7 +579,7 @@ an easy to understand interface.
 \section{Introduction}
 In a realtime system events need to be dealt with as soon as possible
 while also interacting with the user and performing other background
-tasks.  However, certain operations might take considerable computing
+tasks. However, certain operations might take considerable computing
 time (FFT, etc) or I/O is blocking while waiting for data. The
 solution are threads.
 
@@ -596,22 +596,25 @@ simultaneously to the main process which created it.
 
 \section{Thread and worker}
 A thread is just a \textsl{container} for the actual method
-which is running independently. The method contained inside of the
-thread class is called \textsl{worker}.
+which is running independently. The method contained inside of a
+thread is often called \textsl{worker}.
 
 \subsection{Creating threads}
 In C++ a worker is a method within
 a class and needs to be \textsl{static} which means it won't be
 able to access the instance variables of a class. The trick
 is to pass a pointer to the instance of the class (``this'') as the argument of
-the worker, for example, here called ``exec'':
+the worker, for example, called ``exec'':
 \begin{verbatim}
 uthread = new std::thread(MyClassWithAThread::exec, this);
 \end{verbatim}
 where \texttt{MyClassWithAThread} is a class containing the static function ``exec'':
 \begin{verbatim}
 class MyClassWithAThread {
-        void run();
+        void run() {
+                // ... hard work is done here
+                doCallback(result); // hand the result over
+        }
         static void exec(MyClassWithAThread* cppThread) {
                 cppThread->run();
         }
@@ -619,27 +622,26 @@ class MyClassWithAThread {
 \end{verbatim}
 which in turn then calls a non-static class method ``run()'' which
 then has access to the instances variables.
-See \url{https://github.com/berndporr/rpi_AD7705_daq} for an example.
+
 
 
 \subsection{Lifetime of a thread}
 Threads terminate simply once the static worker has finished its job.
-To tell the client that a thread has finished you can use another
+To tell the client that a thread has finished you can use a
 \textsl{callback} to trigger an event.
 
-Sometimes it's important to wait for the termination of the thread, for example
-when your whole program is terminating or for example when you stop the data acquisition of
-the ADC. To wait for the
-termination of the thread use the ``join()'' method:
+Sometimes it's important to wait for the termination of the thread,
+for example when your whole program is terminating or when
+you stop an endless loop in a thread. To wait for the termination
+of the thread use the ``join()'' method:
 \begin{verbatim}
         void stop() {
                 uthread->join();
                 delete uthread;
-                uthread = NULL;
         }
 \end{verbatim}
 Important is also to release the memory of a thread after it has finished
-in avoid memory leaks.
+to avoid memory leaks.
 
 
 \subsection{Running/stopping workers with endless loops}
@@ -647,27 +649,25 @@ Threads with endless loops are often used in conjunction with blocking
 I/O which provide the timing:
 \begin{verbatim}
 void run() {
-       running = 1;
+       running = true;
        while (running) {
               read(buffer); // blocking
               doCallback(buffer); // hand data to client
        }
 }
 \end{verbatim}
-You need to implement a flag (here: ``running'') which is set to zero to terminate
-the thread. This is then done a method
-which terminates the thread by setting
-``running'' to zero before calling ``join()'':
+Note the flag ``running'' which is controlled by the main program and is set to zero to terminate
+the thread:
 \begin{verbatim}
         void stop() {
-                running = 0; // <----- HERE!!
+                running = false; // <----- HERE!!
                 uthread->join();
                 delete uthread;
-                uthread = NULL;
         }
 \end{verbatim}
-Generally a thread should terminate as soon as possible once the flag ``running''
-has been set to zero.
+Note that ``join()'' is a blocking operation and needs to be used with care not to
+lock up the main program. You probably only need it when your program is terminating.
+See \url{https://github.com/berndporr/rpi_AD7705_daq} for an example.
 
 
 \subsection{Dealing with competition / concurrency}
@@ -698,18 +698,17 @@ cmdMtx.unlock();
 
 \subsection{Timing within threads}
 Threads are perfect to create timing without using sleep commands
-with the help of blocking I/O.
+with the help of \textsl{blocking I/O}.
 
 \subsubsection{select/poll commands waiting for GPIO interrupts}
 In section~\ref{gpioIRQ} we introduced the so called ``poll'' command
-which is not polling an IRQ pin but putting a thread to sleep till en
+which is not polling an IRQ pin but \textsl{putting a thread to sleep} till an
 external event has happened. Then of course a callback function should
 be called reacting to the external event. This is the preferred method
-for low latency and can be even tuned more by requesting a Linux
-realtime scheduler.
+for low latency responses.
 
-As said previously, please use \textsl{pigpio} on the Raspberry PI
-which wraps the select/poll commands in a thread and calls a
+As said previously, use \textsl{pigpio} on the Raspberry PI
+which wraps the select/poll commands into a thread and calls a
 \textsl{callback} function whenever an GPIO pin has been triggered.
 
 
@@ -718,8 +717,8 @@ Blocking I/O (read, write, etc) can be used to time
 the data coming in because the thread goes to sleep when it's waiting for
 I/O but wakes up very quickly after new data has arrived.
 
-In this example from above the blocking ``read'' command creates
-the timing of the callback.
+In this example the blocking ``read'' command creates
+the timing of the callback:
 \begin{verbatim}
 void run() {
        running = 1;
@@ -735,10 +734,10 @@ void run() {
 Similar to threads one can create timers which are called at certain
 intervals. These timers emit a Linux signal at a specified interval
 and then this signal is caught by a global (static) function.
-On the raspberry PI it's recommended to use the pigpio library
-and its timer callbacks which create the most reliable timing.
-However, anything beyond 50Hz approximately is most likely not
-precise.
+Generally it's \textsl{not recommended} to use timers for anything
+which needs to be reliably sampled, for example ADC converters or
+sensors with sampling rates higher than a few Hz. On the raspberry PI
+use the pigpio library and its timer callbacks -- if needed at all.
 
 
 

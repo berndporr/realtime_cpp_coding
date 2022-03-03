@@ -55,14 +55,17 @@ In C++ a worker is a method within
 a class and needs to be <SPAN  CLASS="textsl">static</SPAN> which means it won't be
 able to access the instance variables of a class. The trick
 is to pass a pointer to the instance of the class (&ldquo;this&rdquo;) as the argument of
-the worker, for example, here called &ldquo;exec&rdquo;:
+the worker, for example, called &ldquo;exec&rdquo;:
 <PRE>
 uthread = new std::thread(MyClassWithAThread::exec, this);
 </PRE>
 where <SPAN  CLASS="texttt">MyClassWithAThread</SPAN> is a class containing the static function &ldquo;exec&rdquo;:
 <PRE>
 class MyClassWithAThread {
-        void run();
+        void run() {
+                // ... hard work is done here
+                doCallback(result); // hand the result over
+        }
         static void exec(MyClassWithAThread* cppThread) {
                 cppThread-&gt;run();
         }
@@ -70,8 +73,6 @@ class MyClassWithAThread {
 </PRE>
 which in turn then calls a non-static class method &ldquo;run()&rdquo; which
 then has access to the instances variables.
-See <kbd><A ID="tex2html15"
-  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd> for an example.
 
 <P>
 <BR><HR>
