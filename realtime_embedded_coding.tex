@@ -741,5 +741,88 @@ use the pigpio library and its timer callbacks -- if needed at all.
 
 
 
+\chapter{Realtime/event processing in QT}
+
+\section{Introduction}
+QT is a cross platform windows development environment
+for Linux/Windows and Mac.
+
+Elements in QT are \textsl{Widgets} which can contain
+anything form plots, buttons or text fields. They are
+classes. You can define your own widgets or use ready made ones.
+
+\section{Layout in QT}
+
+A layout in QT is defined in a declarative way
+either as layout classes or in QML. Layout classes
+are the old method but much easier than QML.
+
+Example of a vertical layout in a horizontal one.
+
+\includegraphics[width=0.5\textwidth]{qwtex}
+
+
+\begin{verbatim}
+	button = new QPushButton;
+	thermo = new QwtThermo; 
+	plot = new QwtPlot;
+
+        // vertical layout
+	vLayout = new QVBoxLayout;
+	vLayout->addWidget(button);
+	vLayout->addWidget(thermo);
+
+	// horizontal layout
+	hLayout = new QHBoxLayout;
+	hLayout->addLayout(vLayout);
+	hLayout->addWidget(plot);
+
+        // main layout
+	setLayout(hLayout);
+\end{verbatim}
+
+
+\section{Callbacks in QT}
+
+QT provides a wrapper for callbacks which are signals and
+slots. For example a button sends a signal to a method
+which is opening a file dialogue:
+
+\begin{verbatim}
+	connect(button,&QPushButton::clicked,this,&Window::reset);
+\end{verbatim}
+
+
+
+\section{Screen refresh}
+
+For animations such as plots or games you set up a timer
+which then triggers a refresh request via ``update()''.
+Update can be called as often as you like but QT will decide
+when to refresh the screen.
+
+\begin{verbatim}
+void ScopeWindow::timerEvent( QTimerEvent *event )
+          processData();
+          calcScreenParameters();
+          update(); // <----- triggers paint event
+}
+\end{verbatim}
+
+
+\section{Creating your own widget}
+Inherit QWidget and overload the function ``paintEvent'':
+
+
+\begin{verbatim}
+void ScopeWindow::paintEvent(QPaintEvent *) {
+        QPainter paint( this );
+
+        paint.drawLine( ... )
+}
+\end{verbatim}
+
+``paintEvent()'' is called after ``update()'' has been triggered.
+
 
 \end{document}
