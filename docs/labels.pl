@@ -10,6 +10,10 @@ $key = q/gpioIRQ/;
 $external_labels{$key} = "$URL/" . q|node12.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/qwtex/;
+$external_labels{$key} = "$URL/" . q|node37.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/timing/;
 $external_labels{$key} = "$URL/" . q|node2.html|; 
 $noresave{$key} = "$nosave";
@@ -31,6 +35,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/gpioIRQ/;
 $external_latex_labels{$key} = q|1.3.3|; 
+$noresave{$key} = "$nosave";
+
+$key = q/qwtex/;
+$external_latex_labels{$key} = q|3.1|; 
 $noresave{$key} = "$nosave";
 
 $key = q/spimodes/;

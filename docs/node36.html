@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Timing with Linux/pigpio timers</TITLE>
-<META NAME="description" CONTENT="Timing with Linux/pigpio timers">
+<TITLE>Introduction</TITLE>
+<META NAME="description" CONTENT="Introduction">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,48 +15,49 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="previous" HREF="node33.html">
-<LINK REL="next" HREF="node35.html">
+<LINK REL="next" HREF="node37.html">
+<LINK REL="previous" HREF="node35.html">
+<LINK REL="next" HREF="node37.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
 <A
- HREF="node35.html">
+ HREF="node37.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node31.html">
+ HREF="node35.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
- HREF="node33.html">
+ HREF="node35.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html216"
+<A ID="tex2html225"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node35.html">Realtime/event processing in QT</A>
+ HREF="node37.html">Layout in QT</A>
 <B> Up:</B> <A
- HREF="node31.html">Timing within threads</A>
+ HREF="node35.html">Realtime/event processing in QT</A>
 <B> Previous:</B> <A
- HREF="node33.html">Timing with blocking I/O</A>
- &nbsp; <B>  <A ID="tex2html217"
+ HREF="node35.html">Realtime/event processing in QT</A>
+ &nbsp; <B>  <A ID="tex2html226"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A ID="SECTION00335300000000000000">
-Timing with Linux/pigpio timers</A>
-</H3>
-Similar to threads one can create timers which are called at certain
-intervals. These timers emit a Linux signal at a specified interval
-and then this signal is caught by a global (static) function.
-Generally it's <SPAN  CLASS="textsl">not recommended</SPAN> to use timers for anything
-which needs to be reliably sampled, for example ADC converters or
-sensors with sampling rates higher than a few Hz. On the raspberry PI
-use the pigpio library and its timer callbacks &ndash; if needed at all.
+<H1><A ID="SECTION00410000000000000000">
+Introduction</A>
+</H1>
+QT is a cross platform windows development environment
+for Linux/Windows and Mac.
+
+<P>
+Elements in QT are <SPAN  CLASS="textsl">Widgets</SPAN> which can contain
+anything form plots, buttons or text fields. They are
+classes. You can define your own widgets or use ready made ones.
 
 <P>
 <BR><HR>

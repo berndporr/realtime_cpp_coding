@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Lifetime of a thread</TITLE>
-<META NAME="description" CONTENT="Lifetime of a thread">
+<TITLE>Events from widgets</TITLE>
+<META NAME="description" CONTENT="Events from widgets">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,59 +15,54 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node29.html">
-<LINK REL="previous" HREF="node27.html">
-<LINK REL="next" HREF="node29.html">
+<LINK REL="next" HREF="node40.html">
+<LINK REL="previous" HREF="node38.html">
+<LINK REL="next" HREF="node40.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
 <A
- HREF="node29.html">
+ HREF="node40.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node26.html">
+ HREF="node38.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
- HREF="node27.html">
+ HREF="node38.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html201"
+<A ID="tex2html233"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node29.html">Running/stopping workers with endless</A>
+ HREF="node40.html">Screen refresh events</A>
 <B> Up:</B> <A
- HREF="node26.html">Thread and worker</A>
+ HREF="node38.html">Callbacks in QT</A>
 <B> Previous:</B> <A
- HREF="node27.html">Creating threads</A>
- &nbsp; <B>  <A ID="tex2html202"
+ HREF="node38.html">Callbacks in QT</A>
+ &nbsp; <B>  <A ID="tex2html234"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00332000000000000000">
-Lifetime of a thread</A>
+<H2><A ID="SECTION00431000000000000000">
+Events from widgets</A>
 </H2>
-Threads terminate simply once the static worker has finished its job.
-To tell the client that a thread has finished you can use a
-<SPAN  CLASS="textsl">callback</SPAN> to trigger an event.
-
-<P>
-Sometimes it's important to wait for the termination of the thread,
-for example when your whole program is terminating or when
-you stop an endless loop in a thread. To wait for the termination
-of the thread use the &ldquo;join()&rdquo; method:
+In contrast to our low level callback mechanism using interfaces QT rather
+directly calls methods in classes. The problem is that function pointers
+cannot be directly used as a class has instance pointers to its local
+data. So a method of a class needs to be combined with the instance
+pointer. The QT method &ldquo;connect&rdquo; does exactly that:
 <PRE>
-        void stop() {
-                uthread-&gt;join();
-                delete uthread;
-        }
+connect(button,&amp;QPushButton::clicked,
+        this,&amp;Window::reset);
 </PRE>
-Important is also to release the memory of a thread after it has finished
-to avoid memory leaks.
+The QPushButton instance &ldquo;button&rdquo; has a method called &ldquo;clicked&rdquo; which is
+called whenever the user clicks on the button. This is then forwarded to the
+method &ldquo;reset&rdquo; in the application Widget.
 
 <P>
 <BR><HR>

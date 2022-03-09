@@ -10,6 +10,10 @@ $key = q/gpioIRQ/;
 $ref_files{$key} = "$dir".q|node12.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/qwtex/;
+$ref_files{$key} = "$dir".q|node37.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/timing/;
 $ref_files{$key} = "$dir".q|node2.html|; 
 $noresave{$key} = "$nosave";

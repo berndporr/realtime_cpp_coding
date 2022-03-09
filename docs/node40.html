@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>Screen refresh events</TITLE>
+<META NAME="description" CONTENT="Screen refresh events">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="previous" HREF="node39.html">
+<LINK REL="next" HREF="node41.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node41.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node38.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node39.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html235"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node41.html">About this document ...</A>
+<B> Up:</B> <A
+ HREF="node38.html">Callbacks in QT</A>
+<B> Previous:</B> <A
+ HREF="node39.html">Events from widgets</A>
+ &nbsp; <B>  <A ID="tex2html236"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H2><A ID="SECTION00432000000000000000">
+Screen refresh events</A>
+</H2>
+For animations such as plots or games you set up a timer
+which then triggers a refresh request via &ldquo;update()&rdquo;.
+&ldquo;Update&rdquo; can be called as often as you like but QT will decide
+when to refresh the screen.
+
+<P>
+<PRE>
+void ScopeWindow::timerEvent( QTimerEvent *event )
+          processData();
+          calcScreenParameters();
+          update(); // &lt;----- triggers paint event
+}
+</PRE>
+
+<P>
+After &ldquo;update()&rdquo; has been called in the timer event then the
+paint event is executed by QT as soon as possible and re-paints
+the canvas of the widget:
+<PRE>
+void ScopeWindow::paintEvent(QPaintEvent *) {
+        QPainter paint( this );
+
+        paint.drawLine( ... )
+}
+</PRE>
+Note that neither the timer nor the &ldquo;update()&rdquo; function
+is called in a reliable way but whenever QT likes to do it.
+So the QT timers cannot be used to sample data but should
+only be used for screen refresh.
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

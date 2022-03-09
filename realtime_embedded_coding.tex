@@ -753,52 +753,65 @@ classes. You can define your own widgets or use ready made ones.
 
 \section{Layout in QT}
 
-A layout in QT is defined in a declarative way
-either as layout classes or in QML. Layout classes
-are the old method but much easier than QML.
+\begin{figure}[!hbt]
+\begin{center}
+\mbox{\includegraphics[width=0.5\textwidth]{qwtex}}
+\end{center}
+\caption{QT example layout
+\label{qwtex}}
+\end{figure}
 
-Example of a vertical layout in a horizontal one.
+There are different ways of declaring layout in QT. One is
+using a markup language which then has matching classes
+or creating it all with classes. We show how it works by
+just using classes which organise the layout. There is
+also a trend in general to use code to declare the layout
+as done in SwiftUI, for example.
 
-\includegraphics[width=0.5\textwidth]{qwtex}
-
-
+This is an example how widgets are organised into
+nested vertical and horizontal layouts (see Fig.~\ref{qwtex}
+for the result).
 \begin{verbatim}
-	button = new QPushButton;
-	thermo = new QwtThermo; 
-	plot = new QwtPlot;
+// create 3 widgets
+button = new QPushButton;
+thermo = new QwtThermo; 
+plot = new QwtPlot;
 
-        // vertical layout
-	vLayout = new QVBoxLayout;
-	vLayout->addWidget(button);
-	vLayout->addWidget(thermo);
+// vertical layout
+vLayout = new QVBoxLayout;
+vLayout->addWidget(button);
+vLayout->addWidget(thermo);
 
-	// horizontal layout
-	hLayout = new QHBoxLayout;
-	hLayout->addLayout(vLayout);
-	hLayout->addWidget(plot);
+// horizontal layout
+hLayout = new QHBoxLayout;
+hLayout->addLayout(vLayout);
+hLayout->addWidget(plot);
 
-        // main layout
-	setLayout(hLayout);
+// main layout
+setLayout(hLayout);
 \end{verbatim}
 
 
 \section{Callbacks in QT}
-
-QT provides a wrapper for callbacks which are signals and
-slots. For example a button sends a signal to a method
-which is opening a file dialogue:
-
+\subsection{Events from widgets}
+In contrast to our low level callback mechanism using interfaces QT rather
+directly calls methods in classes. The problem is that function pointers
+cannot be directly used as a class has instance pointers to its local
+data. So a method of a class needs to be combined with the instance
+pointer. The QT method ``connect'' does exactly that:
 \begin{verbatim}
-	connect(button,&QPushButton::clicked,this,&Window::reset);
+connect(button,&QPushButton::clicked,
+        this,&Window::reset);
 \end{verbatim}
+The QPushButton instance ``button'' has a method called ``clicked'' which is
+called whenever the user clicks on the button. This is then forwarded to the
+method ``reset'' in the application Widget.
 
 
-
-\section{Screen refresh}
-
+\subsection{Screen refresh events}
 For animations such as plots or games you set up a timer
 which then triggers a refresh request via ``update()''.
-Update can be called as often as you like but QT will decide
+``Update'' can be called as often as you like but QT will decide
 when to refresh the screen.
 
 \begin{verbatim}
@@ -809,11 +822,9 @@ void ScopeWindow::timerEvent( QTimerEvent *event )
 }
 \end{verbatim}
 
-
-\section{Creating your own widget}
-Inherit QWidget and overload the function ``paintEvent'':
-
-
+After ``update()'' has been called in the timer event then the
+paint event is executed by QT as soon as possible and re-paints
+the canvas of the widget:
 \begin{verbatim}
 void ScopeWindow::paintEvent(QPaintEvent *) {
         QPainter paint( this );
@@ -821,8 +832,10 @@ void ScopeWindow::paintEvent(QPaintEvent *) {
         paint.drawLine( ... )
 }
 \end{verbatim}
-
-``paintEvent()'' is called after ``update()'' has been triggered.
+Note that neither the timer nor the ``update()'' function
+is called in a reliable way but whenever QT likes to do it.
+So the QT timers cannot be used to sample data but should
+only be used for screen refresh.
 
 
 \end{document}
