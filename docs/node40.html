@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Screen refresh events</TITLE>
-<META NAME="description" CONTENT="Screen refresh events">
+<TITLE>Plotting realtime data arriving via a callback</TITLE>
+<META NAME="description" CONTENT="Plotting realtime data arriving via a callback">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -48,24 +48,39 @@
 <!--End of Navigation Panel-->
 
 <H2><A ID="SECTION00432000000000000000">
-Screen refresh events</A>
+Plotting realtime data arriving via a callback</A>
 </H2>
-For animations such as plots or games you set up a timer
-which then triggers a refresh request via &ldquo;update()&rdquo;.
-&ldquo;Update&rdquo; can be called as often as you like but QT will decide
-when to refresh the screen.
+The general idea is to store the realtime samples from a callback in a
+buffer and trigger a screen refresh at a lower rate for example every
+40&nbsp;ms which then plots the contents of the buffer.
 
 <P>
+The callback &ldquo;addSample&rdquo; here is called in realtime whenever
+a sample has arrived:
 <PRE>
-void ScopeWindow::timerEvent( QTimerEvent *event )
-          processData();
-          calcScreenParameters();
-          update(); // &lt;----- triggers paint event
+void Window::addSample( float v ) {
+    // add the new input to the plot
+    memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
+    yData[plotDataSize-1] = v;
+}
+</PRE>
+which stores the sample `v` in the shift buffer `yData`.
+
+<P>
+Then the screen refresh (which is slow) is done at
+a lower and unreliable rate:
+<PRE>
+void Window::timerEvent( QTimerEvent * )
+{
+    curve-&gt;setSamples(xData, yData, plotDataSize);
+    plot-&gt;replot();
+    thermo-&gt;setValue( yData[0] );
+    update();
 }
 </PRE>
 
 <P>
-After &ldquo;update()&rdquo; has been called in the timer event then the
+After &ldquo;update()&rdquo; has been called in the timer event the
 paint event is executed by QT as soon as possible and re-paints
 the canvas of the widget:
 <PRE>
@@ -75,6 +90,8 @@ void ScopeWindow::paintEvent(QPaintEvent *) {
         paint.drawLine( ... )
 }
 </PRE>
+
+<P>
 Note that neither the timer nor the &ldquo;update()&rdquo; function
 is called in a reliable way but whenever QT likes to do it.
 So the QT timers cannot be used to sample data but should

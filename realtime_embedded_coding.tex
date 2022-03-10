@@ -808,21 +808,35 @@ called whenever the user clicks on the button. This is then forwarded to the
 method ``reset'' in the application Widget.
 
 
-\subsection{Screen refresh events}
-For animations such as plots or games you set up a timer
-which then triggers a refresh request via ``update()''.
-``Update'' can be called as often as you like but QT will decide
-when to refresh the screen.
+\subsection{Plotting realtime data arriving via a callback}
+The general idea is to store the realtime samples from a callback in a
+buffer and trigger a screen refresh at a lower rate for example every
+40~ms which then plots the contents of the buffer.
 
+The callback ``addSample'' here is called in realtime whenever
+a sample has arrived:
 \begin{verbatim}
-void ScopeWindow::timerEvent( QTimerEvent *event )
-          processData();
-          calcScreenParameters();
-          update(); // <----- triggers paint event
+void Window::addSample( float v ) {
+    // add the new input to the plot
+    memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
+    yData[plotDataSize-1] = v;
+}
+\end{verbatim}
+which stores the sample `v` in the shift buffer `yData`.
+
+Then the screen refresh (which is slow) is done at
+a lower and unreliable rate:
+\begin{verbatim}
+void Window::timerEvent( QTimerEvent * )
+{
+    curve->setSamples(xData, yData, plotDataSize);
+    plot->replot();
+    thermo->setValue( yData[0] );
+    update();
 }
 \end{verbatim}
 
-After ``update()'' has been called in the timer event then the
+After ``update()'' has been called in the timer event the
 paint event is executed by QT as soon as possible and re-paints
 the canvas of the widget:
 \begin{verbatim}
@@ -832,6 +846,7 @@ void ScopeWindow::paintEvent(QPaintEvent *) {
         paint.drawLine( ... )
 }
 \end{verbatim}
+
 Note that neither the timer nor the ``update()'' function
 is called in a reliable way but whenever QT likes to do it.
 So the QT timers cannot be used to sample data but should
