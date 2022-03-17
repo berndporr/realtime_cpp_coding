@@ -15,6 +15,7 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
+<LINK REL="next" HREF="node51.html">
 <LINK REL="previous" HREF="node48.html">
 <LINK REL="next" HREF="node50.html">
 </HEAD>
@@ -31,17 +32,17 @@
 <A
  HREF="node48.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html289"
+<A ID="tex2html296"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node50.html">Client</A>
+ HREF="node50.html">Server client: JSON (application/json)</A>
 <B> Up:</B> <A
  HREF="node47.html">Server</A>
 <B> Previous:</B> <A
- HREF="node48.html">Web server (http/https)</A>
- &nbsp; <B>  <A ID="tex2html290"
+ HREF="node48.html">Web servers (http/https)</A>
+ &nbsp; <B>  <A ID="tex2html297"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -51,34 +52,47 @@
 FastCGI</A>
 </H2>
 FastCGI (see Fig&nbsp;<A HREF="node48.html#cgi">4.1</A>) is written in C++ and generates the entire
-  HTML web page dynamically or here generates JSON packets to be
-  processed by client JavaScripts. For realtime applications
-  the JSON transmission is perfect because the
-  JavaScript of a web page can request
-  JSON packages and display them.
-  On github is a wrapper as a single header file where
-  the user simply needs to implement a callback method
-  which submits the JSON to the web page:
-<PRE>
-class JSONcallback : public JSONCGIHandler::GETCallback {
-public:
-/**
-* Gets the data and sends it to the webserver.
-* The callback creates two JSON entries. One with the
-* timestamp and one with the temperature from the sensor.
-**/
-virtual std::string getJSONString() {
-    JSONCGIHandler::JSONGenerator jsonGenerator;
-    jsonGenerator.add("epoch",(long)time(NULL));
-    jsonGenerator.add("temperatures",temperatureArray);
-    return jsonGenerator.getJSON();
-    }
-};
-</PRE> 
-See <kbd><A ID="tex2html19"
-  HREF="https://github.com/berndporr/json_fastcgi_web_api">https://github.com/berndporr/json_fastcgi_web_api</A></kbd>for a complete example with a sensor mockup.
+content of the http/https request. In particular here we generate
+JSON packets serverside which can then be processed by client JavaScripts.
+For realtime applications JSON transmission is perfect because the client-side
+JavaScript can request JSON packages and directly turn them into variables.
 
 <P>
+A fast CGI program is a UNIX commandline program which communicates with the web server
+(nginx, Apache, ...) via a UNIX socket which in turn is a pseudo file located
+in a temporary directory for example `/tmp/sensorsocket`.
+
+<P>
+The web server then maps certain http/https requests to
+his socket, for example, the configuration for nginx looks like this:
+<PRE>
+       location /sensor/ {
+          include        fastcgi_params;
+          fastcgi_pass   unix:/tmp/sensorsocket;
+        }
+</PRE>
+If the user does a request via the URL <SPAN  CLASS="texttt">www.mywebpage.com/sensor/</SPAN> then
+nginx contacts the fastcgi program via this socket. The fastcgi program
+then needs to return the content. Internally this will be a C++ callback
+inside of the fastcgi program.
+
+<P>
+The C++ fastcgi API <kbd><A ID="tex2html19"
+  HREF="https://github.com/berndporr/json_fastcgi_web_api">https://github.com/berndporr/json_fastcgi_web_api</A></kbd> 
+is wrapper around the quite cryptic fastcgi C library and we are discussing
+its callback handlers now.
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html298"
+  HREF="node50.html">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON (application/json)</A>
+</UL>
+<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

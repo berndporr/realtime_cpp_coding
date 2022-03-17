@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>JSON (application/json)</TITLE>
-<META NAME="description" CONTENT="JSON (application/json)">
+<TITLE>Server client: JSON (application/json)</TITLE>
+<META NAME="description" CONTENT="Server client: JSON (application/json)">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -32,24 +32,25 @@
 <A
  HREF="node44.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html279"
+<A ID="tex2html284"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node46.html">POST (application/x-www-form-urlencoded)</A>
+ HREF="node46.html">Client server: POST (application/x-www-form-urlencoded)</A>
 <B> Up:</B> <A
  HREF="node44.html">Data formats</A>
 <B> Previous:</B> <A
  HREF="node44.html">Data formats</A>
- &nbsp; <B>  <A ID="tex2html280"
+ &nbsp; <B>  <A ID="tex2html285"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
 <H2><A ID="SECTION00531000000000000000">
-JSON (application/json)</A>
+Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON (application/json)</A>
 </H2>
 The most popular dataformat is JSON which is basically a
 map of key/value pairs which can also be nested:
@@ -60,6 +61,10 @@ map of key/value pairs which can also be nested:
     comment: "all good!"
 }
 </PRE>
+Since JSON is sort of readable text a web server can simply
+generate that text send it over via http or https. There
+is no difference except that the MIME format is now `application/json`
+instead of html.
 
 <P>
 <BR><HR>

@@ -32,17 +32,17 @@
 <A
  HREF="node41.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html271"
+<A ID="tex2html276"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
  HREF="node43.html">REST</A>
 <B> Up:</B> <A
- HREF="node41.html">Realtime webserver communication</A>
+ HREF="node41.html">Realtime webserver/client communication</A>
 <B> Previous:</B> <A
- HREF="node41.html">Realtime webserver communication</A>
- &nbsp; <B>  <A ID="tex2html272"
+ HREF="node41.html">Realtime webserver/client communication</A>
+ &nbsp; <B>  <A ID="tex2html277"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -53,15 +53,21 @@ Introduction</A>
 </H1>
 
 <P>
-Server / client applications are at the heart of a huge number
+Web server / client applications are at the heart of a huge number
 of web applications ranging from shopping baskets to social
 media applications.
 
 <P>
-Generally it's easy to create dynamic content which is not realtime
+Generally it's easy to create dynamic content
 with many different solutions available (see PHP or nodejs) and well
 documented. However, feeding realtime data from C++ to a web page or
-realtime button presses back to C++ is more difficult.
+realtime button presses back to C++ is a bit more difficult.
+
+<P>
+Important to recognise where <SPAN  CLASS="textsl">events</SPAN> are generated: it's
+always the client (web browser, mobile app) which triggers an event,
+be it sending data over to the server or requesting data. It's
+always initiated by the client.
 
 <P>
 <BR><HR>

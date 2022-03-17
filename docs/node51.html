@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>About this document ...</TITLE>
-<META NAME="description" CONTENT="About this document ...">
+<TITLE>Client server: POST (application/x-www-form-urlencoded)</TITLE>
+<META NAME="description" CONTENT="Client server: POST (application/x-www-form-urlencoded)">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,44 +15,56 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="previous" HREF="node41.html">
+<LINK REL="previous" HREF="node49.html">
+<LINK REL="next" HREF="node52.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next_g.png"> 
 <A
- HREF="realtime_embedded_coding.html">
+ HREF="node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node47.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node50.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html293"
+<A ID="tex2html301"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
+<B> Next:</B> <A
+ HREF="node52.html">Client</A>
 <B> Up:</B> <A
- HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+ HREF="node47.html">Server</A>
 <B> Previous:</B> <A
- HREF="node50.html">Client</A>
- &nbsp; <B>  <A ID="tex2html294"
+ HREF="node50.html">Server client: JSON (application/json)</A>
+ &nbsp; <B>  <A ID="tex2html302"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A ID="SECTION00600000000000000000">
-About this document ...</A>
-</H1>
- <STRONG>Realtime embedded coding under Linux</STRONG><P>
-This document was generated using the
-<A HREF="http://www.latex2html.org/">LaTeX2HTML</A> translator Version 2019.2 (Released June 5, 2019)
+<H2><A ID="SECTION00543000000000000000">
+Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</H2>
+Like in any GUI the client can press a button and create an event.
+On the client side this is packaged as a JSON record with
+jquery and then sent over to the server. The server then
+receives the data as a callback:
+<PRE>
+virtual void postString(std::string postArg) {
+		auto m = JSONCGIHandler::postDecoder(postArg);
+		float temp = atof(m["volt"].c_str());
+		std::cerr &lt;&lt; m["hello"] &lt;&lt; "\n";
+		sensorfastcgi-&gt;forceValue(temp);
+	}
+</PRE> 
+
 <P>
-The command line arguments were: <BR>
- <kbd>latex2html realtime_embedded_coding -dir docs -t 'Realtime Embedded Coding under Linux' -address '<p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>'</kbd>
-<P>
-The translation was initiated on 2022-03-17
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
