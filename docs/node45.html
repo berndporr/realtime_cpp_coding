@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Timing within threads</TITLE>
-<META NAME="description" CONTENT="Timing within threads">
+<TITLE>JSON (application/json)</TITLE>
+<META NAME="description" CONTENT="JSON (application/json)">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,58 +15,53 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="previous" HREF="node30.html">
-<LINK REL="next" HREF="node32.html">
+<LINK REL="next" HREF="node46.html">
+<LINK REL="previous" HREF="node44.html">
+<LINK REL="next" HREF="node46.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
 <A
- HREF="node32.html">
+ HREF="node46.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node26.html">
+ HREF="node44.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
- HREF="node30.html">
+ HREF="node44.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html229"
+<A ID="tex2html278"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node32.html">select/poll commands waiting for</A>
+ HREF="node46.html">POST (application/x-www-form-urlencoded)</A>
 <B> Up:</B> <A
- HREF="node26.html">Thread and worker</A>
+ HREF="node44.html">Data formats</A>
 <B> Previous:</B> <A
- HREF="node30.html">Dealing with competition /</A>
- &nbsp; <B>  <A ID="tex2html230"
+ HREF="node44.html">Data formats</A>
+ &nbsp; <B>  <A ID="tex2html279"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00335000000000000000">
-Timing within threads</A>
+<H2><A ID="SECTION00531000000000000000">
+JSON (application/json)</A>
 </H2>
-Threads are perfect to create timing without using sleep commands
-with the help of <SPAN  CLASS="textsl">blocking I/O</SPAN>.
+The most popular dataformat is JSON which is basically a
+map of key/value pairs which can also be nested:
+<PRE>
+{
+    temperature: [20, 21, 20, 19, 17],
+    steps: 100,
+    comment: "all good!"
+}
+</PRE>
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL CLASS="ChildLinks">
-<LI><A ID="tex2html231"
-  HREF="node32.html">select/poll commands waiting for GPIO interrupts</A>
-<LI><A ID="tex2html232"
-  HREF="node33.html">Timing with blocking I/O</A>
-<LI><A ID="tex2html233"
-  HREF="node34.html">Timing with Linux/pigpio timers</A>
-</UL>
-<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

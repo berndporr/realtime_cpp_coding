@@ -2,6 +2,11 @@
 # Associate images original text with physical files.
 
 
+$key = q/includegraphics[width=linewidth]{restdataflow};LFS=12;AAT/;
+$cached_env_img{$key} = q|<IMG STYLE=""
+ SRC="|."$dir".q|img3.svg"
+ ALT="\includegraphics[width=\linewidth]{restdataflow}">|; 
+
 $key = q/includegraphics[width=textwidth]{gettersetters};LFS=12;AAT/;
 $cached_env_img{$key} = q|<IMG STYLE=""
  SRC="|."$dir".q|img2.svg"

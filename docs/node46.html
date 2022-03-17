@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Timing within threads</TITLE>
-<META NAME="description" CONTENT="Timing within threads">
+<TITLE>POST (application/x-www-form-urlencoded)</TITLE>
+<META NAME="description" CONTENT="POST (application/x-www-form-urlencoded)">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,58 +15,53 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="previous" HREF="node30.html">
-<LINK REL="next" HREF="node32.html">
+<LINK REL="previous" HREF="node45.html">
+<LINK REL="next" HREF="node47.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
 <A
- HREF="node32.html">
+ HREF="node47.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node26.html">
+ HREF="node44.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
- HREF="node30.html">
+ HREF="node45.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html229"
+<A ID="tex2html280"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node32.html">select/poll commands waiting for</A>
+ HREF="node47.html">Server</A>
 <B> Up:</B> <A
- HREF="node26.html">Thread and worker</A>
+ HREF="node44.html">Data formats</A>
 <B> Previous:</B> <A
- HREF="node30.html">Dealing with competition /</A>
- &nbsp; <B>  <A ID="tex2html230"
+ HREF="node45.html">JSON (application/json)</A>
+ &nbsp; <B>  <A ID="tex2html281"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00335000000000000000">
-Timing within threads</A>
+<H2><A ID="SECTION00532000000000000000">
+POST (application/x-www-form-urlencoded)</A>
 </H2>
-Threads are perfect to create timing without using sleep commands
-with the help of <SPAN  CLASS="textsl">blocking I/O</SPAN>.
+When a website sends data back then even if submitted as JSON
+via jQuery it will be submitted in the form of:
+<PRE>
+temperature=20&amp;steps=100&amp;comment=all+good%33
+</PRE>
+and needs to be parsed by the receiver. All web scripting languages
+such as <SPAN  CLASS="texttt">PHP</SPAN> or <SPAN  CLASS="texttt">node.js</SPAN> have powerful functions to
+decode these strings. In C/C++ <SPAN  CLASS="texttt">libcurl</SPAN>
+can be used to convert back the escape characters to its original
+binary form.
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL CLASS="ChildLinks">
-<LI><A ID="tex2html231"
-  HREF="node32.html">select/poll commands waiting for GPIO interrupts</A>
-<LI><A ID="tex2html232"
-  HREF="node33.html">Timing with blocking I/O</A>
-<LI><A ID="tex2html233"
-  HREF="node34.html">Timing with Linux/pigpio timers</A>
-</UL>
-<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

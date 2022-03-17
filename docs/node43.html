@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>REST</TITLE>
+<META NAME="description" CONTENT="REST">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="next" HREF="node44.html">
+<LINK REL="previous" HREF="node42.html">
+<LINK REL="next" HREF="node44.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node44.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="node41.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node42.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html272"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node44.html">Data formats</A>
+<B> Up:</B> <A
+ HREF="node41.html">Realtime webserver communication</A>
+<B> Previous:</B> <A
+ HREF="node42.html">Introduction</A>
+ &nbsp; <B>  <A ID="tex2html273"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A ID="SECTION00520000000000000000">
+REST</A>
+</H1>
+The interface between a web client (browser, phone app) is usually
+implemented as a Representational State Transfer Architectural (REST)
+style API by communicating via an URL on a web server. The most important requirements
+for this API are very general and won't define the actual data format:
+
+<OL>
+<LI><SPAN  CLASS="textbf">Uniform interface</SPAN> No matter if a web page or mobile phone
+  requests the temperature of a sensor the returned format must always be the same.
+</LI>
+<LI><SPAN  CLASS="textbf">Client-server decoupling</SPAN> The only information
+  the client needs to know is the URL of the server to request data or send data.
+</LI>
+<LI><SPAN  CLASS="textbf">Statelessness</SPAN> Each
+  request needs to include all the information necessary and must not depend
+  on previous requests. For example on the server a request to a buffer
+  must not alter the buffer but read from it so that another user reading
+  the buffer shortly after gets the same data.
+</LI>
+</OL>
+See <a href="https://www.ibm.com/cloud/learn/rest-apis">f</a>or the complete
+list of design principles.
+
+<P>
+<BR><HR>
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>
