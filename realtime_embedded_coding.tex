@@ -1043,6 +1043,45 @@ $(document).ready( documentReady );
 \end{verbatim}
 
 
+\chapter{Setters}
+
+In Fig.~\ref{gettersetters} we have seen that data flows from
+the sensors to the C++ classes via \textsl{callbacks}. The flow
+back from inner C++ classes to motor or display outputs is via
+\textsl{setters}. The same applies for setting configuration
+parameters.
+
+A setter is a simple method in a class, for example to set the
+speed of a motor:
+\begin{verbatim}
+class Motor {
+  /**
+  * Set the Left Wheel Speed
+  * @param speed between -1 and +1
+  **/
+  void setLeftWheelSpeed(float speed);
+};
+\end{verbatim}
+Again as with callbacks it's important to abstract away from the
+hardware, for example normalising the speed of the
+motor and \textsl{hiding} away the complexity of the
+PWM or GPIO ports in the class.
+
+If a setter has more than one argument it's highly recommended
+to use a \textsl{struct} to set the values.
+
+
+\chapter{Data storage and memory management}
+
+\section{Introduction}
+Realtime processing should happen as quickly as possible. This means
+that large memory allocations should happen at once. Small ones
+are more effective as variables or \textsl{structs} which are passed as parameters
+along a chain of callbacks or setters:
+\begin{itemize}
+\item Large memory allocation: Do all ``new'' commands at startup, ``delete'' at shutdown.
+\item Small memory segments: variables or structs.
+\end{itemise}
 
 
 
