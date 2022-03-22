@@ -53,7 +53,7 @@ GPIO interrupt handling via /sys
 </H4>
 The most important application for the /sys filesystem is to
 do interrupt processing in userspace.
-A thread can be put to sleep until an interrupt has happend on one of
+A thread can be put to sleep until an interrupt has happened on one of
 the GPIO pins. This is done by monitoring the &ldquo;value&rdquo;
 of a GPIO pin in the /sys filesystem with the &ldquo;poll&rdquo; command:
 <PRE>

@@ -99,7 +99,7 @@ temperature sensor and one of the accelerometer. In terms of
   damage without the client knowing why.
 \item \textsl{Dependency inversion}: That is about obstructing the
   essential features of of a class of interfaces. For example ideally
-  you want, for example, a base class for covering a range of simuliar
+  you want, for example, a base class for covering a range of similar
   ADC converters from the same manufacturer and not a base class being
   a driver for a particular chip. Instead you want all ADC chip driver
   classes to inherit from the abstract ADC driver.
@@ -172,7 +172,7 @@ the C++ driver classes for different hardware protocols.
 \end{table}
 SPI is a protocol which usually transmits and receives at the same
 time. Even that data might not be used it needs to be matched up. So
-for example sending 8 byes and recieving 8 bytes at the same time.
+for example sending 8 byes and receiving 8 bytes at the same time.
 
 Transfer to/from SPI is best managed by the low level access to /dev.
 Open the SPI device with the standard open() function:
@@ -316,7 +316,7 @@ A thin wrapper around the GPIO sys filesystem is here: \url{https://github.com/b
 \paragraph{GPIO interrupt handling via /sys\label{gpioIRQ}}
 The most important application for the /sys filesystem is to
 do interrupt processing in userspace.
-A thread can be put to sleep until an interrupt has happend on one of
+A thread can be put to sleep until an interrupt has happened on one of
 the GPIO pins. This is done by monitoring the ``value''
 of a GPIO pin in the /sys filesystem with the ``poll'' command:
 \begin{verbatim}
@@ -497,7 +497,7 @@ to hand back the data to the client.
 There are different ways of tackling the issue of callbacks but the
 simplest one is defining a method as \textsl{abstract} and asking the
 client to implement it in a derived class. That abstract function can
-either be in a separate inteface class or part of the device class
+either be in a separate interface class or part of the device class
 itself. So, we have two options:
 \begin{enumerate}
 \item The callback is part of the device driver class:
@@ -612,7 +612,7 @@ struct DataInterface {
 where ``A1Lidar::nDistance'' defines a reference to a constant length array which in
 itself consists of ``A1LidarData'' stucts.
 \end{itemize}
-In terms of \textsl{memory managemet}:
+In terms of \textsl{memory management}:
 \begin{enumerate}
 \item Low sampling rate complex data structures: allocate as a local variable. It can be a simple type
   or a struct. See ``dataReady()'' in: \url{https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp}.
@@ -919,7 +919,7 @@ only be used for screen refresh.
 
 
 
-\chapter{Realtime webserver/client communication}
+\chapter{Realtime web server/client communication}
 
 \section{Introduction}
 
@@ -1013,7 +1013,7 @@ makes it very easy to achieve this.
 \subsection{FastCGI}
 FastCGI (see Fig~\ref{cgi}) is written in C++ and generates the entire
 content of the http/https request. In particular here we generate
-JSON packets serverside which can then be processed by client JavaScripts.
+JSON packets server side which can then be processed by client JavaScripts.
 For realtime applications JSON transmission is perfect because the client-side
 JavaScript can request JSON packages and directly turn them into variables.
 
