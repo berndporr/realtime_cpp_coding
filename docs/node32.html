@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>select/poll commands waiting for GPIO interrupts</TITLE>
-<META NAME="description" CONTENT="select/poll commands waiting for GPIO interrupts">
+<TITLE>Timing within threads</TITLE>
+<META NAME="description" CONTENT="Timing within threads">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,6 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node33.html">
 <LINK REL="previous" HREF="node31.html">
 <LINK REL="next" HREF="node33.html">
 </HEAD>
@@ -27,42 +26,47 @@
  HREF="node33.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node31.html">
+ HREF="node27.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node31.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html238"
+<A ID="tex2html243"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node33.html">Timing with blocking I/O</A>
+ HREF="node33.html">select/poll commands waiting for</A>
 <B> Up:</B> <A
- HREF="node31.html">Timing within threads</A>
+ HREF="node27.html">Thread and worker</A>
 <B> Previous:</B> <A
- HREF="node31.html">Timing within threads</A>
- &nbsp; <B>  <A ID="tex2html239"
+ HREF="node31.html">Dealing with competition /</A>
+ &nbsp; <B>  <A ID="tex2html244"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A ID="SECTION00335100000000000000">
-select/poll commands waiting for GPIO interrupts</A>
-</H3>
-In section&nbsp;<A HREF="node12.html#gpioIRQ">1.3.3</A> we introduced the so called &ldquo;poll&rdquo; command
-which is not polling an IRQ pin but <SPAN  CLASS="textsl">putting a thread to sleep</SPAN> till an
-external event has happened. Then of course a callback function should
-be called reacting to the external event. This is the preferred method
-for low latency responses.
+<H2><A ID="SECTION00335000000000000000">
+Timing within threads</A>
+</H2>
+Threads are perfect to create timing without using sleep commands
+with the help of <SPAN  CLASS="textsl">blocking I/O</SPAN>.
 
 <P>
-As said previously, use <SPAN  CLASS="textsl">pigpio</SPAN> on the Raspberry PI
-which wraps the select/poll commands into a thread and calls a
-<SPAN  CLASS="textsl">callback</SPAN> function whenever an GPIO pin has been triggered.
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<P>
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html245"
+  HREF="node33.html">select/poll commands waiting for GPIO interrupts</A>
+<LI><A ID="tex2html246"
+  HREF="node34.html">Timing with blocking I/O</A>
+<LI><A ID="tex2html247"
+  HREF="node35.html">Timing with Linux/pigpio timers</A>
+</UL>
+<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

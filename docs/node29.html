@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Running/stopping workers with endless loops</TITLE>
-<META NAME="description" CONTENT="Running/stopping workers with endless loops">
+<TITLE>Lifetime of a thread</TITLE>
+<META NAME="description" CONTENT="Lifetime of a thread">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,54 +27,47 @@
  HREF="node30.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node26.html">
+ HREF="node27.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node28.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html229"
+<A ID="tex2html237"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node30.html">Dealing with competition /</A>
+ HREF="node30.html">Running/stopping workers with endless</A>
 <B> Up:</B> <A
- HREF="node26.html">Thread and worker</A>
+ HREF="node27.html">Thread and worker</A>
 <B> Previous:</B> <A
- HREF="node28.html">Lifetime of a thread</A>
- &nbsp; <B>  <A ID="tex2html230"
+ HREF="node28.html">Creating threads</A>
+ &nbsp; <B>  <A ID="tex2html238"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00333000000000000000">
-Running/stopping workers with endless loops</A>
+<H2><A ID="SECTION00332000000000000000">
+Lifetime of a thread</A>
 </H2>
-Threads with endless loops are often used in conjunction with blocking
-I/O which provide the timing:
-<PRE>
-void run() {
-       running = true;
-       while (running) {
-              read(buffer); // blocking
-              doCallback(buffer); // hand data to client
-       }
-}
-</PRE>
-Note the flag &ldquo;running&rdquo; which is controlled by the main program and is set to zero to terminate
-the thread:
+Threads terminate simply once the static worker has finished its job.
+To tell the client that a thread has finished you can use a
+<SPAN  CLASS="textsl">callback</SPAN> to trigger an event.
+
+<P>
+Sometimes it's important to wait for the termination of the thread,
+for example when your whole program is terminating or when
+you stop an endless loop in a thread. To wait for the termination
+of the thread use the &ldquo;join()&rdquo; method:
 <PRE>
         void stop() {
-                running = false; // &lt;----- HERE!!
                 uthread-&gt;join();
                 delete uthread;
         }
 </PRE>
-Note that &ldquo;join()&rdquo; is a blocking operation and needs to be used with care not to
-lock up the main program. You probably only need it when your program is terminating.
-See <kbd><A ID="tex2html15"
-  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd> for an example.
+Important is also to release the memory of a thread after it has finished
+to avoid memory leaks.
 
 <P>
 <BR><HR>

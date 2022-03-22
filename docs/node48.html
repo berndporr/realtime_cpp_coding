@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Web servers (http/https)</TITLE>
-<META NAME="description" CONTENT="Web servers (http/https)">
+<TITLE>Server</TITLE>
+<META NAME="description" CONTENT="Server">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,8 +15,8 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node49.html">
-<LINK REL="previous" HREF="node47.html">
+<LINK REL="next" HREF="node53.html">
+<LINK REL="previous" HREF="node45.html">
 <LINK REL="next" HREF="node49.html">
 </HEAD>
 
@@ -27,63 +27,55 @@
  HREF="node49.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node47.html">
+ HREF="node42.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node47.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html294"
+<A ID="tex2html298"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node49.html">FastCGI</A>
+ HREF="node49.html">Web servers (http/https)</A>
 <B> Up:</B> <A
- HREF="node47.html">Server</A>
+ HREF="node42.html">Realtime webserver/client communication</A>
 <B> Previous:</B> <A
- HREF="node47.html">Server</A>
- &nbsp; <B>  <A ID="tex2html295"
+ HREF="node47.html">Client server: POST (application/x-www-form-urlencoded)</A>
+ &nbsp; <B>  <A ID="tex2html299"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00541000000000000000">
-Web servers (http/https)</A>
-</H2>
+<H1><A ID="SECTION00540000000000000000">
+Server</A>
+</H1>
+On the Linux system a web server needs to be set up. There are
+a variety of different options available but we are focusing here
+on the ones which can be used for C++ communication (i.e. CGI).
 
 <P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html300"
+  HREF="node49.html">Web servers (http/https)</A>
+<LI><A ID="tex2html301"
+  HREF="node50.html">FastCGI</A>
 <UL>
-<LI>NGINX: Easy to configure but very flexible web server
-</LI>
-<LI>Apache: Hard to configure but safe option
-</LI>
-<LI>lighttpd: Smaller web server with a small memory footprint
-</LI>
+<LI><A ID="tex2html302"
+  HREF="node51.html">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON (application/json)</A>
 </UL>
-Note that it's possible to run different web servers at the
-same time where they then act as proxies for a central web
-server visible to the outside world. In particular nginx
-makes it very easy to achieve this.
-
-<P>
-
-<DIV class="CENTER"><A ID="cgi"></A><A ID="266"></A>
-<TABLE>
-<CAPTION class="BOTTOM"><STRONG>Figure 4.1:</STRONG>
-FastCGI dataflow.</CAPTION>
-<TR><TD>
-<DIV class="CENTER">
-<IMG STYLE=""
- SRC="img4.svg"
- ALT="\includegraphics[width=\linewidth]{restdataflow}">
-
-</DIV></TD></TR>
-</TABLE>
-</DIV>
-
-<P>
+<BR>
+<LI><A ID="tex2html303"
+  HREF="node52.html">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</UL>
+<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

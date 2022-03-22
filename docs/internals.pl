@@ -3,7 +3,7 @@
 
 
 $key = q/cgi/;
-$ref_files{$key} = "$dir".q|node48.html|; 
+$ref_files{$key} = "$dir".q|node49.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/gettersetters/;
@@ -15,7 +15,7 @@ $ref_files{$key} = "$dir".q|node12.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/qwtex/;
-$ref_files{$key} = "$dir".q|node37.html|; 
+$ref_files{$key} = "$dir".q|node38.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/timing/;

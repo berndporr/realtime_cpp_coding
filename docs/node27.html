@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Creating threads</TITLE>
-<META NAME="description" CONTENT="Creating threads">
+<TITLE>Thread and worker</TITLE>
+<META NAME="description" CONTENT="Thread and worker">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,6 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node28.html">
 <LINK REL="previous" HREF="node26.html">
 <LINK REL="next" HREF="node28.html">
 </HEAD>
@@ -27,7 +26,7 @@
  HREF="node28.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node26.html">
+ HREF="node24.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node26.html">
@@ -37,44 +36,49 @@
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node28.html">Lifetime of a thread</A>
+ HREF="node28.html">Creating threads</A>
 <B> Up:</B> <A
- HREF="node26.html">Thread and worker</A>
+ HREF="node24.html">Threads</A>
 <B> Previous:</B> <A
- HREF="node26.html">Thread and worker</A>
+ HREF="node26.html">Processes and Threads</A>
  &nbsp; <B>  <A ID="tex2html226"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00331000000000000000">
-Creating threads</A>
-</H2>
-In C++ a worker is a method within
-a class and needs to be <SPAN  CLASS="textsl">static</SPAN> which means it won't be
-able to access the instance variables of a class. The trick
-is to pass a pointer to the instance of the class (&ldquo;this&rdquo;) as the argument of
-the worker, for example, called &ldquo;exec&rdquo;:
-<PRE>
-uthread = new std::thread(MyClassWithAThread::exec, this);
-</PRE>
-where <SPAN  CLASS="texttt">MyClassWithAThread</SPAN> is a class containing the static function &ldquo;exec&rdquo;:
-<PRE>
-class MyClassWithAThread {
-        void run() {
-                // ... hard work is done here
-                doCallback(result); // hand the result over
-        }
-        static void exec(MyClassWithAThread* cppThread) {
-                cppThread-&gt;run();
-        }
-}
-</PRE>
-which in turn then calls a non-static class method &ldquo;run()&rdquo; which
-then has access to the instances variables.
+<H1><A ID="SECTION00330000000000000000">
+Thread and worker</A>
+</H1>
+A thread is just a <SPAN  CLASS="textsl">container</SPAN> for the actual method
+which is running independently. The method contained inside of a
+thread is often called <SPAN  CLASS="textsl">worker</SPAN>.
 
 <P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html227"
+  HREF="node28.html">Creating threads</A>
+<LI><A ID="tex2html228"
+  HREF="node29.html">Lifetime of a thread</A>
+<LI><A ID="tex2html229"
+  HREF="node30.html">Running/stopping workers with endless loops</A>
+<LI><A ID="tex2html230"
+  HREF="node31.html">Dealing with competition / concurrency</A>
+<LI><A ID="tex2html231"
+  HREF="node32.html">Timing within threads</A>
+<UL>
+<LI><A ID="tex2html232"
+  HREF="node33.html">select/poll commands waiting for GPIO interrupts</A>
+<LI><A ID="tex2html233"
+  HREF="node34.html">Timing with blocking I/O</A>
+<LI><A ID="tex2html234"
+  HREF="node35.html">Timing with Linux/pigpio timers</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

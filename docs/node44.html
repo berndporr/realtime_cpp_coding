@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Data formats</TITLE>
-<META NAME="description" CONTENT="Data formats">
+<TITLE>REST</TITLE>
+<META NAME="description" CONTENT="REST">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,7 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node47.html">
+<LINK REL="next" HREF="node45.html">
 <LINK REL="previous" HREF="node43.html">
 <LINK REL="next" HREF="node45.html">
 </HEAD>
@@ -27,43 +27,55 @@
  HREF="node45.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node41.html">
+ HREF="node42.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node43.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html280"
+<A ID="tex2html288"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node45.html">Server client: JSON (application/json)</A>
+ HREF="node45.html">Data formats</A>
 <B> Up:</B> <A
- HREF="node41.html">Realtime webserver/client communication</A>
+ HREF="node42.html">Realtime webserver/client communication</A>
 <B> Previous:</B> <A
- HREF="node43.html">REST</A>
- &nbsp; <B>  <A ID="tex2html281"
+ HREF="node43.html">Introduction</A>
+ &nbsp; <B>  <A ID="tex2html289"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A ID="SECTION00530000000000000000">
-Data formats</A>
+<H1><A ID="SECTION00520000000000000000">
+REST</A>
 </H1>
-<BR><HR>
-<!--Table of Child-Links-->
-<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+The interface between a web client (browser, phone app) is usually
+implemented as a Representational State Transfer Architectural (REST)
+style API by communicating via an URL on a web server. The most important requirements
+for this API are very general and won't define the actual data format:
 
-<UL CLASS="ChildLinks">
-<LI><A ID="tex2html282"
-  HREF="node45.html">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-<LI><A ID="tex2html283"
-  HREF="node46.html">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
-</UL>
-<!--End of Table of Child-Links-->
+<OL>
+<LI><SPAN  CLASS="textbf">Uniform interface</SPAN> Any device connecting to the URL should
+  get the same reply. No matter if a web page or mobile phone
+  requests the temperature of a sensor the returned format must always be the same.
+</LI>
+<LI><SPAN  CLASS="textbf">Client-server decoupling</SPAN> The only information
+  the client needs to know is the URL of the server to request data or send data.
+</LI>
+<LI><SPAN  CLASS="textbf">Statelessness</SPAN> Each request needs to include all the
+  information necessary and must not depend on previous requests. For
+  example a request to a buffer must not alter the
+  buffer but just read from it so that another user reading the buffer
+  shortly after receives the same data.
+</LI>
+</OL>
+See <kbd><A ID="tex2html19"
+  HREF="https://www.ibm.com/cloud/learn/rest-apis">https://www.ibm.com/cloud/learn/rest-apis</A></kbd> for the complete
+list of REST design principles.
+
+<P>
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

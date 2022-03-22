@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Layout in QT</TITLE>
-<META NAME="description" CONTENT="Layout in QT">
+<TITLE>Introduction</TITLE>
+<META NAME="description" CONTENT="Introduction">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,79 +27,37 @@
  HREF="node38.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node35.html">
+ HREF="node36.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node36.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html253"
+<A ID="tex2html261"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node38.html">Callbacks in QT</A>
+ HREF="node38.html">Layout in QT</A>
 <B> Up:</B> <A
- HREF="node35.html">Realtime/event processing in QT</A>
+ HREF="node36.html">Realtime/event processing in QT</A>
 <B> Previous:</B> <A
- HREF="node36.html">Introduction</A>
- &nbsp; <B>  <A ID="tex2html254"
+ HREF="node36.html">Realtime/event processing in QT</A>
+ &nbsp; <B>  <A ID="tex2html262"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A ID="SECTION00420000000000000000">
-Layout in QT</A>
+<H1><A ID="SECTION00410000000000000000">
+Introduction</A>
 </H1>
+QT is a cross platform windows development environment
+for Linux/Windows and Mac.
 
 <P>
-
-<DIV class="CENTER"><A ID="qwtex"></A><A ID="265"></A>
-<TABLE>
-<CAPTION class="BOTTOM"><STRONG>Figure 3.1:</STRONG>
-QT example layout
-</CAPTION>
-<TR><TD>
-<DIV class="CENTER">
-<IMG STYLE=""
- SRC="./qwtex.png"
- ALT="Image qwtex">
-
-</DIV></TD></TR>
-</TABLE>
-</DIV>
-
-<P>
-There are different ways of declaring layout in QT. One is
-using a markup language which then has matching classes
-or creating it all with classes. We show how it works by
-just using classes which organise the layout. There is
-also a trend in general to use code to declare the layout
-as done in SwiftUI, for example.
-
-<P>
-This is an example how widgets are organised into
-nested vertical and horizontal layouts (see Fig.&nbsp;<A HREF="#qwtex">3.1</A>
-for the result).
-<PRE>
-// create 3 widgets
-button = new QPushButton;
-thermo = new QwtThermo; 
-plot = new QwtPlot;
-
-// vertical layout
-vLayout = new QVBoxLayout;
-vLayout-&gt;addWidget(button);
-vLayout-&gt;addWidget(thermo);
-
-// horizontal layout
-hLayout = new QHBoxLayout;
-hLayout-&gt;addLayout(vLayout);
-hLayout-&gt;addWidget(plot);
-
-// main layout
-setLayout(hLayout);
-</PRE>
+Elements in QT are <SPAN  CLASS="textsl">Widgets</SPAN> which can contain
+anything form plots, buttons or text fields. They are
+classes. You can define your own widgets or use ready made ones.
 
 <P>
 <BR><HR>

@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Server</TITLE>
-<META NAME="description" CONTENT="Server">
+<TITLE>Client server: POST (application/x-www-form-urlencoded)</TITLE>
+<META NAME="description" CONTENT="Client server: POST (application/x-www-form-urlencoded)">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,8 +15,7 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node52.html">
-<LINK REL="previous" HREF="node44.html">
+<LINK REL="previous" HREF="node46.html">
 <LINK REL="next" HREF="node48.html">
 </HEAD>
 
@@ -27,55 +26,43 @@
  HREF="node48.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node41.html">
+ HREF="node45.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node46.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html288"
+<A ID="tex2html296"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node48.html">Web servers (http/https)</A>
+ HREF="node48.html">Server</A>
 <B> Up:</B> <A
- HREF="node41.html">Realtime webserver/client communication</A>
+ HREF="node45.html">Data formats</A>
 <B> Previous:</B> <A
- HREF="node46.html">Client server: POST (application/x-www-form-urlencoded)</A>
- &nbsp; <B>  <A ID="tex2html289"
+ HREF="node46.html">Server client: JSON (application/json)</A>
+ &nbsp; <B>  <A ID="tex2html297"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A ID="SECTION00540000000000000000">
-Server</A>
-</H1>
-On the Linux system a web server needs to be set up. There are
-a variety of different options available but we are focusing here
-on the ones which can be used for C++ communication (i.e. CGI).
+<H2><A ID="SECTION00532000000000000000">
+Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</H2>
+When a website sends data back to the server it needs to encode it in the
+form of a single text-line where the key/value pairs are combined with &amp;-signs:
+<PRE>
+temperature=20&amp;steps=100&amp;comment=all+good%33
+</PRE>
+The receiver then has the task to entangle this stream into a suitable dataformat,
+for example a map. All server side scripting languages
+such as <SPAN  CLASS="texttt">PHP</SPAN> or <SPAN  CLASS="texttt">node.js</SPAN> have powerful functions to
+decode these strings. In C/C++ <SPAN  CLASS="texttt">libcurl</SPAN>
+can be used for decoding.
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL CLASS="ChildLinks">
-<LI><A ID="tex2html290"
-  HREF="node48.html">Web servers (http/https)</A>
-<LI><A ID="tex2html291"
-  HREF="node49.html">FastCGI</A>
-<UL>
-<LI><A ID="tex2html292"
-  HREF="node50.html">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-</UL>
-<BR>
-<LI><A ID="tex2html293"
-  HREF="node51.html">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
-</UL>
-<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

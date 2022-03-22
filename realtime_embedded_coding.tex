@@ -86,9 +86,9 @@ particular:
   voltage, temperature) and not sensor registers. Default config parameters
   should be specified that the class can be used straight away with
   default parameters.
-\item The class handles the realtime processing by offering callback
-  interfaces (i.e. based on classes with virtual and abstract methods)
-  to transmit data from the sensor and setters to transmit data to the device.
+\item The class handles the realtime processing by offering \textsl{callback
+  interfaces} (i.e. based on classes with virtual and abstract methods)
+  to transmit data from the sensor and \textsl{setters} to transmit data to the device.
 \item A build system is essential. It's strongly recommended to use ``cmake''
   (autoconf only for older existing projects).
 \item The class is re-usable outwith of your specific project and has
@@ -556,6 +556,56 @@ are set at compile time and the abstract nature of the base class
 makes clear what needs to be implemented.
 See
 \url{https://github.com/berndporr/rpi_ads1115} for a complete example.
+
+\subsection{Callback arguments}
+Above the callbacks just delivered one floating point value. However,
+often more than one sample or more complex data is transmitted:
+\begin{itemize}
+\item Complex data: Do not put loads of arguments into the
+  callback but define a \textsl{struct}. For example an ADC might
+  deliver all 4 channels at once:
+\begin{verbatim}
+class ADmulti {
+
+        struct ADCSample {
+            float ch1;
+            float ch2;
+            float ch3;
+            float ch4;
+        };
+
+        ...
+        virtual void hasSample(ADCSample sample) = 0;
+        ...
+};
+\end{verbatim}
+\item Arrays: Use arrays which contain the length of the arrays:
+  either std::array, std::vector, etc or const arrays and then
+  references to these so that the callback knows the length.
+  For example the LIDAR callback uses a reference to a const length
+  array:
+\begin{verbatim}
+/**
+ * Callback interface which needs to be implemented by the user.
+ **/
+struct DataInterface {
+        virtual void newScanAvail(
+                float rpm, 
+                A1LidarData (&)[A1Lidar::nDistance]) = 0;
+};
+\end{verbatim}
+where ``A1Lidar::nDistance'' defines a reference to a constant length array which in
+itself consists of ``A1LidarData'' stucts.
+\end{itemize}
+In terms of \textsl{memory managemet}:
+\begin{enumerate}
+\item Low sampling rate complex data structures: allocate as a local variable. It can be a simple type
+  or a struct. See ``dataReady()'' in: \url{https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp}.
+\item High sampling rate buffers: allocate memory on the heap in the
+  constructor or in the private section of the class as a const length
+  array and pass on a \textsl{reference}. See ``getData()'' in
+  \url{https://github.com/berndporr/rplidar_rpi}.
+\end{enumerate}
 
 
 \section{Conclusion}
@@ -1046,9 +1096,9 @@ $(document).ready( documentReady );
 \chapter{Setters}
 
 In Fig.~\ref{gettersetters} we have seen that data flows from
-the sensors to the C++ classes via \textsl{callbacks}. The flow
-back from inner C++ classes to motor or display outputs is via
-\textsl{setters}. The same applies for setting configuration
+the sensors to the C++ classes via \textsl{callbacks} then it flows
+back from the inner C++ classes to motor or display outputs is via
+\textsl{setters}. Setters are also used for setting configuration
 parameters.
 
 A setter is a simple method in a class, for example to set the
@@ -1062,29 +1112,43 @@ class Motor {
   void setLeftWheelSpeed(float speed);
 };
 \end{verbatim}
-Again as with callbacks it's important to abstract away from the
+Again as with callbacks it's important to \textsl{abstract} away from the
 hardware, for example normalising the speed of the
-motor and \textsl{hiding} away the complexity of the
+motor between $-1$ and $+1$ and \textsl{hiding} away the complexity of the
 PWM or GPIO ports in the class.
 
-If a setter has more than one argument it's highly recommended
-to use a \textsl{struct} to set the values.
+If a setter has more than one argument, in particular for
+configuration, it's highly recommended to use a \textsl{struct} to set
+the values. For example setting the parameters of the ADS1115:
+\begin{verbatim}
+/**
+ * ADS1115 initial settings when starting the device.
+ **/
+struct ADS1115settings {
 
+	/**
+	 * I2C bus used (99% always set to one)
+	 **/
+	int i2c_bus = 1;
 
-\chapter{Data storage and memory management}
+	/**
+	 * I2C address of the ads1115
+	 **/
+	uint8_t address = DEFAULT_ADS1115_ADDRESS;
+};
 
-\section{Introduction}
-Realtime processing should happen as quickly as possible. This means
-that large memory allocations should happen at once. Small ones
-are more effective as variables or \textsl{structs} which are passed as parameters
-along a chain of callbacks or setters:
-\begin{itemize}
-\item Large memory allocation: Do all ``new'' commands at startup, ``delete'' at shutdown.
-\item Small memory segments: variables or structs.
-\end{itemise}
+/**
+ * Starts the data acquisition in the background and the
+ * callback is called with new samples.
+ * \param settings A struct with the settings.
+ **/
+void start(ADS1115settings settings = ADS1115settings() );
+\end{verbatim}
 
-
-
+If a setter sets large buffers then it's highly recommended
+to allocate the memory in the constructor of the class and then call the setter by reference
+while running. Use array types which convey their length, for example
+std::array or a standard const array which implicitly carries their length.
 
 
 \end{document}

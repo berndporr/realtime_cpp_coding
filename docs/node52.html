@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Client</TITLE>
-<META NAME="description" CONTENT="Client">
+<TITLE>Client server: POST (application/x-www-form-urlencoded)</TITLE>
+<META NAME="description" CONTENT="Client server: POST (application/x-www-form-urlencoded)">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,7 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="previous" HREF="node47.html">
+<LINK REL="previous" HREF="node50.html">
 <LINK REL="next" HREF="node53.html">
 </HEAD>
 
@@ -26,63 +26,43 @@
  HREF="node53.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node41.html">
+ HREF="node48.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node51.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html303"
+<A ID="tex2html311"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node53.html">About this document ...</A>
+ HREF="node53.html">Client</A>
 <B> Up:</B> <A
- HREF="node41.html">Realtime webserver/client communication</A>
+ HREF="node48.html">Server</A>
 <B> Previous:</B> <A
- HREF="node51.html">Client server: POST (application/x-www-form-urlencoded)</A>
- &nbsp; <B>  <A ID="tex2html304"
+ HREF="node51.html">Server client: JSON (application/json)</A>
+ &nbsp; <B>  <A ID="tex2html312"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A ID="SECTION00550000000000000000">
-Client</A>
-</H1>
-Generally on the client side (= web page) HTML with embedded
-<SPAN  CLASS="textsl">JavaScript</SPAN> is used to generate realtime output/input without
-reloading the web page. JavaScript is <SPAN  CLASS="textsl">event driven</SPAN> and has
-callbacks so it's perfect for realtime applications. Use
-<SPAN  CLASS="texttt">jQuery</SPAN> to request and post JSON from/to the server.
-
-<P>
-For example here we request data from the server as a JSON
-packet every second:
-
-<P>
+<H2><A ID="SECTION00543000000000000000">
+Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</H2>
+Like in any GUI the client can press a button and create an event.
+On the client side this is packaged as a JSON record with
+jquery and then sent over to the server. The server then
+receives the data as a callback:
 <PRE>
-// callback when the JSON data has arrived
-function getterCallback(result) {
-  var temperatureArray = result.temperatures;
-  // plot the array here
-}
-
-// timer callback (same idea as in QT to define a refresh rate)
-function getTemperature() {
-  // get the JSON data
-  $.getJSON("/data/:80",getterCallback);
-}
-
-// document ready callback
-function documentReady() {
-  // request new data from the server every second
-  window.intervalId = setInterval(getTemperature , 1000);
-}
-
-// called when the web page has been loaded
-$(document).ready( documentReady );
-</PRE>
+virtual void postString(std::string postArg) {
+		auto m = JSONCGIHandler::postDecoder(postArg);
+		float temp = atof(m["volt"].c_str());
+		std::cerr &lt;&lt; m["hello"] &lt;&lt; "\n";
+		sensorfastcgi-&gt;forceValue(temp);
+	}
+</PRE> 
 
 <P>
 <BR><HR>

@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Events from widgets</TITLE>
-<META NAME="description" CONTENT="Events from widgets">
+<TITLE>Callbacks in QT</TITLE>
+<META NAME="description" CONTENT="Callbacks in QT">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,6 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node40.html">
 <LINK REL="previous" HREF="node38.html">
 <LINK REL="next" HREF="node40.html">
 </HEAD>
@@ -27,44 +26,41 @@
  HREF="node40.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node38.html">
+ HREF="node36.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node38.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html259"
+<A ID="tex2html265"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node40.html">Plotting realtime data arriving</A>
+ HREF="node40.html">Events from widgets</A>
 <B> Up:</B> <A
- HREF="node38.html">Callbacks in QT</A>
+ HREF="node36.html">Realtime/event processing in QT</A>
 <B> Previous:</B> <A
- HREF="node38.html">Callbacks in QT</A>
- &nbsp; <B>  <A ID="tex2html260"
+ HREF="node38.html">Layout in QT</A>
+ &nbsp; <B>  <A ID="tex2html266"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00431000000000000000">
-Events from widgets</A>
-</H2>
-In contrast to our low level callback mechanism using interfaces QT rather
-directly calls methods in classes. The problem is that function pointers
-cannot be directly used as a class has instance pointers to its local
-data. So a method of a class needs to be combined with the instance
-pointer. The QT method &ldquo;connect&rdquo; does exactly that:
-<PRE>
-connect(button,&amp;QPushButton::clicked,
-        this,&amp;Window::reset);
-</PRE>
-The QPushButton instance &ldquo;button&rdquo; has a method called &ldquo;clicked&rdquo; which is
-called whenever the user clicks on the button. This is then forwarded to the
-method &ldquo;reset&rdquo; in the application Widget.
+<H1><A ID="SECTION00430000000000000000">
+Callbacks in QT</A>
+</H1>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
-<P>
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html267"
+  HREF="node40.html">Events from widgets</A>
+<LI><A ID="tex2html268"
+  HREF="node41.html">Plotting realtime data arriving via a callback</A>
+</UL>
+<!--End of Table of Child-Links-->
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

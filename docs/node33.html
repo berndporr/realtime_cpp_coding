@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Timing with blocking I/O</TITLE>
-<META NAME="description" CONTENT="Timing with blocking I/O">
+<TITLE>select/poll commands waiting for GPIO interrupts</TITLE>
+<META NAME="description" CONTENT="select/poll commands waiting for GPIO interrupts">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -27,46 +27,40 @@
  HREF="node34.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node31.html">
+ HREF="node32.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node32.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html240"
+<A ID="tex2html248"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node34.html">Timing with Linux/pigpio timers</A>
+ HREF="node34.html">Timing with blocking I/O</A>
 <B> Up:</B> <A
- HREF="node31.html">Timing within threads</A>
+ HREF="node32.html">Timing within threads</A>
 <B> Previous:</B> <A
- HREF="node32.html">select/poll commands waiting for</A>
- &nbsp; <B>  <A ID="tex2html241"
+ HREF="node32.html">Timing within threads</A>
+ &nbsp; <B>  <A ID="tex2html249"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A ID="SECTION00335200000000000000">
-Timing with blocking I/O</A>
+<H3><A ID="SECTION00335100000000000000">
+select/poll commands waiting for GPIO interrupts</A>
 </H3>
-Blocking I/O (read, write, etc) can be used to time
-the data coming in because the thread goes to sleep when it's waiting for
-I/O but wakes up very quickly after new data has arrived.
+In section&nbsp;<A HREF="node12.html#gpioIRQ">1.3.3</A> we introduced the so called &ldquo;poll&rdquo; command
+which is not polling an IRQ pin but <SPAN  CLASS="textsl">putting a thread to sleep</SPAN> till an
+external event has happened. Then of course a callback function should
+be called reacting to the external event. This is the preferred method
+for low latency responses.
 
 <P>
-In this example the blocking &ldquo;read&rdquo; command creates
-the timing of the callback:
-<PRE>
-void run() {
-       running = 1;
-       while (running) {
-              read(buffer); // blocking
-              doCallback(buffer); // hand data to client
-       }
-}
-</PRE>
+As said previously, use <SPAN  CLASS="textsl">pigpio</SPAN> on the Raspberry PI
+which wraps the select/poll commands into a thread and calls a
+<SPAN  CLASS="textsl">callback</SPAN> function whenever an GPIO pin has been triggered.
 
 <P>
 <BR><HR>
