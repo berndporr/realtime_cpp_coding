@@ -7,7 +7,7 @@ $ref_files{$key} = "$dir".q|node49.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/gettersetters/;
-$ref_files{$key} = "$dir".q|node3.html|; 
+$ref_files{$key} = "$dir".q|node2.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/gpioIRQ/;

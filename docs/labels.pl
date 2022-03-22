@@ -7,7 +7,7 @@ $external_labels{$key} = "$URL/" . q|node49.html|;
 $noresave{$key} = "$nosave";
 
 $key = q/gettersetters/;
-$external_labels{$key} = "$URL/" . q|node3.html|; 
+$external_labels{$key} = "$URL/" . q|node2.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/gpioIRQ/;
@@ -34,7 +34,7 @@ $external_latex_labels{$key} = q|<|;
 $noresave{$key} = "$nosave";
 
 $key = q/cgi/;
-$external_latex_labels{$key} = q|4.1|; 
+$external_latex_labels{$key} = q|5.1|; 
 $noresave{$key} = "$nosave";
 
 $key = q/gettersetters/;
@@ -42,15 +42,15 @@ $external_latex_labels{$key} = q|1.2|;
 $noresave{$key} = "$nosave";
 
 $key = q/gpioIRQ/;
-$external_latex_labels{$key} = q|1.3.3|; 
+$external_latex_labels{$key} = q|2.2.3|; 
 $noresave{$key} = "$nosave";
 
 $key = q/qwtex/;
-$external_latex_labels{$key} = q|3.1|; 
+$external_latex_labels{$key} = q|4.1|; 
 $noresave{$key} = "$nosave";
 
 $key = q/spimodes/;
-$external_latex_labels{$key} = q|1.1|; 
+$external_latex_labels{$key} = q|2.1|; 
 $noresave{$key} = "$nosave";
 
 $key = q/timing/;
