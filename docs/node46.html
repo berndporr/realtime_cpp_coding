@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Server client: JSON (application/json)</TITLE>
-<META NAME="description" CONTENT="Server client: JSON (application/json)">
+<TITLE>Client server: POST (application/x-www-form-urlencoded)</TITLE>
+<META NAME="description" CONTENT="Client server: POST (application/x-www-form-urlencoded)">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,6 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node47.html">
 <LINK REL="previous" HREF="node45.html">
 <LINK REL="next" HREF="node47.html">
 </HEAD>
@@ -27,44 +26,41 @@
  HREF="node47.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node45.html">
+ HREF="node44.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node45.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html293"
+<A ID="tex2html289"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node47.html">Client server: POST (application/x-www-form-urlencoded)</A>
+ HREF="node47.html">Server</A>
 <B> Up:</B> <A
- HREF="node45.html">Data formats</A>
+ HREF="node44.html">Data formats</A>
 <B> Previous:</B> <A
- HREF="node45.html">Data formats</A>
- &nbsp; <B>  <A ID="tex2html294"
+ HREF="node45.html">Server client: JSON (application/json)</A>
+ &nbsp; <B>  <A ID="tex2html290"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00631000000000000000">
-Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
+<H2><A ID="SECTION00632000000000000000">
+Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
 </H2>
-The most popular dataformat is JSON which is basically a
-map of key/value pairs which can also be nested:
+When a website sends data back to the server it needs to encode it in the
+form of a single text-line where the key/value pairs are combined with &amp;-signs:
 <PRE>
-{
-    temperature: [20, 21, 20, 19, 17],
-    steps: 100,
-    comment: "all good!"
-}
+temperature=20&amp;steps=100&amp;comment=all+good%33
 </PRE>
-Since JSON is sort of readable text a web server can simply
-generate that text send it over via http or https. There
-is no difference except that the MIME format is now `application/json`
-instead of html.
+The receiver then has the task to entangle this stream into a suitable dataformat,
+for example a map. All server side scripting languages
+such as <SPAN  CLASS="texttt">PHP</SPAN> or <SPAN  CLASS="texttt">node.js</SPAN> have powerful functions to
+decode these strings. In C/C++ <SPAN  CLASS="texttt">libcurl</SPAN>
+can be used for decoding.
 
 <P>
 <BR><HR>

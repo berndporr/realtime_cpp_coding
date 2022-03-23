@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Server client: JSON (application/json)</TITLE>
-<META NAME="description" CONTENT="Server client: JSON (application/json)">
+<TITLE>Client server: POST (application/x-www-form-urlencoded)</TITLE>
+<META NAME="description" CONTENT="Client server: POST (application/x-www-form-urlencoded)">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,7 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="previous" HREF="node50.html">
+<LINK REL="previous" HREF="node49.html">
 <LINK REL="next" HREF="node52.html">
 </HEAD>
 
@@ -26,50 +26,42 @@
  HREF="node52.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node50.html">
+ HREF="node47.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node50.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html308"
+<A ID="tex2html304"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node52.html">Client server: POST (application/x-www-form-urlencoded)</A>
+ HREF="node52.html">Client</A>
 <B> Up:</B> <A
- HREF="node50.html">FastCGI</A>
+ HREF="node47.html">Server</A>
 <B> Previous:</B> <A
- HREF="node50.html">FastCGI</A>
- &nbsp; <B>  <A ID="tex2html309"
+ HREF="node50.html">Server client: JSON (application/json)</A>
+ &nbsp; <B>  <A ID="tex2html305"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A ID="SECTION00642100000000000000">
-Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-</H3>
-The fastCGI callback expects a JSON string with the data
-transmitted form the server to the client. There is helper
-class JSONGenerator which generates the JSON data from various
-C++ types:
+<H2><A ID="SECTION00643000000000000000">
+Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</H2>
+Like in any GUI the client can press a button and create an event.
+On the client side this is packaged as a JSON record with
+jquery and then sent over to the server. The server then
+receives the data as a callback:
 <PRE>
-class JSONcallback : public JSONCGIHandler::GETCallback {
-public:
-/**
-* Gets the data and sends it to the webserver.
-* The callback creates two JSON entries. One with the
-* timestamp and one with the temperature from the sensor.
-**/
-virtual std::string getJSONString() {
-    JSONCGIHandler::JSONGenerator jsonGenerator;
-    jsonGenerator.add("epoch",(long)time(NULL));
-    jsonGenerator.add("temperatures",temperatureArray);
-    return jsonGenerator.getJSON();
-    }
-};
+virtual void postString(std::string postArg) {
+		auto m = JSONCGIHandler::postDecoder(postArg);
+		float temp = atof(m["volt"].c_str());
+		std::cerr &lt;&lt; m["hello"] &lt;&lt; "\n";
+		sensorfastcgi-&gt;forceValue(temp);
+	}
 </PRE> 
 
 <P>

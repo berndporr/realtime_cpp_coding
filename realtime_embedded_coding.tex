@@ -750,32 +750,6 @@ lock up the main program. You probably only need it when your program is termina
 See \url{https://github.com/berndporr/rpi_AD7705_daq} for an example.
 
 
-\subsection{Dealing with competition / concurrency}
-
-To avoid that two threads manipulating data at the same
-time one can employ a ``mutex'':
-
-\begin{verbatim}
-std::mutex cmdMtx;
-\end{verbatim}
-
-Thread 1:
-\begin{verbatim}
-cmdMtx.lock();
-a = 1
-cmdMtx.unlock();
-\end{verbatim}
-
-Thread 2:
-\begin{verbatim}
-cmdMtx.lock();
-if (a = 2) { do dangerous stuff };
-cmdMtx.unlock();
-\end{verbatim}
-
-
-
-
 \subsection{Timing within threads}
 Threads are perfect to create timing without using sleep commands
 with the help of \textsl{blocking I/O}.

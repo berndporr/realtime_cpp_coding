@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Events from widgets</TITLE>
-<META NAME="description" CONTENT="Events from widgets">
+<TITLE>Plotting realtime data arriving via a callback</TITLE>
+<META NAME="description" CONTENT="Plotting realtime data arriving via a callback">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,6 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node41.html">
 <LINK REL="previous" HREF="node39.html">
 <LINK REL="next" HREF="node41.html">
 </HEAD>
@@ -27,42 +26,76 @@
  HREF="node41.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node39.html">
+ HREF="node38.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node39.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html268"
+<A ID="tex2html264"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node41.html">Plotting realtime data arriving</A>
+ HREF="node41.html">Realtime web server/client communication</A>
 <B> Up:</B> <A
- HREF="node39.html">Callbacks in QT</A>
+ HREF="node38.html">Callbacks in QT</A>
 <B> Previous:</B> <A
- HREF="node39.html">Callbacks in QT</A>
- &nbsp; <B>  <A ID="tex2html269"
+ HREF="node39.html">Events from widgets</A>
+ &nbsp; <B>  <A ID="tex2html265"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00531000000000000000">
-Events from widgets</A>
+<H2><A ID="SECTION00532000000000000000">
+Plotting realtime data arriving via a callback</A>
 </H2>
-In contrast to our low level callback mechanism using interfaces QT rather
-directly calls methods in classes. The problem is that function pointers
-cannot be directly used as a class has instance pointers to its local
-data. So a method of a class needs to be combined with the instance
-pointer. The QT method &ldquo;connect&rdquo; does exactly that:
+The general idea is to store the realtime samples from a callback in a
+buffer and trigger a screen refresh at a lower rate for example every
+40&nbsp;ms which then plots the contents of the buffer.
+
+<P>
+The callback &ldquo;addSample&rdquo; here is called in realtime whenever
+a sample has arrived:
 <PRE>
-connect(button,&amp;QPushButton::clicked,
-        this,&amp;Window::reset);
+void Window::addSample( float v ) {
+    // add the new input to the plot
+    memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
+    yData[plotDataSize-1] = v;
+}
 </PRE>
-The QPushButton instance &ldquo;button&rdquo; has a method called &ldquo;clicked&rdquo; which is
-called whenever the user clicks on the button. This is then forwarded to the
-method &ldquo;reset&rdquo; in the application Widget.
+which stores the sample `v` in the shift buffer `yData`.
+
+<P>
+Then the screen refresh (which is slow) is done at
+a lower and unreliable rate:
+<PRE>
+void Window::timerEvent( QTimerEvent * )
+{
+    curve-&gt;setSamples(xData, yData, plotDataSize);
+    plot-&gt;replot();
+    thermo-&gt;setValue( yData[0] );
+    update();
+}
+</PRE>
+
+<P>
+After &ldquo;update()&rdquo; has been called in the timer event the
+paint event is executed by QT as soon as possible and re-paints
+the canvas of the widget:
+<PRE>
+void ScopeWindow::paintEvent(QPaintEvent *) {
+        QPainter paint( this );
+
+        paint.drawLine( ... )
+}
+</PRE>
+
+<P>
+Note that neither the timer nor the &ldquo;update()&rdquo; function
+is called in a reliable way but whenever QT likes to do it.
+So the QT timers cannot be used to sample data but should
+only be used for screen refresh.
 
 <P>
 <BR><HR>

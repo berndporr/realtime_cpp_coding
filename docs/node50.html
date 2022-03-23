@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>FastCGI</TITLE>
-<META NAME="description" CONTENT="FastCGI">
+<TITLE>Server client: JSON (application/json)</TITLE>
+<META NAME="description" CONTENT="Server client: JSON (application/json)">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,6 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node52.html">
 <LINK REL="previous" HREF="node49.html">
 <LINK REL="next" HREF="node51.html">
 </HEAD>
@@ -27,72 +26,53 @@
  HREF="node51.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node48.html">
+ HREF="node49.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node49.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html305"
+<A ID="tex2html302"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node51.html">Server client: JSON (application/json)</A>
+ HREF="node51.html">Client server: POST (application/x-www-form-urlencoded)</A>
 <B> Up:</B> <A
- HREF="node48.html">Server</A>
+ HREF="node49.html">FastCGI</A>
 <B> Previous:</B> <A
- HREF="node49.html">Web servers (http/https)</A>
- &nbsp; <B>  <A ID="tex2html306"
+ HREF="node49.html">FastCGI</A>
+ &nbsp; <B>  <A ID="tex2html303"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H2><A ID="SECTION00642000000000000000">
-FastCGI</A>
-</H2>
-FastCGI (see Fig&nbsp;<A HREF="node49.html#cgi">5.1</A>) is written in C++ and generates the entire
-content of the http/https request. In particular here we generate
-JSON packets server side which can then be processed by client JavaScripts.
-For realtime applications JSON transmission is perfect because the client-side
-JavaScript can request JSON packages and directly turn them into variables.
-
-<P>
-A fast CGI program is a UNIX commandline program which communicates with the web server
-(nginx, Apache, ...) via a UNIX socket which in turn is a pseudo file located
-in a temporary directory for example `/tmp/sensorsocket`.
-
-<P>
-The web server then maps certain http/https requests to
-his socket, for example, the configuration for nginx looks like this:
-<PRE>
-       location /sensor/ {
-          include        fastcgi_params;
-          fastcgi_pass   unix:/tmp/sensorsocket;
-        }
-</PRE>
-If the user does a request via the URL <SPAN  CLASS="texttt">www.mywebpage.com/sensor/</SPAN> then
-nginx contacts the fastcgi program via this socket. The fastcgi program
-then needs to return the content. Internally this will be a C++ callback
-inside of the fastcgi program.
-
-<P>
-The C++ fastcgi API <kbd><A ID="tex2html21"
-  HREF="https://github.com/berndporr/json_fastcgi_web_api">https://github.com/berndporr/json_fastcgi_web_api</A></kbd> 
-is wrapper around the quite cryptic fastcgi C library and we are discussing
-its callback handlers now.
-
-<P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
-
-<UL CLASS="ChildLinks">
-<LI><A ID="tex2html307"
-  HREF="node51.html">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+<H3><A ID="SECTION00642100000000000000">
+Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-</UL>
-<!--End of Table of Child-Links-->
+</H3>
+The fastCGI callback expects a JSON string with the data
+transmitted form the server to the client. There is helper
+class JSONGenerator which generates the JSON data from various
+C++ types:
+<PRE>
+class JSONcallback : public JSONCGIHandler::GETCallback {
+public:
+/**
+* Gets the data and sends it to the webserver.
+* The callback creates two JSON entries. One with the
+* timestamp and one with the temperature from the sensor.
+**/
+virtual std::string getJSONString() {
+    JSONCGIHandler::JSONGenerator jsonGenerator;
+    jsonGenerator.add("epoch",(long)time(NULL));
+    jsonGenerator.add("temperatures",temperatureArray);
+    return jsonGenerator.getJSON();
+    }
+};
+</PRE> 
+
+<P>
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>

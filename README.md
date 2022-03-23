@@ -1,7 +1,15 @@
-# Realtime Emedded Coding 5 -- Handout
+# Realtime Emedded Coding in C++
 
-## PDF
+![alt tag](gettersetters.png)
+
+This document describes how to do rigorously realtime coding in C++
+under Linux.
+
+At the heart are *callback* interfaces which transmit *events*
+from C++ class to C++ class.
+
+## PDF (Download)
 https://github.com/berndporr/rt_embedded5_teaching/blob/main/realtime_embedded_coding.pdf
 
-## Online
+## HTML (Online)
 https://berndporr.github.io/rt_embedded5_teaching/

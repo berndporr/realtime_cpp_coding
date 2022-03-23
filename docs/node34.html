@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Timing with blocking I/O</TITLE>
-<META NAME="description" CONTENT="Timing with blocking I/O">
+<TITLE>Timing with Linux/pigpio timers</TITLE>
+<META NAME="description" CONTENT="Timing with Linux/pigpio timers">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,7 +15,6 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node35.html">
 <LINK REL="previous" HREF="node33.html">
 <LINK REL="next" HREF="node35.html">
 </HEAD>
@@ -27,46 +26,37 @@
  HREF="node35.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="node32.html">
+ HREF="node31.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node33.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html249"
+<A ID="tex2html245"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node35.html">Timing with Linux/pigpio timers</A>
+ HREF="node35.html">Realtime/event processing in QT</A>
 <B> Up:</B> <A
- HREF="node32.html">Timing within threads</A>
+ HREF="node31.html">Timing within threads</A>
 <B> Previous:</B> <A
- HREF="node33.html">select/poll commands waiting for</A>
- &nbsp; <B>  <A ID="tex2html250"
+ HREF="node33.html">Timing with blocking I/O</A>
+ &nbsp; <B>  <A ID="tex2html246"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H3><A ID="SECTION00435200000000000000">
-Timing with blocking I/O</A>
+<H3><A ID="SECTION00434300000000000000">
+Timing with Linux/pigpio timers</A>
 </H3>
-Blocking I/O (read, write, etc) can be used to time
-the data coming in because the thread goes to sleep when it's waiting for
-I/O but wakes up very quickly after new data has arrived.
-
-<P>
-In this example the blocking &ldquo;read&rdquo; command creates
-the timing of the callback:
-<PRE>
-void run() {
-       running = 1;
-       while (running) {
-              read(buffer); // blocking
-              doCallback(buffer); // hand data to client
-       }
-}
-</PRE>
+Similar to threads one can create timers which are called at certain
+intervals. These timers emit a Linux signal at a specified interval
+and then this signal is caught by a global (static) function.
+Generally it's <SPAN  CLASS="textsl">not recommended</SPAN> to use timers for anything
+which needs to be reliably sampled, for example ADC converters or
+sensors with sampling rates higher than a few Hz. On the raspberry PI
+use the pigpio library and its timer callbacks &ndash; if needed at all.
 
 <P>
 <BR><HR>

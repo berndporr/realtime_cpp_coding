@@ -3,8 +3,8 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Realtime web server/client communication</TITLE>
-<META NAME="description" CONTENT="Realtime web server/client communication">
+<TITLE>Introduction</TITLE>
+<META NAME="description" CONTENT="Introduction">
 <META NAME="keywords" CONTENT="realtime_embedded_coding">
 <META NAME="resource-type" CONTENT="document">
 <META NAME="distribution" CONTENT="global">
@@ -15,8 +15,8 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
-<LINK REL="next" HREF="node54.html">
-<LINK REL="previous" HREF="node36.html">
+<LINK REL="next" HREF="node43.html">
+<LINK REL="previous" HREF="node41.html">
 <LINK REL="next" HREF="node43.html">
 </HEAD>
 
@@ -27,73 +27,49 @@
  HREF="node43.html">
 <IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <A
- HREF="realtime_embedded_coding.html">
+ HREF="node41.html">
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
 <A
  HREF="node41.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html272"
+<A ID="tex2html279"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node43.html">Introduction</A>
+ HREF="node43.html">REST</A>
 <B> Up:</B> <A
- HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+ HREF="node41.html">Realtime web server/client communication</A>
 <B> Previous:</B> <A
- HREF="node41.html">Plotting realtime data arriving</A>
- &nbsp; <B>  <A ID="tex2html273"
+ HREF="node41.html">Realtime web server/client communication</A>
+ &nbsp; <B>  <A ID="tex2html280"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
 
-<H1><A ID="SECTION00600000000000000000">
-Realtime web server/client communication</A>
+<H1><A ID="SECTION00610000000000000000">
+Introduction</A>
 </H1>
 
 <P>
-<BR><HR>
-<!--Table of Child-Links-->
-<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+Web server / client applications are at the heart of a huge number
+of web applications ranging from shopping baskets to social
+media applications.
 
-<UL CLASS="ChildLinks">
-<LI><A ID="tex2html274"
-  HREF="node43.html">Introduction</A>
-<LI><A ID="tex2html275"
-  HREF="node44.html">REST</A>
-<LI><A ID="tex2html276"
-  HREF="node45.html">Data formats</A>
-<UL>
-<LI><A ID="tex2html277"
-  HREF="node46.html">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-<LI><A ID="tex2html278"
-  HREF="node47.html">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
-</UL>
-<BR>
-<LI><A ID="tex2html279"
-  HREF="node48.html">Server</A>
-<UL>
-<LI><A ID="tex2html280"
-  HREF="node49.html">Web servers (http/https)</A>
-<LI><A ID="tex2html281"
-  HREF="node50.html">FastCGI</A>
-<UL>
-<LI><A ID="tex2html282"
-  HREF="node51.html">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-</UL>
-<LI><A ID="tex2html283"
-  HREF="node52.html">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
-</UL>
-<BR>
-<LI><A ID="tex2html284"
-  HREF="node53.html">Client</A>
-</UL>
-<!--End of Table of Child-Links-->
+<P>
+Generally it's easy to create dynamic content
+with many different solutions available (see PHP or nodejs) and well
+documented. However, feeding realtime data from C++ to a web page or
+realtime button presses back to C++ is a bit more difficult.
+
+<P>
+Important to recognise where <SPAN  CLASS="textsl">events</SPAN> are generated: it's
+always the client (web browser, mobile app) which triggers an event,
+be it sending data over to the server or requesting data. It's
+always initiated by the client.
+
+<P>
 <BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
