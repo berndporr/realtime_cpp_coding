@@ -3,23 +3,23 @@
 
 
 $key = q/cgi/;
-$ref_files{$key} = "$dir".q|node48.html|; 
+$ref_files{$key} = "$dir".q|realtime_embedded_coding.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/gettersetters/;
-$ref_files{$key} = "$dir".q|node2.html|; 
+$ref_files{$key} = "$dir".q|realtime_embedded_coding.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/gpioIRQ/;
-$ref_files{$key} = "$dir".q|node12.html|; 
+$ref_files{$key} = "$dir".q|realtime_embedded_coding.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/qwtex/;
-$ref_files{$key} = "$dir".q|node37.html|; 
+$ref_files{$key} = "$dir".q|realtime_embedded_coding.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/timing/;
-$ref_files{$key} = "$dir".q|node2.html|; 
+$ref_files{$key} = "$dir".q|realtime_embedded_coding.html|; 
 $noresave{$key} = "$nosave";
 
 1;
