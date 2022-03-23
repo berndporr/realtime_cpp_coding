@@ -1,6 +1,6 @@
 # Realtime Emedded Coding in C++
 
-![alt tag](gettersetters.png)
+![alt tag](teaserpic.png)
 
 This document describes how to do rigorously realtime coding in C++
 under Linux.
