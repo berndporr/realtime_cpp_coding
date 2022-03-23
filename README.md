@@ -1,4 +1,4 @@
-# Realtime Emedded Coding in C++
+# Realtime embedded coding in C++ under Linux
 
 Bernd Porr & Nick Bailey
 
