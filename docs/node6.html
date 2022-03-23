@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>Realtime web server/client communication</TITLE>
+<META NAME="description" CONTENT="Realtime web server/client communication">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="next" HREF="node7.html">
+<LINK REL="previous" HREF="node5.html">
+<LINK REL="next" HREF="node7.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="realtime_embedded_coding.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html161"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node7.html">Setters</A>
+<B> Up:</B> <A
+ HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+<B> Previous:</B> <A
+ HREF="node5.html">Realtime/event processing in QT</A>
+ &nbsp; <B>  <A ID="tex2html162"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html163"
+  HREF="node6.html#SECTION00610000000000000000">Introduction</A>
+<LI><A ID="tex2html164"
+  HREF="node6.html#SECTION00620000000000000000">REST</A>
+<LI><A ID="tex2html165"
+  HREF="node6.html#SECTION00630000000000000000">Data formats</A>
+<UL>
+<LI><A ID="tex2html166"
+  HREF="node6.html#SECTION00631000000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON (application/json)</A>
+<LI><A ID="tex2html167"
+  HREF="node6.html#SECTION00632000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</UL>
+<BR>
+<LI><A ID="tex2html168"
+  HREF="node6.html#SECTION00640000000000000000">Server</A>
+<UL>
+<LI><A ID="tex2html169"
+  HREF="node6.html#SECTION00641000000000000000">Web servers (http/https)</A>
+<LI><A ID="tex2html170"
+  HREF="node6.html#SECTION00642000000000000000">FastCGI</A>
+<UL>
+<LI><A ID="tex2html171"
+  HREF="node6.html#SECTION00642100000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON (application/json)</A>
+</UL>
+<LI><A ID="tex2html172"
+  HREF="node6.html#SECTION00643000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</UL>
+<BR>
+<LI><A ID="tex2html173"
+  HREF="node6.html#SECTION00650000000000000000">Client</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A ID="SECTION00600000000000000000">
+Realtime web server/client communication</A>
+</H1>
+
+<P>
+
+<H1><A ID="SECTION00610000000000000000">
+Introduction</A>
+</H1>
+
+<P>
+Web server / client applications are at the heart of a huge number
+of web applications ranging from shopping baskets to social
+media applications.
+
+<P>
+Generally it's easy to create dynamic content
+with many different solutions available (see PHP or nodejs) and well
+documented. However, feeding realtime data from C++ to a web page or
+realtime button presses back to C++ is a bit more difficult.
+
+<P>
+Important to recognise where <SPAN  CLASS="textsl">events</SPAN> are generated: it's
+always the client (web browser, mobile app) which triggers an event,
+be it sending data over to the server or requesting data. It's
+always initiated by the client.
+
+<P>
+
+<H1><A ID="SECTION00620000000000000000">
+REST</A>
+</H1>
+The interface between a web client (browser, phone app) is usually
+implemented as a Representational State Transfer Architectural (REST)
+style API by communicating via an URL on a web server. The most important requirements
+for this API are very general and won't define the actual data format:
+
+<OL>
+<LI><SPAN  CLASS="textbf">Uniform interface</SPAN> Any device connecting to the URL should
+  get the same reply. No matter if a web page or mobile phone
+  requests the temperature of a sensor the returned format must always be the same.
+</LI>
+<LI><SPAN  CLASS="textbf">Client-server decoupling</SPAN> The only information
+  the client needs to know is the URL of the server to request data or send data.
+</LI>
+<LI><SPAN  CLASS="textbf">Statelessness</SPAN> Each request needs to include all the
+  information necessary and must not depend on previous requests. For
+  example a request to a buffer must not alter the
+  buffer but just read from it so that another user reading the buffer
+  shortly after receives the same data.
+</LI>
+</OL>
+See <kbd><A ID="tex2html19"
+  HREF="https://www.ibm.com/cloud/learn/rest-apis">https://www.ibm.com/cloud/learn/rest-apis</A></kbd> for the complete
+list of REST design principles.
+
+<P>
+
+<H1><A ID="SECTION00630000000000000000">
+Data formats</A>
+</H1>
+
+<H2><A ID="SECTION00631000000000000000">
+Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON (application/json)</A>
+</H2>
+The most popular dataformat is JSON which is basically a
+map of key/value pairs which can also be nested:
+<PRE>
+{
+    temperature: [20, 21, 20, 19, 17],
+    steps: 100,
+    comment: "all good!"
+}
+</PRE>
+Since JSON is sort of readable text a web server can simply
+generate that text send it over via http or https. There
+is no difference except that the MIME format is now `application/json`
+instead of html.
+
+<P>
+
+<H2><A ID="SECTION00632000000000000000">
+Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</H2>
+When a website sends data back to the server it needs to encode it in the
+form of a single text-line where the key/value pairs are combined with &amp;-signs:
+<PRE>
+temperature=20&amp;steps=100&amp;comment=all+good%33
+</PRE>
+The receiver then has the task to entangle this stream into a suitable dataformat,
+for example a map. All server side scripting languages
+such as <SPAN  CLASS="texttt">PHP</SPAN> or <SPAN  CLASS="texttt">node.js</SPAN> have powerful functions to
+decode these strings. In C/C++ <SPAN  CLASS="texttt">libcurl</SPAN>
+can be used for decoding.
+
+<P>
+
+<H1><A ID="SECTION00640000000000000000">
+Server</A>
+</H1>
+On the Linux system a web server needs to be set up. There are
+a variety of different options available but we are focusing here
+on the ones which can be used for C++ communication (i.e. CGI).
+
+<P>
+
+<H2><A ID="SECTION00641000000000000000">
+Web servers (http/https)</A>
+</H2>
+
+<P>
+
+<UL>
+<LI>NGINX: Easy to configure but very flexible web server
+</LI>
+<LI>Apache: Hard to configure but safe option
+</LI>
+<LI>lighttpd: Smaller web server with a small memory footprint
+</LI>
+</UL>
+Note that it's possible to run different web servers at the
+same time where they then act as proxies for a central web
+server visible to the outside world. In particular nginx
+makes it very easy to achieve this.
+
+<P>
+
+<DIV class="CENTER"><A ID="cgi"></A><A ID="296"></A>
+<TABLE>
+<CAPTION class="BOTTOM"><STRONG>Figure 5.1:</STRONG>
+FastCGI dataflow.</CAPTION>
+<TR><TD>
+<DIV class="CENTER">
+<IMG STYLE=""
+ SRC="img4.svg"
+ ALT="\includegraphics[width=\linewidth]{restdataflow}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+
+<H2><A ID="SECTION00642000000000000000">
+FastCGI</A>
+</H2>
+FastCGI (see Fig&nbsp;<A HREF="#cgi">5.1</A>) is written in C++ and generates the entire
+content of the http/https request. In particular here we generate
+JSON packets server side which can then be processed by client JavaScripts.
+For realtime applications JSON transmission is perfect because the client-side
+JavaScript can request JSON packages and directly turn them into variables.
+
+<P>
+A fast CGI program is a UNIX commandline program which communicates with the web server
+(nginx, Apache, ...) via a UNIX socket which in turn is a pseudo file located
+in a temporary directory for example `/tmp/sensorsocket`.
+
+<P>
+The web server then maps certain http/https requests to
+his socket, for example, the configuration for nginx looks like this:
+<PRE>
+       location /sensor/ {
+          include        fastcgi_params;
+          fastcgi_pass   unix:/tmp/sensorsocket;
+        }
+</PRE>
+If the user does a request via the URL <SPAN  CLASS="texttt">www.mywebpage.com/sensor/</SPAN> then
+nginx contacts the fastcgi program via this socket. The fastcgi program
+then needs to return the content. Internally this will be a C++ callback
+inside of the fastcgi program.
+
+<P>
+The C++ fastcgi API <kbd><A ID="tex2html21"
+  HREF="https://github.com/berndporr/json_fastcgi_web_api">https://github.com/berndporr/json_fastcgi_web_api</A></kbd> 
+is wrapper around the quite cryptic fastcgi C library and we are discussing
+its callback handlers now.
+
+<P>
+
+<H3><A ID="SECTION00642100000000000000">
+Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON (application/json)</A>
+</H3>
+The fastCGI callback expects a JSON string with the data
+transmitted form the server to the client. There is helper
+class JSONGenerator which generates the JSON data from various
+C++ types:
+<PRE>
+class JSONcallback : public JSONCGIHandler::GETCallback {
+public:
+/**
+* Gets the data and sends it to the webserver.
+* The callback creates two JSON entries. One with the
+* timestamp and one with the temperature from the sensor.
+**/
+virtual std::string getJSONString() {
+    JSONCGIHandler::JSONGenerator jsonGenerator;
+    jsonGenerator.add("epoch",(long)time(NULL));
+    jsonGenerator.add("temperatures",temperatureArray);
+    return jsonGenerator.getJSON();
+    }
+};
+</PRE> 
+
+<P>
+
+<H2><A ID="SECTION00643000000000000000">
+Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</H2>
+Like in any GUI the client can press a button and create an event.
+On the client side this is packaged as a JSON record with
+jquery and then sent over to the server. The server then
+receives the data as a callback:
+<PRE>
+virtual void postString(std::string postArg) {
+		auto m = JSONCGIHandler::postDecoder(postArg);
+		float temp = atof(m["volt"].c_str());
+		std::cerr &lt;&lt; m["hello"] &lt;&lt; "\n";
+		sensorfastcgi-&gt;forceValue(temp);
+	}
+</PRE> 
+
+<P>
+
+<H1><A ID="SECTION00650000000000000000">
+Client</A>
+</H1>
+Generally on the client side (= web page) HTML with embedded
+<SPAN  CLASS="textsl">JavaScript</SPAN> is used to generate realtime output/input without
+reloading the web page. JavaScript is <SPAN  CLASS="textsl">event driven</SPAN> and has
+callbacks so it's perfect for realtime applications. Use
+<SPAN  CLASS="texttt">jQuery</SPAN> to request and post JSON from/to the server.
+
+<P>
+For example here we request data from the server as a JSON
+packet every second:
+
+<P>
+<PRE>
+// callback when the JSON data has arrived
+function getterCallback(result) {
+  var temperatureArray = result.temperatures;
+  // plot the array here
+}
+
+// timer callback (same idea as in QT to define a refresh rate)
+function getTemperature() {
+  // get the JSON data
+  $.getJSON("/data/:80",getterCallback);
+}
+
+// document ready callback
+function documentReady() {
+  // request new data from the server every second
+  window.intervalId = setInterval(getTemperature , 1000);
+}
+
+// called when the web page has been loaded
+$(document).ready( documentReady );
+</PRE>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="node7.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="realtime_embedded_coding.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node5.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html161"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node7.html">Setters</A>
+<B> Up:</B> <A
+ HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+<B> Previous:</B> <A
+ HREF="node5.html">Realtime/event processing in QT</A>
+ &nbsp; <B>  <A ID="tex2html162"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

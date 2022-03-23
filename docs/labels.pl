@@ -3,23 +3,23 @@
 
 
 $key = q/cgi/;
-$external_labels{$key} = "$URL/" . q|realtime_embedded_coding.html|; 
+$external_labels{$key} = "$URL/" . q|node6.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/gettersetters/;
-$external_labels{$key} = "$URL/" . q|realtime_embedded_coding.html|; 
+$external_labels{$key} = "$URL/" . q|node2.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/gpioIRQ/;
-$external_labels{$key} = "$URL/" . q|realtime_embedded_coding.html|; 
+$external_labels{$key} = "$URL/" . q|node3.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/qwtex/;
-$external_labels{$key} = "$URL/" . q|realtime_embedded_coding.html|; 
+$external_labels{$key} = "$URL/" . q|node5.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/timing/;
-$external_labels{$key} = "$URL/" . q|realtime_embedded_coding.html|; 
+$external_labels{$key} = "$URL/" . q|node2.html|; 
 $noresave{$key} = "$nosave";
 
 1;

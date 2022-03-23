@@ -15,15 +15,25 @@
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
+<LINK REL="next" HREF="node1.html">
 </HEAD>
 
 <BODY >
 
 <DIV CLASS="navigation"><!--Navigation Panel-->
-<IMG WIDTH="81" HEIGHT="24" ALT="next_inactive" SRC="nx_grp_g.png"> 
+<A
+ HREF="node1.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
 <IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up_g.png"> 
-<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev_g.png">   
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev_g.png"> 
+<A ID="tex2html22"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
+<B> Next:</B> <A
+ HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A ID="tex2html23"
+  HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
@@ -36,1605 +46,154 @@
 </DIV>
 
 <P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html24"
+  HREF="node1.html">Contents</A>
+<LI><A ID="tex2html25"
+  HREF="node2.html">Introduction</A>
+<LI><A ID="tex2html26"
+  HREF="node3.html">Writing C++ device driver classes</A>
+<UL>
+<LI><A ID="tex2html27"
+  HREF="node3.html#SECTION00310000000000000000">General recommendations how to write your C++ classes for devices</A>
+<LI><A ID="tex2html28"
+  HREF="node3.html#SECTION00320000000000000000">Low level userspace device access</A>
+<UL>
+<LI><A ID="tex2html29"
+  HREF="node3.html#SECTION00321000000000000000">SPI</A>
+<LI><A ID="tex2html30"
+  HREF="node3.html#SECTION00322000000000000000">I2C</A>
+<UL>
+<LI><A ID="tex2html31"
+  HREF="node3.html#SECTION00322100000000000000">Raw /dev/i2c access</A>
+<LI><A ID="tex2html32"
+  HREF="node3.html#SECTION00322200000000000000">I2C access via pigpio</A>
+</UL>
+<LI><A ID="tex2html33"
+  HREF="node3.html#SECTION00323000000000000000">Access GPIO pins</A>
+<UL>
+<LI><A ID="tex2html34"
+  HREF="node3.html#SECTION00323100000000000000">/sys filesystem</A>
+<LI><A ID="tex2html35"
+  HREF="node3.html#SECTION00323200000000000000">pigpio</A>
+</UL>
+<LI><A ID="tex2html36"
+  HREF="node3.html#SECTION00324000000000000000">Access to hardware via special devices in /sys</A>
+<LI><A ID="tex2html37"
+  HREF="node3.html#SECTION00325000000000000000">I2S: Audio</A>
+<LI><A ID="tex2html38"
+  HREF="node3.html#SECTION00326000000000000000">Accessing physical memory locations (danger!)</A>
+</UL>
+<LI><A ID="tex2html39"
+  HREF="node3.html#SECTION00330000000000000000">Kernel driver programming</A>
+<LI><A ID="tex2html40"
+  HREF="node3.html#SECTION00340000000000000000">Callbacks in C++ device classes</A>
+<UL>
+<LI><A ID="tex2html41"
+  HREF="node3.html#SECTION00341000000000000000">Creating a callback interface</A>
+<LI><A ID="tex2html42"
+  HREF="node3.html#SECTION00342000000000000000">Adding directly an abstract method to the device driver class</A>
+<LI><A ID="tex2html43"
+  HREF="node3.html#SECTION00343000000000000000">Callback arguments</A>
+</UL>
+<LI><A ID="tex2html44"
+  HREF="node3.html#SECTION00350000000000000000">Conclusion</A>
+</UL>
 <BR>
-
-<H2><A ID="SECTION00100000000000000000">
-Contents</A>
-</H2>
-<!--Table of Contents-->
-
-<UL CLASS="TofC">
+<LI><A ID="tex2html45"
+  HREF="node4.html">Threads</A>
+<UL>
+<LI><A ID="tex2html46"
+  HREF="node4.html#SECTION00410000000000000000">Introduction</A>
+<LI><A ID="tex2html47"
+  HREF="node4.html#SECTION00420000000000000000">Processes and Threads</A>
+<LI><A ID="tex2html48"
+  HREF="node4.html#SECTION00430000000000000000">Thread and worker</A>
+<UL>
+<LI><A ID="tex2html49"
+  HREF="node4.html#SECTION00431000000000000000">Creating threads</A>
+<LI><A ID="tex2html50"
+  HREF="node4.html#SECTION00432000000000000000">Lifetime of a thread</A>
+<LI><A ID="tex2html51"
+  HREF="node4.html#SECTION00433000000000000000">Running/stopping workers with endless loops</A>
+<LI><A ID="tex2html52"
+  HREF="node4.html#SECTION00434000000000000000">Timing within threads</A>
+<UL>
+<LI><A ID="tex2html53"
+  HREF="node4.html#SECTION00434100000000000000">select/poll commands waiting for GPIO interrupts</A>
+<LI><A ID="tex2html54"
+  HREF="node4.html#SECTION00434200000000000000">Timing with blocking I/O</A>
+<LI><A ID="tex2html55"
+  HREF="node4.html#SECTION00434300000000000000">Timing with Linux/pigpio timers</A>
+</UL>
+</UL>
+</UL>
+<BR>
+<LI><A ID="tex2html56"
+  HREF="node5.html">Realtime/event processing in QT</A>
+<UL>
+<LI><A ID="tex2html57"
+  HREF="node5.html#SECTION00510000000000000000">Introduction</A>
+<LI><A ID="tex2html58"
+  HREF="node5.html#SECTION00520000000000000000">Layout in QT</A>
+<LI><A ID="tex2html59"
+  HREF="node5.html#SECTION00530000000000000000">Callbacks in QT</A>
+<UL>
+<LI><A ID="tex2html60"
+  HREF="node5.html#SECTION00531000000000000000">Events from widgets</A>
+<LI><A ID="tex2html61"
+  HREF="node5.html#SECTION00532000000000000000">Plotting realtime data arriving via a callback</A>
+</UL>
+</UL>
+<BR>
+<LI><A ID="tex2html62"
+  HREF="node6.html">Realtime web server/client communication</A>
+<UL>
+<LI><A ID="tex2html63"
+  HREF="node6.html#SECTION00610000000000000000">Introduction</A>
+<LI><A ID="tex2html64"
+  HREF="node6.html#SECTION00620000000000000000">REST</A>
+<LI><A ID="tex2html65"
+  HREF="node6.html#SECTION00630000000000000000">Data formats</A>
+<UL>
+<LI><A ID="tex2html66"
+  HREF="node6.html#SECTION00631000000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON (application/json)</A>
+<LI><A ID="tex2html67"
+  HREF="node6.html#SECTION00632000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</UL>
+<LI><A ID="tex2html68"
+  HREF="node6.html#SECTION00640000000000000000">Server</A>
+<UL>
+<LI><A ID="tex2html69"
+  HREF="node6.html#SECTION00641000000000000000">Web servers (http/https)</A>
+<LI><A ID="tex2html70"
+  HREF="node6.html#SECTION00642000000000000000">FastCGI</A>
+<UL>
+<LI><A ID="tex2html71"
+  HREF="node6.html#SECTION00642100000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON (application/json)</A>
+</UL>
+<LI><A ID="tex2html72"
+  HREF="node6.html#SECTION00643000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+</UL>
+<LI><A ID="tex2html73"
+  HREF="node6.html#SECTION00650000000000000000">Client</A>
+</UL>
+<BR>
 <LI><A ID="tex2html74"
-  HREF="realtime_embedded_coding.html#SECTION00200000000000000000">Introduction</A>
+  HREF="node7.html">Setters</A>
 <LI><A ID="tex2html75"
-  HREF="realtime_embedded_coding.html#SECTION00300000000000000000">Writing C++ device driver classes</A>
-<UL>
-<LI><A ID="tex2html76"
-  HREF="realtime_embedded_coding.html#SECTION00310000000000000000">General recommendations how to write your C++ classes for devices</A>
-<LI><A ID="tex2html77"
-  HREF="realtime_embedded_coding.html#SECTION00320000000000000000">Low level userspace device access</A>
-<UL>
-<LI><A ID="tex2html78"
-  HREF="realtime_embedded_coding.html#SECTION00321000000000000000">SPI</A>
-<LI><A ID="tex2html79"
-  HREF="realtime_embedded_coding.html#SECTION00322000000000000000">I2C</A>
-<LI><A ID="tex2html80"
-  HREF="realtime_embedded_coding.html#SECTION00323000000000000000">Access GPIO pins</A>
-<LI><A ID="tex2html81"
-  HREF="realtime_embedded_coding.html#SECTION00324000000000000000">Access to hardware via special devices in /sys</A>
-<LI><A ID="tex2html82"
-  HREF="realtime_embedded_coding.html#SECTION00325000000000000000">I2S: Audio</A>
-<LI><A ID="tex2html83"
-  HREF="realtime_embedded_coding.html#SECTION00326000000000000000">Accessing physical memory locations (danger!)</A>
+  HREF="node8.html">About this document ...</A>
 </UL>
-<LI><A ID="tex2html84"
-  HREF="realtime_embedded_coding.html#SECTION00330000000000000000">Kernel driver programming</A>
-<LI><A ID="tex2html85"
-  HREF="realtime_embedded_coding.html#SECTION00340000000000000000">Callbacks in C++ device classes</A>
-<UL>
-<LI><A ID="tex2html86"
-  HREF="realtime_embedded_coding.html#SECTION00341000000000000000">Creating a callback interface</A>
-<LI><A ID="tex2html87"
-  HREF="realtime_embedded_coding.html#SECTION00342000000000000000">Adding directly an abstract method to the device driver class</A>
-<LI><A ID="tex2html88"
-  HREF="realtime_embedded_coding.html#SECTION00343000000000000000">Callback arguments</A>
-</UL>
-<LI><A ID="tex2html89"
-  HREF="realtime_embedded_coding.html#SECTION00350000000000000000">Conclusion</A>
-</UL>
-<BR>
-<LI><A ID="tex2html90"
-  HREF="realtime_embedded_coding.html#SECTION00400000000000000000">Threads</A>
-<UL>
-<LI><A ID="tex2html91"
-  HREF="realtime_embedded_coding.html#SECTION00410000000000000000">Introduction</A>
-<LI><A ID="tex2html92"
-  HREF="realtime_embedded_coding.html#SECTION00420000000000000000">Processes and Threads</A>
-<LI><A ID="tex2html93"
-  HREF="realtime_embedded_coding.html#SECTION00430000000000000000">Thread and worker</A>
-<UL>
-<LI><A ID="tex2html94"
-  HREF="realtime_embedded_coding.html#SECTION00431000000000000000">Creating threads</A>
-<LI><A ID="tex2html95"
-  HREF="realtime_embedded_coding.html#SECTION00432000000000000000">Lifetime of a thread</A>
-<LI><A ID="tex2html96"
-  HREF="realtime_embedded_coding.html#SECTION00433000000000000000">Running/stopping workers with endless loops</A>
-<LI><A ID="tex2html97"
-  HREF="realtime_embedded_coding.html#SECTION00434000000000000000">Timing within threads</A>
-</UL>
-</UL>
-<BR>
-<LI><A ID="tex2html98"
-  HREF="realtime_embedded_coding.html#SECTION00500000000000000000">Realtime/event processing in QT</A>
-<UL>
-<LI><A ID="tex2html99"
-  HREF="realtime_embedded_coding.html#SECTION00510000000000000000">Introduction</A>
-<LI><A ID="tex2html100"
-  HREF="realtime_embedded_coding.html#SECTION00520000000000000000">Layout in QT</A>
-<LI><A ID="tex2html101"
-  HREF="realtime_embedded_coding.html#SECTION00530000000000000000">Callbacks in QT</A>
-<UL>
-<LI><A ID="tex2html102"
-  HREF="realtime_embedded_coding.html#SECTION00531000000000000000">Events from widgets</A>
-<LI><A ID="tex2html103"
-  HREF="realtime_embedded_coding.html#SECTION00532000000000000000">Plotting realtime data arriving via a callback</A>
-</UL>
-</UL>
-<BR>
-<LI><A ID="tex2html104"
-  HREF="realtime_embedded_coding.html#SECTION00600000000000000000">Realtime web server/client communication</A>
-<UL>
-<LI><A ID="tex2html105"
-  HREF="realtime_embedded_coding.html#SECTION00610000000000000000">Introduction</A>
-<LI><A ID="tex2html106"
-  HREF="realtime_embedded_coding.html#SECTION00620000000000000000">REST</A>
-<LI><A ID="tex2html107"
-  HREF="realtime_embedded_coding.html#SECTION00630000000000000000">Data formats</A>
-<UL>
-<LI><A ID="tex2html108"
-  HREF="realtime_embedded_coding.html#SECTION00631000000000000000">Server client: JSON (application/json)</A>
-<LI><A ID="tex2html109"
-  HREF="realtime_embedded_coding.html#SECTION00632000000000000000">Client server: POST (application/x-www-form-urlencoded)</A>
-</UL>
-<LI><A ID="tex2html110"
-  HREF="realtime_embedded_coding.html#SECTION00640000000000000000">Server</A>
-<UL>
-<LI><A ID="tex2html111"
-  HREF="realtime_embedded_coding.html#SECTION00641000000000000000">Web servers (http/https)</A>
-<LI><A ID="tex2html112"
-  HREF="realtime_embedded_coding.html#SECTION00642000000000000000">FastCGI</A>
-<LI><A ID="tex2html113"
-  HREF="realtime_embedded_coding.html#SECTION00643000000000000000">Client server: POST (application/x-www-form-urlencoded)</A>
-</UL>
-<LI><A ID="tex2html114"
-  HREF="realtime_embedded_coding.html#SECTION00650000000000000000">Client</A>
-</UL>
-<BR>
-<LI><A ID="tex2html115"
-  HREF="realtime_embedded_coding.html#SECTION00700000000000000000">Setters</A>
-</UL>
-<!--End of Table of Contents-->
-<P>
-
-<H1><A ID="SECTION00200000000000000000">
-Introduction</A>
-</H1>
-
-<P>
-
-<DIV class="CENTER"><A ID="timing"></A><A ID="289"></A>
-<TABLE>
-<CAPTION class="BOTTOM"><STRONG>Figure 1.1:</STRONG>
-Dataflow and timing in low level realtime coding
-</CAPTION>
-<TR><TD>
-<DIV class="CENTER">
-<IMG STYLE=""
- SRC="img2.svg"
- ALT="\includegraphics[width=\textwidth]{signals-timings}">
-
-</DIV></TD></TR>
-</TABLE>
-</DIV>
-
-<P>
-In realtime embedded coding it's all about <SPAN  CLASS="textsl">events</SPAN>
-which can be a binary signal as somebody opening a door or
-an ADC signalling that a sample is ready.
-Fig.&nbsp;<A HREF="#timing">1.1</A> shows the basic dataflow and how event timing is
-established: devices by themselves have event signals such as data
-ready or crash sensor triggered. The Linux kernel then receives
-interrupt callbacks. However, userspace has no direct interrupt
-mechanism but it has blocking I/O where an I/O operation blocks
-until an interrupt has happened. These can then be translated
-back into callbacks between classes. Data is transmitted 
-back to the hardware via methods called &ldquo;setters&rdquo;.
-
-<P>
-
-<DIV class="CENTER"><A ID="gettersetters"></A><A ID="291"></A>
-<TABLE>
-<CAPTION class="BOTTOM"><STRONG>Figure 1.2:</STRONG>
-A realtime system with two C++ classes. Communication
-  between classes is achieved with callbacks (not getters) for incoming events
-  and setters to send out control events. The control output itself
-  receives its timing from the events so that the loop is traversed
-  as quickly as possible.
-</CAPTION>
-<TR><TD>
-<DIV class="CENTER">
-<IMG STYLE=""
- SRC="img3.svg"
- ALT="\includegraphics[width=\textwidth]{gettersetters}">
-
-</DIV></TD></TR>
-</TABLE>
-</DIV>
-Fig.&nbsp;<A HREF="#gettersetters">1.2</A> shows the overall communication between C++
-classes in a realtime system. This communication is done via callbacks
-(<SPAN  CLASS="textsl">not</SPAN> getters) and setters, where an event from a sensor
-traverses according to its realtime requirements through the classes via
-callbacks and then back to the control output via setters. For example,
-a collision sensor at a robot triggers a GPIO pin, which then triggers a
-callback to issue an avoidance action which in turn then sets the
-motors in reverse.
-
-<P>
-When developing the C++ classes keep S.O.L.I.D.
-<kbd><A ID="tex2html3"
-  HREF="https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design">https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design</A></kbd>in mind:
-
-<OL>
-<LI><SPAN  CLASS="textsl">Single responsibility</SPAN>: If you have a temperature
-sensor and an accelerometer then write two classes, one for the
-temperature sensor and one of the accelerometer. Don't write one
-class <SPAN  CLASS="texttt">Hardware</SPAN> which takes an argument <SPAN  CLASS="texttt">Hardware::temp</SPAN>
-or <SPAN  CLASS="texttt">Hardware::accel</SPAN> and then does one of two completely different
-things. It's a debugging nightmare.
-</LI>
-<LI><SPAN  CLASS="textsl">Open-Closed principle</SPAN> Your class is open to extension but
-  closed to modification. For example an ADC class
-  has a callback which returns voltage to the client. However,
-  you'll be connecting, for example, a temperature sensor to
-  it, so you'd like to be able to extend the class
-  overloading the callback methods so that you add the conversion
-  from volt to degrees. This is a Good Thing<SUP><SMALL>TM</SMALL></SUP> so long as
-  you create a derived class. It's a bad idea to hack the existing
-  ADC class adding a <SPAN  CLASS="texttt">to_kelvin</SPAN> method: why would somebody
-  using the ADC to read a value from an accelerometer need that?
-</LI>
-<LI><SPAN  CLASS="textsl">Liskov substitution principle</SPAN> Strictly, subtituting
-  a derived class for its base class does not result in the program
-  becoming incorrect. That is to say, any derived class from
-  your device driver class can be used in place of the base class if
-  the base class is all that's required, because the extra
-  functionality in the derived class shouldn't break the basic
-  required functionality of the base class. For example, if you have a
-  super duper DAC with lots of extra features, it shouldn't stop you
-  using it when you only need a very simple one. This also means
-  that sensible default values should be set so that the client
-  won't need to understand the nerdy features of that super duper DAC.
-</LI>
-<LI><SPAN  CLASS="textsl">Interface Segregation Principle</SPAN>:
-  Keep functionality separate and rather divide it up in different
-  classes. Imagine you have a universal IO class with SPI and I2C
-  but your client really just needs SPI. Then the client is forced
-  to deactivate I2C or in the worst case the class causes collateral
-  damage without the client knowing why.
-</LI>
-<LI><SPAN  CLASS="textsl">Dependency inversion</SPAN>: That is about obstructing the
-  essential features of of a class of interfaces. For example, ideally
-  you want a base class covering a range of similar
-  ADC converters from the same manufacturer and not a base class being
-  a driver for a particular chip. Individual ADC chip driver
-  classes then inherit from the abstract ADC driver. The authors of
-  the ADC's driver will no doubt consider their chip's
-  particular capabilities to be the core ideas,
-  but this needs inverting. Why would one ADC driver need
-  to provide all the necessaray code for a different one of the
-  same family? Instead, the driver is dependent on the abstract
-  idea of an ADC, not the other way around.
-</LI>
-</OL>
-
-<P>
-Besides S.O.L.I.D it's also essential that:
-
-<OL>
-<LI>the project has a <SPAN  CLASS="textbf">build system</SPAN> such as cmake. It's strongly recommended to use cmake
-  (autoconf only for older existing projects).
-</LI>
-<LI>classes (in particular driver classes) are <SPAN  CLASS="textbf">re-usable</SPAN>
-  outwith of the specific project and have
-  their own &ldquo;cmake&rdquo; projects in their subdirectories. Except for the main
-  cmake project all sub-projects are libraries.
-</LI>
-<LI>all public interfaces have <SPAN  CLASS="textbf">doc-strings</SPAN> for all public methods/constants and
-  an automatically generated reference, for example with the help of doxygen.
-</LI>
-<LI>classes which perform internal processing such as filters, databases, detectors, ...have
-  <SPAN  CLASS="textbf">unit tests</SPAN> and run via &ldquo;ctest&rdquo;.
-</LI>
-<LI>the documentation provides comprehensive information about the project itself,
-  how to install and run the project.
-</LI>
-</OL>
-
-<P>
-
-<H1><A ID="SECTION00300000000000000000">
-Writing C++ device driver classes</A>
-</H1>
-This chapter focuses on writing your own C++ device driver class
-hiding away the complexity (and messy) low level C APIs and/or raw
-device access. How are events translated into I/O operations? On the
-hardware-side we have event signals such as data-ready signals or by
-the timing of a serial or audio interface. The Linux kernel translates
-this timing info into blocking I/O on pseudo filesystems such as /dev
-or /sys which means that a read operation blocks until data has arrived
-or an event has happened. Some low level libraries such as pigpio
-translate them back into C callbacks. The task of a C++ programmer is
-to hide this complexity and these quite different approaches in C++
-classes which communicate via callbacks and setters with the client
-classes.
-
-<P>
-
-<H1><A ID="SECTION00310000000000000000">
-General recommendations how to write your C++ classes for devices</A>
-</H1>
-As said above the main purpose of object oriented coding here is to
-hide away the complexity of low level driver access and offer the
-client a simple and safe way of connecting to the sensor. In
-particular:
-
-<OL>
-<LI>Setters and callbacks hand over <SPAN  CLASS="textsl">physical units</SPAN>
-  (temperature, acceleration, ...) or relative units but not raw
-  integer values with no meaning.
-</LI>
-<LI>The sensor is configured by specifying physical units (time,
-  voltage, temperature) and not sensor registers. Default config parameters
-  should be specified that the class can be used straight away with
-  default parameters.
-</LI>
-<LI>It has simple demo programs demonstrating how to use the class
-  by a client.
-</LI>
-</OL>
-
-<P>
-
-<H1><A ID="SECTION00320000000000000000">
-Low level userspace device access</A>
-</H1>
-The following sections provide pointers of how to write
-the C++ driver classes for different hardware protocols.
-
-<P>
-
-<H2><A ID="SECTION00321000000000000000">
-SPI</A>
-</H2>
-<BR>  <DIV class="CENTER">
-  <A ID="292"></A>
-<TABLE class="PAD  BORDER" style="">
-<CAPTION><STRONG>Table 2.1:</STRONG>
-SPI modes</CAPTION>
-<TR><TD CLASS="LEFT">SPI Mode</TD>
-<TD CLASS="LEFT">CPOL</TD>
-<TD CLASS="LEFT">CPHA</TD>
-<TD CLASS="LEFT">Idle state</TD>
-</TR>
-<TR><TD CLASS="LEFT">0</TD>
-<TD CLASS="LEFT">0</TD>
-<TD CLASS="LEFT">0</TD>
-<TD CLASS="LEFT">L</TD>
-</TR>
-<TR><TD CLASS="LEFT">1</TD>
-<TD CLASS="LEFT">0</TD>
-<TD CLASS="LEFT">1</TD>
-<TD CLASS="LEFT">L</TD>
-</TR>
-<TR><TD CLASS="LEFT">2</TD>
-<TD CLASS="LEFT">1</TD>
-<TD CLASS="LEFT">1</TD>
-<TD CLASS="LEFT">H</TD>
-</TR>
-<TR><TD CLASS="LEFT">3</TD>
-<TD CLASS="LEFT">1</TD>
-<TD CLASS="LEFT">0</TD>
-<TD CLASS="LEFT">H</TD>
-</TR>
-</TABLE>
-</DIV>
-<BR>
-SPI is a protocol which usually transmits and receives at the same
-time. Even that data might not be used it needs to be matched up. So
-for example sending 8 byes and receiving 8 bytes at the same time.
-
-<P>
-Transfer to/from SPI is best managed by the low level access to /dev.
-Open the SPI device with the standard open() function:
-<PRE>
-int fd = open( "/dev/spidev0.0", O_RDWR);
-</PRE>
-
-<P>
-Then set the SPI mode (see table.&nbsp;<A HREF="#spimodes">2.1</A>):
-<PRE>
-int ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);
-</PRE>
-which is explained, for example, here:
-<kbd><A ID="tex2html5"
-  HREF="https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html">https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html</A></kbd>.
-
-<P>
-Since SPI transmits and receives at the same time we need to
-use ioctl to do the communication.
-Populate this struct:
-<PRE>
-struct spi_ioc_transfer tr = {
-  .tx_buf = (unsigned long)tx1,
-  .rx_buf = (unsigned long)rx1,
-  .len = ARRAY_SIZE(tx1),
-  .delay_usecs = delay,
-  .speed_hz = speed,
-  .bits_per_word = 8,
-};
-</PRE>
-which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with the
-same length.
-
-<P>
-Reading and simultaneous writing is happening then via the ioctrl
-function:
-<PRE>
-int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
-</PRE>
-
-<P>
-Sometimes the SPI protocol of a chip is so odd that even the raw
-I/O via /dev won't work and you need to write your own bit banging
-interface, for example done here for the ADC on the alphabot:
-<kbd><A ID="tex2html6"
-  HREF="https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58">https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58</A></kbd>.
-This is obviously far from ideal as it might require &ldquo;usleep&rdquo; commands
-so that acquisition needs to be run in a separate thread (the alphabot
-uses a timer callback in a separate thread).
-
-<P>
-Overall the SPI protocol is often device dependent and calls
-for experimentation to get it to work. Often the SPI clock is also
-the ADC conversion clock which requires a longer lasting clock signal
-by transmitting dummy bytes in addition to the payload.
-
-<P>
-As a general recommendation do not use SAR converters which use the
-SPI data clock also as acquisition clock as they are often not compatible
-with the standard SPI transfers via /dev. Use sensors or ADCs which
-have their own clock signal.
-
-<P>
-
-<H2><A ID="SECTION00322000000000000000">
-I2C</A>
-</H2>
-The I2C bus has two signal lines (SDA &amp; SDL) which must be pulled up
-by resistors. Every I2C device has an address on the bus. You can scan
-a bus with &ldquo;i2cdetect&rdquo; (part of the i2c-tools package):
-<PRE>
-root@raspberrypi:/home/pi# i2cdetect -y 1
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:                         -- -- -- -- -- -- -- -- 
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- 1e -- 
-20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-50: -- -- -- -- -- -- -- -- 58 -- -- -- -- -- -- -- 
-60: -- -- -- -- -- -- -- -- -- -- -- 6b -- -- -- -- 
-70: -- -- -- -- -- -- -- --                         
-root@raspberrypi:/home/pi#
-</PRE>
-In this case there are 3 I2C devices on the I2C bus at addresses
-1E, 58 and 6B and need to be specified when
-accessing the I2C device.
-
-<P>
-
-<H3><A ID="SECTION00322100000000000000">
-Raw /dev/i2c access</A>
-</H3>
-I2C either transmits or receives but never at the same time so here we
-can use the standard C read/write commands. However, we need to use ioctrl to tell
-the kernel the I2C address:
-<PRE>
-char buf[2];
-int file = open("/dev/i2c-2",O_RDWR);
-int addr = 0x58;
-ioctl(file, I2C_SLAVE, addr);
-write(file,buf,1)
-read(file,buf,2)
-</PRE>
-where &ldquo;addr&rdquo; is the I2C address. Then use standard read()
-or write() commands. Usually the 1st write() operation tells the chip
-which register to read or write to. Then write/read its register.
-
-<P>
-
-<H3><A ID="SECTION00322200000000000000">
-I2C access via pigpio</A>
-</H3>
-Access via pigpio (<kbd><A ID="tex2html7"
-  HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
-is preferred in contrast to direct
-access of the raw /dev/i2c because many different devices
-can be connected to the I2C bus and pigpio manages this.
-Simply install the development package:
-<PRE>
-sudo apt-get install libpigpio-dev
-</PRE>
-which triggers then the install of the other relevant packages.
-For example writing a byte to a register in an I2C sensor can be done with a
-few commands:
-<PRE>
-int fd = i2cOpen(i2c_bus, address, 0);
-i2cWriteByteData(fd, subAddress, data);
-i2cClose(fd);
-</PRE>
-where i2c_bus is the I2C bus number (usually 1 on the RPI)
-and the address is the I2C address of the device on that bus.
-The subAddress here is the register address in the device.
-
-<P>
-
-<H2><A ID="SECTION00323000000000000000">
-Access GPIO pins</A>
-</H2>
-
-<H3><A ID="SECTION00323100000000000000">
-/sys filesystem</A>
-</H3>
-The GPIO of the raspberry PI can easily be controlled via
-the /sys filesystem. This is slow but good for
-debugging as you can directly write a
-&ldquo;0&rdquo; or &ldquo;1&rdquo; string to it and print the result. The
-pseudo files are here:
-<PRE>
-/sys/class/gpio
-</PRE>
-which contains files which directly relate to individual pins.
-To be able to access a pin we need to tell Linux to make
-it visible:
-<PRE>
-/sys/class/gpio/export
-</PRE>
-For example, writing a 5 (in text form) to this file would
-create the subdirectory <SPAN  CLASS="texttt">/sys/class/gpio/gpio5</SPAN> for GPIO pin 5.
-
-<P>
-Then reading from
-<PRE>
-/sys/class/gpio/gpio5/value
-</PRE>
-would give you the status of GPIO pin 5 and writing
-to it would change it.
-A thin wrapper around the GPIO sys filesystem is here: <kbd><A ID="tex2html8"
-  HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>.
-
-<P>
-
-<H4><A ID="SECTION00323110000000000000"></A><A ID="gpioIRQ"></A>
-<BR>
-GPIO interrupt handling via /sys
-</H4>
-The most important application for the /sys filesystem is to
-do interrupt processing in userspace.
-A thread can be put to sleep until an interrupt has happened on one of
-the GPIO pins. This is done by monitoring the &ldquo;value&rdquo;
-of a GPIO pin in the /sys filesystem with the &ldquo;poll&rdquo; command:
-<PRE>
-struct pollfd fdset[1];
-int nfds = 1;
-int gpio_fd = open("/sys/class/gpio/gpio5/value", O_RDONLY | O_NONBLOCK );
-memset((void*)fdset, 0, sizeof(fdset));
-fdset[0].fd = gpio_fd;
-fdset[0].events = POLLPRI;
-int rc = poll(fdset, nfds, timeout);
-if (fdset[0].revents &amp; POLLPRI) {
-   // dummy
-   read(fdset[0].fd, buf, MAX_BUF);
-}
-</PRE>
-makes the thread go to sleep until an interrupt has occurred on
-GPIO pin 5. Then the thread wakes up and execution continues.
-
-<P>
-
-<H3><A ID="SECTION00323200000000000000">
-pigpio</A>
-</H3>
-The above section has given you a deep understanding what's happening
-under the hood on the sysfs-level but it's highly recommended to
-use the pigpio library (<kbd><A ID="tex2html9"
-  HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
-to read/write to GPIO pins or do interrupt programming.
-
-<P>
-For example to set GPIO pin 24 as an input just call:
-<PRE>
-gpioSetMode(24,PI_INPUT);
-</PRE>
-
-<P>
-To read from GPIO pin 24 just call:
-<PRE>
-int a = gpioRead(24)
-</PRE>
-
-<P>
-
-<H4><A ID="SECTION00323210000000000000">
-interrupt handling via pigpio</A>
-</H4>
-pigpio manages GPIO interrupt handling by wrapping all the above
-functionality into a single command where the client registers a
-callback function which is called whenever a change has occurred on a
-GPIO pin.
-Specifically a method of the form:
-<PRE>
-class mySensorClass {
-  ...
-  static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)
-  ...
-}
-</PRE>
-is registered with pigpio:
-<PRE>
-gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
-</PRE>
-where &ldquo;this&rdquo; is the pointer to your class instance which is then used
-to call a class method, here: &ldquo;dataReady()&rdquo;.
-<PRE>
-class LSM9DS1 {
-  void dataReady();
-  static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
-    {
-        ((LSM9DS1*)userdata)-&gt;dataReady();
-    }
-};
-</PRE>
-where here within the static function the void pointer is cast back into the instance pointer.
-See <kbd><A ID="tex2html10"
-  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library</A></kbd> for the complete code.
-
-<P>
-
-<H2><A ID="SECTION00324000000000000000">
-Access to hardware via special devices in /sys</A>
-</H2>
-Some sensors are directly available via the sys filesystem in human readable format.
-
-<P>
-For example
-<PRE>
-cat /sys/class/thermal/thermal_zone0/temp
-</PRE>
-gives you the temperature of the CPU.
-
-<P>
-
-<H2><A ID="SECTION00325000000000000000">
-I2S: Audio</A>
-</H2>
-The standard framework for audio is alsa: <kbd><A ID="tex2html11"
-  HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
-
-<P>
-ALSA works packet based where a read command
-returns a chunk of audio or a chunk is written to.
-
-<P>
-First, the parameters are requested and the driver can modify or
-reject them:
-<PRE>
-/* Signed 16-bit little-endian format */
-  snd_pcm_hw_params_set_format(handle, params,
-                               SND_PCM_FORMAT_S16_LE);
-
-  /* One channel (mono) */
-  snd_pcm_hw_params_set_channels(handle, params, 1);
-
-  /* 44100 bits/second sampling rate (CD quality) */
-  val = 44100;
-  snd_pcm_hw_params_set_rate_near(handle, params,
-                                  &amp;val, &amp;dir);
-</PRE>
-
-<P>
-Then playing sound is done in an endless loop were a read()
-or write() command is issued. Both are blocking so that
-it needs to run in a thread:
-
-<P>
-<PRE>
-while(running) {
-    rc = snd_pcm_writei(handle, buffer, frames);
-    if (rc == -EPIPE) {
-      /* EPIPE means underrun */
-      fprintf(stderr, "underrun occurred\n");
-      snd_pcm_prepare(handle);
-    } else if (rc &lt; 0) {
-      fprintf(stderr,
-              "error from writei: %s\n",
-              snd_strerror(rc));
-    }  else if (rc != (int)frames) {
-      fprintf(stderr,
-              "short write, write %d frames\n", rc);
-    }
-}
-</PRE>
-
-<P>
-For a full coding example &ldquo;aplay&rdquo; is a very
-good start or &ldquo;arecord&rdquo;. Both can be found here:
-<kbd><A ID="tex2html12"
-  HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
-
-<P>
-
-<H2><A ID="SECTION00326000000000000000">
-Accessing physical memory locations (danger!)</A>
-</H2>
-In case you really need to access registers you can access
-also memory directly. This should only be used as a last resort.
-For example, setting the clock for the AD converter requires
-turning a GPIO pin into a clock output pin. This is not yet
-supported by the drivers so we need to program registers
-on the RPI.
-
-<UL>
-<LI>Linux uses virtual addressed so that a pointer won't
-point to a physical address. It points to three page
-tables with an offset.
-</LI>
-<LI>Special device /dev/mem which allows access of physical
-memory.
-</LI>
-<LI>The command &ldquo;mmap&rdquo; provides a pointer to a physical
-address by opening /dev/mem.
-</LI>
-<LI>Example:
-<PRE>
-int *addr;
-if ((fd = open("/dev/mem", O_RDWR|O_SYNC)) &lt; 0 ) {
-    printf("Error opening file. \n");
-    close(fd);
-    return (-1);
-}
-addr = (int *)mmap(0, num*STRUCT_PAGE_SIZE, PROT_READ, MAP_PRIVATE,
-            fd, 0x0000620000000000);
-printf("addr: %p \n",addr);
-printf("addr: %d \n",*addr);
-</PRE>
-</LI>
-<LI>Use this with care! It's dangerous if not used properly.
-</LI>
-</UL>
-
-<P>
-
-<H1><A ID="SECTION00330000000000000000">
-Kernel driver programming</A>
-</H1>
-You can also create your own /dev/mydevice in the /dev filesystem
-by writing a kernel driver and a matching userspace library. For
-example the USB mouse has a driver in kernel space and translates
-the raw data from the mouse into coordinates. However,
-this is beyond the scope of this handout. If you want to embark
-on this adventure then the best approach is to
-find a kernel driver which does approximately what you want and then
-modify it for your purposes.
-
-<P>
-
-<H1><A ID="SECTION00340000000000000000">
-Callbacks in C++ device classes</A>
-</H1>
-As said in the introduction your hardware device class has callback interfaces
-to hand back the data to the client.
-
-<P>
-There are different ways of tackling the issue of callbacks but the
-simplest one is defining a method as <SPAN  CLASS="textsl">abstract</SPAN> and asking the
-client to implement it in a derived class. That abstract function can
-either be in a separate interface class or part of the device class
-itself. So, we have two options:
-
-<OL>
-<LI>The callback is part of the device driver class:
-<PRE>
-class MyDriver {
-          void start(DevSettings settings = DevSettings() );
-          void stop();
-          virtual void callback(float sample) = 0;
-};
-</PRE>
-</LI>
-<LI>The callback is part of an interface class:
-<PRE>
-class CallbackInterface {
-          virtual void callback(float sample) = 0;
-};
-</PRE>
-and then registering it in the main device driver class:
-<PRE>
-class MyDriver {
-          void registerCallback(CallbackInterface* cb);
-};
-</PRE>
-</LI>
-</OL>
-These two options are now explained in greater detail.
-
-<P>
-
-<H2><A ID="SECTION00341000000000000000">
-Creating a callback interface</A>
-</H2>
-Here, we create a separate interface class containing a callback
-as an abstract method:
-<PRE>
-class LSM9DS1callback {
-public:
-        virtual void hasSample(LSM9DS1Sample sample) = 0;
-};
-</PRE>
-
-<P>
-The client then implements the abstract method &ldquo;hasSample()&rdquo;, instantiates
-the interface class and then saves its pointer in the device class, here called &ldquo;lsm9ds1Callback&rdquo;.
-<PRE>
-void LSM9DS1::dataReady() {
-        LSM9DS1Sample sample;
-        // fills the sample struct with data
-        // ...
-        lsm9ds1Callback-&gt;hasSample(sample);
-}
-</PRE>
-The pointer to the interface instance is transmitted via a setter which
-receives the pointer of the interface as an argument, for example:
-<PRE>
-        void registerCallback(LSM9DS1callback* cb);
-</PRE>
-This allows to register a callback optionally. The client might not need
-one or not always.
-See
-<kbd><A ID="tex2html13"
-  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd>for a complete example.
-
-<P>
-
-<H2><A ID="SECTION00342000000000000000">
-Adding directly an abstract method to the device driver class</A>
-</H2>
-Instead of creating a separate class containing the callback you
-can also add the callback straight to the device driver class.
-<PRE>
-class ADS1115rpi {
-        ...
-        virtual void hasSample(float sample) = 0;
-        ...
-};
-</PRE>
-This forces the client to implement the callback to be able to use
-the class. This creates a very safe environment as all dependencies
-are set at compile time and the abstract nature of the base class
-makes clear what needs to be implemented.
-See
-<kbd><A ID="tex2html14"
-  HREF="https://github.com/berndporr/rpi_ads1115">https://github.com/berndporr/rpi_ads1115</A></kbd> for a complete example.
-
-<P>
-
-<H2><A ID="SECTION00343000000000000000">
-Callback arguments</A>
-</H2>
-Above the callbacks just delivered one floating point value. However,
-often more than one sample or more complex data is transmitted:
-
-<UL>
-<LI>Complex data: Do not put loads of arguments into the
-  callback but define a <SPAN  CLASS="textsl">struct</SPAN>. For example an ADC might
-  deliver all 4 channels at once:
-<PRE>
-class ADmulti {
-
-        struct ADCSample {
-            float ch1;
-            float ch2;
-            float ch3;
-            float ch4;
-        };
-
-        ...
-        virtual void hasSample(ADCSample sample) = 0;
-        ...
-};
-</PRE>
-</LI>
-<LI>Arrays: Use arrays which contain the length of the arrays:
-  either std::array, std::vector, etc or const arrays and then
-  references to these so that the callback knows the length.
-  For example the LIDAR callback uses a reference to a const length
-  array:
-<PRE>
-/**
- * Callback interface which needs to be implemented by the user.
- **/
-struct DataInterface {
-        virtual void newScanAvail(
-                float rpm, 
-                A1LidarData (&amp;)[A1Lidar::nDistance]) = 0;
-};
-</PRE>
-where &ldquo;A1Lidar::nDistance&rdquo; defines a reference to a constant length array which in
-itself consists of &ldquo;A1LidarData&rdquo; stucts.
-</LI>
-</UL>
-In terms of <SPAN  CLASS="textsl">memory management</SPAN>:
-
-<OL>
-<LI>Low sampling rate complex data structures: allocate as a local variable. It can be a simple type
-  or a struct. See &ldquo;dataReady()&rdquo; in: <kbd><A ID="tex2html15"
-  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp</A></kbd>.
-</LI>
-<LI>High sampling rate buffers: allocate memory on the heap in the
-  constructor or in the private section of the class as a const length
-  array and pass on a <SPAN  CLASS="textsl">reference</SPAN>. See &ldquo;getData()&rdquo; in
-  <kbd><A ID="tex2html16"
-  HREF="https://github.com/berndporr/rplidar_rpi">https://github.com/berndporr/rplidar_rpi</A></kbd>.
-</LI>
-</OL>
-
-<P>
-
-<H1><A ID="SECTION00350000000000000000">
-Conclusion</A>
-</H1>
-In conclusion, the communication between C++ is done via callbacks and
-setters where the event from the sensor traverses through the C++
-classes via callbacks and then back to the control output via setters.
-
-<P>
-From the sections above it's clear that Linux userspace low level
-device access is complex, even without taking into account the
-complexity of contemporary chips which have often a multitude of
-registers and pages of documentation. Your task is to hide away
-all this (scary) complexity in a C++ class and offer the client
-an easy to understand interface.
-
-<P>
-
-<H1><A ID="SECTION00400000000000000000">
-Threads</A>
-</H1>
-
-<P>
-
-<H1><A ID="SECTION00410000000000000000">
-Introduction</A>
-</H1>
-In a realtime system events need to be dealt with as soon as possible
-while also interacting with the user and performing other background
-tasks. However, certain operations might take considerable computing
-time (FFT, etc) or I/O is blocking while waiting for data. The
-solution are threads.
-
-<P>
-
-<H1><A ID="SECTION00420000000000000000">
-Processes and Threads</A>
-</H1>
-Processes are different programs which seem to be running at the same
-time. However this is done by the operating system which switches
-approximately every 10ms from one process to the next so it feels as
-if they are running at the same time. A thread is a lightweight
-process where multiple threads share the same memory and started from
-within the parent process. As with processes the threads seem to be
-running at the same time. When a thread is started it runs
-simultaneously to the main process which created it.
-
-<P>
-
-<H1><A ID="SECTION00430000000000000000">
-Thread and worker</A>
-</H1>
-A thread is just a <SPAN  CLASS="textsl">container</SPAN> for the actual method
-which is running independently. The method contained inside of a
-thread is often called <SPAN  CLASS="textsl">worker</SPAN>.
-
-<P>
-
-<H2><A ID="SECTION00431000000000000000">
-Creating threads</A>
-</H2>
-In C++ a worker is a method within
-a class and needs to be <SPAN  CLASS="textsl">static</SPAN> which means it won't be
-able to access the instance variables of a class. The trick
-is to pass a pointer to the instance of the class (&ldquo;this&rdquo;) as the argument of
-the worker, for example, called &ldquo;exec&rdquo;:
-<PRE>
-uthread = new std::thread(MyClassWithAThread::exec, this);
-</PRE>
-where <SPAN  CLASS="texttt">MyClassWithAThread</SPAN> is a class containing the static function &ldquo;exec&rdquo;:
-<PRE>
-class MyClassWithAThread {
-        void run() {
-                // ... hard work is done here
-                doCallback(result); // hand the result over
-        }
-        static void exec(MyClassWithAThread* cppThread) {
-                cppThread-&gt;run();
-        }
-}
-</PRE>
-which in turn then calls a non-static class method &ldquo;run()&rdquo; which
-then has access to the instances variables.
-
-<P>
-
-<H2><A ID="SECTION00432000000000000000">
-Lifetime of a thread</A>
-</H2>
-Threads terminate simply once the static worker has finished its job.
-To tell the client that a thread has finished you can use a
-<SPAN  CLASS="textsl">callback</SPAN> to trigger an event.
-
-<P>
-Sometimes it's important to wait for the termination of the thread,
-for example when your whole program is terminating or when
-you stop an endless loop in a thread. To wait for the termination
-of the thread use the &ldquo;join()&rdquo; method:
-<PRE>
-        void stop() {
-                uthread-&gt;join();
-                delete uthread;
-        }
-</PRE>
-Important is also to release the memory of a thread after it has finished
-to avoid memory leaks.
-
-<P>
-
-<H2><A ID="SECTION00433000000000000000">
-Running/stopping workers with endless loops</A>
-</H2>
-Threads with endless loops are often used in conjunction with blocking
-I/O which provide the timing:
-<PRE>
-void run() {
-       running = true;
-       while (running) {
-              read(buffer); // blocking
-              doCallback(buffer); // hand data to client
-       }
-}
-</PRE>
-Note the flag &ldquo;running&rdquo; which is controlled by the main program and is set to zero to terminate
-the thread:
-<PRE>
-        void stop() {
-                running = false; // &lt;----- HERE!!
-                uthread-&gt;join();
-                delete uthread;
-        }
-</PRE>
-Note that &ldquo;join()&rdquo; is a blocking operation and needs to be used with care not to
-lock up the main program. You probably only need it when your program is terminating.
-See <kbd><A ID="tex2html17"
-  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd> for an example.
-
-<P>
-
-<H2><A ID="SECTION00434000000000000000">
-Timing within threads</A>
-</H2>
-Threads are perfect to create timing without using sleep commands
-with the help of <SPAN  CLASS="textsl">blocking I/O</SPAN>.
-
-<P>
-
-<H3><A ID="SECTION00434100000000000000">
-select/poll commands waiting for GPIO interrupts</A>
-</H3>
-In section&nbsp;<A HREF="#gpioIRQ">2.2.3</A> we introduced the so called &ldquo;poll&rdquo; command
-which is not polling an IRQ pin but <SPAN  CLASS="textsl">putting a thread to sleep</SPAN> till an
-external event has happened. Then of course a callback function should
-be called reacting to the external event. This is the preferred method
-for low latency responses.
-
-<P>
-As said previously, use <SPAN  CLASS="textsl">pigpio</SPAN> on the Raspberry PI
-which wraps the select/poll commands into a thread and calls a
-<SPAN  CLASS="textsl">callback</SPAN> function whenever an GPIO pin has been triggered.
-
-<P>
-
-<H3><A ID="SECTION00434200000000000000">
-Timing with blocking I/O</A>
-</H3>
-Blocking I/O (read, write, etc) can be used to time
-the data coming in because the thread goes to sleep when it's waiting for
-I/O but wakes up very quickly after new data has arrived.
-
-<P>
-In this example the blocking &ldquo;read&rdquo; command creates
-the timing of the callback:
-<PRE>
-void run() {
-       running = 1;
-       while (running) {
-              read(buffer); // blocking
-              doCallback(buffer); // hand data to client
-       }
-}
-</PRE>
-
-<P>
-
-<H3><A ID="SECTION00434300000000000000">
-Timing with Linux/pigpio timers</A>
-</H3>
-Similar to threads one can create timers which are called at certain
-intervals. These timers emit a Linux signal at a specified interval
-and then this signal is caught by a global (static) function.
-Generally it's <SPAN  CLASS="textsl">not recommended</SPAN> to use timers for anything
-which needs to be reliably sampled, for example ADC converters or
-sensors with sampling rates higher than a few Hz. On the raspberry PI
-use the pigpio library and its timer callbacks &ndash; if needed at all.
-
-<P>
-
-<H1><A ID="SECTION00500000000000000000">
-Realtime/event processing in QT</A>
-</H1>
-
-<P>
-
-<H1><A ID="SECTION00510000000000000000">
-Introduction</A>
-</H1>
-QT is a cross platform windows development environment
-for Linux/Windows and Mac.
-
-<P>
-Elements in QT are <SPAN  CLASS="textsl">Widgets</SPAN> which can contain
-anything form plots, buttons or text fields. They are
-classes. You can define your own widgets or use ready made ones.
-
-<P>
-
-<H1><A ID="SECTION00520000000000000000">
-Layout in QT</A>
-</H1>
-
-<P>
-
-<DIV class="CENTER"><A ID="qwtex"></A><A ID="295"></A>
-<TABLE>
-<CAPTION class="BOTTOM"><STRONG>Figure 4.1:</STRONG>
-QT example layout
-</CAPTION>
-<TR><TD>
-<DIV class="CENTER">
-<IMG STYLE=""
- SRC="./qwtex.png"
- ALT="Image qwtex">
-
-</DIV></TD></TR>
-</TABLE>
-</DIV>
-
-<P>
-There are different ways of declaring layout in QT. One is
-using a markup language which then has matching classes
-or creating it all with classes. We show how it works by
-just using classes which organise the layout. There is
-also a trend in general to use code to declare the layout
-as done in SwiftUI, for example.
-
-<P>
-This is an example how widgets are organised into
-nested vertical and horizontal layouts (see Fig.&nbsp;<A HREF="#qwtex">4.1</A>
-for the result).
-<PRE>
-// create 3 widgets
-button = new QPushButton;
-thermo = new QwtThermo; 
-plot = new QwtPlot;
-
-// vertical layout
-vLayout = new QVBoxLayout;
-vLayout-&gt;addWidget(button);
-vLayout-&gt;addWidget(thermo);
-
-// horizontal layout
-hLayout = new QHBoxLayout;
-hLayout-&gt;addLayout(vLayout);
-hLayout-&gt;addWidget(plot);
-
-// main layout
-setLayout(hLayout);
-</PRE>
-
-<P>
-
-<H1><A ID="SECTION00530000000000000000">
-Callbacks in QT</A>
-</H1>
-
-<H2><A ID="SECTION00531000000000000000">
-Events from widgets</A>
-</H2>
-In contrast to our low level callback mechanism using interfaces QT rather
-directly calls methods in classes. The problem is that function pointers
-cannot be directly used as a class has instance pointers to its local
-data. So a method of a class needs to be combined with the instance
-pointer. The QT method &ldquo;connect&rdquo; does exactly that:
-<PRE>
-connect(button,&amp;QPushButton::clicked,
-        this,&amp;Window::reset);
-</PRE>
-The QPushButton instance &ldquo;button&rdquo; has a method called &ldquo;clicked&rdquo; which is
-called whenever the user clicks on the button. This is then forwarded to the
-method &ldquo;reset&rdquo; in the application Widget.
-
-<P>
-
-<H2><A ID="SECTION00532000000000000000">
-Plotting realtime data arriving via a callback</A>
-</H2>
-The general idea is to store the realtime samples from a callback in a
-buffer and trigger a screen refresh at a lower rate for example every
-40&nbsp;ms which then plots the contents of the buffer.
-
-<P>
-The callback &ldquo;addSample&rdquo; here is called in realtime whenever
-a sample has arrived:
-<PRE>
-void Window::addSample( float v ) {
-    // add the new input to the plot
-    memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
-    yData[plotDataSize-1] = v;
-}
-</PRE>
-which stores the sample `v` in the shift buffer `yData`.
-
-<P>
-Then the screen refresh (which is slow) is done at
-a lower and unreliable rate:
-<PRE>
-void Window::timerEvent( QTimerEvent * )
-{
-    curve-&gt;setSamples(xData, yData, plotDataSize);
-    plot-&gt;replot();
-    thermo-&gt;setValue( yData[0] );
-    update();
-}
-</PRE>
-
-<P>
-After &ldquo;update()&rdquo; has been called in the timer event the
-paint event is executed by QT as soon as possible and re-paints
-the canvas of the widget:
-<PRE>
-void ScopeWindow::paintEvent(QPaintEvent *) {
-        QPainter paint( this );
-
-        paint.drawLine( ... )
-}
-</PRE>
-
-<P>
-Note that neither the timer nor the &ldquo;update()&rdquo; function
-is called in a reliable way but whenever QT likes to do it.
-So the QT timers cannot be used to sample data but should
-only be used for screen refresh.
-
-<P>
-
-<H1><A ID="SECTION00600000000000000000">
-Realtime web server/client communication</A>
-</H1>
-
-<P>
-
-<H1><A ID="SECTION00610000000000000000">
-Introduction</A>
-</H1>
-
-<P>
-Web server / client applications are at the heart of a huge number
-of web applications ranging from shopping baskets to social
-media applications.
-
-<P>
-Generally it's easy to create dynamic content
-with many different solutions available (see PHP or nodejs) and well
-documented. However, feeding realtime data from C++ to a web page or
-realtime button presses back to C++ is a bit more difficult.
-
-<P>
-Important to recognise where <SPAN  CLASS="textsl">events</SPAN> are generated: it's
-always the client (web browser, mobile app) which triggers an event,
-be it sending data over to the server or requesting data. It's
-always initiated by the client.
-
-<P>
-
-<H1><A ID="SECTION00620000000000000000">
-REST</A>
-</H1>
-The interface between a web client (browser, phone app) is usually
-implemented as a Representational State Transfer Architectural (REST)
-style API by communicating via an URL on a web server. The most important requirements
-for this API are very general and won't define the actual data format:
-
-<OL>
-<LI><SPAN  CLASS="textbf">Uniform interface</SPAN> Any device connecting to the URL should
-  get the same reply. No matter if a web page or mobile phone
-  requests the temperature of a sensor the returned format must always be the same.
-</LI>
-<LI><SPAN  CLASS="textbf">Client-server decoupling</SPAN> The only information
-  the client needs to know is the URL of the server to request data or send data.
-</LI>
-<LI><SPAN  CLASS="textbf">Statelessness</SPAN> Each request needs to include all the
-  information necessary and must not depend on previous requests. For
-  example a request to a buffer must not alter the
-  buffer but just read from it so that another user reading the buffer
-  shortly after receives the same data.
-</LI>
-</OL>
-See <kbd><A ID="tex2html19"
-  HREF="https://www.ibm.com/cloud/learn/rest-apis">https://www.ibm.com/cloud/learn/rest-apis</A></kbd> for the complete
-list of REST design principles.
-
-<P>
-
-<H1><A ID="SECTION00630000000000000000">
-Data formats</A>
-</H1>
-
-<H2><A ID="SECTION00631000000000000000">
-Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-</H2>
-The most popular dataformat is JSON which is basically a
-map of key/value pairs which can also be nested:
-<PRE>
-{
-    temperature: [20, 21, 20, 19, 17],
-    steps: 100,
-    comment: "all good!"
-}
-</PRE>
-Since JSON is sort of readable text a web server can simply
-generate that text send it over via http or https. There
-is no difference except that the MIME format is now `application/json`
-instead of html.
-
-<P>
-
-<H2><A ID="SECTION00632000000000000000">
-Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
-</H2>
-When a website sends data back to the server it needs to encode it in the
-form of a single text-line where the key/value pairs are combined with &amp;-signs:
-<PRE>
-temperature=20&amp;steps=100&amp;comment=all+good%33
-</PRE>
-The receiver then has the task to entangle this stream into a suitable dataformat,
-for example a map. All server side scripting languages
-such as <SPAN  CLASS="texttt">PHP</SPAN> or <SPAN  CLASS="texttt">node.js</SPAN> have powerful functions to
-decode these strings. In C/C++ <SPAN  CLASS="texttt">libcurl</SPAN>
-can be used for decoding.
-
-<P>
-
-<H1><A ID="SECTION00640000000000000000">
-Server</A>
-</H1>
-On the Linux system a web server needs to be set up. There are
-a variety of different options available but we are focusing here
-on the ones which can be used for C++ communication (i.e. CGI).
-
-<P>
-
-<H2><A ID="SECTION00641000000000000000">
-Web servers (http/https)</A>
-</H2>
-
-<P>
-
-<UL>
-<LI>NGINX: Easy to configure but very flexible web server
-</LI>
-<LI>Apache: Hard to configure but safe option
-</LI>
-<LI>lighttpd: Smaller web server with a small memory footprint
-</LI>
-</UL>
-Note that it's possible to run different web servers at the
-same time where they then act as proxies for a central web
-server visible to the outside world. In particular nginx
-makes it very easy to achieve this.
-
-<P>
-
-<DIV class="CENTER"><A ID="cgi"></A><A ID="296"></A>
-<TABLE>
-<CAPTION class="BOTTOM"><STRONG>Figure 5.1:</STRONG>
-FastCGI dataflow.</CAPTION>
-<TR><TD>
-<DIV class="CENTER">
-<IMG STYLE=""
- SRC="img4.svg"
- ALT="\includegraphics[width=\linewidth]{restdataflow}">
-
-</DIV></TD></TR>
-</TABLE>
-</DIV>
-
-<P>
-
-<H2><A ID="SECTION00642000000000000000">
-FastCGI</A>
-</H2>
-FastCGI (see Fig&nbsp;<A HREF="#cgi">5.1</A>) is written in C++ and generates the entire
-content of the http/https request. In particular here we generate
-JSON packets server side which can then be processed by client JavaScripts.
-For realtime applications JSON transmission is perfect because the client-side
-JavaScript can request JSON packages and directly turn them into variables.
-
-<P>
-A fast CGI program is a UNIX commandline program which communicates with the web server
-(nginx, Apache, ...) via a UNIX socket which in turn is a pseudo file located
-in a temporary directory for example `/tmp/sensorsocket`.
-
-<P>
-The web server then maps certain http/https requests to
-his socket, for example, the configuration for nginx looks like this:
-<PRE>
-       location /sensor/ {
-          include        fastcgi_params;
-          fastcgi_pass   unix:/tmp/sensorsocket;
-        }
-</PRE>
-If the user does a request via the URL <SPAN  CLASS="texttt">www.mywebpage.com/sensor/</SPAN> then
-nginx contacts the fastcgi program via this socket. The fastcgi program
-then needs to return the content. Internally this will be a C++ callback
-inside of the fastcgi program.
-
-<P>
-The C++ fastcgi API <kbd><A ID="tex2html21"
-  HREF="https://github.com/berndporr/json_fastcgi_web_api">https://github.com/berndporr/json_fastcgi_web_api</A></kbd> 
-is wrapper around the quite cryptic fastcgi C library and we are discussing
-its callback handlers now.
-
-<P>
-
-<H3><A ID="SECTION00642100000000000000">
-Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-</H3>
-The fastCGI callback expects a JSON string with the data
-transmitted form the server to the client. There is helper
-class JSONGenerator which generates the JSON data from various
-C++ types:
-<PRE>
-class JSONcallback : public JSONCGIHandler::GETCallback {
-public:
-/**
-* Gets the data and sends it to the webserver.
-* The callback creates two JSON entries. One with the
-* timestamp and one with the temperature from the sensor.
-**/
-virtual std::string getJSONString() {
-    JSONCGIHandler::JSONGenerator jsonGenerator;
-    jsonGenerator.add("epoch",(long)time(NULL));
-    jsonGenerator.add("temperatures",temperatureArray);
-    return jsonGenerator.getJSON();
-    }
-};
-</PRE> 
-
-<P>
-
-<H2><A ID="SECTION00643000000000000000">
-Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
-</H2>
-Like in any GUI the client can press a button and create an event.
-On the client side this is packaged as a JSON record with
-jquery and then sent over to the server. The server then
-receives the data as a callback:
-<PRE>
-virtual void postString(std::string postArg) {
-		auto m = JSONCGIHandler::postDecoder(postArg);
-		float temp = atof(m["volt"].c_str());
-		std::cerr &lt;&lt; m["hello"] &lt;&lt; "\n";
-		sensorfastcgi-&gt;forceValue(temp);
-	}
-</PRE> 
-
-<P>
-
-<H1><A ID="SECTION00650000000000000000">
-Client</A>
-</H1>
-Generally on the client side (= web page) HTML with embedded
-<SPAN  CLASS="textsl">JavaScript</SPAN> is used to generate realtime output/input without
-reloading the web page. JavaScript is <SPAN  CLASS="textsl">event driven</SPAN> and has
-callbacks so it's perfect for realtime applications. Use
-<SPAN  CLASS="texttt">jQuery</SPAN> to request and post JSON from/to the server.
-
-<P>
-For example here we request data from the server as a JSON
-packet every second:
-
-<P>
-<PRE>
-// callback when the JSON data has arrived
-function getterCallback(result) {
-  var temperatureArray = result.temperatures;
-  // plot the array here
-}
-
-// timer callback (same idea as in QT to define a refresh rate)
-function getTemperature() {
-  // get the JSON data
-  $.getJSON("/data/:80",getterCallback);
-}
-
-// document ready callback
-function documentReady() {
-  // request new data from the server every second
-  window.intervalId = setInterval(getTemperature , 1000);
-}
-
-// called when the web page has been loaded
-$(document).ready( documentReady );
-</PRE>
-
-<P>
-
-<H1><A ID="SECTION00700000000000000000">
-Setters</A>
-</H1>
-
-<P>
-In Fig.&nbsp;<A HREF="#gettersetters">1.2</A> we have seen that data flows from
-the sensors to the C++ classes via <SPAN  CLASS="textsl">callbacks</SPAN> then it flows
-back from the inner C++ classes to motor or display outputs is via
-<SPAN  CLASS="textsl">setters</SPAN>. Setters are also used for setting configuration
-parameters.
-
-<P>
-A setter is a simple method in a class, for example to set the
-speed of a motor:
-<PRE>
-class Motor {
-  /**
-  * Set the Left Wheel Speed
-  * @param speed between -1 and +1
-  **/
-  void setLeftWheelSpeed(float speed);
-};
-</PRE>
-Again as with callbacks it's important to <SPAN  CLASS="textsl">abstract</SPAN> away from the
-hardware, for example normalising the speed of the
-motor between <SPAN CLASS="MATH"><IMG STYLE="height: 1.82ex; vertical-align: -0.28ex; " SRC="img5.svg"
- ALT="$-1$"></SPAN> and <SPAN CLASS="MATH"><IMG STYLE="height: 1.80ex; vertical-align: -0.27ex; " SRC="img6.svg"
- ALT="$+1$"></SPAN> and <SPAN  CLASS="textsl">hiding</SPAN> away the complexity of the
-PWM or GPIO ports in the class.
-
-<P>
-If a setter has more than one argument, in particular for
-configuration, it's highly recommended to use a <SPAN  CLASS="textsl">struct</SPAN> to set
-the values. For example setting the parameters of the ADS1115:
-<PRE>
-/**
- * ADS1115 initial settings when starting the device.
- **/
-struct ADS1115settings {
-
-	/**
-	 * I2C bus used (99% always set to one)
-	 **/
-	int i2c_bus = 1;
-
-	/**
-	 * I2C address of the ads1115
-	 **/
-	uint8_t address = DEFAULT_ADS1115_ADDRESS;
-};
-
-/**
- * Starts the data acquisition in the background and the
- * callback is called with new samples.
- * \param settings A struct with the settings.
- **/
-void start(ADS1115settings settings = ADS1115settings() );
-</PRE>
-
-<P>
-If a setter sets large buffers then it's highly recommended
-to allocate the memory in the constructor of the class and then call the setter by reference
-while running. Use array types which convey their length, for example
-std::array or a standard const array which implicitly carries their length.
-
-<P>
-
-<H1><A ID="SECTION00800000000000000000">
-About this document ...</A>
-</H1>
- <STRONG>Realtime embedded coding under Linux</STRONG><P>
-This document was generated using the
-<A HREF="http://www.latex2html.org/">LaTeX2HTML</A> translator Version 2019.2 (Released June 5, 2019)
-<P>
-The command line arguments were: <BR>
- <kbd>latex2html realtime_embedded_coding -split 1 -dir docs -t 'Realtime Embedded Coding under Linux' -address '<p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>'</kbd>
-<P>
-The translation was initiated on 2022-03-23
-<DIV CLASS="navigation"><HR>
-<!--Navigation Panel-->
-<IMG WIDTH="81" HEIGHT="24" ALT="next_inactive" SRC="nx_grp_g.png"> 
-<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up_g.png"> 
-<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev_g.png">   
-<BR></DIV>
-<!--End of Navigation Panel-->
+<!--End of Table of Child-Links-->
+<BR><HR>
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
 </ADDRESS>

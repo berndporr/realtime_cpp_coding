@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>Introduction</TITLE>
+<META NAME="description" CONTENT="Introduction">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="next" HREF="node3.html">
+<LINK REL="previous" HREF="node1.html">
+<LINK REL="next" HREF="node3.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node3.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="realtime_embedded_coding.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node1.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html118"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node3.html">Writing C++ device driver</A>
+<B> Up:</B> <A
+ HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+<B> Previous:</B> <A
+ HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A ID="tex2html119"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A ID="SECTION00200000000000000000">
+Introduction</A>
+</H1>
+
+<P>
+
+<DIV class="CENTER"><A ID="timing"></A><A ID="289"></A>
+<TABLE>
+<CAPTION class="BOTTOM"><STRONG>Figure 1.1:</STRONG>
+Dataflow and timing in low level realtime coding
+</CAPTION>
+<TR><TD>
+<DIV class="CENTER">
+<IMG STYLE=""
+ SRC="img2.svg"
+ ALT="\includegraphics[width=\textwidth]{signals-timings}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+
+<P>
+In realtime embedded coding it's all about <SPAN  CLASS="textsl">events</SPAN>
+which can be a binary signal as somebody opening a door or
+an ADC signalling that a sample is ready.
+Fig.&nbsp;<A HREF="#timing">1.1</A> shows the basic dataflow and how event timing is
+established: devices by themselves have event signals such as data
+ready or crash sensor triggered. The Linux kernel then receives
+interrupt callbacks. However, userspace has no direct interrupt
+mechanism but it has blocking I/O where an I/O operation blocks
+until an interrupt has happened. These can then be translated
+back into callbacks between classes. Data is transmitted 
+back to the hardware via methods called &ldquo;setters&rdquo;.
+
+<P>
+
+<DIV class="CENTER"><A ID="gettersetters"></A><A ID="291"></A>
+<TABLE>
+<CAPTION class="BOTTOM"><STRONG>Figure 1.2:</STRONG>
+A realtime system with two C++ classes. Communication
+  between classes is achieved with callbacks (not getters) for incoming events
+  and setters to send out control events. The control output itself
+  receives its timing from the events so that the loop is traversed
+  as quickly as possible.
+</CAPTION>
+<TR><TD>
+<DIV class="CENTER">
+<IMG STYLE=""
+ SRC="img3.svg"
+ ALT="\includegraphics[width=\textwidth]{gettersetters}">
+
+</DIV></TD></TR>
+</TABLE>
+</DIV>
+Fig.&nbsp;<A HREF="#gettersetters">1.2</A> shows the overall communication between C++
+classes in a realtime system. This communication is done via callbacks
+(<SPAN  CLASS="textsl">not</SPAN> getters) and setters, where an event from a sensor
+traverses according to its realtime requirements through the classes via
+callbacks and then back to the control output via setters. For example,
+a collision sensor at a robot triggers a GPIO pin, which then triggers a
+callback to issue an avoidance action which in turn then sets the
+motors in reverse.
+
+<P>
+When developing the C++ classes keep S.O.L.I.D.
+<kbd><A ID="tex2html3"
+  HREF="https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design">https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design</A></kbd>in mind:
+
+<OL>
+<LI><SPAN  CLASS="textsl">Single responsibility</SPAN>: If you have a temperature
+sensor and an accelerometer then write two classes, one for the
+temperature sensor and one of the accelerometer. Don't write one
+class <SPAN  CLASS="texttt">Hardware</SPAN> which takes an argument <SPAN  CLASS="texttt">Hardware::temp</SPAN>
+or <SPAN  CLASS="texttt">Hardware::accel</SPAN> and then does one of two completely different
+things. It's a debugging nightmare.
+</LI>
+<LI><SPAN  CLASS="textsl">Open-Closed principle</SPAN> Your class is open to extension but
+  closed to modification. For example an ADC class
+  has a callback which returns voltage to the client. However,
+  you'll be connecting, for example, a temperature sensor to
+  it, so you'd like to be able to extend the class
+  overloading the callback methods so that you add the conversion
+  from volt to degrees. This is a Good Thing<SUP><SMALL>TM</SMALL></SUP> so long as
+  you create a derived class. It's a bad idea to hack the existing
+  ADC class adding a <SPAN  CLASS="texttt">to_kelvin</SPAN> method: why would somebody
+  using the ADC to read a value from an accelerometer need that?
+</LI>
+<LI><SPAN  CLASS="textsl">Liskov substitution principle</SPAN> Strictly, subtituting
+  a derived class for its base class does not result in the program
+  becoming incorrect. That is to say, any derived class from
+  your device driver class can be used in place of the base class if
+  the base class is all that's required, because the extra
+  functionality in the derived class shouldn't break the basic
+  required functionality of the base class. For example, if you have a
+  super duper DAC with lots of extra features, it shouldn't stop you
+  using it when you only need a very simple one. This also means
+  that sensible default values should be set so that the client
+  won't need to understand the nerdy features of that super duper DAC.
+</LI>
+<LI><SPAN  CLASS="textsl">Interface Segregation Principle</SPAN>:
+  Keep functionality separate and rather divide it up in different
+  classes. Imagine you have a universal IO class with SPI and I2C
+  but your client really just needs SPI. Then the client is forced
+  to deactivate I2C or in the worst case the class causes collateral
+  damage without the client knowing why.
+</LI>
+<LI><SPAN  CLASS="textsl">Dependency inversion</SPAN>: That is about obstructing the
+  essential features of of a class of interfaces. For example, ideally
+  you want a base class covering a range of similar
+  ADC converters from the same manufacturer and not a base class being
+  a driver for a particular chip. Individual ADC chip driver
+  classes then inherit from the abstract ADC driver. The authors of
+  the ADC's driver will no doubt consider their chip's
+  particular capabilities to be the core ideas,
+  but this needs inverting. Why would one ADC driver need
+  to provide all the necessaray code for a different one of the
+  same family? Instead, the driver is dependent on the abstract
+  idea of an ADC, not the other way around.
+</LI>
+</OL>
+
+<P>
+Besides S.O.L.I.D it's also essential that:
+
+<OL>
+<LI>the project has a <SPAN  CLASS="textbf">build system</SPAN> such as cmake. It's strongly recommended to use cmake
+  (autoconf only for older existing projects).
+</LI>
+<LI>classes (in particular driver classes) are <SPAN  CLASS="textbf">re-usable</SPAN>
+  outwith of the specific project and have
+  their own &ldquo;cmake&rdquo; projects in their subdirectories. Except for the main
+  cmake project all sub-projects are libraries.
+</LI>
+<LI>all public interfaces have <SPAN  CLASS="textbf">doc-strings</SPAN> for all public methods/constants and
+  an automatically generated reference, for example with the help of doxygen.
+</LI>
+<LI>classes which perform internal processing such as filters, databases, detectors, ...have
+  <SPAN  CLASS="textbf">unit tests</SPAN> and run via &ldquo;ctest&rdquo;.
+</LI>
+<LI>the documentation provides comprehensive information about the project itself,
+  how to install and run the project.
+</LI>
+</OL>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="node3.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="realtime_embedded_coding.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node1.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html118"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node3.html">Writing C++ device driver</A>
+<B> Up:</B> <A
+ HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+<B> Previous:</B> <A
+ HREF="node1.html">Contents</A>
+ &nbsp; <B>  <A ID="tex2html119"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

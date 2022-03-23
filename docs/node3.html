@@ -1,0 +1,794 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>Writing C++ device driver classes</TITLE>
+<META NAME="description" CONTENT="Writing C++ device driver classes">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="next" HREF="node4.html">
+<LINK REL="previous" HREF="node2.html">
+<LINK REL="next" HREF="node4.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="realtime_embedded_coding.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html120"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node4.html">Threads</A>
+<B> Up:</B> <A
+ HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+<B> Previous:</B> <A
+ HREF="node2.html">Introduction</A>
+ &nbsp; <B>  <A ID="tex2html121"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html122"
+  HREF="node3.html#SECTION00310000000000000000">General recommendations how to write your C++ classes for devices</A>
+<LI><A ID="tex2html123"
+  HREF="node3.html#SECTION00320000000000000000">Low level userspace device access</A>
+<UL>
+<LI><A ID="tex2html124"
+  HREF="node3.html#SECTION00321000000000000000">SPI</A>
+<LI><A ID="tex2html125"
+  HREF="node3.html#SECTION00322000000000000000">I2C</A>
+<UL>
+<LI><A ID="tex2html126"
+  HREF="node3.html#SECTION00322100000000000000">Raw /dev/i2c access</A>
+<LI><A ID="tex2html127"
+  HREF="node3.html#SECTION00322200000000000000">I2C access via pigpio</A>
+</UL>
+<LI><A ID="tex2html128"
+  HREF="node3.html#SECTION00323000000000000000">Access GPIO pins</A>
+<UL>
+<LI><A ID="tex2html129"
+  HREF="node3.html#SECTION00323100000000000000">/sys filesystem</A>
+<UL>
+<LI><A ID="tex2html130"
+  HREF="node3.html#SECTION00323110000000000000">GPIO interrupt handling via /sys</A>
+</UL>
+<LI><A ID="tex2html131"
+  HREF="node3.html#SECTION00323200000000000000">pigpio</A>
+<UL>
+<LI><A ID="tex2html132"
+  HREF="node3.html#SECTION00323210000000000000">interrupt handling via pigpio</A>
+</UL>
+</UL>
+<LI><A ID="tex2html133"
+  HREF="node3.html#SECTION00324000000000000000">Access to hardware via special devices in /sys</A>
+<LI><A ID="tex2html134"
+  HREF="node3.html#SECTION00325000000000000000">I2S: Audio</A>
+<LI><A ID="tex2html135"
+  HREF="node3.html#SECTION00326000000000000000">Accessing physical memory locations (danger!)</A>
+</UL>
+<BR>
+<LI><A ID="tex2html136"
+  HREF="node3.html#SECTION00330000000000000000">Kernel driver programming</A>
+<LI><A ID="tex2html137"
+  HREF="node3.html#SECTION00340000000000000000">Callbacks in C++ device classes</A>
+<UL>
+<LI><A ID="tex2html138"
+  HREF="node3.html#SECTION00341000000000000000">Creating a callback interface</A>
+<LI><A ID="tex2html139"
+  HREF="node3.html#SECTION00342000000000000000">Adding directly an abstract method to the device driver class</A>
+<LI><A ID="tex2html140"
+  HREF="node3.html#SECTION00343000000000000000">Callback arguments</A>
+</UL>
+<BR>
+<LI><A ID="tex2html141"
+  HREF="node3.html#SECTION00350000000000000000">Conclusion</A>
+</UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A ID="SECTION00300000000000000000">
+Writing C++ device driver classes</A>
+</H1>
+This chapter focuses on writing your own C++ device driver class
+hiding away the complexity (and messy) low level C APIs and/or raw
+device access. How are events translated into I/O operations? On the
+hardware-side we have event signals such as data-ready signals or by
+the timing of a serial or audio interface. The Linux kernel translates
+this timing info into blocking I/O on pseudo filesystems such as /dev
+or /sys which means that a read operation blocks until data has arrived
+or an event has happened. Some low level libraries such as pigpio
+translate them back into C callbacks. The task of a C++ programmer is
+to hide this complexity and these quite different approaches in C++
+classes which communicate via callbacks and setters with the client
+classes.
+
+<P>
+
+<H1><A ID="SECTION00310000000000000000">
+General recommendations how to write your C++ classes for devices</A>
+</H1>
+As said above the main purpose of object oriented coding here is to
+hide away the complexity of low level driver access and offer the
+client a simple and safe way of connecting to the sensor. In
+particular:
+
+<OL>
+<LI>Setters and callbacks hand over <SPAN  CLASS="textsl">physical units</SPAN>
+  (temperature, acceleration, ...) or relative units but not raw
+  integer values with no meaning.
+</LI>
+<LI>The sensor is configured by specifying physical units (time,
+  voltage, temperature) and not sensor registers. Default config parameters
+  should be specified that the class can be used straight away with
+  default parameters.
+</LI>
+<LI>It has simple demo programs demonstrating how to use the class
+  by a client.
+</LI>
+</OL>
+
+<P>
+
+<H1><A ID="SECTION00320000000000000000">
+Low level userspace device access</A>
+</H1>
+The following sections provide pointers of how to write
+the C++ driver classes for different hardware protocols.
+
+<P>
+
+<H2><A ID="SECTION00321000000000000000">
+SPI</A>
+</H2>
+<BR>  <DIV class="CENTER">
+  <A ID="292"></A>
+<TABLE class="PAD  BORDER" style="">
+<CAPTION><STRONG>Table 2.1:</STRONG>
+SPI modes</CAPTION>
+<TR><TD CLASS="LEFT">SPI Mode</TD>
+<TD CLASS="LEFT">CPOL</TD>
+<TD CLASS="LEFT">CPHA</TD>
+<TD CLASS="LEFT">Idle state</TD>
+</TR>
+<TR><TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">L</TD>
+</TR>
+<TR><TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">L</TD>
+</TR>
+<TR><TD CLASS="LEFT">2</TD>
+<TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">H</TD>
+</TR>
+<TR><TD CLASS="LEFT">3</TD>
+<TD CLASS="LEFT">1</TD>
+<TD CLASS="LEFT">0</TD>
+<TD CLASS="LEFT">H</TD>
+</TR>
+</TABLE>
+</DIV>
+<BR>
+SPI is a protocol which usually transmits and receives at the same
+time. Even that data might not be used it needs to be matched up. So
+for example sending 8 byes and receiving 8 bytes at the same time.
+
+<P>
+Transfer to/from SPI is best managed by the low level access to /dev.
+Open the SPI device with the standard open() function:
+<PRE>
+int fd = open( "/dev/spidev0.0", O_RDWR);
+</PRE>
+
+<P>
+Then set the SPI mode (see table.&nbsp;<A HREF="#spimodes">2.1</A>):
+<PRE>
+int ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);
+</PRE>
+which is explained, for example, here:
+<kbd><A ID="tex2html5"
+  HREF="https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html">https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html</A></kbd>.
+
+<P>
+Since SPI transmits and receives at the same time we need to
+use ioctl to do the communication.
+Populate this struct:
+<PRE>
+struct spi_ioc_transfer tr = {
+  .tx_buf = (unsigned long)tx1,
+  .rx_buf = (unsigned long)rx1,
+  .len = ARRAY_SIZE(tx1),
+  .delay_usecs = delay,
+  .speed_hz = speed,
+  .bits_per_word = 8,
+};
+</PRE>
+which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with the
+same length.
+
+<P>
+Reading and simultaneous writing is happening then via the ioctrl
+function:
+<PRE>
+int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
+</PRE>
+
+<P>
+Sometimes the SPI protocol of a chip is so odd that even the raw
+I/O via /dev won't work and you need to write your own bit banging
+interface, for example done here for the ADC on the alphabot:
+<kbd><A ID="tex2html6"
+  HREF="https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58">https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58</A></kbd>.
+This is obviously far from ideal as it might require &ldquo;usleep&rdquo; commands
+so that acquisition needs to be run in a separate thread (the alphabot
+uses a timer callback in a separate thread).
+
+<P>
+Overall the SPI protocol is often device dependent and calls
+for experimentation to get it to work. Often the SPI clock is also
+the ADC conversion clock which requires a longer lasting clock signal
+by transmitting dummy bytes in addition to the payload.
+
+<P>
+As a general recommendation do not use SAR converters which use the
+SPI data clock also as acquisition clock as they are often not compatible
+with the standard SPI transfers via /dev. Use sensors or ADCs which
+have their own clock signal.
+
+<P>
+
+<H2><A ID="SECTION00322000000000000000">
+I2C</A>
+</H2>
+The I2C bus has two signal lines (SDA &amp; SDL) which must be pulled up
+by resistors. Every I2C device has an address on the bus. You can scan
+a bus with &ldquo;i2cdetect&rdquo; (part of the i2c-tools package):
+<PRE>
+root@raspberrypi:/home/pi# i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- 1e -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- 58 -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- 6b -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+root@raspberrypi:/home/pi#
+</PRE>
+In this case there are 3 I2C devices on the I2C bus at addresses
+1E, 58 and 6B and need to be specified when
+accessing the I2C device.
+
+<P>
+
+<H3><A ID="SECTION00322100000000000000">
+Raw /dev/i2c access</A>
+</H3>
+I2C either transmits or receives but never at the same time so here we
+can use the standard C read/write commands. However, we need to use ioctrl to tell
+the kernel the I2C address:
+<PRE>
+char buf[2];
+int file = open("/dev/i2c-2",O_RDWR);
+int addr = 0x58;
+ioctl(file, I2C_SLAVE, addr);
+write(file,buf,1)
+read(file,buf,2)
+</PRE>
+where &ldquo;addr&rdquo; is the I2C address. Then use standard read()
+or write() commands. Usually the 1st write() operation tells the chip
+which register to read or write to. Then write/read its register.
+
+<P>
+
+<H3><A ID="SECTION00322200000000000000">
+I2C access via pigpio</A>
+</H3>
+Access via pigpio (<kbd><A ID="tex2html7"
+  HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
+is preferred in contrast to direct
+access of the raw /dev/i2c because many different devices
+can be connected to the I2C bus and pigpio manages this.
+Simply install the development package:
+<PRE>
+sudo apt-get install libpigpio-dev
+</PRE>
+which triggers then the install of the other relevant packages.
+For example writing a byte to a register in an I2C sensor can be done with a
+few commands:
+<PRE>
+int fd = i2cOpen(i2c_bus, address, 0);
+i2cWriteByteData(fd, subAddress, data);
+i2cClose(fd);
+</PRE>
+where i2c_bus is the I2C bus number (usually 1 on the RPI)
+and the address is the I2C address of the device on that bus.
+The subAddress here is the register address in the device.
+
+<P>
+
+<H2><A ID="SECTION00323000000000000000">
+Access GPIO pins</A>
+</H2>
+
+<H3><A ID="SECTION00323100000000000000">
+/sys filesystem</A>
+</H3>
+The GPIO of the raspberry PI can easily be controlled via
+the /sys filesystem. This is slow but good for
+debugging as you can directly write a
+&ldquo;0&rdquo; or &ldquo;1&rdquo; string to it and print the result. The
+pseudo files are here:
+<PRE>
+/sys/class/gpio
+</PRE>
+which contains files which directly relate to individual pins.
+To be able to access a pin we need to tell Linux to make
+it visible:
+<PRE>
+/sys/class/gpio/export
+</PRE>
+For example, writing a 5 (in text form) to this file would
+create the subdirectory <SPAN  CLASS="texttt">/sys/class/gpio/gpio5</SPAN> for GPIO pin 5.
+
+<P>
+Then reading from
+<PRE>
+/sys/class/gpio/gpio5/value
+</PRE>
+would give you the status of GPIO pin 5 and writing
+to it would change it.
+A thin wrapper around the GPIO sys filesystem is here: <kbd><A ID="tex2html8"
+  HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>.
+
+<P>
+
+<H4><A ID="SECTION00323110000000000000"></A><A ID="gpioIRQ"></A>
+<BR>
+GPIO interrupt handling via /sys
+</H4>
+The most important application for the /sys filesystem is to
+do interrupt processing in userspace.
+A thread can be put to sleep until an interrupt has happened on one of
+the GPIO pins. This is done by monitoring the &ldquo;value&rdquo;
+of a GPIO pin in the /sys filesystem with the &ldquo;poll&rdquo; command:
+<PRE>
+struct pollfd fdset[1];
+int nfds = 1;
+int gpio_fd = open("/sys/class/gpio/gpio5/value", O_RDONLY | O_NONBLOCK );
+memset((void*)fdset, 0, sizeof(fdset));
+fdset[0].fd = gpio_fd;
+fdset[0].events = POLLPRI;
+int rc = poll(fdset, nfds, timeout);
+if (fdset[0].revents &amp; POLLPRI) {
+   // dummy
+   read(fdset[0].fd, buf, MAX_BUF);
+}
+</PRE>
+makes the thread go to sleep until an interrupt has occurred on
+GPIO pin 5. Then the thread wakes up and execution continues.
+
+<P>
+
+<H3><A ID="SECTION00323200000000000000">
+pigpio</A>
+</H3>
+The above section has given you a deep understanding what's happening
+under the hood on the sysfs-level but it's highly recommended to
+use the pigpio library (<kbd><A ID="tex2html9"
+  HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
+to read/write to GPIO pins or do interrupt programming.
+
+<P>
+For example to set GPIO pin 24 as an input just call:
+<PRE>
+gpioSetMode(24,PI_INPUT);
+</PRE>
+
+<P>
+To read from GPIO pin 24 just call:
+<PRE>
+int a = gpioRead(24)
+</PRE>
+
+<P>
+
+<H4><A ID="SECTION00323210000000000000">
+interrupt handling via pigpio</A>
+</H4>
+pigpio manages GPIO interrupt handling by wrapping all the above
+functionality into a single command where the client registers a
+callback function which is called whenever a change has occurred on a
+GPIO pin.
+Specifically a method of the form:
+<PRE>
+class mySensorClass {
+  ...
+  static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)
+  ...
+}
+</PRE>
+is registered with pigpio:
+<PRE>
+gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
+</PRE>
+where &ldquo;this&rdquo; is the pointer to your class instance which is then used
+to call a class method, here: &ldquo;dataReady()&rdquo;.
+<PRE>
+class LSM9DS1 {
+  void dataReady();
+  static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
+    {
+        ((LSM9DS1*)userdata)-&gt;dataReady();
+    }
+};
+</PRE>
+where here within the static function the void pointer is cast back into the instance pointer.
+See <kbd><A ID="tex2html10"
+  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library</A></kbd> for the complete code.
+
+<P>
+
+<H2><A ID="SECTION00324000000000000000">
+Access to hardware via special devices in /sys</A>
+</H2>
+Some sensors are directly available via the sys filesystem in human readable format.
+
+<P>
+For example
+<PRE>
+cat /sys/class/thermal/thermal_zone0/temp
+</PRE>
+gives you the temperature of the CPU.
+
+<P>
+
+<H2><A ID="SECTION00325000000000000000">
+I2S: Audio</A>
+</H2>
+The standard framework for audio is alsa: <kbd><A ID="tex2html11"
+  HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
+
+<P>
+ALSA works packet based where a read command
+returns a chunk of audio or a chunk is written to.
+
+<P>
+First, the parameters are requested and the driver can modify or
+reject them:
+<PRE>
+/* Signed 16-bit little-endian format */
+  snd_pcm_hw_params_set_format(handle, params,
+                               SND_PCM_FORMAT_S16_LE);
+
+  /* One channel (mono) */
+  snd_pcm_hw_params_set_channels(handle, params, 1);
+
+  /* 44100 bits/second sampling rate (CD quality) */
+  val = 44100;
+  snd_pcm_hw_params_set_rate_near(handle, params,
+                                  &amp;val, &amp;dir);
+</PRE>
+
+<P>
+Then playing sound is done in an endless loop were a read()
+or write() command is issued. Both are blocking so that
+it needs to run in a thread:
+
+<P>
+<PRE>
+while(running) {
+    rc = snd_pcm_writei(handle, buffer, frames);
+    if (rc == -EPIPE) {
+      /* EPIPE means underrun */
+      fprintf(stderr, "underrun occurred\n");
+      snd_pcm_prepare(handle);
+    } else if (rc &lt; 0) {
+      fprintf(stderr,
+              "error from writei: %s\n",
+              snd_strerror(rc));
+    }  else if (rc != (int)frames) {
+      fprintf(stderr,
+              "short write, write %d frames\n", rc);
+    }
+}
+</PRE>
+
+<P>
+For a full coding example &ldquo;aplay&rdquo; is a very
+good start or &ldquo;arecord&rdquo;. Both can be found here:
+<kbd><A ID="tex2html12"
+  HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
+
+<P>
+
+<H2><A ID="SECTION00326000000000000000">
+Accessing physical memory locations (danger!)</A>
+</H2>
+In case you really need to access registers you can access
+also memory directly. This should only be used as a last resort.
+For example, setting the clock for the AD converter requires
+turning a GPIO pin into a clock output pin. This is not yet
+supported by the drivers so we need to program registers
+on the RPI.
+
+<UL>
+<LI>Linux uses virtual addressed so that a pointer won't
+point to a physical address. It points to three page
+tables with an offset.
+</LI>
+<LI>Special device /dev/mem which allows access of physical
+memory.
+</LI>
+<LI>The command &ldquo;mmap&rdquo; provides a pointer to a physical
+address by opening /dev/mem.
+</LI>
+<LI>Example:
+<PRE>
+int *addr;
+if ((fd = open("/dev/mem", O_RDWR|O_SYNC)) &lt; 0 ) {
+    printf("Error opening file. \n");
+    close(fd);
+    return (-1);
+}
+addr = (int *)mmap(0, num*STRUCT_PAGE_SIZE, PROT_READ, MAP_PRIVATE,
+            fd, 0x0000620000000000);
+printf("addr: %p \n",addr);
+printf("addr: %d \n",*addr);
+</PRE>
+</LI>
+<LI>Use this with care! It's dangerous if not used properly.
+</LI>
+</UL>
+
+<P>
+
+<H1><A ID="SECTION00330000000000000000">
+Kernel driver programming</A>
+</H1>
+You can also create your own /dev/mydevice in the /dev filesystem
+by writing a kernel driver and a matching userspace library. For
+example the USB mouse has a driver in kernel space and translates
+the raw data from the mouse into coordinates. However,
+this is beyond the scope of this handout. If you want to embark
+on this adventure then the best approach is to
+find a kernel driver which does approximately what you want and then
+modify it for your purposes.
+
+<P>
+
+<H1><A ID="SECTION00340000000000000000">
+Callbacks in C++ device classes</A>
+</H1>
+As said in the introduction your hardware device class has callback interfaces
+to hand back the data to the client.
+
+<P>
+There are different ways of tackling the issue of callbacks but the
+simplest one is defining a method as <SPAN  CLASS="textsl">abstract</SPAN> and asking the
+client to implement it in a derived class. That abstract function can
+either be in a separate interface class or part of the device class
+itself. So, we have two options:
+
+<OL>
+<LI>The callback is part of the device driver class:
+<PRE>
+class MyDriver {
+          void start(DevSettings settings = DevSettings() );
+          void stop();
+          virtual void callback(float sample) = 0;
+};
+</PRE>
+</LI>
+<LI>The callback is part of an interface class:
+<PRE>
+class CallbackInterface {
+          virtual void callback(float sample) = 0;
+};
+</PRE>
+and then registering it in the main device driver class:
+<PRE>
+class MyDriver {
+          void registerCallback(CallbackInterface* cb);
+};
+</PRE>
+</LI>
+</OL>
+These two options are now explained in greater detail.
+
+<P>
+
+<H2><A ID="SECTION00341000000000000000">
+Creating a callback interface</A>
+</H2>
+Here, we create a separate interface class containing a callback
+as an abstract method:
+<PRE>
+class LSM9DS1callback {
+public:
+        virtual void hasSample(LSM9DS1Sample sample) = 0;
+};
+</PRE>
+
+<P>
+The client then implements the abstract method &ldquo;hasSample()&rdquo;, instantiates
+the interface class and then saves its pointer in the device class, here called &ldquo;lsm9ds1Callback&rdquo;.
+<PRE>
+void LSM9DS1::dataReady() {
+        LSM9DS1Sample sample;
+        // fills the sample struct with data
+        // ...
+        lsm9ds1Callback-&gt;hasSample(sample);
+}
+</PRE>
+The pointer to the interface instance is transmitted via a setter which
+receives the pointer of the interface as an argument, for example:
+<PRE>
+        void registerCallback(LSM9DS1callback* cb);
+</PRE>
+This allows to register a callback optionally. The client might not need
+one or not always.
+See
+<kbd><A ID="tex2html13"
+  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd>for a complete example.
+
+<P>
+
+<H2><A ID="SECTION00342000000000000000">
+Adding directly an abstract method to the device driver class</A>
+</H2>
+Instead of creating a separate class containing the callback you
+can also add the callback straight to the device driver class.
+<PRE>
+class ADS1115rpi {
+        ...
+        virtual void hasSample(float sample) = 0;
+        ...
+};
+</PRE>
+This forces the client to implement the callback to be able to use
+the class. This creates a very safe environment as all dependencies
+are set at compile time and the abstract nature of the base class
+makes clear what needs to be implemented.
+See
+<kbd><A ID="tex2html14"
+  HREF="https://github.com/berndporr/rpi_ads1115">https://github.com/berndporr/rpi_ads1115</A></kbd> for a complete example.
+
+<P>
+
+<H2><A ID="SECTION00343000000000000000">
+Callback arguments</A>
+</H2>
+Above the callbacks just delivered one floating point value. However,
+often more than one sample or more complex data is transmitted:
+
+<UL>
+<LI>Complex data: Do not put loads of arguments into the
+  callback but define a <SPAN  CLASS="textsl">struct</SPAN>. For example an ADC might
+  deliver all 4 channels at once:
+<PRE>
+class ADmulti {
+
+        struct ADCSample {
+            float ch1;
+            float ch2;
+            float ch3;
+            float ch4;
+        };
+
+        ...
+        virtual void hasSample(ADCSample sample) = 0;
+        ...
+};
+</PRE>
+</LI>
+<LI>Arrays: Use arrays which contain the length of the arrays:
+  either std::array, std::vector, etc or const arrays and then
+  references to these so that the callback knows the length.
+  For example the LIDAR callback uses a reference to a const length
+  array:
+<PRE>
+/**
+ * Callback interface which needs to be implemented by the user.
+ **/
+struct DataInterface {
+        virtual void newScanAvail(
+                float rpm, 
+                A1LidarData (&amp;)[A1Lidar::nDistance]) = 0;
+};
+</PRE>
+where &ldquo;A1Lidar::nDistance&rdquo; defines a reference to a constant length array which in
+itself consists of &ldquo;A1LidarData&rdquo; stucts.
+</LI>
+</UL>
+In terms of <SPAN  CLASS="textsl">memory management</SPAN>:
+
+<OL>
+<LI>Low sampling rate complex data structures: allocate as a local variable. It can be a simple type
+  or a struct. See &ldquo;dataReady()&rdquo; in: <kbd><A ID="tex2html15"
+  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp</A></kbd>.
+</LI>
+<LI>High sampling rate buffers: allocate memory on the heap in the
+  constructor or in the private section of the class as a const length
+  array and pass on a <SPAN  CLASS="textsl">reference</SPAN>. See &ldquo;getData()&rdquo; in
+  <kbd><A ID="tex2html16"
+  HREF="https://github.com/berndporr/rplidar_rpi">https://github.com/berndporr/rplidar_rpi</A></kbd>.
+</LI>
+</OL>
+
+<P>
+
+<H1><A ID="SECTION00350000000000000000">
+Conclusion</A>
+</H1>
+In conclusion, the communication between C++ is done via callbacks and
+setters where the event from the sensor traverses through the C++
+classes via callbacks and then back to the control output via setters.
+
+<P>
+From the sections above it's clear that Linux userspace low level
+device access is complex, even without taking into account the
+complexity of contemporary chips which have often a multitude of
+registers and pages of documentation. Your task is to hide away
+all this (scary) complexity in a C++ class and offer the client
+an easy to understand interface.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="node4.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="realtime_embedded_coding.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node2.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html120"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node4.html">Threads</A>
+<B> Up:</B> <A
+ HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+<B> Previous:</B> <A
+ HREF="node2.html">Introduction</A>
+ &nbsp; <B>  <A ID="tex2html121"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>

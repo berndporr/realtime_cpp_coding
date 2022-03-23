@@ -1,0 +1,288 @@
+<!DOCTYPE HTML>
+
+<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
+<HTML lang="EN">
+<HEAD>
+<TITLE>Threads</TITLE>
+<META NAME="description" CONTENT="Threads">
+<META NAME="keywords" CONTENT="realtime_embedded_coding">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+
+<LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
+
+<LINK REL="next" HREF="node5.html">
+<LINK REL="previous" HREF="node3.html">
+<LINK REL="next" HREF="node5.html">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><!--Navigation Panel-->
+<A
+ HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="realtime_embedded_coding.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html142"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node5.html">Realtime/event processing in QT</A>
+<B> Up:</B> <A
+ HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+<B> Previous:</B> <A
+ HREF="node3.html">Writing C++ device driver</A>
+ &nbsp; <B>  <A ID="tex2html143"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR></DIV>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><A ID="tex2html144"
+  HREF="node4.html#SECTION00410000000000000000">Introduction</A>
+<LI><A ID="tex2html145"
+  HREF="node4.html#SECTION00420000000000000000">Processes and Threads</A>
+<LI><A ID="tex2html146"
+  HREF="node4.html#SECTION00430000000000000000">Thread and worker</A>
+<UL>
+<LI><A ID="tex2html147"
+  HREF="node4.html#SECTION00431000000000000000">Creating threads</A>
+<LI><A ID="tex2html148"
+  HREF="node4.html#SECTION00432000000000000000">Lifetime of a thread</A>
+<LI><A ID="tex2html149"
+  HREF="node4.html#SECTION00433000000000000000">Running/stopping workers with endless loops</A>
+<LI><A ID="tex2html150"
+  HREF="node4.html#SECTION00434000000000000000">Timing within threads</A>
+<UL>
+<LI><A ID="tex2html151"
+  HREF="node4.html#SECTION00434100000000000000">select/poll commands waiting for GPIO interrupts</A>
+<LI><A ID="tex2html152"
+  HREF="node4.html#SECTION00434200000000000000">Timing with blocking I/O</A>
+<LI><A ID="tex2html153"
+  HREF="node4.html#SECTION00434300000000000000">Timing with Linux/pigpio timers</A>
+</UL></UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H1><A ID="SECTION00400000000000000000">
+Threads</A>
+</H1>
+
+<P>
+
+<H1><A ID="SECTION00410000000000000000">
+Introduction</A>
+</H1>
+In a realtime system events need to be dealt with as soon as possible
+while also interacting with the user and performing other background
+tasks. However, certain operations might take considerable computing
+time (FFT, etc) or I/O is blocking while waiting for data. The
+solution are threads.
+
+<P>
+
+<H1><A ID="SECTION00420000000000000000">
+Processes and Threads</A>
+</H1>
+Processes are different programs which seem to be running at the same
+time. However this is done by the operating system which switches
+approximately every 10ms from one process to the next so it feels as
+if they are running at the same time. A thread is a lightweight
+process where multiple threads share the same memory and started from
+within the parent process. As with processes the threads seem to be
+running at the same time. When a thread is started it runs
+simultaneously to the main process which created it.
+
+<P>
+
+<H1><A ID="SECTION00430000000000000000">
+Thread and worker</A>
+</H1>
+A thread is just a <SPAN  CLASS="textsl">container</SPAN> for the actual method
+which is running independently. The method contained inside of a
+thread is often called <SPAN  CLASS="textsl">worker</SPAN>.
+
+<P>
+
+<H2><A ID="SECTION00431000000000000000">
+Creating threads</A>
+</H2>
+In C++ a worker is a method within
+a class and needs to be <SPAN  CLASS="textsl">static</SPAN> which means it won't be
+able to access the instance variables of a class. The trick
+is to pass a pointer to the instance of the class (&ldquo;this&rdquo;) as the argument of
+the worker, for example, called &ldquo;exec&rdquo;:
+<PRE>
+uthread = new std::thread(MyClassWithAThread::exec, this);
+</PRE>
+where <SPAN  CLASS="texttt">MyClassWithAThread</SPAN> is a class containing the static function &ldquo;exec&rdquo;:
+<PRE>
+class MyClassWithAThread {
+        void run() {
+                // ... hard work is done here
+                doCallback(result); // hand the result over
+        }
+        static void exec(MyClassWithAThread* cppThread) {
+                cppThread-&gt;run();
+        }
+}
+</PRE>
+which in turn then calls a non-static class method &ldquo;run()&rdquo; which
+then has access to the instances variables.
+
+<P>
+
+<H2><A ID="SECTION00432000000000000000">
+Lifetime of a thread</A>
+</H2>
+Threads terminate simply once the static worker has finished its job.
+To tell the client that a thread has finished you can use a
+<SPAN  CLASS="textsl">callback</SPAN> to trigger an event.
+
+<P>
+Sometimes it's important to wait for the termination of the thread,
+for example when your whole program is terminating or when
+you stop an endless loop in a thread. To wait for the termination
+of the thread use the &ldquo;join()&rdquo; method:
+<PRE>
+        void stop() {
+                uthread-&gt;join();
+                delete uthread;
+        }
+</PRE>
+Important is also to release the memory of a thread after it has finished
+to avoid memory leaks.
+
+<P>
+
+<H2><A ID="SECTION00433000000000000000">
+Running/stopping workers with endless loops</A>
+</H2>
+Threads with endless loops are often used in conjunction with blocking
+I/O which provide the timing:
+<PRE>
+void run() {
+       running = true;
+       while (running) {
+              read(buffer); // blocking
+              doCallback(buffer); // hand data to client
+       }
+}
+</PRE>
+Note the flag &ldquo;running&rdquo; which is controlled by the main program and is set to zero to terminate
+the thread:
+<PRE>
+        void stop() {
+                running = false; // &lt;----- HERE!!
+                uthread-&gt;join();
+                delete uthread;
+        }
+</PRE>
+Note that &ldquo;join()&rdquo; is a blocking operation and needs to be used with care not to
+lock up the main program. You probably only need it when your program is terminating.
+See <kbd><A ID="tex2html17"
+  HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd> for an example.
+
+<P>
+
+<H2><A ID="SECTION00434000000000000000">
+Timing within threads</A>
+</H2>
+Threads are perfect to create timing without using sleep commands
+with the help of <SPAN  CLASS="textsl">blocking I/O</SPAN>.
+
+<P>
+
+<H3><A ID="SECTION00434100000000000000">
+select/poll commands waiting for GPIO interrupts</A>
+</H3>
+In section&nbsp;<A HREF="node3.html#gpioIRQ">2.2.3</A> we introduced the so called &ldquo;poll&rdquo; command
+which is not polling an IRQ pin but <SPAN  CLASS="textsl">putting a thread to sleep</SPAN> till an
+external event has happened. Then of course a callback function should
+be called reacting to the external event. This is the preferred method
+for low latency responses.
+
+<P>
+As said previously, use <SPAN  CLASS="textsl">pigpio</SPAN> on the Raspberry PI
+which wraps the select/poll commands into a thread and calls a
+<SPAN  CLASS="textsl">callback</SPAN> function whenever an GPIO pin has been triggered.
+
+<P>
+
+<H3><A ID="SECTION00434200000000000000">
+Timing with blocking I/O</A>
+</H3>
+Blocking I/O (read, write, etc) can be used to time
+the data coming in because the thread goes to sleep when it's waiting for
+I/O but wakes up very quickly after new data has arrived.
+
+<P>
+In this example the blocking &ldquo;read&rdquo; command creates
+the timing of the callback:
+<PRE>
+void run() {
+       running = 1;
+       while (running) {
+              read(buffer); // blocking
+              doCallback(buffer); // hand data to client
+       }
+}
+</PRE>
+
+<P>
+
+<H3><A ID="SECTION00434300000000000000">
+Timing with Linux/pigpio timers</A>
+</H3>
+Similar to threads one can create timers which are called at certain
+intervals. These timers emit a Linux signal at a specified interval
+and then this signal is caught by a global (static) function.
+Generally it's <SPAN  CLASS="textsl">not recommended</SPAN> to use timers for anything
+which needs to be reliably sampled, for example ADC converters or
+sensors with sampling rates higher than a few Hz. On the raspberry PI
+use the pigpio library and its timer callbacks &ndash; if needed at all.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="node5.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="realtime_embedded_coding.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node3.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html142"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node5.html">Realtime/event processing in QT</A>
+<B> Up:</B> <A
+ HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+<B> Previous:</B> <A
+ HREF="node3.html">Writing C++ device driver</A>
+ &nbsp; <B>  <A ID="tex2html143"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+<p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
+</ADDRESS>
+</BODY>
+</HTML>
