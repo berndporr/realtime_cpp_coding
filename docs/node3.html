@@ -57,7 +57,7 @@ device access. How are events translated into I/O operations? On the
 hardware-side we have event signals such as data-ready signals or by
 the timing of a serial or audio interface. The Linux kernel translates
 this timing info into blocking I/O on pseudo filesystems such as /dev
-or /sys which means that a read operation blocks till data has arrived
+or /sys which means that a read operation blocks until data has arrived
 or an event has happened. Some low level libraries such as pigpio
 translate them back into C callbacks. The task of a C++ programmer is
 to hide this complexity and these quite different approaches in C++

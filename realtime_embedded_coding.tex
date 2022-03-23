@@ -15,7 +15,7 @@
 \renewcommand{\familydefault}{\sfdefault}
 \renewcommand{\captionfont}{\small}
 
-\author{Bernd Porr}
+\author{Bernd Porr \& Nick Bailey}
 \title{Realtime embedded coding under Linux}
 
 \begin{document}
@@ -86,7 +86,7 @@ things. It's a debugging nightmare.
   overloading the callback methods so that you add the conversion
   from volt to degrees. This is a Good Thing\texttrademark{} so long as
   you create a derived class. It's a bad idea to hack the existing
-  ADC class adding a \texttt{to_kelvin} method: why would somebody
+  ADC class adding a \texttt{to\_kelvin} method: why would somebody
   using the ADC to read a value from an accelerometer need that?
 \item \textsl{Liskov substitution principle} Strictly, subtituting
   a derived class for its base class does not result in the program

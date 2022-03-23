@@ -54,7 +54,7 @@ Introduction</A>
 
 <P>
 
-<DIV class="CENTER"><A ID="timing"></A><A ID="291"></A>
+<DIV class="CENTER"><A ID="timing"></A><A ID="296"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.1:</STRONG>
 Dataflow and timing in low level realtime coding
@@ -79,12 +79,12 @@ ready or crash sensor triggered. The Linux kernel then receives
 interrupt callbacks. However, userspace has no direct interrupt
 mechanism but it has blocking I/O where an I/O operation blocks
 until an interrupt has happened. These can then be translated
-back into callbacks between classes. Data back to the hardware
-is transmitted via methods, called &ldquo;setters&rdquo;.
+back into callbacks between classes. Data is transmitted 
+back to the hardware via methods called &ldquo;setters&rdquo;.
 
 <P>
 
-<DIV class="CENTER"><A ID="gettersetters"></A><A ID="293"></A>
+<DIV class="CENTER"><A ID="gettersetters"></A><A ID="298"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.2:</STRONG>
 A realtime system with two C++ classes. Communication
@@ -104,9 +104,9 @@ A realtime system with two C++ classes. Communication
 </DIV>
 Fig.&nbsp;<A HREF="#gettersetters">1.2</A> shows the overall communication between C++
 classes in a realtime system. This communication is done via callbacks
-(<SPAN  CLASS="textsl">not</SPAN> getters) and setters where an event from a sensor
+(<SPAN  CLASS="textsl">not</SPAN> getters) and setters, where an event from a sensor
 traverses according to its realtime requirements through the classes via
-callbacks and then back to the control output via setters. For example
+callbacks and then back to the control output via setters. For example,
 a collision sensor at a robot triggers a GPIO pin, which then triggers a
 callback to issue an avoidance action which in turn then sets the
 motors in reverse.
@@ -119,17 +119,25 @@ When developing the C++ classes keep S.O.L.I.D.
 <OL>
 <LI><SPAN  CLASS="textsl">Single responsibility</SPAN>: If you have a temperature
 sensor and an accelerometer then write two classes, one for the
-temperature sensor and one of the accelerometer. In terms of
+temperature sensor and one of the accelerometer. Don't write one
+class <SPAN  CLASS="texttt">Hardware</SPAN> which takes an argument <SPAN  CLASS="texttt">Hardware::temp</SPAN>
+or <SPAN  CLASS="texttt">Hardware::accel</SPAN> and then does one of two completely different
+things. It's a debugging nightmare.
 </LI>
 <LI><SPAN  CLASS="textsl">Open-Closed principle</SPAN> Your class is open to extension but
   closed to modification. For example an ADC class
   has a callback which returns voltage to the client. However,
-  you'll be connecting for example a temperature sensor to
-  it so you'd like to be able to extend the class by for example
+  you'll be connecting, for example, a temperature sensor to
+  it, so you'd like to be able to extend the class
   overloading the callback methods so that you add the conversion
-  from volt to degrees but not hacking the existing ADC class.
+  from volt to degrees. This is a Good Thing<SUP><SMALL>TM</SMALL></SUP> so long as
+  you create a derived class. It's a bad idea to hack the existing
+  ADC class adding a <SPAN  CLASS="texttt">to_kelvin</SPAN> method: why would somebody
+  using the ADC to read a value from an accelerometer need that?
 </LI>
-<LI><SPAN  CLASS="textsl">Liskov substitution principle</SPAN> Any derived class from
+<LI><SPAN  CLASS="textsl">Liskov substitution principle</SPAN> Strictly, subtituting
+  a derived class for its base class does not result in the program
+  becoming incorrect. That is to say, any derived class from
   your device driver class can be used in place of the base class if
   the base class is all that's required, because the extra
   functionality in the derived class shouldn't break the basic
@@ -147,11 +155,17 @@ temperature sensor and one of the accelerometer. In terms of
   damage without the client knowing why.
 </LI>
 <LI><SPAN  CLASS="textsl">Dependency inversion</SPAN>: That is about obstructing the
-  essential features of of a class of interfaces. For example ideally
-  you want, for example, a base class for covering a range of similar
+  essential features of of a class of interfaces. For example, ideally
+  you want a base class covering a range of similar
   ADC converters from the same manufacturer and not a base class being
-  a driver for a particular chip. Instead you want all ADC chip driver
-  classes to inherit from the abstract ADC driver.
+  a driver for a particular chip. Individual ADC chip driver
+  classes then inherit from the abstract ADC driver. The authors of
+  the ADC's driver will no doubt consider their chip's
+  particular capabilities to be the core ideas,
+  but this needs inverting. Why would one ADC driver need
+  to provide all the necessaray code for a different one of the
+  same family? Instead, the driver is dependent on the abstract
+  idea of an ADC, not the other way around.
 </LI>
 </OL>
 
@@ -159,12 +173,13 @@ temperature sensor and one of the accelerometer. In terms of
 Besides S.O.L.I.D it's also essential that:
 
 <OL>
-<LI>the project has a a <SPAN  CLASS="textbf">build system</SPAN> such as cmake. It's strongly recommended to use cmake
+<LI>the project has a <SPAN  CLASS="textbf">build system</SPAN> such as cmake. It's strongly recommended to use cmake
   (autoconf only for older existing projects).
 </LI>
-<LI>classes (in particular driver classes) are <SPAN  CLASS="textbf">re-usable</SPAN> outwith of the specific project and have
+<LI>classes (in particular driver classes) are <SPAN  CLASS="textbf">re-usable</SPAN>
+  outwith of the specific project and have
   their own &ldquo;cmake&rdquo; projects in their subdirectories. Except for the main
-  cmake project all sub projects are libraries.
+  cmake project all sub-projects are libraries.
 </LI>
 <LI>all public interfaces have <SPAN  CLASS="textbf">doc-strings</SPAN> for all public methods/constants and
   an automatically generated reference, for example with the help of doxygen.
