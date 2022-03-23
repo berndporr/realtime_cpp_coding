@@ -3,17 +3,22 @@
 
 
 $key = q/+1;MSF=1.6;LFS=12;AAT/;
-$cached_env_img{$key} = q|<IMG STYLE="height: 1.80ex; vertical-align: -0.27ex; " SRC="|."$dir".q|img5.svg"
+$cached_env_img{$key} = q|<IMG STYLE="height: 1.80ex; vertical-align: -0.27ex; " SRC="|."$dir".q|img6.svg"
  ALT="$+1$">|; 
 
 $key = q/-1;MSF=1.6;LFS=12;AAT/;
-$cached_env_img{$key} = q|<IMG STYLE="height: 1.82ex; vertical-align: -0.28ex; " SRC="|."$dir".q|img4.svg"
+$cached_env_img{$key} = q|<IMG STYLE="height: 1.82ex; vertical-align: -0.28ex; " SRC="|."$dir".q|img5.svg"
  ALT="$-1$">|; 
 
 $key = q/includegraphics[width=linewidth]{restdataflow};LFS=12;AAT/;
 $cached_env_img{$key} = q|<IMG STYLE=""
- SRC="|."$dir".q|img3.svg"
+ SRC="|."$dir".q|img4.svg"
  ALT="\includegraphics[width=\linewidth]{restdataflow}">|; 
+
+$key = q/includegraphics[width=textwidth]{gettersetters};LFS=12;AAT/;
+$cached_env_img{$key} = q|<IMG STYLE=""
+ SRC="|."$dir".q|img3.svg"
+ ALT="\includegraphics[width=\textwidth]{gettersetters}">|; 
 
 $key = q/includegraphics[width=textwidth]{signals-timings};LFS=12;AAT/;
 $cached_env_img{$key} = q|<IMG STYLE=""
