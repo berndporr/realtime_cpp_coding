@@ -414,8 +414,10 @@ gives you the temperature of the CPU.
 \subsection{I2S: Audio}
 The standard framework for audio is alsa: \url{https://github.com/alsa-project}.
 
-ALSA works packet based where a read command
-returns a chunk of audio or a chunk is written to.
+ALSA is packet based with a read command
+returning a chunk ("buffer") of audio and write emitting one.
+There are calls to set the sample format, sample rate, buffer size
+and so forth.
 
 First, the parameters are requested and the driver can modify or
 reject them:
@@ -446,15 +448,16 @@ it needs to run in a thread:
  }
 \end{verbatim}
 
-For a full coding example ``arecord'' is a good start. Both can be found here:
+For a full coding example ``aplay'' and ``arecord'' are a good start.
+Both can be found here:
 \url{https://github.com/alsa-project}.
 
 
 
 
 \subsection{Accessing physical memory locations (danger!)}
-In case you really need to access registers you can access
-also memory directly. This should only be used as a last resort.
+In case you really need to access registers you can
+also access memory directly. This should only be used as a last resort.
 For example, setting the clock for the AD converter requires
 turning a GPIO pin into a clock output pin. This is not yet
 supported by the drivers so we need to program registers
