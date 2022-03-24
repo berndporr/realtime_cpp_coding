@@ -478,8 +478,10 @@ The standard framework for audio is alsa: <kbd><A ID="tex2html11"
   HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
 
 <P>
-ALSA works packet based where a read command
-returns a chunk of audio or a chunk is written to.
+ALSA is packet based with a read command
+returning a chunk ("buffer") of audio and write emitting one.
+There are calls to set the sample format, sample rate, buffer size
+and so forth.
 
 <P>
 First, the parameters are requested and the driver can modify or
@@ -514,7 +516,8 @@ it needs to run in a thread:
 </PRE>
 
 <P>
-For a full coding example &ldquo;arecord&rdquo; is a good start. Both can be found here:
+For a full coding example &ldquo;aplay&rdquo; and &ldquo;arecord&rdquo; are a good start.
+Both can be found here:
 <kbd><A ID="tex2html12"
   HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
 
@@ -523,8 +526,8 @@ For a full coding example &ldquo;arecord&rdquo; is a good start. Both can be fou
 <H2><A ID="SECTION00326000000000000000">
 Accessing physical memory locations (danger!)</A>
 </H2>
-In case you really need to access registers you can access
-also memory directly. This should only be used as a last resort.
+In case you really need to access registers you can
+also access memory directly. This should only be used as a last resort.
 For example, setting the clock for the AD converter requires
 turning a GPIO pin into a clock output pin. This is not yet
 supported by the drivers so we need to program registers
