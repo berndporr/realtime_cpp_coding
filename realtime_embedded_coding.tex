@@ -1146,13 +1146,15 @@ to allocate the memory in the constructor of the class and then call the setter 
 while running. Use array types which convey their length, for example
 std::array or a standard const array which implicitly carries their length.
 
-\subsection{Constant sampling rate output (audio, etc)}
-For example audio DACs require a constant sampling rate and thus
-constant output. In this case the C++ driver class will have again
-a blocking loop and then read a buffer populated by the setter,
-which is ideally always updated by the setter. Of course you
-can also implement a callback by the audio to \textsl{request} samples
-but needs to be ultimately resolved in a class between
-audio arriving and being dispatched.
+\subsection{Constant sampling rate output (audio, \ldots)}
+There are many applications where the output device has a fixed
+sampling rate, for example digital to analogue converters.  In this
+case the C++ driver class will have again a blocking write-loop which
+then reads periodically a buffer populated by the setter, which is
+ideally always ahead of time. You need to decide what happens if no
+fresh data has arrived, for example interpolating the output or
+putting it on hold. Of course you can also implement a callback by the
+audio write-loop to \textsl{request} samples but needs to be ultimately resolved
+in a class between audio arriving and being dispatched.
 
 \end{document}
