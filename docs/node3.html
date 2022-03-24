@@ -505,26 +505,16 @@ it needs to run in a thread:
 
 <P>
 <PRE>
-while(running) {
-    rc = snd_pcm_writei(handle, buffer, frames);
-    if (rc == -EPIPE) {
-      /* EPIPE means underrun */
-      fprintf(stderr, "underrun occurred\n");
-      snd_pcm_prepare(handle);
-    } else if (rc &lt; 0) {
-      fprintf(stderr,
-              "error from writei: %s\n",
-              snd_strerror(rc));
-    }  else if (rc != (int)frames) {
-      fprintf(stderr,
-              "short write, write %d frames\n", rc);
-    }
-}
+ while (running) {
+   if ((err = snd_pcm_readi (handle, buffer, buffer_frames)) != buffer_frames) {
+     if (errCallback) errCallback-&gt;hasError();
+   }
+   if (sampleCallback) sampleCallback-&gt;hasData(buffer);
+ }
 </PRE>
 
 <P>
-For a full coding example &ldquo;aplay&rdquo; is a very
-good start or &ldquo;arecord&rdquo;. Both can be found here:
+For a full coding example &ldquo;arecord&rdquo; is a good start. Both can be found here:
 <kbd><A ID="tex2html12"
   HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
 

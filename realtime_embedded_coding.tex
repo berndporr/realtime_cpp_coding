@@ -438,25 +438,15 @@ or write() command is issued. Both are blocking so that
 it needs to run in a thread:
 
 \begin{verbatim}
-while(running) {
-    rc = snd_pcm_writei(handle, buffer, frames);
-    if (rc == -EPIPE) {
-      /* EPIPE means underrun */
-      fprintf(stderr, "underrun occurred\n");
-      snd_pcm_prepare(handle);
-    } else if (rc < 0) {
-      fprintf(stderr,
-              "error from writei: %s\n",
-              snd_strerror(rc));
-    }  else if (rc != (int)frames) {
-      fprintf(stderr,
-              "short write, write %d frames\n", rc);
-    }
-}
+ while (running) {
+   if ((err = snd_pcm_readi (handle, buffer, buffer_frames)) != buffer_frames) {
+     if (errCallback) errCallback->hasError();
+   }
+   if (sampleCallback) sampleCallback->hasData(buffer);
+ }
 \end{verbatim}
 
-For a full coding example ``aplay'' is a very
-good start or ``arecord''. Both can be found here:
+For a full coding example ``arecord'' is a good start. Both can be found here:
 \url{https://github.com/alsa-project}.
 
 
