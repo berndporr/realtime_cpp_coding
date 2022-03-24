@@ -32,7 +32,7 @@
 <A
  HREF="node3.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html142"
+<A ID="tex2html144"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,7 +42,7 @@
  HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
 <B> Previous:</B> <A
  HREF="node3.html">Writing C++ device driver</A>
- &nbsp; <B>  <A ID="tex2html143"
+ &nbsp; <B>  <A ID="tex2html145"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -51,27 +51,27 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html144"
-  HREF="node4.html#SECTION00410000000000000000">Introduction</A>
-<LI><A ID="tex2html145"
-  HREF="node4.html#SECTION00420000000000000000">Processes and Threads</A>
 <LI><A ID="tex2html146"
+  HREF="node4.html#SECTION00410000000000000000">Introduction</A>
+<LI><A ID="tex2html147"
+  HREF="node4.html#SECTION00420000000000000000">Processes and Threads</A>
+<LI><A ID="tex2html148"
   HREF="node4.html#SECTION00430000000000000000">Thread and worker</A>
 <UL>
-<LI><A ID="tex2html147"
-  HREF="node4.html#SECTION00431000000000000000">Creating threads</A>
-<LI><A ID="tex2html148"
-  HREF="node4.html#SECTION00432000000000000000">Lifetime of a thread</A>
 <LI><A ID="tex2html149"
-  HREF="node4.html#SECTION00433000000000000000">Running/stopping workers with endless loops</A>
+  HREF="node4.html#SECTION00431000000000000000">Creating threads</A>
 <LI><A ID="tex2html150"
+  HREF="node4.html#SECTION00432000000000000000">Lifetime of a thread</A>
+<LI><A ID="tex2html151"
+  HREF="node4.html#SECTION00433000000000000000">Running/stopping workers with endless loops</A>
+<LI><A ID="tex2html152"
   HREF="node4.html#SECTION00434000000000000000">Timing within threads</A>
 <UL>
-<LI><A ID="tex2html151"
-  HREF="node4.html#SECTION00434100000000000000">select/poll commands waiting for GPIO interrupts</A>
-<LI><A ID="tex2html152"
-  HREF="node4.html#SECTION00434200000000000000">Timing with blocking I/O</A>
 <LI><A ID="tex2html153"
+  HREF="node4.html#SECTION00434100000000000000">select/poll commands waiting for GPIO interrupts</A>
+<LI><A ID="tex2html154"
+  HREF="node4.html#SECTION00434200000000000000">Timing with blocking I/O</A>
+<LI><A ID="tex2html155"
   HREF="node4.html#SECTION00434300000000000000">Timing with Linux/pigpio timers</A>
 </UL></UL></UL>
 <!--End of Table of Child-Links-->
@@ -86,11 +86,16 @@ Threads</A>
 <H1><A ID="SECTION00410000000000000000">
 Introduction</A>
 </H1>
-In a realtime system events need to be dealt with as soon as possible
-while also interacting with the user and performing other background
-tasks. However, certain operations might take considerable computing
-time (FFT, etc) or I/O is blocking while waiting for data. The
-solution are threads.
+In realtime systems threads have two distinct functions:
+
+<OL>
+<LI>Endless loops with blocking I/O or GPIO wakeups
+  to establish <SPAN  CLASS="textbf">precise timing</SPAN>.
+</LI>
+<LI><SPAN  CLASS="textbf">Asynchronous execution</SPAN> of time consuming tasks
+  with a callback after the task has completed.
+</LI>
+</OL>
 
 <P>
 
@@ -268,7 +273,7 @@ use the pigpio library and its timer callbacks &ndash; if needed at all.
 <A
  HREF="node3.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html142"
+<A ID="tex2html144"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -278,7 +283,7 @@ use the pigpio library and its timer callbacks &ndash; if needed at all.
  HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
 <B> Previous:</B> <A
  HREF="node3.html">Writing C++ device driver</A>
- &nbsp; <B>  <A ID="tex2html143"
+ &nbsp; <B>  <A ID="tex2html145"
   HREF="node1.html">Contents</A></B> </DIV>
 <!--End of Navigation Panel-->
 <ADDRESS>

@@ -495,7 +495,7 @@ find a kernel driver which does approximately what you want and then
 modify it for your purposes.
 
 
-\section{Callbacks in C++ device classes}
+\section{Callbacks in C++ device classes (getting data)}
 As said in the introduction your hardware device class has callback interfaces
 to hand back the data to the client.
 
@@ -647,11 +647,13 @@ an easy to understand interface.
 \chapter{Threads}
 
 \section{Introduction}
-In a realtime system events need to be dealt with as soon as possible
-while also interacting with the user and performing other background
-tasks. However, certain operations might take considerable computing
-time (FFT, etc) or I/O is blocking while waiting for data. The
-solution are threads.
+In realtime systems threads have two distinct functions:
+\begin{enumerate}
+\item Endless loops with blocking I/O or GPIO wakeups
+  to establish \textbf{precise timing}.
+\item \textbf{Asynchronous execution} of time consuming tasks
+  with a callback after the task has completed.
+\end{enumerate}
 
 
 \section{Processes and Threads}
@@ -1144,5 +1146,13 @@ to allocate the memory in the constructor of the class and then call the setter 
 while running. Use array types which convey their length, for example
 std::array or a standard const array which implicitly carries their length.
 
+\subsection{Constant sampling rate output (audio, etc)}
+For example audio DACs require a constant sampling rate and thus
+constant output. In this case the C++ driver class will have again
+a blocking loop and then read a buffer populated by the setter,
+which is ideally always updated by the setter. Of course you
+can also implement a callback by the audio to \textsl{request} samples
+but needs to be ultimately resolved in a class between
+audio arriving and being dispatched.
 
 \end{document}

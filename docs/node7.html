@@ -32,7 +32,7 @@
 <A
  HREF="node6.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html174"
+<A ID="tex2html176"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -42,11 +42,21 @@
  HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
 <B> Previous:</B> <A
  HREF="node6.html">Realtime web server/client communication</A>
- &nbsp; <B>  <A ID="tex2html175"
+ &nbsp; <B>  <A ID="tex2html177"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
 <!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL CLASS="ChildLinks">
+<LI><UL>
+<LI><A ID="tex2html178"
+  HREF="node7.html#SECTION00701000000000000000">Constant sampling rate output (audio, etc)</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
 
 <H1><A ID="SECTION00700000000000000000">
 Setters</A>
@@ -114,7 +124,44 @@ while running. Use array types which convey their length, for example
 std::array or a standard const array which implicitly carries their length.
 
 <P>
-<BR><HR>
+
+<H2><A ID="SECTION00701000000000000000">
+Constant sampling rate output (audio, etc)</A>
+</H2>
+For example audio DACs require a constant sampling rate and thus
+constant output. In this case the C++ driver class will have again
+a blocking loop and then read a buffer populated by the setter,
+which is ideally always updated by the setter. Of course you
+can also implement a callback by the audio to <SPAN  CLASS="textsl">request</SPAN> samples
+but needs to be ultimately resolved in a class between
+audio arriving and being dispatched.
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A
+ HREF="node8.html">
+<IMG WIDTH="37" HEIGHT="24" ALT="next" SRC="next.png"></A> 
+<A
+ HREF="realtime_embedded_coding.html">
+<IMG WIDTH="26" HEIGHT="24" ALT="up" SRC="up.png"></A> 
+<A
+ HREF="node6.html">
+<IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
+<A ID="tex2html176"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Next:</B> <A
+ HREF="node8.html">About this document ...</A>
+<B> Up:</B> <A
+ HREF="realtime_embedded_coding.html">Realtime Embedded Coding under</A>
+<B> Previous:</B> <A
+ HREF="node6.html">Realtime web server/client communication</A>
+ &nbsp; <B>  <A ID="tex2html177"
+  HREF="node1.html">Contents</A></B> </DIV>
+<!--End of Navigation Panel-->
 <ADDRESS>
 <p><br /><a href="https://github.com/berndporr/rt_embedded5_teaching/">github / contact</a><br /></p>
 </ADDRESS>
