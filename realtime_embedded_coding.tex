@@ -68,8 +68,8 @@ a collision sensor at a robot triggers a GPIO pin, which then triggers a
 callback to issue an avoidance action which in turn then sets the
 motors in reverse.
 
-When developing the C++ classes keep S.O.L.I.D.
-\url{https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design}
+When developing the C++ classes keep 
+\href{https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design}{S.O.L.I.D.}
 in mind:
 \begin{enumerate}
 \item \textsl{Single responsibility}: If you have a temperature
@@ -1172,7 +1172,7 @@ to allocate the memory in the constructor of the class and then call the setter 
 while running. Use array types which convey their length, for example
 std::array or a standard const array which implicitly carries their length.
 
-\subsection{Constant sampling rate output (audio, \ldots)}
+\paragraph{Constant sampling rate output (audio, \ldots)}
 There are many applications where the output device has a fixed
 sampling rate, for example digital to analogue converters.  In this
 case the C++ driver class will have again a blocking write-loop which
