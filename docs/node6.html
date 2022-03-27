@@ -33,7 +33,7 @@
 <A
  HREF="node5.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html156"
+<A ID="tex2html166"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node5.html">Realtime/event processing in QT</A>
- &nbsp; <B>  <A ID="tex2html157"
+ &nbsp; <B>  <A ID="tex2html167"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,40 +52,42 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html158"
+<LI><A ID="tex2html168"
   HREF="node6.html#SECTION00610000000000000000">Introduction</A>
-<LI><A ID="tex2html159"
+<LI><A ID="tex2html169"
   HREF="node6.html#SECTION00620000000000000000">REST</A>
-<LI><A ID="tex2html160"
+<LI><A ID="tex2html170"
   HREF="node6.html#SECTION00630000000000000000">Data formats</A>
 <UL>
-<LI><A ID="tex2html161"
+<LI><A ID="tex2html171"
   HREF="node6.html#SECTION00631000000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-<LI><A ID="tex2html162"
+<LI><A ID="tex2html172"
   HREF="node6.html#SECTION00632000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
 </UL>
 <BR>
-<LI><A ID="tex2html163"
+<LI><A ID="tex2html173"
   HREF="node6.html#SECTION00640000000000000000">Server</A>
 <UL>
-<LI><A ID="tex2html164"
+<LI><A ID="tex2html174"
   HREF="node6.html#SECTION00641000000000000000">Web servers (http/https)</A>
-<LI><A ID="tex2html165"
+<LI><A ID="tex2html175"
   HREF="node6.html#SECTION00642000000000000000">FastCGI</A>
 <UL>
-<LI><A ID="tex2html166"
+<LI><A ID="tex2html176"
   HREF="node6.html#SECTION00642100000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> client: JSON (application/json)</A>
 </UL>
-<LI><A ID="tex2html167"
+<LI><A ID="tex2html177"
   HREF="node6.html#SECTION00643000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
 </UL>
 <BR>
-<LI><A ID="tex2html168"
+<LI><A ID="tex2html178"
   HREF="node6.html#SECTION00650000000000000000">Client</A>
+<LI><A ID="tex2html179"
+  HREF="node6.html#SECTION00660000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
 <HR>
@@ -219,7 +221,7 @@ makes it very easy to achieve this.
 
 <P>
 
-<DIV class="CENTER"><A ID="cgi"></A><A ID="304"></A>
+<DIV class="CENTER"><A ID="cgi"></A><A ID="308"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 5.1:</STRONG>
 FastCGI dataflow.</CAPTION>
@@ -353,6 +355,18 @@ function documentReady() {
 // called when the web page has been loaded
 $(document).ready( documentReady );
 </PRE>
+
+<P>
+
+<H1><A ID="SECTION00660000000000000000">
+Conclusion</A>
+</H1>
+Events in web based communication are always triggered by the
+web browser in exactly the same way as QT does it. These events
+either transmit data from the web browser to the web server or request
+data from the web server. The protocol is nowadays always http or https
+and is a RESTful interface with JSON the most popular data format
+being requested.
 
 <P>
 
