@@ -271,13 +271,12 @@ use the pigpio library and its timer callbacks &ndash; if needed at all.
 <H1><A ID="SECTION00440000000000000000">
 Conclusion</A>
 </H1>
-Threads play a very important role in realtime coding as they
-establish together with blocking I/O the callbacks so that every
-event triggers separate threads and with that distributes the computing
-load over many processors.
+Threads play a central role in realtime coding as they establish
+together with blocking I/O the callback interfaces so that every event
+triggers a separate thread.
 
 <P>
-Callbacks are of course also used to signal the termination of
+Callbacks are also used to signal the termination of
 threads and shows again the close relationship between threads
 and callbacks.
 

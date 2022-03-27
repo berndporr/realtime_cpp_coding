@@ -147,7 +147,9 @@ in a class between audio arriving and being dispatched.
 Conclusion</A>
 </H1>
 Setters are simply methods which transmit an event back to the physical
-device. Setters should, as callbacks, abstract away from the hardware.
+device. Setters should, as callbacks, always hide the low level
+complexity of the hardware device and receive normalised or physical
+units.
 
 <P>
 
