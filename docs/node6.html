@@ -86,7 +86,7 @@
 </UL>
 <BR>
 <LI><A ID="tex2html175"
-  HREF="node6.html#SECTION00650000000000000000">Client</A>
+  HREF="node6.html#SECTION00650000000000000000">Client code: javascript for websites</A>
 <LI><A ID="tex2html176"
   HREF="node6.html#SECTION00660000000000000000">Conclusion</A>
 </UL>
@@ -104,19 +104,18 @@ Introduction</A>
 </H1>
 
 <P>
-Web server / client applications are at the heart of a huge number
+Web server / client applications are central to a huge number
 of web applications ranging from shopping baskets to social
 media applications.
 
 <P>
-Generally it's easy to create dynamic content
-with many different solutions available (see PHP or nodejs) and well
+Generally it's easy to create dynamic content (see PHP or nodejs) and is well
 documented. However, feeding realtime data from C++ to a web page or
 realtime button presses back to C++ is a bit more difficult.
 
 <P>
-Important to recognise where <SPAN  CLASS="textsl">events</SPAN> are generated: it's
-always the client (web browser, mobile app) which triggers an event,
+It's important to recognise where <SPAN  CLASS="textsl">events</SPAN> are generated: it is
+always the client (web browser or mobile app) which triggers an event,
 be it sending data over to the server or requesting data. It's
 always initiated by the client.
 
@@ -125,9 +124,9 @@ always initiated by the client.
 <H1><A ID="SECTION00620000000000000000">
 REST</A>
 </H1>
-The interface between a web client (browser, phone app) is usually
+The interface between a web client (browser or phone app) is usually
 implemented as a Representational State Transfer Architectural (REST)
-style API by communicating via an URL on a web server. The most important requirements
+API by communicating via an URL on a web server. The requirements
 for this API are very general and won't define the actual data format:
 
 <OL>
@@ -170,7 +169,7 @@ map of key/value pairs which can also be nested:
 </PRE>
 Since JSON is sort of readable text a web server can simply
 generate that text send it over via http or https. There
-is no difference except that the MIME format is now `application/json`
+is no difference except that the MIME format is `application/json`
 instead of html.
 
 <P>
@@ -179,16 +178,14 @@ instead of html.
 Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
 </H2>
-When a website sends data back to the server it needs to encode it in the
-form of a single text-line where the key/value pairs are combined with &amp;-signs:
+When a website or mobile app wants to send data back to the server it
+needs to encode it in the form of a single text-line where the
+key/value pairs are combined with &amp;-signs:
 <PRE>
 temperature=20&amp;steps=100&amp;comment=all+good%33
 </PRE>
-The receiver then has the task to entangle this stream into a suitable dataformat,
-for example a map. All server side scripting languages
-such as <SPAN  CLASS="texttt">PHP</SPAN> or <SPAN  CLASS="texttt">node.js</SPAN> have powerful functions to
-decode these strings. In C/C++ <SPAN  CLASS="texttt">libcurl</SPAN>
-can be used for decoding.
+The receiver then has the task to entangle this stream into a suitable data-format,
+for example a map.
 
 <P>
 
@@ -222,7 +219,7 @@ makes it very easy to achieve this.
 
 <P>
 
-<DIV class="CENTER"><A ID="cgi"></A><A ID="309"></A>
+<DIV class="CENTER"><A ID="cgi"></A><A ID="307"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 5.1:</STRONG>
 FastCGI dataflow.</CAPTION>
@@ -305,10 +302,16 @@ virtual std::string getJSONString() {
 Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
 </H2>
-Like in any GUI the client can press a button and create an event.
-On the client side this is packaged as a JSON record with
-jquery and then sent over to the server. The server then
-receives the data as a callback:
+Like in any GUI the client can press a button and create an event.  On
+the client side this is packaged with jquery into an
+&ldquo;application/x-www-form-urlencoded&rdquo; stream and then sent over to the
+server where then <SPAN  CLASS="texttt">libcurl</SPAN> is the standard tool for decoding
+the application/x-www-form-urlencoded stream back into a C++ data
+structure, for example a map.
+
+<P>
+Here, the server then receives the &ldquo;application/x-www-form-urlencoded&rdquo; data as a callback
+called &ldquo;postArg&rdquo;:
 <PRE>
 virtual void postString(std::string postArg) {
 		auto m = JSONCGIHandler::postDecoder(postArg);
@@ -316,12 +319,13 @@ virtual void postString(std::string postArg) {
 		std::cerr &lt;&lt; m["hello"] &lt;&lt; "\n";
 		sensorfastcgi-&gt;forceValue(temp);
 	}
-</PRE> 
+</PRE>
+which is then decoded into key/value pairs in the form of a C++ std::map.
 
 <P>
 
 <H1><A ID="SECTION00650000000000000000">
-Client</A>
+Client code: javascript for websites</A>
 </H1>
 Generally on the client side (= web page) HTML with embedded
 <SPAN  CLASS="textsl">JavaScript</SPAN> is used to generate realtime output/input without
@@ -358,14 +362,20 @@ $(document).ready( documentReady );
 </PRE>
 
 <P>
+Mobile phone programming in JAVA, Kotlin or Swift is also purely
+callback driven as the JS code above and differs only in its syntax.
+
+<P>
 
 <H1><A ID="SECTION00660000000000000000">
 Conclusion</A>
 </H1>
 Events in web based communication are always triggered by the web
-browser in exactly the same way as QT does it, for example by a button
-press. These events either transmit data from the web browser to the
-web server or request data from the web server. The protocol is
+browser or the mobile app in exactly the same way as QT does it, for
+example by a button press. The same applies for animations where a
+client-side timer requests data from the server. Thus, these client
+side events either cause transmission of data from the web browser to
+the web server or request data from the web server. The protocol is
 nowadays always http or https and has a RESTful interface with JSON
 being the most popular data format being requested from the server.
 
