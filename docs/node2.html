@@ -56,7 +56,7 @@ Introduction</A>
 
 <P>
 
-<DIV class="CENTER"><A ID="timing"></A><A ID="300"></A>
+<DIV class="CENTER"><A ID="timing"></A><A ID="301"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.1:</STRONG>
 Dataflow and timing in low level realtime coding
@@ -74,19 +74,19 @@ Dataflow and timing in low level realtime coding
 <P>
 In realtime embedded coding it's all about <SPAN  CLASS="textsl">events</SPAN>
 which can be a binary signal as somebody opening a door or
-an ADC signalling that a sample is ready.
+an ADC signalling that a sample is ready to be picked up.
 Fig.&nbsp;<A HREF="#timing">1.1</A> shows the basic dataflow and how event timing is
 established: devices by themselves have event signals such as data
-ready or crash sensor triggered. The Linux kernel then receives
+ready or crash sensor has been triggered. The Linux kernel then receives
 interrupt callbacks. However, userspace has no direct interrupt
 mechanism but it has blocking I/O where an I/O operation blocks
-until an interrupt has happened. These can then be translated
-back into callbacks between classes. Data is transmitted 
+until a kernel-side interrupt has happened. These can then be translated
+back into callbacks between classes by waking up threads. Data is transmitted 
 back to the hardware via methods called &ldquo;setters&rdquo;.
 
 <P>
 
-<DIV class="CENTER"><A ID="gettersetters"></A><A ID="302"></A>
+<DIV class="CENTER"><A ID="gettersetters"></A><A ID="303"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.2:</STRONG>
 A realtime system with two C++ classes. Communication
@@ -107,7 +107,7 @@ A realtime system with two C++ classes. Communication
 Fig.&nbsp;<A HREF="#gettersetters">1.2</A> shows the overall communication between C++
 classes in a realtime system. This communication is done via callbacks
 (<SPAN  CLASS="textsl">not</SPAN> getters) and setters, where an event from a sensor
-traverses according to its realtime requirements through the classes via
+traverses according to its realtime requirements through the C++ classes via
 callbacks and then back to the control output via setters. For example,
 a collision sensor at a robot triggers a GPIO pin, which then triggers a
 callback to issue an avoidance action which in turn then sets the
@@ -175,19 +175,22 @@ things. It's a debugging nightmare.
 Besides S.O.L.I.D it's also essential that:
 
 <OL>
-<LI>the project has a <SPAN  CLASS="textbf">build system</SPAN> such as cmake. It's strongly recommended to use cmake
-  (autoconf only for older existing projects).
+<LI>the project has a <SPAN  CLASS="textbf">build system</SPAN> such as cmake. It's
+  strongly recommended to use <SPAN  CLASS="textbf">cmake</SPAN> (autoconf only for older existing
+  projects).
 </LI>
 <LI>classes (in particular driver classes) are <SPAN  CLASS="textbf">re-usable</SPAN>
   outwith of the specific project and have
-  their own &ldquo;cmake&rdquo; projects in their subdirectories. Except for the main
+  their own cmake-projects in their subdirectories. Except for the main
   cmake project all sub-projects are libraries.
 </LI>
-<LI>all public interfaces have <SPAN  CLASS="textbf">doc-strings</SPAN> for all public methods/constants and
-  an automatically generated reference, for example with the help of doxygen.
+<LI>all public interfaces have <SPAN  CLASS="textbf">doc-strings</SPAN> for all public
+  methods/constants and an automatically generated reference, for
+  example with the help of doxygen.
 </LI>
-<LI>classes which perform internal processing such as filters, databases, detectors, ...have
-  <SPAN  CLASS="textbf">unit tests</SPAN> and run via &ldquo;ctest&rdquo;.
+<LI>classes which perform internal processing such as filters,
+  databases, detectors, ...have <SPAN  CLASS="textbf">unit tests</SPAN> and are started via
+  the cmake testing framework.
 </LI>
 <LI>the documentation provides comprehensive information about the project itself,
   how to install and run the project.
