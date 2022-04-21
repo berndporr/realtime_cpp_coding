@@ -3,7 +3,7 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Realtime/event processing in QT</TITLE>
+<TITLE>Realtime/event processing in Qt</TITLE>
 <meta name="google-site-verification" content="dHOmN66WitxgD2yFMjrDq8aatlUBmj2hBDQL6v7sU30" />
 <META NAME="description" CONTENT="Realtime embedded coding in C++ under Linux">
 <META NAME="keywords" CONTENT="Realtime, coding, C++, callbacks, classes, fgci, QT, threads, S.O.L.I.D, events">
@@ -56,9 +56,9 @@
 <LI><A ID="tex2html157"
   HREF="node5.html#SECTION00510000000000000000">Introduction</A>
 <LI><A ID="tex2html158"
-  HREF="node5.html#SECTION00520000000000000000">Layout in QT</A>
+  HREF="node5.html#SECTION00520000000000000000">Layout in Qt</A>
 <LI><A ID="tex2html159"
-  HREF="node5.html#SECTION00530000000000000000">Callbacks in QT</A>
+  HREF="node5.html#SECTION00530000000000000000">Callbacks in Qt</A>
 <UL>
 <LI><A ID="tex2html160"
   HREF="node5.html#SECTION00531000000000000000">Events from widgets</A>
@@ -73,7 +73,7 @@
 <HR>
 
 <H1><A ID="SECTION00500000000000000000">
-Realtime/event processing in QT</A>
+Realtime/event processing in Qt</A>
 </H1>
 
 <P>
@@ -81,23 +81,23 @@ Realtime/event processing in QT</A>
 <H1><A ID="SECTION00510000000000000000">
 Introduction</A>
 </H1>
-QT is a cross platform windows development environment
-for Linux/Windows and Mac.
+<SPAN  CLASS="textbf">Qt</SPAN> is a cross-platform windows development environment
+for Linux, Windows and Mac.
 
 <P>
-Elements in QT are <SPAN  CLASS="textsl">Widgets</SPAN> which can contain
+Elements in Qt are <SPAN  CLASS="textsl">Widgets</SPAN> which can contain
 anything form plots, buttons or text fields. They are
-classes. You can define your own widgets or use ready made ones.
+classes. You can define your own widgets or use ready-made ones.
 
 <P>
 
 <H1><A ID="SECTION00520000000000000000">
-Layout in QT</A>
+Layout in Qt</A>
 </H1>
 
 <P>
 
-<DIV class="CENTER"><A ID="qwtex"></A><A ID="307"></A>
+<DIV class="CENTER"><A ID="qwtex"></A><A ID="365"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 4.1:</STRONG>
 QT example layout
@@ -113,12 +113,13 @@ QT example layout
 </DIV>
 
 <P>
-There are different ways of declaring layout in QT. One is
-using a markup language which then has matching classes
-or creating it all with classes. We show how it works by
-just using classes which organise the layout. There is
-also a trend in general to use code to declare the layout
-as done in SwiftUI, for example.
+There are different ways of declaring layout in Qt. One is
+using a markup language which then has matching classes;
+another is creating to use only C++ classes.
+We show how to organise the layout using the second method.
+This avoids having the learn an additional language and is
+consistent with the general  trend to use code to declare the layout
+in this and other frameworks (<SPAN  CLASS="textbf">SwiftUI</SPAN>, for example).
 
 <P>
 This is an example how widgets are organised into
@@ -147,36 +148,38 @@ setLayout(hLayout);
 <P>
 
 <H1><A ID="SECTION00530000000000000000">
-Callbacks in QT</A>
+Callbacks in Qt</A>
 </H1>
 
 <H2><A ID="SECTION00531000000000000000">
 Events from widgets</A>
 </H2>
-In contrast to our low level callback mechanism using interfaces QT rather
+In contrast to our low level callback mechanism using interfaces, Qt rather
 directly calls methods in classes. The problem is that function pointers
 cannot be directly used as a class has instance pointers to its local
 data. So a method of a class needs to be combined with the instance
-pointer. The QT method &ldquo;connect&rdquo; does exactly that:
+pointer. The Qt method &ldquo;connect&rdquo; does exactly that:
 <PRE>
-connect(button,&amp;QPushButton::clicked,
-        this,&amp;Window::reset);
+connect(button, &amp;QPushButton::clicked,
+        this, &amp;Window::reset);
 </PRE>
-The QPushButton instance &ldquo;button&rdquo; has a method called &ldquo;clicked&rdquo; which is
+The QPushButton instance <SPAN  CLASS="texttt">button</SPAN> has a method called <SPAN  CLASS="texttt">clicked()</SPAN> which is
 called whenever the user clicks on the button. This is then forwarded to the
-method &ldquo;reset&rdquo; in the application Widget.
+method <SPAN  CLASS="texttt">reset()</SPAN> in the application Widget.
 
 <P>
 
 <H2><A ID="SECTION00532000000000000000">
 Plotting realtime data arriving via a callback</A>
 </H2>
-The general idea is to store the realtime samples from a callback in a
-buffer and trigger a screen refresh at a lower rate for example every
-40&nbsp;ms which then plots the contents of the buffer.
+The general idea is to store the real-time samples from a callback in a
+buffer and trigger a screen refresh at a lower rate. For example, we may
+choose to replot the samples in the buffer every
+40&nbsp;ms because that fast enough for the user, whereas plotting the
+whole buffer every sample would be too CPU-intensive.
 
 <P>
-The callback &ldquo;addSample&rdquo; here is called in realtime whenever
+A callback <SPAN  CLASS="texttt">addSample()</SPAN> is called in real-time whenever
 a sample has arrived:
 <PRE>
 void Window::addSample( float v ) {
@@ -185,7 +188,7 @@ void Window::addSample( float v ) {
     yData[plotDataSize-1] = v;
 }
 </PRE>
-which stores the sample `v` in the shift buffer `yData`.
+which stores the sample <SPAN  CLASS="texttt">v</SPAN> in the shift buffer <SPAN  CLASS="texttt">yData</SPAN>.
 
 <P>
 Then the screen refresh (which is slow) is done at
@@ -201,8 +204,9 @@ void Window::timerEvent( QTimerEvent * )
 </PRE>
 
 <P>
-After &ldquo;update()&rdquo; has been called in the timer event the
-paint event is executed by QT as soon as possible and re-paints
+<SPAN  CLASS="texttt">update()</SPAN> in the timer event-handler generates a
+paint event and Qt then invokes the repaint
+handler &ldquo;as soon as possible&rdquo; (which is to say, not in real-time) to repaint
 the canvas of the widget:
 <PRE>
 void ScopeWindow::paintEvent(QPaintEvent *) {
@@ -213,20 +217,21 @@ void ScopeWindow::paintEvent(QPaintEvent *) {
 </PRE>
 
 <P>
-Note that neither the timer nor the &ldquo;update()&rdquo; function
-is called in a reliable way but whenever QT likes to do it.
-So the QT timers cannot be used to sample data but should
-only be used for screen refresh.
+Note that neither the timer nor the <SPAN  CLASS="texttt">update()</SPAN> function
+is called in a reliable way but whenever Qt chooses to do it.
+So Qt timers cannot be used to sample data but should
+only be used for screen refresh and other non-time-critical
+reasons.
 
 <P>
 
 <H1><A ID="SECTION00540000000000000000">
 Conclusion</A>
 </H1>
-Events in QT are generated by user interaction, for example a button
-press or moving the mouse. As before QT provides a callback mechanism
-via the &ldquo;connect&rdquo; method. Callbacks from QT timers are used for
-animations but must not be used for realtime events as QT timers won't
+Events in Qt are generated by user interaction, for example a button
+press or moving the mouse. As before Qt provides a callback mechanism
+via the <SPAN  CLASS="texttt">connect()</SPAN> method. Callbacks from Qt timers may be used for
+animations but must not be used for real-time events as Qt timers won't
 guarantee a reliable timing.
 
 <P>

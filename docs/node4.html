@@ -39,7 +39,7 @@
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node5.html">Realtime/event processing in QT</A>
+ HREF="node5.html">Realtime/event processing in Qt</A>
 <B> Up:</B> <A
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
@@ -99,7 +99,7 @@ In realtime systems threads have two distinct functions:
 <LI>Endless loops with blocking I/O or GPIO wakeups
   to establish <SPAN  CLASS="textbf">precise timing</SPAN> for callbacks.
 </LI>
-<LI><SPAN  CLASS="textbf">Asynchronous execution</SPAN> of time consuming tasks
+<LI><SPAN  CLASS="textbf">Asynchronous execution</SPAN> of time-consuming tasks
   with a callback after the task has completed.
 </LI>
 </OL>
@@ -110,22 +110,24 @@ In realtime systems threads have two distinct functions:
 Processes and Threads</A>
 </H1>
 Processes are different programs which seem to be running at the same
-time. However this is done by the operating system which switches
+time. A small embedded system may only have a single CPU core,
+so this this is achieved by the operating system switching
 approximately every 10ms from one process to the next so it feels as
-if they are running at the same time. A thread is a lightweight
-process where multiple threads share the same memory and started from
-within the parent process. As with processes the threads seem to be
+if they are running concurrently. A thread is a lightweight
+process. A process may have  multiple threads which share the same
+address-space and are all started from
+within the parent process. As with processes, the threads seem to be
 running at the same time. When a thread is started it runs
-simultaneously to the main process which created it.
+simultaneously with the main process which created it.
 
 <P>
 
 <H1><A ID="SECTION00430000000000000000">
 Thread and worker</A>
 </H1>
-A thread is just a <SPAN  CLASS="textsl">container</SPAN> for the actual method
-which is running independently. The method contained inside of a
-thread is often called <SPAN  CLASS="textsl">worker</SPAN>.
+A thread is just a <SPAN  CLASS="textsl">wrapper</SPAN> for the actual method
+which is running independently. The method being run in the thread
+is often called a <SPAN  CLASS="textsl">worker</SPAN>.
 
 <P>
 
@@ -135,8 +137,8 @@ Creating threads</A>
 In C++ a worker is a method within
 a class and needs to be <SPAN  CLASS="textsl">static</SPAN> which means it won't be
 able to access the instance variables of a class. The trick
-is to pass a pointer to the instance of the class (&ldquo;this&rdquo;) as the argument of
-the worker, for example, called &ldquo;exec&rdquo;:
+is to pass a pointer to the instance of the class (<SPAN  CLASS="texttt">this</SPAN>) as the argument of
+the worker, in the following example called <SPAN  CLASS="texttt">exec</SPAN>:
 <PRE>
 uthread = new std::thread(MyClassWithAThread::exec, this);
 </PRE>
@@ -152,8 +154,9 @@ class MyClassWithAThread {
         }
 }
 </PRE>
-which in turn then calls a non-static class method &ldquo;run()&rdquo; which
-then has access to the instances variables.
+which in turn then calls a non-static class method <SPAN  CLASS="texttt">run()</SPAN>.
+<SPAN  CLASS="texttt">run</SPAN> will then have access to all of the instance's attributes
+and methods.
 
 <P>
 
@@ -175,8 +178,8 @@ of the thread use the &ldquo;join()&rdquo; method:
                 delete uthread;
         }
 </PRE>
-Important is also to release the memory of a thread after it has finished
-to avoid memory leaks.
+It's also important is also to release the memory of a thread after it has finished
+to avoid memory leaks, hence the <SPAN  CLASS="texttt">delete</SPAN> command.
 
 <P>
 
@@ -194,7 +197,7 @@ void run() {
        }
 }
 </PRE>
-Note the flag &ldquo;running&rdquo; which is controlled by the main program and is set to zero to terminate
+Note the flag <SPAN  CLASS="texttt">running</SPAN> which is controlled by the main program and is set to zero to terminate
 the thread:
 <PRE>
         void stop() {
@@ -203,10 +206,21 @@ the thread:
                 delete uthread;
         }
 </PRE>
-Note that &ldquo;join()&rdquo; is a blocking operation and needs to be used with care not to
+Note that <SPAN  CLASS="texttt">join()</SPAN> is a blocking operation and needs to be used with care not to
 lock up the main program. You probably only need it when your program is terminating.
 See <kbd><A ID="tex2html16"
   HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd> for an example.
+
+<P>
+If your program creates and joins several threads while executing,
+with care you might be able to design your program to allow an
+end-of-life thread to carry on
+tidying up in the background after you stop it by setting <SPAN  CLASS="texttt">running = false;</SPAN>.
+In this case only need execute <SPAN  CLASS="texttt">join()</SPAN> to be sure that
+the thread has finished. Joining a terminated thread is OK
+(the call just returns immediately)
+but you absolutely  must not join a thread more than once,
+nor delete a thread until you've joined it.
 
 <P>
 
@@ -228,7 +242,7 @@ be called reacting to the external event. This is the preferred method
 for low latency responses.
 
 <P>
-As said previously, use <SPAN  CLASS="textsl">pigpio</SPAN> on the Raspberry PI
+As said previously, use <SPAN  CLASS="textbf">pigpio</SPAN> on the Raspberry PI
 which wraps the select/poll commands into a thread and calls a
 <SPAN  CLASS="textsl">callback</SPAN> function whenever an GPIO pin has been triggered.
 
@@ -242,7 +256,7 @@ the data coming in because the thread goes to sleep when it's waiting for
 I/O but wakes up very quickly after new data has arrived.
 
 <P>
-In this example the blocking &ldquo;read&rdquo; command creates
+In this example the blocking <SPAN  CLASS="texttt">read</SPAN> command creates
 the timing of the callback:
 <PRE>
 void run() {
@@ -265,20 +279,21 @@ and then this signal is caught by a global (static) function.
 Generally it's <SPAN  CLASS="textsl">not recommended</SPAN> to use timers for anything
 which needs to be reliably sampled, for example ADC converters or
 sensors with sampling rates higher than a few Hz. On the raspberry PI
-use the pigpio library and its timer callbacks &ndash; if needed at all.
+use the pigpio library and its timer callbacks &mdash; if needed at all.
 
 <P>
 
 <H1><A ID="SECTION00440000000000000000">
 Conclusion</A>
 </H1>
-Threads play a central role in realtime coding as they establish
-together with blocking I/O the callback interfaces so that every event
+Threads play a central role in real-time coding as,
+together with blocking I/O, they establish
+the callback interfaces. Every event handler
 runs in a separate thread.
 
 <P>
 Callbacks are also used to signal the termination of
-threads and shows again the close relationship between threads
+threads, which shows again the close relationship between threads
 and callbacks.
 
 <P>

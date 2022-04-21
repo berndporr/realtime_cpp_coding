@@ -43,7 +43,7 @@
 <B> Up:</B> <A
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
- HREF="node5.html">Realtime/event processing in QT</A>
+ HREF="node5.html">Realtime/event processing in Qt</A>
  &nbsp; <B>  <A ID="tex2html164"
   HREF="node1.html">Contents</A></B> 
 <BR>
@@ -104,12 +104,12 @@ Introduction</A>
 </H1>
 
 <P>
-Web server / client applications are central to a huge number
-of web applications ranging from shopping baskets to social
-media applications.
+There is a wide diversity of Web server / client applications
+ranging from shopping baskets on vendor sites to social
+media.
 
 <P>
-Generally it's easy to create dynamic content (see PHP or nodejs) and is well
+Generally it's easy to create dynamic content (see PHP or nodejs) and this is well
 documented. However, feeding realtime data from C++ to a web page or
 realtime button presses back to C++ is a bit more difficult.
 
@@ -128,22 +128,24 @@ The interface between a web client (browser or phone app) is usually
 implemented as a Representational State Transfer Architectural (REST)
 API by communicating via an URL on a web server. The requirements
 for this API are very general and won't define the actual data format:
-
-<OL>
-<LI><SPAN  CLASS="textbf">Uniform interface</SPAN> Any device connecting to the URL should
+<DL>
+<DT><STRONG>Uniform interface.</STRONG></DT>
+<DD>Any device connecting to the URL should
   get the same reply. No matter if a web page or mobile phone
   requests the temperature of a sensor the returned format must always be the same.
-</LI>
-<LI><SPAN  CLASS="textbf">Client-server decoupling</SPAN> The only information
+</DD>
+<DT><STRONG>Client-server decoupling.</STRONG></DT>
+<DD>The only information
   the client needs to know is the URL of the server to request data or send data.
-</LI>
-<LI><SPAN  CLASS="textbf">Statelessness</SPAN> Each request needs to include all the
+</DD>
+<DT><STRONG>Statelessness.</STRONG></DT>
+<DD>Each request needs to include all the
   information necessary and must not depend on previous requests. For
   example a request to a buffer must not alter the
   buffer but just read from it so that another user reading the buffer
   shortly after receives the same data.
-</LI>
-</OL>
+</DD>
+</DL>
 See <kbd><A ID="tex2html18"
   HREF="https://www.ibm.com/cloud/learn/rest-apis">https://www.ibm.com/cloud/learn/rest-apis</A></kbd> for the complete
 list of REST design principles.
@@ -159,7 +161,7 @@ Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; "
  ALT="$\to $"></SPAN> client: JSON (application/json)</A>
 </H2>
 The most popular dataformat is JSON which is basically a
-map of key/value pairs which can also be nested:
+map of (nestable) key/value pairs:
 <PRE>
 {
     temperature: [20, 21, 20, 19, 17],
@@ -167,9 +169,9 @@ map of key/value pairs which can also be nested:
     comment: "all good!"
 }
 </PRE>
-Since JSON is sort of readable text a web server can simply
+Since JSON is human-readable text a web server can simply
 generate that text send it over via http or https. There
-is no difference except that the MIME format is `application/json`
+is no difference except that the MIME format is application/json
 instead of html.
 
 <P>
@@ -205,11 +207,11 @@ Web servers (http/https)</A>
 <P>
 
 <UL>
-<LI>NGINX: Easy to configure but very flexible web server
+<LI>NGINX: Easy to configure but very flexible web server. Pronounced &ldquo;Engine-X&rdquo;.
 </LI>
 <LI>Apache: Hard to configure but safe option
 </LI>
-<LI>lighttpd: Smaller web server with a small memory footprint
+<LI>lighttpd: Smaller web server with a small memory footprint. Pronounced &ldquo;lighty&rdquo;.
 </LI>
 </UL>
 Note that it's possible to run different web servers at the
@@ -219,7 +221,7 @@ makes it very easy to achieve this.
 
 <P>
 
-<DIV class="CENTER"><A ID="cgi"></A><A ID="308"></A>
+<DIV class="CENTER"><A ID="cgi"></A><A ID="366"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 5.1:</STRONG>
 FastCGI dataflow.</CAPTION>
@@ -247,11 +249,11 @@ JavaScript can request JSON packages and directly turn them into variables.
 <P>
 A fast CGI program is a UNIX commandline program which communicates with the web server
 (nginx, Apache, ...) via a UNIX socket which in turn is a pseudo file located
-in a temporary directory for example `/tmp/sensorsocket`.
+in a temporary directory for example <SPAN  CLASS="texttt">/tmp/sensorsocket</SPAN>.
 
 <P>
 The web server then maps certain http/https requests to
-his socket, for example, the configuration for nginx looks like this:
+this socket. An example configuration for nginx looks like this:
 <PRE>
        location /sensor/ {
           include        fastcgi_params;
@@ -266,7 +268,7 @@ inside of the fastcgi program.
 <P>
 The C++ fastcgi API <kbd><A ID="tex2html20"
   HREF="https://github.com/berndporr/json_fastcgi_web_api">https://github.com/berndporr/json_fastcgi_web_api</A></kbd> 
-is wrapper around the quite cryptic fastcgi C library and we are discussing
+is wrapper around the quite cryptic fastcgi C library and we discuss
 its callback handlers now.
 
 <P>
@@ -288,10 +290,10 @@ public:
 * timestamp and one with the temperature from the sensor.
 **/
 virtual std::string getJSONString() {
-    JSONCGIHandler::JSONGenerator jsonGenerator;
-    jsonGenerator.add("epoch",(long)time(NULL));
-    jsonGenerator.add("temperatures",temperatureArray);
-    return jsonGenerator.getJSON();
+      JSONCGIHandler::JSONGenerator jsonGenerator;
+      jsonGenerator.add("epoch",(long)time(NULL));
+      jsonGenerator.add("temperatures",temperatureArray);
+      return jsonGenerator.getJSON();
     }
 };
 </PRE> 
@@ -305,7 +307,7 @@ Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; "
 Like in any GUI the client can press a button and create an event.  On
 the client side this is packaged with jquery into an
 &ldquo;application/x-www-form-urlencoded&rdquo; stream and then sent over to the
-server where then <SPAN  CLASS="texttt">libcurl</SPAN> is the standard tool for decoding
+server. In the server, <SPAN  CLASS="texttt">libcurl</SPAN> is the standard tool for decoding
 the application/x-www-form-urlencoded stream back into a C++ data
 structure, for example a map.
 
@@ -314,22 +316,22 @@ Here, the server then receives the &ldquo;application/x-www-form-urlencoded&rdqu
 called &ldquo;postArg&rdquo;:
 <PRE>
 virtual void postString(std::string postArg) {
-		auto m = JSONCGIHandler::postDecoder(postArg);
-		float temp = atof(m["volt"].c_str());
-		std::cerr &lt;&lt; m["hello"] &lt;&lt; "\n";
-		sensorfastcgi-&gt;forceValue(temp);
-	}
+    auto m = JSONCGIHandler::postDecoder(postArg);
+    float temp = atof(m["volt"].c_str());
+    std::cerr &lt;&lt; m["hello"] &lt;&lt; "\n";
+    sensorfastcgi-&gt;forceValue(temp);
+}
 </PRE>
-which is then decoded into key/value pairs in the form of a C++ std::map.
+which is then decoded into key/value pairs in the form of a C++ <SPAN  CLASS="texttt">std::map</SPAN>.
 
 <P>
 
 <H1><A ID="SECTION00650000000000000000">
 Client code: javascript for websites</A>
 </H1>
-Generally on the client side (= web page) HTML with embedded
+Generally on the client side (= web page), HTML with embedded
 <SPAN  CLASS="textsl">JavaScript</SPAN> is used to generate realtime output/input without
-reloading the web page. JavaScript is <SPAN  CLASS="textsl">event driven</SPAN> and has
+reloading the page. JavaScript is <SPAN  CLASS="textsl">event driven</SPAN> and has
 callbacks so it's perfect for realtime applications. Use
 <SPAN  CLASS="texttt">jQuery</SPAN> to request and post JSON from/to the server.
 
@@ -345,7 +347,7 @@ function getterCallback(result) {
   // plot the array here
 }
 
-// timer callback (same idea as in QT to define a refresh rate)
+// timer callback (same idea as in Qt to define a refresh rate)
 function getTemperature() {
   // get the JSON data
   $.getJSON("/data/:80",getterCallback);
@@ -371,13 +373,13 @@ callback driven as the JS code above and differs only in its syntax.
 Conclusion</A>
 </H1>
 Events in web based communication are always triggered by the web
-browser or the mobile app in exactly the same way as QT does it, for
+browser or the mobile app in exactly the same way as Qt does it, for
 example by a button press. The same applies for animations where a
 client-side timer requests data from the server. Thus, these client
 side events either cause transmission of data from the web browser to
-the web server or request data from the web server. The protocol is
-nowadays always http or https and has a RESTful interface with JSON
-being the most popular data format being requested from the server.
+the web server or request data from the web server. Nowadays the protocol is
+always http or https and a RESTful interface with JSON
+being the most popular data format requested from the server.
 
 <P>
 

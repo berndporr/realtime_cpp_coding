@@ -63,8 +63,8 @@
 Setters</A>
 </H1>
 In Fig.&nbsp;<A HREF="node2.html#gettersetters">1.2</A> we have seen that data flows from
-the sensors to the C++ classes via <SPAN  CLASS="textsl">callbacks</SPAN> then it flows
-back from the inner C++ classes to motor or display outputs is via
+the sensors to the C++ classes via <SPAN  CLASS="textsl">callbacks</SPAN> then returns
+from the inner C++ classes to motor or display outputs is via
 <SPAN  CLASS="textsl">setters</SPAN>. Setters are also used for setting configuration
 parameters.
 
@@ -129,13 +129,15 @@ Constant sampling rate output (audio, ...)</A>
 </H4>
 There are many applications where the output device has a fixed
 sampling rate, for example digital to analogue converters.  In this
-case the C++ driver class will have again a blocking write-loop which
-then reads periodically a buffer populated by the setter, which is
-ideally always ahead of time. You need to decide what happens if no
+case the C++ driver class will again have a blocking write-loop
+periodically reading a buffer populated by the setter, which is
+ideally always ahead of time.
+You need to decide what happens if no
 fresh data has arrived, for example interpolating the output or
 putting it on hold. Of course you can also implement a callback by the
-audio write-loop to <SPAN  CLASS="textsl">request</SPAN> samples but needs to be ultimately resolved
-in a class between audio arriving and being dispatched.
+audio write-loop to <SPAN  CLASS="textsl">request</SPAN> samples but ultimately
+the conflict between audio arriving and being dispatched needs to be
+resolved.
 
 <P>
 

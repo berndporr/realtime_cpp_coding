@@ -54,7 +54,7 @@
 
 <UL CLASS="ChildLinks">
 <LI><A ID="tex2html124"
-  HREF="node3.html#SECTION00310000000000000000">General recommendations how to write your C++ classes for devices</A>
+  HREF="node3.html#SECTION00310000000000000000">General recommendations on how to write your C++ classes for devices</A>
 <LI><A ID="tex2html125"
   HREF="node3.html#SECTION00320000000000000000">Low level userspace device access</A>
 <UL>
@@ -64,7 +64,7 @@
   HREF="node3.html#SECTION00322000000000000000">I2C</A>
 <UL>
 <LI><A ID="tex2html128"
-  HREF="node3.html#SECTION00322100000000000000">Raw /dev/i2c access</A>
+  HREF="node3.html#SECTION00322100000000000000">Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
 <LI><A ID="tex2html129"
   HREF="node3.html#SECTION00322200000000000000">I2C access via pigpio</A>
 </UL>
@@ -72,12 +72,12 @@
   HREF="node3.html#SECTION00323000000000000000">Access GPIO pins</A>
 <UL>
 <LI><A ID="tex2html131"
-  HREF="node3.html#SECTION00323100000000000000">/sys filesystem</A>
+  HREF="node3.html#SECTION00323100000000000000"><SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
 <LI><A ID="tex2html132"
   HREF="node3.html#SECTION00323200000000000000">pigpio</A>
 </UL>
 <LI><A ID="tex2html133"
-  HREF="node3.html#SECTION00324000000000000000">Access to hardware via special devices in /sys</A>
+  HREF="node3.html#SECTION00324000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
 <LI><A ID="tex2html134"
   HREF="node3.html#SECTION00325000000000000000">I2S: Audio</A>
 <LI><A ID="tex2html135"
@@ -113,16 +113,17 @@ hardware-side we have event signals such as data-ready signals or by
 the timing of a serial or audio interface. The Linux kernel translates
 this timing info into blocking I/O on pseudo filesystems such as /dev
 or /sys which means that a read operation blocks until data has arrived
-or an event has happened. Some low level libraries such as pigpio
+or an event has happened. Some low level libraries such as <SPAN  CLASS="textbf">pigpio</SPAN>
 translate them back into C callbacks. The task of a C++ programmer is
 to hide this complexity and these quite different approaches in C++
 classes which communicate via callbacks and setters with the client
-classes.
+classes. The rest of the program will then appear simple and be
+easy to maintain.
 
 <P>
 
 <H1><A ID="SECTION00310000000000000000">
-General recommendations how to write your C++ classes for devices</A>
+General recommendations on how to write your C++ classes for devices</A>
 </H1>
 As said above the main purpose of object oriented coding here is to
 hide away the complexity of low level driver access and offer the
@@ -139,8 +140,8 @@ particular:
   should be specified that the class can be used straight away with
   default parameters.
 </LI>
-<LI>It has simple demo programs demonstrating how to use the class
-  by a client.
+<LI>The class comes with simple demo programs demonstrating how
+  a client program might use it.
 </LI>
 </OL>
 
@@ -158,7 +159,7 @@ the C++ driver classes for different hardware protocols.
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="304"></A>
+  <A ID="359"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 2.1:</STRONG>
 SPI modes</CAPTION>
@@ -191,31 +192,34 @@ SPI modes</CAPTION>
 </DIV>
 <BR>
 SPI is a protocol which usually transmits and receives at the same
-time. Even that data might not be used it needs to be matched up. So
-for example sending 8 byes and receiving 8 bytes at the same time.
+time. Even though data might not be used it needs to be matched up,
+because the same clock is used to send and collect the data signal
+(it is <SPAN  CLASS="textit">isochronous</SPAN>).
+So if you send 8 bytes the hardware receives 8 bytes at the same time.
 
 <P>
-Transfer to/from SPI is best managed by the low level access to /dev.
-Open the SPI device with the standard open() function:
+Transfer to/from SPI is best managed by the low level access to <SPAN  CLASS="texttt">/dev</SPAN>.
+Open the SPI device with the standard <SPAN  CLASS="texttt">open()</SPAN> function:
 <PRE>
 int fd = open( "/dev/spidev0.0", O_RDWR);
 </PRE>
 
 <P>
-Then set the SPI mode (see table.&nbsp;<A HREF="#spimodes">2.1</A>):
+Then set the SPI mode (see table&nbsp;<A HREF="#spimodes">2.1</A>):
 <PRE>
 int ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);
 </PRE>
-which is explained, for example, here:
+as explained, for example, here:
 <kbd><A ID="tex2html4"
   HREF="https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html">https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html</A></kbd>.
 
 <P>
-Since SPI transmits and receives at the same time we need to
-use ioctl to do the communication.
+Because SPI is isochronous, <SPAN  CLASS="texttt">read()</SPAN> and <SPAN  CLASS="texttt">write()</SPAN>
+can't be used to transmit and receive data. Instead, the simultaneous
+read and write is performed using an <SPAN  CLASS="texttt">ioctl()</SPAN> to do the communication.
 Populate this struct:
 <PRE>
-struct spi_ioc_transfer tr = {
+struct spi_ioc_transfer tr { % leave out the = ? It's 2022...
   .tx_buf = (unsigned long)tx1,
   .rx_buf = (unsigned long)rx1,
   .len = ARRAY_SIZE(tx1),
@@ -225,35 +229,37 @@ struct spi_ioc_transfer tr = {
 };
 </PRE>
 which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with the
-same length.
+same length. (Note: this code fragment's use of designated initialisers
+officially requires C++2a, although most C++ compilers support it
+when compiling with older standards. In C it's been fine for a while!)
 
 <P>
-Reading and simultaneous writing is happening then via the ioctrl
-function:
+Reading and simultaneous writing then happens via this <SPAN  CLASS="texttt">ioctrl()</SPAN>
+function call:
 <PRE>
 int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
 </PRE>
 
 <P>
 Sometimes the SPI protocol of a chip is so odd that even the raw
-I/O via /dev won't work and you need to write your own bit banging
+I/O via <SPAN  CLASS="texttt">/dev</SPAN> won't work and you need to write your own bit banging
 interface, for example done here for the ADC on the alphabot:
 <kbd><A ID="tex2html5"
   HREF="https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58">https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58</A></kbd>.
-This is obviously far from ideal as it might require &ldquo;usleep&rdquo; commands
-so that acquisition needs to be run in a separate thread (the alphabot
+This is obviously far from ideal as it might require <SPAN  CLASS="texttt">usleep()</SPAN> commands
+so that acquisition needs to be run in a separate thread (the alphabot indeed
 uses a timer callback in a separate thread).
 
 <P>
 Overall the SPI protocol is often device dependent and calls
-for experimentation to get it to work. Often the SPI clock is also
-the ADC conversion clock which requires a longer lasting clock signal
-by transmitting dummy bytes in addition to the payload.
+for experimentation to get it to work. On some ADCs the SPI clock is also
+the conversion clock and a longer lasting clock signal sequence is required,
+making it necessary to transmit dummy bytes in addition to the payload.
 
 <P>
 As a general recommendation do not use SAR converters which use the
 SPI data clock also as acquisition clock as they are often not compatible
-with the standard SPI transfers via /dev. Use sensors or ADCs which
+with the standard SPI transfers via <SPAN  CLASS="texttt">/dev</SPAN>. Use sensors or ADCs which
 have their own clock signal.
 
 <P>
@@ -263,7 +269,7 @@ I2C</A>
 </H2>
 The I2C bus has two signal lines (SDA &amp; SDL) which must be pulled up
 by resistors. Every I2C device has an address on the bus. You can scan
-a bus with &ldquo;i2cdetect&rdquo; (part of the i2c-tools package):
+a bus with <SPAN  CLASS="textbf">i2cdetect</SPAN> (part of the i2c-tools package):
 <PRE>
 root@raspberrypi:/home/pi# i2cdetect -y 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -284,7 +290,7 @@ accessing the I2C device.
 <P>
 
 <H3><A ID="SECTION00322100000000000000">
-Raw /dev/i2c access</A>
+Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
 </H3>
 I2C either transmits or receives but never at the same time so here we
 can use the standard C read/write commands. However, we need to use ioctrl to tell
@@ -294,12 +300,13 @@ char buf[2];
 int file = open("/dev/i2c-2",O_RDWR);
 int addr = 0x58;
 ioctl(file, I2C_SLAVE, addr);
-write(file,buf,1)
-read(file,buf,2)
+write(file, buf, 1)
+read(file, buf, 2)
 </PRE>
-where &ldquo;addr&rdquo; is the I2C address. Then use standard read()
-or write() commands. Usually the 1st write() operation tells the chip
-which register to read or write to. Then write/read its register.
+where <SPAN  CLASS="texttt">addr</SPAN> is the I2C address. Then use standard <SPAN  CLASS="texttt">read()</SPAN>
+or <SPAN  CLASS="texttt">write()</SPAN> commands. Usually the 1st write operation tells the chip
+which register to read or write to. Subsequent operations read
+or write that register.
 
 <P>
 
@@ -323,9 +330,9 @@ int fd = i2cOpen(i2c_bus, address, 0);
 i2cWriteByteData(fd, subAddress, data);
 i2cClose(fd);
 </PRE>
-where i2c_bus is the I2C bus number (usually 1 on the RPI)
-and the address is the I2C address of the device on that bus.
-The subAddress here is the register address in the device.
+where <SPAN  CLASS="texttt">i2c_bus</SPAN> is the I2C bus number (usually 1 on the RPI)
+and the <SPAN  CLASS="texttt">address</SPAN> is the I2C address of the device on that bus.
+The <SPAN  CLASS="texttt">subAddress</SPAN> here is the register address in the device.
 
 <P>
 
@@ -334,10 +341,10 @@ Access GPIO pins</A>
 </H2>
 
 <H3><A ID="SECTION00323100000000000000">
-/sys filesystem</A>
+<SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
 </H3>
 The GPIO of the raspberry PI can easily be controlled via
-the /sys filesystem. This is slow but good for
+the <SPAN  CLASS="texttt">/sys</SPAN> filesystem. This is slow but good for
 debugging as you can directly write a
 &ldquo;0&rdquo; or &ldquo;1&rdquo; string to it and print the result. The
 pseudo files are here:
@@ -352,8 +359,6 @@ it visible:
 </PRE>
 For example, writing a 5 (in text form) to this file would
 create the subdirectory <SPAN  CLASS="texttt">/sys/class/gpio/gpio5</SPAN> for GPIO pin 5.
-
-<P>
 Then reading from
 <PRE>
 /sys/class/gpio/gpio5/value
@@ -367,13 +372,13 @@ A thin wrapper around the GPIO sys filesystem is here: <kbd><A ID="tex2html7"
 
 <H4><A ID="SECTION00323110000000000000"></A><A ID="gpioIRQ"></A>
 <BR>
-GPIO interrupt handling via /sys
+GPIO interrupt handling via <SPAN  CLASS="texttt">/sys</SPAN>.
 </H4>
 The most important application for the /sys filesystem is to
 do interrupt processing in userspace.
 A thread can be put to sleep until an interrupt has happened on one of
 the GPIO pins. This is done by monitoring the &ldquo;value&rdquo;
-of a GPIO pin in the /sys filesystem with the &ldquo;poll&rdquo; command:
+of a GPIO pin in the <SPAN  CLASS="texttt">/sys</SPAN> filesystem with the &ldquo;poll&rdquo; command:
 <PRE>
 struct pollfd fdset[1];
 int nfds = 1;
@@ -387,8 +392,8 @@ if (fdset[0].revents &amp; POLLPRI) {
    read(fdset[0].fd, buf, MAX_BUF);
 }
 </PRE>
-makes the thread go to sleep until an interrupt has occurred on
-GPIO pin 5. Then the thread wakes up and execution continues.
+This code makes the thread go to sleep until an interrupt has occurred on
+GPIO pin&nbsp;5. Then the thread wakes up and execution continues.
 
 <P>
 
@@ -416,12 +421,11 @@ int a = gpioRead(24)
 <P>
 
 <H4><A ID="SECTION00323210000000000000">
-interrupt handling via pigpio</A>
+interrupt handling via pigpio.</A>
 </H4>
 pigpio manages GPIO interrupt handling by wrapping all the above
 functionality into a single command where the client registers a
-callback function which is called whenever a change has occurred on a
-GPIO pin.
+callback function. The callback occurs whenever a GPIO pin changes.
 Specifically a method of the form:
 <PRE>
 class mySensorClass {
@@ -434,8 +438,8 @@ is registered with pigpio:
 <PRE>
 gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
 </PRE>
-where &ldquo;this&rdquo; is the pointer to your class instance which is then used
-to call a class method, here: &ldquo;dataReady()&rdquo;.
+where &ldquo;this&rdquo; is the pointer to your class instance.
+The callback registered will then be <SPAN  CLASS="texttt">this-&gt;dataReady()</SPAN>.
 <PRE>
 class LSM9DS1 {
   void dataReady();
@@ -452,11 +456,9 @@ See <kbd><A ID="tex2html9"
 <P>
 
 <H2><A ID="SECTION00324000000000000000">
-Access to hardware via special devices in /sys</A>
+Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
 </H2>
 Some sensors are directly available via the sys filesystem in human readable format.
-
-<P>
 For example
 <PRE>
 cat /sys/class/thermal/thermal_zone0/temp
@@ -520,6 +522,9 @@ Both can be found here:
 <H2><A ID="SECTION00326000000000000000">
 Accessing physical memory locations (danger!)</A>
 </H2>
+
+<P>
+Don't.
 In case you really need to access registers you can
 also access memory directly. This should only be used as a last resort.
 For example, setting the clock for the AD converter requires
@@ -528,15 +533,15 @@ supported by the drivers so we need to program registers
 on the RPI.
 
 <UL>
-<LI>Linux uses virtual addressed so that a pointer won't
-point to a physical address. It points to three page
+<LI>Linux uses virtual addresses so that a pointer won't
+point to a physical memory location. It points to three page
 tables with an offset.
 </LI>
-<LI>Special device /dev/mem which allows access of physical
+<LI>Special device <SPAN  CLASS="texttt">/dev/mem</SPAN> allows access to physical
 memory.
 </LI>
-<LI>The command &ldquo;mmap&rdquo; provides a pointer to a physical
-address by opening /dev/mem.
+<LI>The command <SPAN  CLASS="textbf">mmap</SPAN> provides a pointer to a physical
+address by opening <SPAN  CLASS="texttt">/dev/mem</SPAN>.
 </LI>
 <LI>Example:
 <PRE>
@@ -561,13 +566,13 @@ printf("addr: %d \n",*addr);
 <H1><A ID="SECTION00330000000000000000">
 Kernel driver programming</A>
 </H1>
-You can also create your own /dev/mydevice in the /dev filesystem
+You can also create your own <SPAN  CLASS="texttt">/dev/mydevice</SPAN> in the <SPAN  CLASS="texttt">/dev</SPAN> filesystem
 by writing a kernel driver and a matching userspace library. For
 example the USB mouse has a driver in kernel space and translates
 the raw data from the mouse into coordinates. However,
 this is beyond the scope of this handout. If you want to embark
 on this adventure then the best approach is to
-find a kernel driver which does approximately what you want and then
+find a kernel driver which does approximately what you want and
 modify it for your purposes.
 
 <P>
@@ -626,8 +631,8 @@ public:
 </PRE>
 
 <P>
-The client then implements the abstract method &ldquo;hasSample()&rdquo;, instantiates
-the interface class and then saves its pointer in the device class, here called &ldquo;lsm9ds1Callback&rdquo;.
+The client then implements the abstract method <SPAN  CLASS="texttt">hasSample()</SPAN>, instantiates
+the interface class and then saves its pointer in the device class, here called <SPAN  CLASS="texttt">lsm9ds1Callback</SPAN>.
 <PRE>
 void LSM9DS1::dataReady() {
         LSM9DS1Sample sample;
@@ -641,8 +646,8 @@ receives the pointer of the interface as an argument, for example:
 <PRE>
         void registerCallback(LSM9DS1callback* cb);
 </PRE>
-This allows to register a callback optionally. The client might not need
-one or not always.
+This allows to register a callback optionally. The client may or may not need
+one.
 See
 <kbd><A ID="tex2html12"
   HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd>for a complete example.
@@ -675,10 +680,10 @@ See
 Callback arguments</A>
 </H2>
 Above the callbacks just delivered one floating point value. However,
-often more than one sample or more complex data is transmitted:
+often more than one sample or more complex data are transmitted:
 
 <UL>
-<LI>Complex data: Do not put loads of arguments into the
+<LI>Complex data: do not put loads of arguments into the
   callback but define a <SPAN  CLASS="textsl">struct</SPAN>. For example an ADC might
   deliver all 4 channels at once:
 <PRE>
@@ -696,6 +701,9 @@ class ADmulti {
         ...
 };
 </PRE>
+Depending on your application,
+you might consider the values not useful individually and therefore prefer
+a <SPAN  CLASS="texttt">std::tuple</SPAN>.
 </LI>
 <LI>Arrays: Use arrays which contain the length of the arrays:
   either std::array, std::vector, etc or const arrays and then
@@ -712,20 +720,22 @@ struct DataInterface {
                 A1LidarData (&amp;)[A1Lidar::nDistance]) = 0;
 };
 </PRE>
-where &ldquo;A1Lidar::nDistance&rdquo; defines a reference to a constant length array which in
-itself consists of &ldquo;A1LidarData&rdquo; stucts.
+Here <SPAN  CLASS="texttt">A1Lidar::nDistance</SPAN> is a constant-expression giving the fixed array length,
+and <SPAN  CLASS="texttt">(&amp;)[A1Lidar::nDistance]</SPAN> a reference to a constant-length array which
+containing <SPAN  CLASS="texttt">A1LidarData</SPAN> stucts. If you're going to use types that hard to key-in
+often, <SPAN  CLASS="texttt">typedef</SPAN> them.
 </LI>
 </UL>
 In terms of <SPAN  CLASS="textsl">memory management</SPAN>:
 
 <OL>
 <LI>Low sampling rate complex data structures: allocate as a local variable. It can be a simple type
-  or a struct. See &ldquo;dataReady()&rdquo; in: <kbd><A ID="tex2html14"
+  or a struct. See <SPAN  CLASS="texttt">dataReady()</SPAN> in: <kbd><A ID="tex2html14"
   HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp</A></kbd>.
 </LI>
 <LI>High sampling rate buffers: allocate memory on the heap in the
   constructor or in the private section of the class as a const length
-  array and pass on a <SPAN  CLASS="textsl">reference</SPAN>. See &ldquo;getData()&rdquo; in
+  array and pass on a <SPAN  CLASS="textsl">reference</SPAN>. See <SPAN  CLASS="texttt">getData()</SPAN> in
   <kbd><A ID="tex2html15"
   HREF="https://github.com/berndporr/rplidar_rpi">https://github.com/berndporr/rplidar_rpi</A></kbd>.
 </LI>
@@ -736,18 +746,18 @@ In terms of <SPAN  CLASS="textsl">memory management</SPAN>:
 <H1><A ID="SECTION00350000000000000000">
 Conclusion</A>
 </H1>
-In conclusion, the communication between C++ classes is achieved via
-callbacks and setters where the event from the sensor traverses
-through the C++ classes via callbacks and then back to the control
+The communication between C++ classes is achieved via
+callbacks and setters. The event from the sensor traverses
+the C++ classes via callbacks and then back to the control
 output via setters.
 
 <P>
-From the sections above it's clear that Linux userspace low level
+From the sections above it's clear that Linux user-space low level
 device access is complex, even without taking into account the
 complexity of contemporary chips which have often a multitude of
 registers and pages of documentation. Your task is to hide away
 all this (scary) complexity in a C++ class and offer the client
-an easy to understand interface.
+an easy-to-understand interface.
 
 <P>
 

@@ -58,5 +58,6 @@ DIV.navigation		{   }
 PRE.preform		{   }
 SPAN.arabic		{   }
 SPAN.textbf		{ font-weight: bold  }
+SPAN.textit		{ font-style: italic  }
 SPAN.textsl		{ font-style: oblique  }
 SPAN.texttt		{ font-family: monospace  }

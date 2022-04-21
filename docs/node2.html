@@ -56,7 +56,7 @@ Introduction</A>
 
 <P>
 
-<DIV class="CENTER"><A ID="timing"></A><A ID="301"></A>
+<DIV class="CENTER"><A ID="timing"></A><A ID="356"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.1:</STRONG>
 Dataflow and timing in low level realtime coding
@@ -72,21 +72,22 @@ Dataflow and timing in low level realtime coding
 </DIV>
 
 <P>
-In realtime embedded coding it's all about <SPAN  CLASS="textsl">events</SPAN>
-which can be a binary signal as somebody opening a door or
+Realtime embedded coding is all about <SPAN  CLASS="textsl">events</SPAN>.
+These can be a binary signal such as somebody opening a door or
 an ADC signalling that a sample is ready to be picked up.
 Fig.&nbsp;<A HREF="#timing">1.1</A> shows the basic dataflow and how event timing is
-established: devices by themselves have event signals such as data
-ready or crash sensor has been triggered. The Linux kernel then receives
-interrupt callbacks. However, userspace has no direct interrupt
-mechanism but it has blocking I/O where an I/O operation blocks
-until a kernel-side interrupt has happened. These can then be translated
-back into callbacks between classes by waking up threads. Data is transmitted 
-back to the hardware via methods called &ldquo;setters&rdquo;.
+established: devices by themselves have event signals such as &ldquo;data
+ready&rdquo; or &ldquo;crash sensor has been triggered&rdquo;. The Linux kernel receives
+these as interrupt callbacks. However, userspace has no direct interrupt
+mechanism; instead it has blocking I/O where a read or write operation blocks
+until a kernel-side interrupt has happened. A blocking I/O call returning
+may then be translated callbacks between classes by waking up threads.
+Data is transmitted back to the hardware via methods called &ldquo;setters&rdquo;,
+which change an object's attributes and potentially do other processing.
 
 <P>
 
-<DIV class="CENTER"><A ID="gettersetters"></A><A ID="303"></A>
+<DIV class="CENTER"><A ID="gettersetters"></A><A ID="358"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.2:</STRONG>
 A realtime system with two C++ classes. Communication
@@ -117,16 +118,19 @@ motors in reverse.
 When developing the C++ classes keep 
 <a href="https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design">S.O.L.I.D.</a>
 in mind:
-
-<OL>
-<LI><SPAN  CLASS="textsl">Single responsibility</SPAN>: If you have a temperature
-sensor and an accelerometer then write two classes, one for the
+<DL>
+<DT><STRONG>Single responsibility:</STRONG></DT>
+<DD>If you have a temperature
+sensor and an accelerometer then write two classes: one for the
 temperature sensor and one of the accelerometer. Don't write one
 class <SPAN  CLASS="texttt">Hardware</SPAN> which takes an argument <SPAN  CLASS="texttt">Hardware::temp</SPAN>
 or <SPAN  CLASS="texttt">Hardware::accel</SPAN> and then does one of two completely different
-things. It's a debugging nightmare.
-</LI>
-<LI><SPAN  CLASS="textsl">Open-Closed principle</SPAN> Your class is open to extension but
+things. It's a debugging nightmare and wasteful if you want to reuse
+your class in hardware with <SPAN  CLASS="textit">only</SPAN> a temperature sensor <SPAN  CLASS="textit">or</SPAN>
+an accelerometer.
+</DD>
+<DT><STRONG>Open-Closed principle:</STRONG></DT>
+<DD>Your class is open to extension but
   closed to modification. For example an ADC class
   has a callback which returns voltage to the client. However,
   you'll be connecting, for example, a temperature sensor to
@@ -136,28 +140,30 @@ things. It's a debugging nightmare.
   you create a derived class. It's a bad idea to hack the existing
   ADC class adding a <SPAN  CLASS="texttt">to_kelvin</SPAN> method: why would somebody
   using the ADC to read a value from an accelerometer need that?
-</LI>
-<LI><SPAN  CLASS="textsl">Liskov substitution principle</SPAN> Strictly, subtituting
+</DD>
+<DT><STRONG>Liskov substitution principle:</STRONG></DT>
+<DD>Strictly, substituting
   a derived class for its base class does not result in the program
   becoming incorrect. That is to say, any derived class from
   your device driver class can be used in place of the base class if
   the base class is all that's required, because the extra
   functionality in the derived class shouldn't break the basic
   required functionality of the base class. For example, if you have a
-  super duper DAC with lots of extra features, it shouldn't stop you
+  super-duper DAC with lots of extra features, it shouldn't stop you
   using it when you only need a very simple one. This also means
   that sensible default values should be set so that the client
-  won't need to understand the nerdy features of that super duper DAC.
-</LI>
-<LI><SPAN  CLASS="textsl">Interface Segregation Principle</SPAN>:
-  Keep functionality separate and rather divide it up in different
+  won't need to understand the nerdy features of that super-duper DAC.
+</DD>
+<DT><STRONG>Interface Segregation principle:</STRONG></DT>
+<DD>Keep functionality separate and aim to divide it up in different
   classes. Imagine you have a universal IO class with SPI and I2C
   but your client really just needs SPI. Then the client is forced
   to deactivate I2C or in the worst case the class causes collateral
   damage without the client knowing why.
-</LI>
-<LI><SPAN  CLASS="textsl">Dependency inversion</SPAN>: That is about obstructing the
-  essential features of of a class of interfaces. For example, ideally
+</DD>
+<DT><STRONG>Dependency inversion:</STRONG></DT>
+<DD>That is about abstracting the
+  essential features of a class of interfaces. For example, ideally
   you want a base class covering a range of similar
   ADC converters from the same manufacturer and not a base class being
   a driver for a particular chip. Individual ADC chip driver
@@ -167,9 +173,10 @@ things. It's a debugging nightmare.
   but this needs inverting. Why would one ADC driver need
   to provide all the necessaray code for a different one of the
   same family? Instead, the driver is dependent on the abstract
-  idea of an ADC, not the other way around.
-</LI>
-</OL>
+  idea of an ADC, not the other way around. The concrete depends
+  on the abstract.
+</DD>
+</DL>
 
 <P>
 Besides S.O.L.I.D it's also essential that:
@@ -177,19 +184,21 @@ Besides S.O.L.I.D it's also essential that:
 <OL>
 <LI>the project has a <SPAN  CLASS="textbf">build system</SPAN> such as cmake. It's
   strongly recommended to use <SPAN  CLASS="textbf">cmake</SPAN> (autoconf only for older existing
-  projects).
+  projects). This is especially true for Qt projects, where cmake support
+  is a stated priority of the Qt developers.
 </LI>
 <LI>classes (in particular driver classes) are <SPAN  CLASS="textbf">re-usable</SPAN>
   outwith of the specific project and have
   their own cmake-projects in their subdirectories. Except for the main
-  cmake project all sub-projects are libraries.
+  cmake project all sub-projects are libraries. This aids testing and
+  reuse.
 </LI>
 <LI>all public interfaces have <SPAN  CLASS="textbf">doc-strings</SPAN> for all public
   methods/constants and an automatically generated reference, for
-  example with the help of doxygen.
+  example with the help of <SPAN  CLASS="textbf">doxygen</SPAN>.
 </LI>
 <LI>classes which perform internal processing such as filters,
-  databases, detectors, ...have <SPAN  CLASS="textbf">unit tests</SPAN> and are started via
+  databases, detectors, ..., have <SPAN  CLASS="textbf">unit tests</SPAN> and are run via
   the cmake testing framework.
 </LI>
 <LI>the documentation provides comprehensive information about the project itself,
