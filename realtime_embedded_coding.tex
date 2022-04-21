@@ -220,7 +220,7 @@ can't be used to transmit and receive data. Instead, the simultaneous
 read and write is performed using an \texttt{ioctl()} to do the communication.
 Populate this struct:
 \begin{verbatim}
-struct spi_ioc_transfer tr { % leave out the = ? It's 2022...
+struct spi_ioc_transfer tr {
   .tx_buf = (unsigned long)tx1,
   .rx_buf = (unsigned long)rx1,
   .len = ARRAY_SIZE(tx1),
@@ -230,9 +230,9 @@ struct spi_ioc_transfer tr { % leave out the = ? It's 2022...
 };
 \end{verbatim}
 which points to two character buffers ``tx'' and ``rx'' with the
-same length. (Note: this code fragment's use of designated initialisers
+same length\footnote{This code fragment's use of designated initialisers
 officially requires C++2a, although most C++ compilers support it
-when compiling with older standards. In C it's been fine for a while!)
+when compiling with older standards. In C it's been fine for a while!}.
 
 Reading and simultaneous writing then happens via this \texttt{ioctrl()}
 function call:
@@ -914,8 +914,8 @@ a sample has arrived:
 \begin{verbatim}
 void Window::addSample( float v ) {
     // add the new input to the plot
-    memmove( yData, yData+1, (plotDataSize-1) * sizeof(double) );
-    yData[plotDataSize-1] = v;
+    std::move( yData, yData + plotDataSize - 1, yData+1 );
+    yData[0] = v;
 }
 \end{verbatim}
 which stores the sample \texttt{v} in the shift buffer \texttt{yData}.
@@ -976,7 +976,6 @@ It's important to recognise where \textsl{events} are generated: it is
 always the client (web browser or mobile app) which triggers an event,
 be it sending data over to the server or requesting data. It's
 always initiated by the client.
-%leave last sentence in for emphasis. It's counterintuitive and important
 
 \section{REST}
 The interface between a web client (browser or phone app) is usually
@@ -1228,14 +1227,12 @@ sampling rate, for example digital to analogue converters.  In this
 case the C++ driver class will again have a blocking write-loop
 periodically reading a buffer populated by the setter, which is
 ideally always ahead of time.
-% ^^^ That's still quite a complicated sentence, but I think it's right...
 You need to decide what happens if no
 fresh data has arrived, for example interpolating the output or
 putting it on hold. Of course you can also implement a callback by the
 audio write-loop to \textsl{request} samples but ultimately
 the conflict between audio arriving and being dispatched needs to be
 resolved.
-% ^^^ Agian, check I didn't change your meaning too much,
 
 \section{Conclusion}
 Setters are simply methods which transmit an event back to the physical
