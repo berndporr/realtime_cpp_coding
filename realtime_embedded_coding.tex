@@ -964,11 +964,11 @@ guarantee a reliable timing.
 
 \section{Introduction}
 
-Web server / client applications are central to a huge number
-of web applications ranging from shopping baskets to social
-media applications.
+There is a wide diversity of Web server / client applications
+ranging from shopping baskets on vendor sites to social
+media.
 
-Generally it's easy to create dynamic content (see PHP or nodejs) and is well
+Generally it's easy to create dynamic content (see PHP or nodejs) and this is well
 documented. However, feeding realtime data from C++ to a web page or
 realtime button presses back to C++ is a bit more difficult.
 
@@ -976,31 +976,32 @@ It's important to recognise where \textsl{events} are generated: it is
 always the client (web browser or mobile app) which triggers an event,
 be it sending data over to the server or requesting data. It's
 always initiated by the client.
+%leave last sentence in for emphasis. It's counterintuitive and important
 
 \section{REST}
 The interface between a web client (browser or phone app) is usually
 implemented as a Representational State Transfer Architectural (REST)
 API by communicating via an URL on a web server. The requirements
 for this API are very general and won't define the actual data format:
-\begin{enumerate}
-\item\textbf{Uniform interface} Any device connecting to the URL should
+\begin{description}
+\item[Uniform interface.] Any device connecting to the URL should
   get the same reply. No matter if a web page or mobile phone
   requests the temperature of a sensor the returned format must always be the same.
-\item\textbf{Client-server decoupling} The only information
+\item[Client-server decoupling.] The only information
   the client needs to know is the URL of the server to request data or send data.
-\item\textbf{Statelessness} Each request needs to include all the
+\item[Statelessness.] Each request needs to include all the
   information necessary and must not depend on previous requests. For
   example a request to a buffer must not alter the
   buffer but just read from it so that another user reading the buffer
   shortly after receives the same data.
-\end{enumerate}
+\end{description}
 See \url{https://www.ibm.com/cloud/learn/rest-apis} for the complete
 list of REST design principles.
 
 \section{Data formats}
 \subsection{Server $\to$ client: JSON (application/json)}
 The most popular dataformat is JSON which is basically a
-map of key/value pairs which can also be nested:
+map of (nestable) key/value pairs:
 \begin{verbatim}
 {
     temperature: [20, 21, 20, 19, 17],
@@ -1008,9 +1009,9 @@ map of key/value pairs which can also be nested:
     comment: "all good!"
 }
 \end{verbatim}
-Since JSON is sort of readable text a web server can simply
+Since JSON is human-readable text a web server can simply
 generate that text send it over via http or https. There
-is no difference except that the MIME format is `application/json`
+is no difference except that the MIME format is \textquotesingle application/json\textquotesingle{}
 instead of html.
 
 \subsection{Client $\to$ server: POST (application/x-www-form-urlencoded)}
@@ -1032,9 +1033,9 @@ on the ones which can be used for C++ communication (i.e. CGI).
 \subsection{Web servers (http/https)}
 
 \begin{itemize}
-  \item NGINX: Easy to configure but very flexible web server
+  \item NGINX: Easy to configure but very flexible web server. Pronounced ``Engine-X''.
   \item Apache: Hard to configure but safe option
-  \item lighttpd: Smaller web server with a small memory footprint
+  \item lighttpd: Smaller web server with a small memory footprint. Pronounced ``lighty''.
 \end{itemize}
 Note that it's possible to run different web servers at the
 same time where they then act as proxies for a central web
@@ -1057,10 +1058,10 @@ JavaScript can request JSON packages and directly turn them into variables.
 
 A fast CGI program is a UNIX commandline program which communicates with the web server
 (nginx, Apache, \ldots) via a UNIX socket which in turn is a pseudo file located
-in a temporary directory for example `/tmp/sensorsocket`.
+in a temporary directory for example \texttt{/tmp/sensorsocket}.
 
 The web server then maps certain http/https requests to
-his socket, for example, the configuration for nginx looks like this:
+this socket. An example configuration for nginx looks like this:
 \begin{verbatim}
        location /sensor/ {
           include        fastcgi_params;
@@ -1073,7 +1074,7 @@ then needs to return the content. Internally this will be a C++ callback
 inside of the fastcgi program.
 
 The C++ fastcgi API \url{https://github.com/berndporr/json_fastcgi_web_api} 
-is wrapper around the quite cryptic fastcgi C library and we are discussing
+is wrapper around the quite cryptic fastcgi C library and we discuss
 its callback handlers now.
 
 \subsubsection{Server $\to$ client: JSON (application/json)}
