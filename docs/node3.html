@@ -103,8 +103,9 @@
 <!--End of Table of Child-Links-->
 <HR>
 
-<H1><A ID="SECTION00300000000000000000">
-Writing C++ device driver classes</A>
+<H1><A ID="SECTION00300000000000000000"></A><A ID="drivers"></A>
+<BR>
+Writing C++ device driver classes
 </H1>
 This chapter focuses on writing your own C++ device driver class
 hiding away the complexity (and messy) low level C APIs and/or raw
@@ -159,7 +160,7 @@ the C++ driver classes for different hardware protocols.
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="364"></A>
+  <A ID="370"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 2.1:</STRONG>
 SPI modes</CAPTION>
@@ -230,7 +231,7 @@ struct spi_ioc_transfer tr {
 </PRE>
 which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with the
 same length<A ID="tex2html5"
-  HREF="footnode.html#foot80"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
+  HREF="footnode.html#foot85"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
 
 <P>
 Reading and simultaneous writing then happens via this <SPAN  CLASS="texttt">ioctrl()</SPAN>

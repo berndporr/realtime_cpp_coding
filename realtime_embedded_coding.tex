@@ -145,8 +145,23 @@ Besides S.O.L.I.D it's also essential that:
   how to install and run the project.
 \end{enumerate}
 
+In the following sections we are describing how to write event driven
+code in C++. Important here is the interplay between blocking I/O and
+threads: the chapter~\ref{drivers} focuses on how to wrap the low
+level blocking Linux I/O in a class and how to establish the
+communication between classes while the chapter~\ref{threads}
+describes how threads can effectively be used to trigger callbacks
+with blocking I/O. Chapter~\ref{qt} then presents the event based
+communication in Qt, in particular user interaction and animations.
+Chapter~\ref{webserver} tackles the same issues as for Qt but for
+website server communication. The final chapter~\ref{setters} then
+describes how events are transmitted back from a C++ class to the user
+with the help of setters.
 
-\chapter{Writing C++ device driver classes}
+
+
+
+\chapter{Writing C++ device driver classes\label{drivers}}
 This chapter focuses on writing your own C++ device driver class
 hiding away the complexity (and messy) low level C APIs and/or raw
 device access. How are events translated into I/O operations? On the
@@ -669,7 +684,7 @@ an easy-to-understand interface.
 
 
 
-\chapter{Threads}
+\chapter{Threads\label{threads}}
 
 \section{Introduction}
 In realtime systems threads have two distinct functions:
@@ -833,7 +848,7 @@ and callbacks.
 
 
 
-\chapter{Realtime/event processing in Qt}
+\chapter{Realtime/event processing in Qt\label{qt}}
 
 \section{Introduction}
 \textbf{Qt} is a cross-platform windows development environment
@@ -960,7 +975,7 @@ guarantee a reliable timing.
 
 
 
-\chapter{Realtime web server/client communication}
+\chapter{Realtime web server/client communication\label{webserver}}
 
 \section{Introduction}
 
@@ -1167,7 +1182,7 @@ always http or https and a RESTful interface with JSON
 being the most popular data format requested from the server.
 
 
-\chapter{Setters}
+\chapter{Setters\label{setters}}
 In Fig.~\ref{gettersetters} we have seen that data flows from
 the sensors to the C++ classes via \textsl{callbacks} then returns
 from the inner C++ classes to motor or display outputs is via

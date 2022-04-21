@@ -6,6 +6,10 @@ $key = q/cgi/;
 $external_labels{$key} = "$URL/" . q|node6.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/drivers/;
+$external_labels{$key} = "$URL/" . q|node3.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/gettersetters/;
 $external_labels{$key} = "$URL/" . q|node2.html|; 
 $noresave{$key} = "$nosave";
@@ -14,12 +18,28 @@ $key = q/gpioIRQ/;
 $external_labels{$key} = "$URL/" . q|node3.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/qt/;
+$external_labels{$key} = "$URL/" . q|node5.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/qwtex/;
 $external_labels{$key} = "$URL/" . q|node5.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/setters/;
+$external_labels{$key} = "$URL/" . q|node7.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/threads/;
+$external_labels{$key} = "$URL/" . q|node4.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/timing/;
 $external_labels{$key} = "$URL/" . q|node2.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/webserver/;
+$external_labels{$key} = "$URL/" . q|node6.html|; 
 $noresave{$key} = "$nosave";
 
 1;
@@ -37,6 +57,10 @@ $key = q/cgi/;
 $external_latex_labels{$key} = q|5.1|; 
 $noresave{$key} = "$nosave";
 
+$key = q/drivers/;
+$external_latex_labels{$key} = q|2|; 
+$noresave{$key} = "$nosave";
+
 $key = q/gettersetters/;
 $external_latex_labels{$key} = q|1.2|; 
 $noresave{$key} = "$nosave";
@@ -45,16 +69,32 @@ $key = q/gpioIRQ/;
 $external_latex_labels{$key} = q|2.2.3|; 
 $noresave{$key} = "$nosave";
 
+$key = q/qt/;
+$external_latex_labels{$key} = q|4|; 
+$noresave{$key} = "$nosave";
+
 $key = q/qwtex/;
 $external_latex_labels{$key} = q|4.1|; 
+$noresave{$key} = "$nosave";
+
+$key = q/setters/;
+$external_latex_labels{$key} = q|6|; 
 $noresave{$key} = "$nosave";
 
 $key = q/spimodes/;
 $external_latex_labels{$key} = q|2.1|; 
 $noresave{$key} = "$nosave";
 
+$key = q/threads/;
+$external_latex_labels{$key} = q|3|; 
+$noresave{$key} = "$nosave";
+
 $key = q/timing/;
 $external_latex_labels{$key} = q|1.1|; 
+$noresave{$key} = "$nosave";
+
+$key = q/webserver/;
+$external_latex_labels{$key} = q|5|; 
 $noresave{$key} = "$nosave";
 
 1;
