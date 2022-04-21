@@ -1091,10 +1091,10 @@ public:
 * timestamp and one with the temperature from the sensor.
 **/
 virtual std::string getJSONString() {
-    JSONCGIHandler::JSONGenerator jsonGenerator;
-    jsonGenerator.add("epoch",(long)time(NULL));
-    jsonGenerator.add("temperatures",temperatureArray);
-    return jsonGenerator.getJSON();
+      JSONCGIHandler::JSONGenerator jsonGenerator;
+      jsonGenerator.add("epoch",(long)time(NULL));
+      jsonGenerator.add("temperatures",temperatureArray);
+      return jsonGenerator.getJSON();
     }
 };
 \end{verbatim} 
@@ -1103,7 +1103,7 @@ virtual std::string getJSONString() {
 Like in any GUI the client can press a button and create an event.  On
 the client side this is packaged with jquery into an
 ``application/x-www-form-urlencoded'' stream and then sent over to the
-server where then \texttt{libcurl} is the standard tool for decoding
+server. In the server, \texttt{libcurl} is the standard tool for decoding
 the application/x-www-form-urlencoded stream back into a C++ data
 structure, for example a map.
 
@@ -1111,18 +1111,18 @@ Here, the server then receives the ``application/x-www-form-urlencoded'' data as
 called ``postArg'':
 \begin{verbatim}
 virtual void postString(std::string postArg) {
-		auto m = JSONCGIHandler::postDecoder(postArg);
-		float temp = atof(m["volt"].c_str());
-		std::cerr << m["hello"] << "\n";
-		sensorfastcgi->forceValue(temp);
-	}
+    auto m = JSONCGIHandler::postDecoder(postArg);
+    float temp = atof(m["volt"].c_str());
+    std::cerr << m["hello"] << "\n";
+    sensorfastcgi->forceValue(temp);
+}
 \end{verbatim}
-which is then decoded into key/value pairs in the form of a C++ std::map.
+which is then decoded into key/value pairs in the form of a C++ \texttt{std::map}.
 
 \section{Client code: javascript for websites}
-Generally on the client side (= web page) HTML with embedded
+Generally on the client side (= web page), HTML with embedded
 \textsl{JavaScript} is used to generate realtime output/input without
-reloading the web page. JavaScript is \textsl{event driven} and has
+reloading the page. JavaScript is \textsl{event driven} and has
 callbacks so it's perfect for realtime applications. Use
 \texttt{jQuery} to request and post JSON from/to the server.
 
@@ -1136,7 +1136,7 @@ function getterCallback(result) {
   // plot the array here
 }
 
-// timer callback (same idea as in QT to define a refresh rate)
+// timer callback (same idea as in Qt to define a refresh rate)
 function getTemperature() {
   // get the JSON data
   $.getJSON("/data/:80",getterCallback);
@@ -1157,13 +1157,13 @@ callback driven as the JS code above and differs only in its syntax.
 
 \section{Conclusion}
 Events in web based communication are always triggered by the web
-browser or the mobile app in exactly the same way as QT does it, for
+browser or the mobile app in exactly the same way as Qt does it, for
 example by a button press. The same applies for animations where a
 client-side timer requests data from the server. Thus, these client
 side events either cause transmission of data from the web browser to
-the web server or request data from the web server. The protocol is
-nowadays always http or https and has a RESTful interface with JSON
-being the most popular data format being requested from the server.
+the web server or request data from the web server. Nowadays the protocol is
+always http or https and a RESTful interface with JSON
+being the most popular data format requested from the server.
 
 
 \chapter{Setters}
