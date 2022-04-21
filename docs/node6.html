@@ -34,7 +34,7 @@
 <A
  HREF="node5.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html164"
+<A ID="tex2html166"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -44,7 +44,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node5.html">Realtime/event processing in Qt</A>
- &nbsp; <B>  <A ID="tex2html165"
+ &nbsp; <B>  <A ID="tex2html167"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -53,41 +53,39 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html166"
-  HREF="node6.html#SECTION00610000000000000000">Introduction</A>
-<LI><A ID="tex2html167"
-  HREF="node6.html#SECTION00620000000000000000">REST</A>
 <LI><A ID="tex2html168"
+  HREF="node6.html#SECTION00610000000000000000">Introduction</A>
+<LI><A ID="tex2html169"
+  HREF="node6.html#SECTION00620000000000000000">REST</A>
+<LI><A ID="tex2html170"
   HREF="node6.html#SECTION00630000000000000000">Data formats</A>
 <UL>
-<LI><A ID="tex2html169"
+<LI><A ID="tex2html171"
   HREF="node6.html#SECTION00631000000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-<LI><A ID="tex2html170"
+ ALT="$\to $"></SPAN> client: JSON</A>
+<LI><A ID="tex2html172"
   HREF="node6.html#SECTION00632000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+ ALT="$\to $"></SPAN> server: POST</A>
 </UL>
 <BR>
-<LI><A ID="tex2html171"
+<LI><A ID="tex2html173"
   HREF="node6.html#SECTION00640000000000000000">Server</A>
 <UL>
-<LI><A ID="tex2html172"
-  HREF="node6.html#SECTION00641000000000000000">Web servers (http/https)</A>
-<LI><A ID="tex2html173"
-  HREF="node6.html#SECTION00642000000000000000">FastCGI</A>
-<UL>
 <LI><A ID="tex2html174"
-  HREF="node6.html#SECTION00642100000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-</UL>
+  HREF="node6.html#SECTION00641000000000000000">Web servers (http/https)</A>
 <LI><A ID="tex2html175"
-  HREF="node6.html#SECTION00643000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+  HREF="node6.html#SECTION00642000000000000000">FastCGI</A>
+<LI><A ID="tex2html176"
+  HREF="node6.html#SECTION00643000000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON</A>
+<LI><A ID="tex2html177"
+  HREF="node6.html#SECTION00644000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> server: POST</A>
 </UL>
 <BR>
-<LI><A ID="tex2html176"
+<LI><A ID="tex2html178"
   HREF="node6.html#SECTION00650000000000000000">Client code: javascript for websites</A>
-<LI><A ID="tex2html177"
+<LI><A ID="tex2html179"
   HREF="node6.html#SECTION00660000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -158,10 +156,10 @@ Data formats</A>
 
 <H2><A ID="SECTION00631000000000000000">
 Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
+ ALT="$\to $"></SPAN> client: JSON</A>
 </H2>
-The most popular dataformat is JSON which is basically a
-map of (nestable) key/value pairs:
+The most popular dataformat is JSON (<SPAN  CLASS="texttt">application/json</SPAN>) which
+is basically a map of (nestable) key/value pairs:
 <PRE>
 {
     temperature: [20, 21, 20, 19, 17],
@@ -178,16 +176,17 @@ instead of html.
 
 <H2><A ID="SECTION00632000000000000000">
 Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+ ALT="$\to $"></SPAN> server: POST</A>
 </H2>
-When a website or mobile app wants to send data back to the server it
-needs to encode it in the form of a single text-line where the
-key/value pairs are combined with &amp;-signs:
+When a website or mobile app wants to send data
+(<SPAN  CLASS="texttt">application/x-www-form-urlencoded</SPAN>) back to the server it needs to
+encode it in the form of a single text-line where the key/value pairs
+are combined with &amp;-signs:
 <PRE>
 temperature=20&amp;steps=100&amp;comment=all+good%33
 </PRE>
-The receiver then has the task to entangle this stream into a suitable data-format,
-for example a map.
+The receiver then has the task to entangle this stream into a suitable
+data-format, for example a map.
 
 <P>
 
@@ -221,7 +220,7 @@ makes it very easy to achieve this.
 
 <P>
 
-<DIV class="CENTER"><A ID="cgi"></A><A ID="367"></A>
+<DIV class="CENTER"><A ID="cgi"></A><A ID="371"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 5.1:</STRONG>
 FastCGI dataflow.</CAPTION>
@@ -273,11 +272,11 @@ its callback handlers now.
 
 <P>
 
-<H3><A ID="SECTION00642100000000000000">
+<H2><A ID="SECTION00643000000000000000">
 Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON (application/json)</A>
-</H3>
-The fastCGI callback expects a JSON string with the data
+ ALT="$\to $"></SPAN> client: JSON</A>
+</H2>
+The fastCGI callback expects a JSON string (application/json) with the data
 transmitted form the server to the client. There is helper
 class JSONGenerator which generates the JSON data from various
 C++ types:
@@ -300,19 +299,20 @@ virtual std::string getJSONString() {
 
 <P>
 
-<H2><A ID="SECTION00643000000000000000">
+<H2><A ID="SECTION00644000000000000000">
 Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST (application/x-www-form-urlencoded)</A>
+ ALT="$\to $"></SPAN> server: POST</A>
 </H2>
 Like in any GUI the client can press a button and create an event.  On
 the client side this is packaged with jquery into an
-&ldquo;application/x-www-form-urlencoded&rdquo; stream and then sent over to the
+<SPAN  CLASS="texttt">application/x-www-form-urlencoded</SPAN> stream and then sent over to the
 server. In the server, <SPAN  CLASS="texttt">libcurl</SPAN> is the standard tool for decoding
 the application/x-www-form-urlencoded stream back into a C++ data
 structure, for example a map.
 
 <P>
-Here, the server then receives the &ldquo;application/x-www-form-urlencoded&rdquo; data as a callback
+Here, the server then receives the
+<SPAN  CLASS="texttt">application/x-www-form-urlencoded</SPAN> data as a callback
 called &ldquo;postArg&rdquo;:
 <PRE>
 virtual void postString(std::string postArg) {

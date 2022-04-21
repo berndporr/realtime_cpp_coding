@@ -998,9 +998,9 @@ See \url{https://www.ibm.com/cloud/learn/rest-apis} for the complete
 list of REST design principles.
 
 \section{Data formats}
-\subsection{Server $\to$ client: JSON (application/json)}
-The most popular dataformat is JSON which is basically a
-map of (nestable) key/value pairs:
+\subsection{Server $\to$ client: JSON}
+The most popular dataformat is JSON (\texttt{application/json}) which
+is basically a map of (nestable) key/value pairs:
 \begin{verbatim}
 {
     temperature: [20, 21, 20, 19, 17],
@@ -1013,15 +1013,16 @@ generate that text send it over via http or https. There
 is no difference except that the MIME format is \textquotesingle application/json\textquotesingle{}
 instead of html.
 
-\subsection{Client $\to$ server: POST (application/x-www-form-urlencoded)}
-When a website or mobile app wants to send data back to the server it
-needs to encode it in the form of a single text-line where the
-key/value pairs are combined with \&-signs:
+\subsection{Client $\to$ server: POST}
+When a website or mobile app wants to send data
+(\texttt{application/x-www-form-urlencoded}) back to the server it needs to
+encode it in the form of a single text-line where the key/value pairs
+are combined with \&-signs:
 \begin{verbatim}
 temperature=20&steps=100&comment=all+good%33
 \end{verbatim}
-The receiver then has the task to entangle this stream into a suitable data-format,
-for example a map.
+The receiver then has the task to entangle this stream into a suitable
+data-format, for example a map.
 
 
 \section{Server}
@@ -1076,8 +1077,8 @@ The C++ fastcgi API \url{https://github.com/berndporr/json_fastcgi_web_api}
 is wrapper around the quite cryptic fastcgi C library and we discuss
 its callback handlers now.
 
-\subsubsection{Server $\to$ client: JSON (application/json)}
-The fastCGI callback expects a JSON string with the data
+\subsection{Server $\to$ client: JSON}
+The fastCGI callback expects a JSON string (application/json) with the data
 transmitted form the server to the client. There is helper
 class JSONGenerator which generates the JSON data from various
 C++ types:
@@ -1098,15 +1099,16 @@ virtual std::string getJSONString() {
 };
 \end{verbatim} 
 
-\subsection{Client $\to$ server: POST (application/x-www-form-urlencoded)}
+\subsection{Client $\to$ server: POST}
 Like in any GUI the client can press a button and create an event.  On
 the client side this is packaged with jquery into an
-``application/x-www-form-urlencoded'' stream and then sent over to the
+\texttt{application/x-www-form-urlencoded} stream and then sent over to the
 server. In the server, \texttt{libcurl} is the standard tool for decoding
 the application/x-www-form-urlencoded stream back into a C++ data
 structure, for example a map.
 
-Here, the server then receives the ``application/x-www-form-urlencoded'' data as a callback
+Here, the server then receives the
+\texttt{application/x-www-form-urlencoded} data as a callback
 called ``postArg'':
 \begin{verbatim}
 virtual void postString(std::string postArg) {
