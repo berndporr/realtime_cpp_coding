@@ -147,7 +147,7 @@ Besides S.O.L.I.D it's also essential that:
 
 In the following sections we are describing how to write event driven
 code in C++. Important here is the interplay between blocking I/O and
-threads: the chapter~\ref{drivers} focuses on how to wrap the low
+threads: chapter~\ref{drivers} focuses on how to wrap the low
 level blocking Linux I/O in a class and how to establish the
 communication between classes while the chapter~\ref{threads}
 describes how threads can effectively be used to trigger callbacks
@@ -255,13 +255,13 @@ function call:
 int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
 \end{verbatim}
 
-Sometimes the SPI protocol of a chip is so odd that even the raw
-I/O via \texttt{/dev} won't work and you need to write your own bit banging
-interface, for example done here for the ADC on the alphabot:
+Sometimes the SPI protocol of a chip is so odd that even the raw I/O
+via \texttt{/dev} won't work and you need to write your own bit
+banging interface, for example done here for the ADC on the alphabot:
 \url{https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58}.
-This is obviously far from ideal as it might require \texttt{usleep()} commands
-so that acquisition needs to be run in a separate thread (the alphabot indeed
-uses a timer callback in a separate thread).
+This is obviously far from ideal as it might require \texttt{usleep()}
+commands so that acquisition needs to be run in a separate thread (the
+alphabot indeed uses a timer callback in a separate thread).
 
 Overall the SPI protocol is often device dependent and calls
 for experimentation to get it to work. On some ADCs the SPI clock is also
@@ -829,12 +829,15 @@ void run() {
 
 \subsubsection{Timing with Linux/pigpio timers}
 Similar to threads one can create timers which are called at certain
-intervals. These timers emit a Linux signal at a specified interval
-and then this signal is caught by a global (static) function.
-Generally it's \textsl{not recommended} to use timers for anything
-which needs to be reliably sampled, for example ADC converters or
-sensors with sampling rates higher than a few Hz. On the raspberry PI
-use the pigpio library and its timer callbacks --- if needed at all.
+intervals. As with threads timers should be \textsl{hidden} within a
+C++ class as \textsl{private} members which then trigger
+\textsl{public callbacks} via C++ callback mechanisms as described
+above. These timers emit a Linux signal at a specified interval and
+then this signal is caught by a global (static) function.  Generally
+it's \textsl{not recommended} to use timers for anything which needs
+to be reliably sampled, for example ADC converters or sensors with
+sampling rates higher than a few Hz. On the raspberry PI use the
+pigpio library and its timer callbacks --- if needed at all.
 
 \section{Conclusion}
 Threads play a central role in real-time coding as,

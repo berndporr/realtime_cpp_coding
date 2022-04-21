@@ -160,7 +160,7 @@ the C++ driver classes for different hardware protocols.
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="370"></A>
+  <A ID="373"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 2.1:</STRONG>
 SPI modes</CAPTION>
@@ -241,14 +241,14 @@ int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
 </PRE>
 
 <P>
-Sometimes the SPI protocol of a chip is so odd that even the raw
-I/O via <SPAN  CLASS="texttt">/dev</SPAN> won't work and you need to write your own bit banging
-interface, for example done here for the ADC on the alphabot:
+Sometimes the SPI protocol of a chip is so odd that even the raw I/O
+via <SPAN  CLASS="texttt">/dev</SPAN> won't work and you need to write your own bit
+banging interface, for example done here for the ADC on the alphabot:
 <kbd><A ID="tex2html6"
   HREF="https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58">https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58</A></kbd>.
-This is obviously far from ideal as it might require <SPAN  CLASS="texttt">usleep()</SPAN> commands
-so that acquisition needs to be run in a separate thread (the alphabot indeed
-uses a timer callback in a separate thread).
+This is obviously far from ideal as it might require <SPAN  CLASS="texttt">usleep()</SPAN>
+commands so that acquisition needs to be run in a separate thread (the
+alphabot indeed uses a timer callback in a separate thread).
 
 <P>
 Overall the SPI protocol is often device dependent and calls
