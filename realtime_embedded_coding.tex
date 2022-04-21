@@ -36,17 +36,18 @@
 \label{timing}}
 \end{figure}
 
-In realtime embedded coding it's all about \textsl{events}
-which can be a binary signal as somebody opening a door or
+Realtime embedded coding is all about \textsl{events}.
+These can be a binary signal such as somebody opening a door or
 an ADC signalling that a sample is ready to be picked up.
 Fig.~\ref{timing} shows the basic dataflow and how event timing is
-established: devices by themselves have event signals such as data
-ready or crash sensor has been triggered. The Linux kernel then receives
-interrupt callbacks. However, userspace has no direct interrupt
-mechanism but it has blocking I/O where an I/O operation blocks
-until a kernel-side interrupt has happened. These can then be translated
-back into callbacks between classes by waking up threads. Data is transmitted 
-back to the hardware via methods called ``setters''.
+established: devices by themselves have event signals such as ``data
+ready'' or ``crash sensor has been triggered''. The Linux kernel receives
+these as interrupt callbacks. However, userspace has no direct interrupt
+mechanism; instead it has blocking I/O where a read or write operation blocks
+until a kernel-side interrupt has happened. A blocking I/O call returning
+may then be translated callbacks between classes by waking up threads.
+Data is transmitted back to the hardware via methods called ``setters'',
+which change an object's attributes and potentially do other processing.
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -71,14 +72,16 @@ motors in reverse.
 When developing the C++ classes keep 
 \href{https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design}{S.O.L.I.D.}
 in mind:
-\begin{enumerate}
-\item \textsl{Single responsibility}: If you have a temperature
-sensor and an accelerometer then write two classes, one for the
+\begin{description}
+\item[Single responsibility:] If you have a temperature
+sensor and an accelerometer then write two classes: one for the
 temperature sensor and one of the accelerometer. Don't write one
 class \texttt{Hardware} which takes an argument \texttt{Hardware::temp}
 or \texttt{Hardware::accel} and then does one of two completely different
-things. It's a debugging nightmare.
-\item \textsl{Open-Closed principle} Your class is open to extension but
+things. It's a debugging nightmare and wasteful if you want to reuse
+your class in hardware with \emph{only} a temperature sensor \emph{or}
+an accelerometer.
+\item[Open-Closed principle:] Your class is open to extension but
   closed to modification. For example an ADC class
   has a callback which returns voltage to the client. However,
   you'll be connecting, for example, a temperature sensor to
@@ -88,25 +91,25 @@ things. It's a debugging nightmare.
   you create a derived class. It's a bad idea to hack the existing
   ADC class adding a \texttt{to\_kelvin} method: why would somebody
   using the ADC to read a value from an accelerometer need that?
-\item \textsl{Liskov substitution principle} Strictly, subtituting
+\item[Liskov substitution principle:] Strictly, substituting
   a derived class for its base class does not result in the program
   becoming incorrect. That is to say, any derived class from
   your device driver class can be used in place of the base class if
   the base class is all that's required, because the extra
   functionality in the derived class shouldn't break the basic
   required functionality of the base class. For example, if you have a
-  super duper DAC with lots of extra features, it shouldn't stop you
+  super-duper DAC with lots of extra features, it shouldn't stop you
   using it when you only need a very simple one. This also means
   that sensible default values should be set so that the client
-  won't need to understand the nerdy features of that super duper DAC.
-\item \textsl{Interface Segregation Principle}:
-  Keep functionality separate and rather divide it up in different
+  won't need to understand the nerdy features of that super-duper DAC.
+\item[Interface Segregation principle:]
+  Keep functionality separate and aim to divide it up in different
   classes. Imagine you have a universal IO class with SPI and I2C
   but your client really just needs SPI. Then the client is forced
   to deactivate I2C or in the worst case the class causes collateral
   damage without the client knowing why.
-\item \textsl{Dependency inversion}: That is about obstructing the
-  essential features of of a class of interfaces. For example, ideally
+\item[Dependency inversion:] That is about abstracting the
+  essential features of a class of interfaces. For example, ideally
   you want a base class covering a range of similar
   ADC converters from the same manufacturer and not a base class being
   a driver for a particular chip. Individual ADC chip driver
@@ -116,23 +119,27 @@ things. It's a debugging nightmare.
   but this needs inverting. Why would one ADC driver need
   to provide all the necessaray code for a different one of the
   same family? Instead, the driver is dependent on the abstract
-  idea of an ADC, not the other way around.
-\end{enumerate}
+  idea of an ADC, not the other way around. The concrete depends
+  on the abstract.
+\end{description}
+
 
 Besides S.O.L.I.D it's also essential that:
 \begin{enumerate}
 \item the project has a \textbf{build system} such as cmake. It's
   strongly recommended to use \textbf{cmake} (autoconf only for older existing
-  projects).
+  projects). This is especially true for Qt projects, where cmake support
+  is a stated priority of the Qt developers.
 \item classes (in particular driver classes) are \textbf{re-usable}
   outwith of the specific project and have
   their own cmake-projects in their subdirectories. Except for the main
-  cmake project all sub-projects are libraries.
+  cmake project all sub-projects are libraries. This aids testing and
+  reuse.
 \item all public interfaces have \textbf{doc-strings} for all public
   methods/constants and an automatically generated reference, for
-  example with the help of doxygen.
+  example with the help of \textbf{doxygen}.
 \item classes which perform internal processing such as filters,
-  databases, detectors, \ldots have \textbf{unit tests} and are started via
+  databases, detectors, \ldots, have \textbf{unit tests} and are run via
   the cmake testing framework.
 \item the documentation provides comprehensive information about the project itself,
   how to install and run the project.
@@ -147,13 +154,14 @@ hardware-side we have event signals such as data-ready signals or by
 the timing of a serial or audio interface. The Linux kernel translates
 this timing info into blocking I/O on pseudo filesystems such as /dev
 or /sys which means that a read operation blocks until data has arrived
-or an event has happened. Some low level libraries such as pigpio
+or an event has happened. Some low level libraries such as \textbf{pigpio}
 translate them back into C callbacks. The task of a C++ programmer is
 to hide this complexity and these quite different approaches in C++
 classes which communicate via callbacks and setters with the client
-classes.
+classes. The rest of the program will then appear simple and be
+easy to maintain.
 
-\section{General recommendations how to write your C++ classes for devices}
+\section{General recommendations on how to write your C++ classes for devices}
 As said above the main purpose of object oriented coding here is to
 hide away the complexity of low level driver access and offer the
 client a simple and safe way of connecting to the sensor. In
@@ -166,8 +174,8 @@ particular:
   voltage, temperature) and not sensor registers. Default config parameters
   should be specified that the class can be used straight away with
   default parameters.
-\item It has simple demo programs demonstrating how to use the class
-  by a client.
+\item The class comes with simple demo programs demonstrating how
+  a client program might use it.
 \end{enumerate}
 
 \section{Low level userspace device access}
@@ -189,27 +197,30 @@ the C++ driver classes for different hardware protocols.
   \end{center}
 \end{table}
 SPI is a protocol which usually transmits and receives at the same
-time. Even that data might not be used it needs to be matched up. So
-for example sending 8 byes and receiving 8 bytes at the same time.
+time. Even though data might not be used it needs to be matched up,
+because the same clock is used to send and collect the data signal
+(it is \emph{isochronous}).
+So if you send 8 bytes the hardware receives 8 bytes at the same time.
 
-Transfer to/from SPI is best managed by the low level access to /dev.
-Open the SPI device with the standard open() function:
+Transfer to/from SPI is best managed by the low level access to \texttt{/dev}.
+Open the SPI device with the standard \texttt{open()} function:
 \begin{verbatim}
 int fd = open( "/dev/spidev0.0", O_RDWR);
 \end{verbatim}
 
-Then set the SPI mode (see table.~\ref{spimodes}):
+Then set the SPI mode (see table~\ref{spimodes}):
 \begin{verbatim}
 int ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
 \end{verbatim}
-which is explained, for example, here:
+as explained, for example, here:
 \url{https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html}.
 
-Since SPI transmits and receives at the same time we need to
-use ioctl to do the communication.
+Because SPI is isochronous, \texttt{read()} and \texttt{write()}
+can't be used to transmit and receive data. Instead, the simultaneous
+read and write is performed using an \texttt{ioctl()} to do the communication.
 Populate this struct:
 \begin{verbatim}
-struct spi_ioc_transfer tr = {
+struct spi_ioc_transfer tr { % leave out the = ? It's 2022...
   .tx_buf = (unsigned long)tx1,
   .rx_buf = (unsigned long)rx1,
   .len = ARRAY_SIZE(tx1),
@@ -219,37 +230,39 @@ struct spi_ioc_transfer tr = {
 };
 \end{verbatim}
 which points to two character buffers ``tx'' and ``rx'' with the
-same length.
+same length. (Note: this code fragment's use of designated initialisers
+officially requires C++2a, although most C++ compilers support it
+when compiling with older standards. In C it's been fine for a while!)
 
-Reading and simultaneous writing is happening then via the ioctrl
-function:
+Reading and simultaneous writing then happens via this \texttt{ioctrl()}
+function call:
 \begin{verbatim}
 int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
 \end{verbatim}
 
 Sometimes the SPI protocol of a chip is so odd that even the raw
-I/O via /dev won't work and you need to write your own bit banging
+I/O via \texttt{/dev} won't work and you need to write your own bit banging
 interface, for example done here for the ADC on the alphabot:
 \url{https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58}.
-This is obviously far from ideal as it might require ``usleep'' commands
-so that acquisition needs to be run in a separate thread (the alphabot
+This is obviously far from ideal as it might require \texttt{usleep()} commands
+so that acquisition needs to be run in a separate thread (the alphabot indeed
 uses a timer callback in a separate thread).
 
 Overall the SPI protocol is often device dependent and calls
-for experimentation to get it to work. Often the SPI clock is also
-the ADC conversion clock which requires a longer lasting clock signal
-by transmitting dummy bytes in addition to the payload.
+for experimentation to get it to work. On some ADCs the SPI clock is also
+the conversion clock and a longer lasting clock signal sequence is required,
+making it necessary to transmit dummy bytes in addition to the payload.
 
 As a general recommendation do not use SAR converters which use the
 SPI data clock also as acquisition clock as they are often not compatible
-with the standard SPI transfers via /dev. Use sensors or ADCs which
+with the standard SPI transfers via \texttt{/dev}. Use sensors or ADCs which
 have their own clock signal.
 
 
 \subsection{I2C}
 The I2C bus has two signal lines (SDA \& SDL) which must be pulled up
 by resistors. Every I2C device has an address on the bus. You can scan
-a bus with ``i2cdetect'' (part of the i2c-tools package):
+a bus with \textbf{i2cdetect} (part of the i2c-tools package):
 \begin{verbatim}
 root@raspberrypi:/home/pi# i2cdetect -y 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -267,7 +280,7 @@ In this case there are 3 I2C devices on the I2C bus at addresses
 1E, 58 and 6B and need to be specified when
 accessing the I2C device.
 
-\subsubsection{Raw /dev/i2c access}
+\subsubsection{Raw \texttt{/dev/i2c} access}
 I2C either transmits or receives but never at the same time so here we
 can use the standard C read/write commands. However, we need to use ioctrl to tell
 the kernel the I2C address:
@@ -276,12 +289,13 @@ char buf[2];
 int file = open("/dev/i2c-2",O_RDWR);
 int addr = 0x58;
 ioctl(file, I2C_SLAVE, addr);
-write(file,buf,1)
-read(file,buf,2)
+write(file, buf, 1)
+read(file, buf, 2)
 \end{verbatim}
-where ``addr'' is the I2C address. Then use standard read()
-or write() commands. Usually the 1st write() operation tells the chip
-which register to read or write to. Then write/read its register.
+where \texttt{addr} is the I2C address. Then use standard \texttt{read()}
+or \texttt{write()} commands. Usually the 1st write operation tells the chip
+which register to read or write to. Subsequent operations read
+or write that register.
 
 \subsubsection{I2C access via pigpio}
 Access via pigpio (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
@@ -300,14 +314,14 @@ int fd = i2cOpen(i2c_bus, address, 0);
 i2cWriteByteData(fd, subAddress, data);
 i2cClose(fd);
 \end{verbatim}
-where i2c\_bus is the I2C bus number (usually 1 on the RPI)
-and the address is the I2C address of the device on that bus.
-The subAddress here is the register address in the device.
+where \texttt{i2c\_bus} is the I2C bus number (usually 1 on the RPI)
+and the \texttt{address} is the I2C address of the device on that bus.
+The \texttt{subAddress} here is the register address in the device.
 
 \subsection{Access GPIO pins}
-\subsubsection{/sys filesystem}
+\subsubsection{\texttt{/sys} filesystem}
 The GPIO of the raspberry PI can easily be controlled via
-the /sys filesystem. This is slow but good for
+the \texttt{/sys} filesystem. This is slow but good for
 debugging as you can directly write a
 ``0'' or ``1'' string to it and print the result. The
 pseudo files are here:
@@ -322,7 +336,6 @@ it visible:
 \end{verbatim}
 For example, writing a 5 (in text form) to this file would
 create the subdirectory \texttt{/sys/class/gpio/gpio5} for GPIO pin 5.
-
 Then reading from
 \begin{verbatim}
 /sys/class/gpio/gpio5/value
@@ -331,12 +344,12 @@ would give you the status of GPIO pin 5 and writing
 to it would change it.
 A thin wrapper around the GPIO sys filesystem is here: \url{https://github.com/berndporr/gpio-sysfs}.
 
-\paragraph{GPIO interrupt handling via /sys\label{gpioIRQ}}
+\paragraph{GPIO interrupt handling via \texttt{/sys}\label{gpioIRQ}.}
 The most important application for the /sys filesystem is to
 do interrupt processing in userspace.
 A thread can be put to sleep until an interrupt has happened on one of
 the GPIO pins. This is done by monitoring the ``value''
-of a GPIO pin in the /sys filesystem with the ``poll'' command:
+of a GPIO pin in the \texttt{/sys} filesystem with the ``poll'' command:
 \begin{verbatim}
 struct pollfd fdset[1];
 int nfds = 1;
@@ -350,8 +363,8 @@ if (fdset[0].revents & POLLPRI) {
    read(fdset[0].fd, buf, MAX_BUF);
 }
 \end{verbatim}
-makes the thread go to sleep until an interrupt has occurred on
-GPIO pin 5. Then the thread wakes up and execution continues.
+This code makes the thread go to sleep until an interrupt has occurred on
+GPIO pin~5. Then the thread wakes up and execution continues.
 
 \subsubsection{pigpio}
 The above section has given you a deep understanding what's happening
@@ -369,11 +382,10 @@ To read from GPIO pin 24 just call:
 int a = gpioRead(24)
 \end{verbatim}
 
-\paragraph{interrupt handling via pigpio}
+\paragraph{interrupt handling via pigpio.}
 pigpio manages GPIO interrupt handling by wrapping all the above
 functionality into a single command where the client registers a
-callback function which is called whenever a change has occurred on a
-GPIO pin.
+callback function. The callback occurs whenever a GPIO pin changes.
 Specifically a method of the form:
 \begin{verbatim}
 class mySensorClass {
@@ -386,8 +398,8 @@ is registered with pigpio:
 \begin{verbatim}
 gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
 \end{verbatim}
-where ``this'' is the pointer to your class instance which is then used
-to call a class method, here: ``dataReady()''.
+where ``this'' is the pointer to your class instance.
+The callback registered will then be \texttt{this->dataReady()}.
 \begin{verbatim}
 class LSM9DS1 {
   void dataReady();
@@ -402,9 +414,8 @@ See \url{https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library} for the c
 
 
 
-\subsection{Access to hardware via special devices in /sys}
+\subsection{Access to hardware via special devices in \texttt{/sys}}
 Some sensors are directly available via the sys filesystem in human readable format.
-
 For example
 \begin{verbatim}
 cat /sys/class/thermal/thermal_zone0/temp
@@ -459,6 +470,8 @@ Both can be found here:
 
 
 \subsection{Accessing physical memory locations (danger!)}
+
+Don't.
 In case you really need to access registers you can
 also access memory directly. This should only be used as a last resort.
 For example, setting the clock for the AD converter requires
@@ -466,13 +479,13 @@ turning a GPIO pin into a clock output pin. This is not yet
 supported by the drivers so we need to program registers
 on the RPI.
 \begin{itemize}
-\item Linux uses virtual addressed so that a pointer won't
-point to a physical address. It points to three page
+\item Linux uses virtual addresses so that a pointer won't
+point to a physical memory location. It points to three page
 tables with an offset.
-\item Special device /dev/mem which allows access of physical
+\item Special device \texttt{/dev/mem} allows access to physical
 memory.
-\item The command ``mmap'' provides a pointer to a physical
-address by opening /dev/mem.
+\item The command \textbf{mmap} provides a pointer to a physical
+address by opening \texttt{/dev/mem}.
 \item Example:
 \begin{verbatim}
 int *addr;
@@ -491,13 +504,13 @@ printf("addr: %d \n",*addr);
 
 
 \section{Kernel driver programming}
-You can also create your own /dev/mydevice in the /dev filesystem
+You can also create your own \texttt{/dev/mydevice} in the \texttt{/dev} filesystem
 by writing a kernel driver and a matching userspace library. For
 example the USB mouse has a driver in kernel space and translates
 the raw data from the mouse into coordinates. However,
 this is beyond the scope of this handout. If you want to embark
 on this adventure then the best approach is to
-find a kernel driver which does approximately what you want and then
+find a kernel driver which does approximately what you want and
 modify it for your purposes.
 
 
@@ -545,8 +558,8 @@ public:
 };
 \end{verbatim}
 
-The client then implements the abstract method ``hasSample()'', instantiates
-the interface class and then saves its pointer in the device class, here called ``lsm9ds1Callback''.
+The client then implements the abstract method \texttt{hasSample()}, instantiates
+the interface class and then saves its pointer in the device class, here called \texttt{lsm9ds1Callback}.
 \begin{verbatim}
 void LSM9DS1::dataReady() {
         LSM9DS1Sample sample;
@@ -560,8 +573,8 @@ receives the pointer of the interface as an argument, for example:
 \begin{verbatim}
         void registerCallback(LSM9DS1callback* cb);
 \end{verbatim}
-This allows to register a callback optionally. The client might not need
-one or not always.
+This allows to register a callback optionally. The client may or may not need
+one.
 See
 \url{https://github.com/berndporr/rpi_AD7705_daq}
 for a complete example.
@@ -585,9 +598,9 @@ See
 
 \subsection{Callback arguments}
 Above the callbacks just delivered one floating point value. However,
-often more than one sample or more complex data is transmitted:
+often more than one sample or more complex data are transmitted:
 \begin{itemize}
-\item Complex data: Do not put loads of arguments into the
+\item Complex data: do not put loads of arguments into the
   callback but define a \textsl{struct}. For example an ADC might
   deliver all 4 channels at once:
 \begin{verbatim}
@@ -605,6 +618,9 @@ class ADmulti {
         ...
 };
 \end{verbatim}
+Depending on your application,
+you might consider the values not useful individually and therefore prefer
+a \texttt{std::tuple}.
 \item Arrays: Use arrays which contain the length of the arrays:
   either std::array, std::vector, etc or const arrays and then
   references to these so that the callback knows the length.
@@ -620,32 +636,34 @@ struct DataInterface {
                 A1LidarData (&)[A1Lidar::nDistance]) = 0;
 };
 \end{verbatim}
-where ``A1Lidar::nDistance'' defines a reference to a constant length array which in
-itself consists of ``A1LidarData'' stucts.
+Here \texttt{A1Lidar::nDistance} is a constant-expression giving the fixed array length,
+and \texttt{(\&)[A1Lidar::nDistance]} a reference to a constant-length array which
+containing \texttt{A1LidarData} stucts. If you're going to use types that hard to key-in
+often, \texttt{typedef} them.
 \end{itemize}
 In terms of \textsl{memory management}:
 \begin{enumerate}
 \item Low sampling rate complex data structures: allocate as a local variable. It can be a simple type
-  or a struct. See ``dataReady()'' in: \url{https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp}.
+  or a struct. See \texttt{dataReady()} in: \url{https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp}.
 \item High sampling rate buffers: allocate memory on the heap in the
   constructor or in the private section of the class as a const length
-  array and pass on a \textsl{reference}. See ``getData()'' in
+  array and pass on a \textsl{reference}. See \texttt{getData()} in
   \url{https://github.com/berndporr/rplidar_rpi}.
 \end{enumerate}
 
 
 \section{Conclusion}
-In conclusion, the communication between C++ classes is achieved via
-callbacks and setters where the event from the sensor traverses
-through the C++ classes via callbacks and then back to the control
+The communication between C++ classes is achieved via
+callbacks and setters. The event from the sensor traverses
+the C++ classes via callbacks and then back to the control
 output via setters.
 
-From the sections above it's clear that Linux userspace low level
+From the sections above it's clear that Linux user-space low level
 device access is complex, even without taking into account the
 complexity of contemporary chips which have often a multitude of
 registers and pages of documentation. Your task is to hide away
 all this (scary) complexity in a C++ class and offer the client
-an easy to understand interface.
+an easy-to-understand interface.
 
 
 
@@ -658,32 +676,34 @@ In realtime systems threads have two distinct functions:
 \begin{enumerate}
 \item Endless loops with blocking I/O or GPIO wakeups
   to establish \textbf{precise timing} for callbacks.
-\item \textbf{Asynchronous execution} of time consuming tasks
+\item \textbf{Asynchronous execution} of time-consuming tasks
   with a callback after the task has completed.
 \end{enumerate}
 
 
 \section{Processes and Threads}
 Processes are different programs which seem to be running at the same
-time. However this is done by the operating system which switches
+time. A small embedded system may only have a single CPU core,
+so this this is achieved by the operating system switching
 approximately every 10ms from one process to the next so it feels as
-if they are running at the same time. A thread is a lightweight
-process where multiple threads share the same memory and started from
-within the parent process. As with processes the threads seem to be
+if they are running concurrently. A thread is a lightweight
+process. A process may have  multiple threads which share the same
+address-space and are all started from
+within the parent process. As with processes, the threads seem to be
 running at the same time. When a thread is started it runs
-simultaneously to the main process which created it.
+simultaneously with the main process which created it.
 
 \section{Thread and worker}
-A thread is just a \textsl{container} for the actual method
-which is running independently. The method contained inside of a
-thread is often called \textsl{worker}.
+A thread is just a \textsl{wrapper} for the actual method
+which is running independently. The method being run in the thread
+is often called a \textsl{worker}.
 
 \subsection{Creating threads}
 In C++ a worker is a method within
 a class and needs to be \textsl{static} which means it won't be
 able to access the instance variables of a class. The trick
-is to pass a pointer to the instance of the class (``this'') as the argument of
-the worker, for example, called ``exec'':
+is to pass a pointer to the instance of the class (\texttt{this}) as the argument of
+the worker, in the following example called \texttt{exec}:
 \begin{verbatim}
 uthread = new std::thread(MyClassWithAThread::exec, this);
 \end{verbatim}
@@ -699,10 +719,9 @@ class MyClassWithAThread {
         }
 }
 \end{verbatim}
-which in turn then calls a non-static class method ``run()'' which
-then has access to the instances variables.
-
-
+which in turn then calls a non-static class method \texttt{run()}.
+\texttt{run} will then have access to all of the instance's attributes
+and methods.
 
 \subsection{Lifetime of a thread}
 Threads terminate simply once the static worker has finished its job.
@@ -719,8 +738,8 @@ of the thread use the ``join()'' method:
                 delete uthread;
         }
 \end{verbatim}
-Important is also to release the memory of a thread after it has finished
-to avoid memory leaks.
+It's also important is also to release the memory of a thread after it has finished
+to avoid memory leaks, hence the \texttt{delete} command.
 
 
 \subsection{Running/stopping workers with endless loops}
@@ -735,7 +754,7 @@ void run() {
        }
 }
 \end{verbatim}
-Note the flag ``running'' which is controlled by the main program and is set to zero to terminate
+Note the flag \texttt{running} which is controlled by the main program and is set to zero to terminate
 the thread:
 \begin{verbatim}
         void stop() {
@@ -744,9 +763,19 @@ the thread:
                 delete uthread;
         }
 \end{verbatim}
-Note that ``join()'' is a blocking operation and needs to be used with care not to
+Note that \texttt{join()} is a blocking operation and needs to be used with care not to
 lock up the main program. You probably only need it when your program is terminating.
 See \url{https://github.com/berndporr/rpi_AD7705_daq} for an example.
+
+If your program creates and joins several threads while executing,
+with care you might be able to design your program to allow an
+end-of-life thread to carry on
+tidying up in the background after you stop it by setting \texttt{running = false;}.
+In this case only need execute \texttt{join()} to be sure that
+the thread has finished. Joining a terminated thread is OK
+(the call just returns immediately)
+but you absolutely  must not join a thread more than once,
+nor delete a thread until you've joined it.
 
 
 \subsection{Timing within threads}
@@ -760,7 +789,7 @@ external event has happened. Then of course a callback function should
 be called reacting to the external event. This is the preferred method
 for low latency responses.
 
-As said previously, use \textsl{pigpio} on the Raspberry PI
+As said previously, use \textbf{pigpio} on the Raspberry PI
 which wraps the select/poll commands into a thread and calls a
 \textsl{callback} function whenever an GPIO pin has been triggered.
 
@@ -770,7 +799,7 @@ Blocking I/O (read, write, etc) can be used to time
 the data coming in because the thread goes to sleep when it's waiting for
 I/O but wakes up very quickly after new data has arrived.
 
-In this example the blocking ``read'' command creates
+In this example the blocking \texttt{read} command creates
 the timing of the callback:
 \begin{verbatim}
 void run() {
@@ -790,30 +819,31 @@ and then this signal is caught by a global (static) function.
 Generally it's \textsl{not recommended} to use timers for anything
 which needs to be reliably sampled, for example ADC converters or
 sensors with sampling rates higher than a few Hz. On the raspberry PI
-use the pigpio library and its timer callbacks -- if needed at all.
+use the pigpio library and its timer callbacks --- if needed at all.
 
 \section{Conclusion}
-Threads play a central role in realtime coding as they establish
-together with blocking I/O the callback interfaces so that every event
+Threads play a central role in real-time coding as,
+together with blocking I/O, they establish
+the callback interfaces. Every event handler
 runs in a separate thread.
 
 Callbacks are also used to signal the termination of
-threads and shows again the close relationship between threads
+threads, which shows again the close relationship between threads
 and callbacks.
 
 
 
-\chapter{Realtime/event processing in QT}
+\chapter{Realtime/event processing in Qt}
 
 \section{Introduction}
-QT is a cross platform windows development environment
-for Linux/Windows and Mac.
+\textbf{Qt} is a cross-platform windows development environment
+for Linux, Windows and Mac.
 
-Elements in QT are \textsl{Widgets} which can contain
+Elements in Qt are \textsl{Widgets} which can contain
 anything form plots, buttons or text fields. They are
-classes. You can define your own widgets or use ready made ones.
+classes. You can define your own widgets or use ready-made ones.
 
-\section{Layout in QT}
+\section{Layout in Qt}
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -823,12 +853,13 @@ classes. You can define your own widgets or use ready made ones.
 \label{qwtex}}
 \end{figure}
 
-There are different ways of declaring layout in QT. One is
-using a markup language which then has matching classes
-or creating it all with classes. We show how it works by
-just using classes which organise the layout. There is
-also a trend in general to use code to declare the layout
-as done in SwiftUI, for example.
+There are different ways of declaring layout in Qt. One is
+using a markup language which then has matching classes;
+another is creating to use only C++ classes.
+We show how to organise the layout using the second method.
+This avoids having the learn an additional language and is
+consistent with the general  trend to use code to declare the layout
+in this and other frameworks (\textbf{SwiftUI}, for example).
 
 This is an example how widgets are organised into
 nested vertical and horizontal layouts (see Fig.~\ref{qwtex}
@@ -854,29 +885,32 @@ setLayout(hLayout);
 \end{verbatim}
 
 
-\section{Callbacks in QT}
+\section{Callbacks in Qt}
 \subsection{Events from widgets}
-In contrast to our low level callback mechanism using interfaces QT rather
+In contrast to our low level callback mechanism using interfaces, Qt rather
 directly calls methods in classes. The problem is that function pointers
 cannot be directly used as a class has instance pointers to its local
 data. So a method of a class needs to be combined with the instance
-pointer. The QT method ``connect'' does exactly that:
+pointer. The Qt method ``connect'' does exactly that:
 \begin{verbatim}
-connect(button,&QPushButton::clicked,
-        this,&Window::reset);
+connect(button, &QPushButton::clicked,
+        this, &Window::reset);
 \end{verbatim}
-The QPushButton instance ``button'' has a method called ``clicked'' which is
+The QPushButton instance \texttt{button} has a method called \texttt{clicked()} which is
 called whenever the user clicks on the button. This is then forwarded to the
-method ``reset'' in the application Widget.
+method \texttt{reset()} in the application Widget.
 
 
 \subsection{Plotting realtime data arriving via a callback}
-The general idea is to store the realtime samples from a callback in a
-buffer and trigger a screen refresh at a lower rate for example every
-40~ms which then plots the contents of the buffer.
+The general idea is to store the real-time samples from a callback in a
+buffer and trigger a screen refresh at a lower rate. For example, we may
+choose to replot the samples in the buffer every
+40~ms because that fast enough for the user, whereas plotting the
+whole buffer every sample would be too CPU-intensive.
 
-The callback ``addSample'' here is called in realtime whenever
+A callback \texttt{addSample()} is called in real-time whenever
 a sample has arrived:
+%should probably change memmove to std::move or whatever
 \begin{verbatim}
 void Window::addSample( float v ) {
     // add the new input to the plot
@@ -884,7 +918,7 @@ void Window::addSample( float v ) {
     yData[plotDataSize-1] = v;
 }
 \end{verbatim}
-which stores the sample `v` in the shift buffer `yData`.
+which stores the sample \texttt{v} in the shift buffer \texttt{yData}.
 
 Then the screen refresh (which is slow) is done at
 a lower and unreliable rate:
@@ -898,8 +932,9 @@ void Window::timerEvent( QTimerEvent * )
 }
 \end{verbatim}
 
-After ``update()'' has been called in the timer event the
-paint event is executed by QT as soon as possible and re-paints
+\texttt{update()} in the timer event-handler generates a
+paint event and Qt then invokes the repaint
+handler ``as soon as possible'' (which is to say, not in real-time) to repaint
 the canvas of the widget:
 \begin{verbatim}
 void ScopeWindow::paintEvent(QPaintEvent *) {
@@ -909,16 +944,17 @@ void ScopeWindow::paintEvent(QPaintEvent *) {
 }
 \end{verbatim}
 
-Note that neither the timer nor the ``update()'' function
-is called in a reliable way but whenever QT likes to do it.
-So the QT timers cannot be used to sample data but should
-only be used for screen refresh.
+Note that neither the timer nor the \texttt{update()} function
+is called in a reliable way but whenever Qt chooses to do it.
+So Qt timers cannot be used to sample data but should
+only be used for screen refresh and other non-time-critical
+reasons.
 
 \section{Conclusion}
-Events in QT are generated by user interaction, for example a button
-press or moving the mouse. As before QT provides a callback mechanism
-via the ``connect'' method. Callbacks from QT timers are used for
-animations but must not be used for realtime events as QT timers won't
+Events in Qt are generated by user interaction, for example a button
+press or moving the mouse. As before Qt provides a callback mechanism
+via the \texttt{connect()} method. Callbacks from Qt timers may be used for
+animations but must not be used for real-time events as Qt timers won't
 guarantee a reliable timing.
 
 
@@ -928,11 +964,11 @@ guarantee a reliable timing.
 
 \section{Introduction}
 
-Web server / client applications are central to a huge number
-of web applications ranging from shopping baskets to social
-media applications.
+There is a wide diversity of Web server / client applications
+ranging from shopping baskets on vendor sites to social
+media.
 
-Generally it's easy to create dynamic content (see PHP or nodejs) and is well
+Generally it's easy to create dynamic content (see PHP or nodejs) and this is well
 documented. However, feeding realtime data from C++ to a web page or
 realtime button presses back to C++ is a bit more difficult.
 
@@ -940,31 +976,32 @@ It's important to recognise where \textsl{events} are generated: it is
 always the client (web browser or mobile app) which triggers an event,
 be it sending data over to the server or requesting data. It's
 always initiated by the client.
+%leave last sentence in for emphasis. It's counterintuitive and important
 
 \section{REST}
 The interface between a web client (browser or phone app) is usually
 implemented as a Representational State Transfer Architectural (REST)
 API by communicating via an URL on a web server. The requirements
 for this API are very general and won't define the actual data format:
-\begin{enumerate}
-\item\textbf{Uniform interface} Any device connecting to the URL should
+\begin{description}
+\item[Uniform interface.] Any device connecting to the URL should
   get the same reply. No matter if a web page or mobile phone
   requests the temperature of a sensor the returned format must always be the same.
-\item\textbf{Client-server decoupling} The only information
+\item[Client-server decoupling.] The only information
   the client needs to know is the URL of the server to request data or send data.
-\item\textbf{Statelessness} Each request needs to include all the
+\item[Statelessness.] Each request needs to include all the
   information necessary and must not depend on previous requests. For
   example a request to a buffer must not alter the
   buffer but just read from it so that another user reading the buffer
   shortly after receives the same data.
-\end{enumerate}
+\end{description}
 See \url{https://www.ibm.com/cloud/learn/rest-apis} for the complete
 list of REST design principles.
 
 \section{Data formats}
 \subsection{Server $\to$ client: JSON (application/json)}
 The most popular dataformat is JSON which is basically a
-map of key/value pairs which can also be nested:
+map of (nestable) key/value pairs:
 \begin{verbatim}
 {
     temperature: [20, 21, 20, 19, 17],
@@ -972,9 +1009,9 @@ map of key/value pairs which can also be nested:
     comment: "all good!"
 }
 \end{verbatim}
-Since JSON is sort of readable text a web server can simply
+Since JSON is human-readable text a web server can simply
 generate that text send it over via http or https. There
-is no difference except that the MIME format is `application/json`
+is no difference except that the MIME format is \textquotesingle application/json\textquotesingle{}
 instead of html.
 
 \subsection{Client $\to$ server: POST (application/x-www-form-urlencoded)}
@@ -996,9 +1033,9 @@ on the ones which can be used for C++ communication (i.e. CGI).
 \subsection{Web servers (http/https)}
 
 \begin{itemize}
-  \item NGINX: Easy to configure but very flexible web server
+  \item NGINX: Easy to configure but very flexible web server. Pronounced ``Engine-X''.
   \item Apache: Hard to configure but safe option
-  \item lighttpd: Smaller web server with a small memory footprint
+  \item lighttpd: Smaller web server with a small memory footprint. Pronounced ``lighty''.
 \end{itemize}
 Note that it's possible to run different web servers at the
 same time where they then act as proxies for a central web
@@ -1021,10 +1058,10 @@ JavaScript can request JSON packages and directly turn them into variables.
 
 A fast CGI program is a UNIX commandline program which communicates with the web server
 (nginx, Apache, \ldots) via a UNIX socket which in turn is a pseudo file located
-in a temporary directory for example `/tmp/sensorsocket`.
+in a temporary directory for example \texttt{/tmp/sensorsocket}.
 
 The web server then maps certain http/https requests to
-his socket, for example, the configuration for nginx looks like this:
+this socket. An example configuration for nginx looks like this:
 \begin{verbatim}
        location /sensor/ {
           include        fastcgi_params;
@@ -1037,7 +1074,7 @@ then needs to return the content. Internally this will be a C++ callback
 inside of the fastcgi program.
 
 The C++ fastcgi API \url{https://github.com/berndporr/json_fastcgi_web_api} 
-is wrapper around the quite cryptic fastcgi C library and we are discussing
+is wrapper around the quite cryptic fastcgi C library and we discuss
 its callback handlers now.
 
 \subsubsection{Server $\to$ client: JSON (application/json)}
@@ -1054,10 +1091,10 @@ public:
 * timestamp and one with the temperature from the sensor.
 **/
 virtual std::string getJSONString() {
-    JSONCGIHandler::JSONGenerator jsonGenerator;
-    jsonGenerator.add("epoch",(long)time(NULL));
-    jsonGenerator.add("temperatures",temperatureArray);
-    return jsonGenerator.getJSON();
+      JSONCGIHandler::JSONGenerator jsonGenerator;
+      jsonGenerator.add("epoch",(long)time(NULL));
+      jsonGenerator.add("temperatures",temperatureArray);
+      return jsonGenerator.getJSON();
     }
 };
 \end{verbatim} 
@@ -1066,7 +1103,7 @@ virtual std::string getJSONString() {
 Like in any GUI the client can press a button and create an event.  On
 the client side this is packaged with jquery into an
 ``application/x-www-form-urlencoded'' stream and then sent over to the
-server where then \texttt{libcurl} is the standard tool for decoding
+server. In the server, \texttt{libcurl} is the standard tool for decoding
 the application/x-www-form-urlencoded stream back into a C++ data
 structure, for example a map.
 
@@ -1074,18 +1111,18 @@ Here, the server then receives the ``application/x-www-form-urlencoded'' data as
 called ``postArg'':
 \begin{verbatim}
 virtual void postString(std::string postArg) {
-		auto m = JSONCGIHandler::postDecoder(postArg);
-		float temp = atof(m["volt"].c_str());
-		std::cerr << m["hello"] << "\n";
-		sensorfastcgi->forceValue(temp);
-	}
+    auto m = JSONCGIHandler::postDecoder(postArg);
+    float temp = atof(m["volt"].c_str());
+    std::cerr << m["hello"] << "\n";
+    sensorfastcgi->forceValue(temp);
+}
 \end{verbatim}
-which is then decoded into key/value pairs in the form of a C++ std::map.
+which is then decoded into key/value pairs in the form of a C++ \texttt{std::map}.
 
 \section{Client code: javascript for websites}
-Generally on the client side (= web page) HTML with embedded
+Generally on the client side (= web page), HTML with embedded
 \textsl{JavaScript} is used to generate realtime output/input without
-reloading the web page. JavaScript is \textsl{event driven} and has
+reloading the page. JavaScript is \textsl{event driven} and has
 callbacks so it's perfect for realtime applications. Use
 \texttt{jQuery} to request and post JSON from/to the server.
 
@@ -1099,7 +1136,7 @@ function getterCallback(result) {
   // plot the array here
 }
 
-// timer callback (same idea as in QT to define a refresh rate)
+// timer callback (same idea as in Qt to define a refresh rate)
 function getTemperature() {
   // get the JSON data
   $.getJSON("/data/:80",getterCallback);
@@ -1120,19 +1157,19 @@ callback driven as the JS code above and differs only in its syntax.
 
 \section{Conclusion}
 Events in web based communication are always triggered by the web
-browser or the mobile app in exactly the same way as QT does it, for
+browser or the mobile app in exactly the same way as Qt does it, for
 example by a button press. The same applies for animations where a
 client-side timer requests data from the server. Thus, these client
 side events either cause transmission of data from the web browser to
-the web server or request data from the web server. The protocol is
-nowadays always http or https and has a RESTful interface with JSON
-being the most popular data format being requested from the server.
+the web server or request data from the web server. Nowadays the protocol is
+always http or https and a RESTful interface with JSON
+being the most popular data format requested from the server.
 
 
 \chapter{Setters}
 In Fig.~\ref{gettersetters} we have seen that data flows from
-the sensors to the C++ classes via \textsl{callbacks} then it flows
-back from the inner C++ classes to motor or display outputs is via
+the sensors to the C++ classes via \textsl{callbacks} then returns
+from the inner C++ classes to motor or display outputs is via
 \textsl{setters}. Setters are also used for setting configuration
 parameters.
 
@@ -1188,13 +1225,17 @@ std::array or a standard const array which implicitly carries their length.
 \paragraph{Constant sampling rate output (audio, \ldots)}
 There are many applications where the output device has a fixed
 sampling rate, for example digital to analogue converters.  In this
-case the C++ driver class will have again a blocking write-loop which
-then reads periodically a buffer populated by the setter, which is
-ideally always ahead of time. You need to decide what happens if no
+case the C++ driver class will again have a blocking write-loop
+periodically reading a buffer populated by the setter, which is
+ideally always ahead of time.
+% ^^^ That's still quite a complicated sentence, but I think it's right...
+You need to decide what happens if no
 fresh data has arrived, for example interpolating the output or
 putting it on hold. Of course you can also implement a callback by the
-audio write-loop to \textsl{request} samples but needs to be ultimately resolved
-in a class between audio arriving and being dispatched.
+audio write-loop to \textsl{request} samples but ultimately
+the conflict between audio arriving and being dispatched needs to be
+resolved.
+% ^^^ Agian, check I didn't change your meaning too much,
 
 \section{Conclusion}
 Setters are simply methods which transmit an event back to the physical
