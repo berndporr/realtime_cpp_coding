@@ -827,17 +827,18 @@ void run() {
 \end{verbatim}
 
 
-\subsubsection{Timing with Linux/pigpio timers}
-Similar to threads one can create timers which are called at certain
-intervals. As with threads timers should be \textsl{hidden} within a
-C++ class as \textsl{private} members which then trigger
-\textsl{public callbacks} via C++ callback mechanisms as described
-above. These timers emit a Linux signal at a specified interval and
-then this signal is caught by a global (static) function.  Generally
-it's \textsl{not recommended} to use timers for anything which needs
-to be reliably sampled, for example ADC converters or sensors with
-sampling rates higher than a few Hz. On the raspberry PI use the
-pigpio library and its timer callbacks --- if needed at all.
+\section{Timing with Linux/pigpio timers}
+As a last resort one can use a timer. Similar to threads one can
+create timers which are then called at certain intervals. As with threads
+timers should be \textsl{hidden} within a C++ class as
+\textsl{private} members which then trigger \textsl{public callbacks}
+via C++ callback mechanisms as described above. These timers emit a
+Linux signal at a specified interval and then this signal is caught by
+a global (static) function.  Generally it's \textsl{not recommended}
+to use timers for anything which needs to be reliably sampled, for
+example ADC converters or sensors with sampling rates higher than a
+few Hz. On the raspberry PI use the pigpio library and its timer
+callbacks --- if needed at all.
 
 \section{Conclusion}
 Threads play a central role in real-time coding as,
