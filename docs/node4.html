@@ -252,7 +252,7 @@ which wraps the select/poll commands into a thread and calls a
 <H3><A ID="SECTION00434200000000000000">
 Timing with blocking I/O</A>
 </H3>
-Blocking I/O (read, write, etc) can be used to time
+Blocking I/O (read, write, etc) <SPAN  CLASS="textsl">is by far the best approach</SPAN> to time
 the data coming in because the thread goes to sleep when it's waiting for
 I/O but wakes up very quickly after new data has arrived.
 

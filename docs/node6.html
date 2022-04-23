@@ -221,7 +221,7 @@ makes it very easy to achieve this.
 
 <P>
 
-<DIV class="CENTER"><A ID="cgi"></A><A ID="383"></A>
+<DIV class="CENTER"><A ID="cgi"></A><A ID="386"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 5.1:</STRONG>
 FastCGI dataflow.</CAPTION>
@@ -277,7 +277,7 @@ its callback handlers now.
 Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> client: JSON</A>
 </H2>
-The fastCGI callback expects a JSON string (application/json) with the data
+The fastCGI callback expects a JSON string (<SPAN  CLASS="texttt">application/json</SPAN>) with the data
 transmitted form the server to the client. There is helper
 class JSONGenerator which generates the JSON data from various
 C++ types:
@@ -308,7 +308,7 @@ Like in any GUI the client can press a button and create an event.  On
 the client side this is packaged with jquery into an
 <SPAN  CLASS="texttt">application/x-www-form-urlencoded</SPAN> stream and then sent over to the
 server. In the server, <SPAN  CLASS="texttt">libcurl</SPAN> is the standard tool for decoding
-the application/x-www-form-urlencoded stream back into a C++ data
+the <SPAN  CLASS="texttt">application/x-www-form-urlencoded</SPAN> stream back into a C++ data
 structure, for example a map.
 
 <P>
