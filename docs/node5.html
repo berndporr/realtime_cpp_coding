@@ -3,7 +3,7 @@
 <!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
 <HTML lang="EN">
 <HEAD>
-<TITLE>Realtime/event processing in Qt</TITLE>
+<TITLE>Realtime/event processing within the Graphical User Interface Qt</TITLE>
 <META NAME="description" CONTENT="Realtime embedded coding in C++ under Linux">
 <META NAME="keywords" CONTENT="Realtime, coding, C++, callbacks, classes, fgci, QT, threads, S.O.L.I.D, events">
 <META NAME="resource-type" CONTENT="document">
@@ -33,7 +33,7 @@
 <A
  HREF="node4.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html160"
+<A ID="tex2html158"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node4.html">Threads</A>
- &nbsp; <B>  <A ID="tex2html161"
+ &nbsp; <B>  <A ID="tex2html159"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,28 +52,26 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html162"
+<LI><A ID="tex2html160"
   HREF="node5.html#SECTION00510000000000000000">Introduction</A>
-<LI><A ID="tex2html163"
-  HREF="node5.html#SECTION00520000000000000000">Layout in Qt</A>
-<LI><A ID="tex2html164"
-  HREF="node5.html#SECTION00530000000000000000">Callbacks in Qt</A>
+<LI><A ID="tex2html161"
+  HREF="node5.html#SECTION00520000000000000000">Callbacks in Qt</A>
 <UL>
-<LI><A ID="tex2html165"
-  HREF="node5.html#SECTION00531000000000000000">Events from widgets</A>
-<LI><A ID="tex2html166"
-  HREF="node5.html#SECTION00532000000000000000">Plotting realtime data arriving via a callback</A>
+<LI><A ID="tex2html162"
+  HREF="node5.html#SECTION00521000000000000000">Events from widgets</A>
+<LI><A ID="tex2html163"
+  HREF="node5.html#SECTION00522000000000000000">Plotting realtime data arriving via a callback</A>
 </UL>
 <BR>
-<LI><A ID="tex2html167"
-  HREF="node5.html#SECTION00540000000000000000">Conclusion</A>
+<LI><A ID="tex2html164"
+  HREF="node5.html#SECTION00530000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
 <HR>
 
 <H1><A ID="SECTION00500000000000000000"></A><A ID="qt"></A>
 <BR>
-Realtime/event processing in Qt
+Realtime/event processing within the Graphical User Interface Qt
 </H1>
 
 <P>
@@ -81,23 +79,24 @@ Realtime/event processing in Qt
 <H1><A ID="SECTION00510000000000000000">
 Introduction</A>
 </H1>
-<SPAN  CLASS="textbf">Qt</SPAN> is a cross-platform windows development environment
-for Linux, Windows and Mac.
+<SPAN  CLASS="textbf">Qt</SPAN> is a cross-platform windows development environment for
+Linux, Windows and Mac. Such graphical user interfaces have realtime
+requirements because, for example, pressing a button should trigger an
+instant response by the application so that the user thinks this has
+been instantaneous. QT also works with callbacks as introduced above
+but they are wrapped in a QT-specific signal/slot concept.
 
 <P>
-Elements in Qt are <SPAN  CLASS="textsl">Widgets</SPAN> which can contain
-anything form plots, buttons or text fields. They are
-classes. You can define your own widgets or use ready-made ones.
+Elements in Qt are <SPAN  CLASS="textsl">Widgets</SPAN> which can contain anything form
+plots, buttons or text fields. They are classes. You can define your
+own widgets or use ready-made ones. Realtime communication within QT
+happens between widgets where then one widget calls another widget,
+for example a button the calls the main window if a button press has
+happened.
 
 <P>
 
-<H1><A ID="SECTION00520000000000000000">
-Layout in Qt</A>
-</H1>
-
-<P>
-
-<DIV class="CENTER"><A ID="qwtex"></A><A ID="384"></A>
+<DIV class="CENTER"><A ID="qwtex"></A><A ID="383"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 4.1:</STRONG>
 QT example layout
@@ -113,7 +112,8 @@ QT example layout
 </DIV>
 
 <P>
-There are different ways of declaring layout in Qt. One is
+The arrangements of widgets on the screen is managed by
+layouts. There are different ways of declaring layout in Qt. One is
 using a markup language which then has matching classes;
 another is creating to use only C++ classes.
 We show how to organise the layout using the second method.
@@ -147,11 +147,11 @@ setLayout(hLayout);
 
 <P>
 
-<H1><A ID="SECTION00530000000000000000">
+<H1><A ID="SECTION00520000000000000000">
 Callbacks in Qt</A>
 </H1>
 
-<H2><A ID="SECTION00531000000000000000">
+<H2><A ID="SECTION00521000000000000000">
 Events from widgets</A>
 </H2>
 In contrast to our low level callback mechanism using interfaces, Qt rather
@@ -169,7 +169,7 @@ method <SPAN  CLASS="texttt">reset()</SPAN> in the application Widget.
 
 <P>
 
-<H2><A ID="SECTION00532000000000000000">
+<H2><A ID="SECTION00522000000000000000">
 Plotting realtime data arriving via a callback</A>
 </H2>
 The general idea is to store the real-time samples from a callback in a
@@ -225,7 +225,7 @@ reasons.
 
 <P>
 
-<H1><A ID="SECTION00540000000000000000">
+<H1><A ID="SECTION00530000000000000000">
 Conclusion</A>
 </H1>
 Events in Qt are generated by user interaction, for example a button

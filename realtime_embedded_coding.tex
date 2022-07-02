@@ -852,17 +852,22 @@ and callbacks.
 
 
 
-\chapter{Realtime/event processing in Qt\label{qt}}
+\chapter{Realtime/event processing within the Graphical User Interface Qt\label{qt}}
 
 \section{Introduction}
-\textbf{Qt} is a cross-platform windows development environment
-for Linux, Windows and Mac.
+\textbf{Qt} is a cross-platform windows development environment for
+Linux, Windows and Mac. Such graphical user interfaces have realtime
+requirements because, for example, pressing a button should trigger an
+instant response by the application so that the user thinks this has
+been instantaneous. QT also works with callbacks as introduced above
+but they are wrapped in a QT-specific signal/slot concept.
 
-Elements in Qt are \textsl{Widgets} which can contain
-anything form plots, buttons or text fields. They are
-classes. You can define your own widgets or use ready-made ones.
-
-\section{Layout in Qt}
+Elements in Qt are \textsl{Widgets} which can contain anything form
+plots, buttons or text fields. They are classes. You can define your
+own widgets or use ready-made ones. Realtime communication within QT
+happens between widgets where then one widget calls another widget,
+for example a button the calls the main window if a button press has
+happened.
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -872,7 +877,8 @@ classes. You can define your own widgets or use ready-made ones.
 \label{qwtex}}
 \end{figure}
 
-There are different ways of declaring layout in Qt. One is
+The arrangements of widgets on the screen is managed by
+layouts. There are different ways of declaring layout in Qt. One is
 using a markup language which then has matching classes;
 another is creating to use only C++ classes.
 We show how to organise the layout using the second method.
