@@ -482,6 +482,22 @@ Both can be found here:
 \url{https://github.com/alsa-project}.
 
 
+\subsection{Video camera capture (openCV)}
+
+Reading from a video camera is usually done with the help of openCV which is a wrapper
+around the raw video 4 Linux devices. These are again blocking so that as before
+a loop needs to run in a thread:
+\begin{verbatim}
+while(running) {
+    cv::Mat cap;
+    videoCapture.read(cap);
+    sceneCallback->nextScene(cap);
+}
+\end{verbatim}
+The \texttt{read(cap)} command is blocking till a new frame has
+arrived which is then transmitted with the callback \texttt{nextScene}
+to the client. The full code of the example camera class is here:
+\href{https://github.com/berndporr/opencv-camera-callback}.
 
 
 \subsection{Accessing physical memory locations (danger!)}

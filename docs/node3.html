@@ -33,7 +33,7 @@
 <A
  HREF="node2.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html125"
+<A ID="tex2html127"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node2.html">Introduction</A>
- &nbsp; <B>  <A ID="tex2html126"
+ &nbsp; <B>  <A ID="tex2html128"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,51 +52,53 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html127"
+<LI><A ID="tex2html129"
   HREF="node3.html#SECTION00310000000000000000">General recommendations on how to write your C++ classes for devices</A>
-<LI><A ID="tex2html128"
+<LI><A ID="tex2html130"
   HREF="node3.html#SECTION00320000000000000000">Low level userspace device access</A>
 <UL>
-<LI><A ID="tex2html129"
+<LI><A ID="tex2html131"
   HREF="node3.html#SECTION00321000000000000000">SPI</A>
-<LI><A ID="tex2html130"
+<LI><A ID="tex2html132"
   HREF="node3.html#SECTION00322000000000000000">I2C</A>
 <UL>
-<LI><A ID="tex2html131"
+<LI><A ID="tex2html133"
   HREF="node3.html#SECTION00322100000000000000">Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
-<LI><A ID="tex2html132"
+<LI><A ID="tex2html134"
   HREF="node3.html#SECTION00322200000000000000">I2C access via pigpio</A>
 </UL>
-<LI><A ID="tex2html133"
+<LI><A ID="tex2html135"
   HREF="node3.html#SECTION00323000000000000000">Access GPIO pins</A>
 <UL>
-<LI><A ID="tex2html134"
+<LI><A ID="tex2html136"
   HREF="node3.html#SECTION00323100000000000000"><SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
-<LI><A ID="tex2html135"
+<LI><A ID="tex2html137"
   HREF="node3.html#SECTION00323200000000000000">pigpio</A>
 </UL>
-<LI><A ID="tex2html136"
-  HREF="node3.html#SECTION00324000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
-<LI><A ID="tex2html137"
-  HREF="node3.html#SECTION00325000000000000000">I2S: Audio</A>
 <LI><A ID="tex2html138"
-  HREF="node3.html#SECTION00326000000000000000">Accessing physical memory locations (danger!)</A>
+  HREF="node3.html#SECTION00324000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
+<LI><A ID="tex2html139"
+  HREF="node3.html#SECTION00325000000000000000">I2S: Audio</A>
+<LI><A ID="tex2html140"
+  HREF="node3.html#SECTION00326000000000000000">Video camera capture (openCV)</A>
+<LI><A ID="tex2html141"
+  HREF="node3.html#SECTION00327000000000000000">Accessing physical memory locations (danger!)</A>
 </UL>
 <BR>
-<LI><A ID="tex2html139"
+<LI><A ID="tex2html142"
   HREF="node3.html#SECTION00330000000000000000">Kernel driver programming</A>
-<LI><A ID="tex2html140"
+<LI><A ID="tex2html143"
   HREF="node3.html#SECTION00340000000000000000">Callbacks in C++ device classes (getting data)</A>
 <UL>
-<LI><A ID="tex2html141"
+<LI><A ID="tex2html144"
   HREF="node3.html#SECTION00341000000000000000">Creating a callback interface</A>
-<LI><A ID="tex2html142"
+<LI><A ID="tex2html145"
   HREF="node3.html#SECTION00342000000000000000">Adding directly an abstract method to the device driver class</A>
-<LI><A ID="tex2html143"
+<LI><A ID="tex2html146"
   HREF="node3.html#SECTION00343000000000000000">Callback arguments</A>
 </UL>
 <BR>
-<LI><A ID="tex2html144"
+<LI><A ID="tex2html147"
   HREF="node3.html#SECTION00350000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -159,7 +161,7 @@ the C++ driver classes for different hardware protocols.
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="375"></A>
+  <A ID="381"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 2.1:</STRONG>
 SPI modes</CAPTION>
@@ -519,6 +521,28 @@ Both can be found here:
 <P>
 
 <H2><A ID="SECTION00326000000000000000">
+Video camera capture (openCV)</A>
+</H2>
+
+<P>
+Reading from a video camera is usually done with the help of openCV which is a wrapper
+around the raw video 4 Linux devices. These are again blocking so that as before
+a loop needs to run in a thread:
+<PRE>
+while(running) {
+    cv::Mat cap;
+    videoCapture.read(cap);
+    sceneCallback-&gt;nextScene(cap);
+}
+</PRE>
+The <SPAN  CLASS="texttt">read(cap)</SPAN> command is blocking till a new frame has
+arrived which is then transmitted with the callback <SPAN  CLASS="texttt">nextScene</SPAN>
+to the client. The full code of the example camera class is here:
+<a href="https://github.com/berndporr/opencv-camera-callback">.</a>
+
+<P>
+
+<H2><A ID="SECTION00327000000000000000">
 Accessing physical memory locations (danger!)</A>
 </H2>
 
