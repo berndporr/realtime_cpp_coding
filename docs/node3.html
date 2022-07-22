@@ -33,7 +33,7 @@
 <A
  HREF="node2.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html127"
+<A ID="tex2html128"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node2.html">Introduction</A>
- &nbsp; <B>  <A ID="tex2html128"
+ &nbsp; <B>  <A ID="tex2html129"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,53 +52,53 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html129"
-  HREF="node3.html#SECTION00310000000000000000">General recommendations on how to write your C++ classes for devices</A>
 <LI><A ID="tex2html130"
+  HREF="node3.html#SECTION00310000000000000000">General recommendations on how to write your C++ classes for devices</A>
+<LI><A ID="tex2html131"
   HREF="node3.html#SECTION00320000000000000000">Low level userspace device access</A>
 <UL>
-<LI><A ID="tex2html131"
-  HREF="node3.html#SECTION00321000000000000000">SPI</A>
 <LI><A ID="tex2html132"
+  HREF="node3.html#SECTION00321000000000000000">SPI</A>
+<LI><A ID="tex2html133"
   HREF="node3.html#SECTION00322000000000000000">I2C</A>
 <UL>
-<LI><A ID="tex2html133"
-  HREF="node3.html#SECTION00322100000000000000">Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
 <LI><A ID="tex2html134"
+  HREF="node3.html#SECTION00322100000000000000">Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
+<LI><A ID="tex2html135"
   HREF="node3.html#SECTION00322200000000000000">I2C access via pigpio</A>
 </UL>
-<LI><A ID="tex2html135"
+<LI><A ID="tex2html136"
   HREF="node3.html#SECTION00323000000000000000">Access GPIO pins</A>
 <UL>
-<LI><A ID="tex2html136"
-  HREF="node3.html#SECTION00323100000000000000"><SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
 <LI><A ID="tex2html137"
+  HREF="node3.html#SECTION00323100000000000000"><SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
+<LI><A ID="tex2html138"
   HREF="node3.html#SECTION00323200000000000000">pigpio</A>
 </UL>
-<LI><A ID="tex2html138"
-  HREF="node3.html#SECTION00324000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
 <LI><A ID="tex2html139"
-  HREF="node3.html#SECTION00325000000000000000">I2S: Audio</A>
+  HREF="node3.html#SECTION00324000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
 <LI><A ID="tex2html140"
-  HREF="node3.html#SECTION00326000000000000000">Video camera capture (openCV)</A>
+  HREF="node3.html#SECTION00325000000000000000">I2S: Audio</A>
 <LI><A ID="tex2html141"
+  HREF="node3.html#SECTION00326000000000000000">Video camera capture (openCV)</A>
+<LI><A ID="tex2html142"
   HREF="node3.html#SECTION00327000000000000000">Accessing physical memory locations (danger!)</A>
 </UL>
 <BR>
-<LI><A ID="tex2html142"
-  HREF="node3.html#SECTION00330000000000000000">Kernel driver programming</A>
 <LI><A ID="tex2html143"
+  HREF="node3.html#SECTION00330000000000000000">Kernel driver programming</A>
+<LI><A ID="tex2html144"
   HREF="node3.html#SECTION00340000000000000000">Callbacks in C++ device classes (getting data)</A>
 <UL>
-<LI><A ID="tex2html144"
-  HREF="node3.html#SECTION00341000000000000000">Creating a callback interface</A>
 <LI><A ID="tex2html145"
-  HREF="node3.html#SECTION00342000000000000000">Adding directly an abstract method to the device driver class</A>
+  HREF="node3.html#SECTION00341000000000000000">Creating a callback interface</A>
 <LI><A ID="tex2html146"
+  HREF="node3.html#SECTION00342000000000000000">Adding directly an abstract method to the device driver class</A>
+<LI><A ID="tex2html147"
   HREF="node3.html#SECTION00343000000000000000">Callback arguments</A>
 </UL>
 <BR>
-<LI><A ID="tex2html147"
+<LI><A ID="tex2html148"
   HREF="node3.html#SECTION00350000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -538,7 +538,8 @@ while(running) {
 The <SPAN  CLASS="texttt">read(cap)</SPAN> command is blocking till a new frame has
 arrived which is then transmitted with the callback <SPAN  CLASS="texttt">nextScene</SPAN>
 to the client. The full code of the example camera class is here:
-<a href="https://github.com/berndporr/opencv-camera-callback">.</a>
+<kbd><A ID="tex2html13"
+  HREF="https://github.com/berndporr/opencv-camera-callback">https://github.com/berndporr/opencv-camera-callback</A></kbd>.
 
 <P>
 
@@ -672,7 +673,7 @@ receives the pointer of the interface as an argument, for example:
 This allows to register a callback optionally. The client may or may not need
 one.
 See
-<kbd><A ID="tex2html13"
+<kbd><A ID="tex2html14"
   HREF="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</A></kbd>for a complete example.
 
 <P>
@@ -694,7 +695,7 @@ the class. This creates a very safe environment as all dependencies
 are set at compile time and the abstract nature of the base class
 makes clear what needs to be implemented.
 See
-<kbd><A ID="tex2html14"
+<kbd><A ID="tex2html15"
   HREF="https://github.com/berndporr/rpi_ads1115">https://github.com/berndporr/rpi_ads1115</A></kbd> for a complete example.
 
 <P>
@@ -753,13 +754,13 @@ In terms of <SPAN  CLASS="textsl">memory management</SPAN>:
 
 <OL>
 <LI>Low sampling rate complex data structures: allocate as a local variable. It can be a simple type
-  or a struct. See <SPAN  CLASS="texttt">dataReady()</SPAN> in: <kbd><A ID="tex2html15"
+  or a struct. See <SPAN  CLASS="texttt">dataReady()</SPAN> in: <kbd><A ID="tex2html16"
   HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp</A></kbd>.
 </LI>
 <LI>High sampling rate buffers: allocate memory on the heap in the
   constructor or in the private section of the class as a const length
   array and pass on a <SPAN  CLASS="textsl">reference</SPAN>. See <SPAN  CLASS="texttt">getData()</SPAN> in
-  <kbd><A ID="tex2html16"
+  <kbd><A ID="tex2html17"
   HREF="https://github.com/berndporr/rplidar_rpi">https://github.com/berndporr/rplidar_rpi</A></kbd>.
 </LI>
 </OL>
