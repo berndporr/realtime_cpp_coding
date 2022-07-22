@@ -523,11 +523,10 @@ Both can be found here:
 <H2><A ID="SECTION00326000000000000000">
 Video camera capture (openCV)</A>
 </H2>
-
-<P>
-Reading from a video camera is usually done with the help of openCV which is a wrapper
-around the raw video 4 Linux devices. These are again blocking so that as before
-a loop needs to run in a thread:
+Reading from a video camera is usually done with the help of openCV
+which is a wrapper around the raw video 4 Linux devices. These are
+blocking to establish the capture events so that a loop needs to run in
+a thread:
 <PRE>
 while(running) {
     cv::Mat cap;

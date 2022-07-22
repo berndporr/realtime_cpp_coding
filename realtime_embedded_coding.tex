@@ -483,10 +483,10 @@ Both can be found here:
 
 
 \subsection{Video camera capture (openCV)}
-
-Reading from a video camera is usually done with the help of openCV which is a wrapper
-around the raw video 4 Linux devices. These are again blocking so that as before
-a loop needs to run in a thread:
+Reading from a video camera is usually done with the help of openCV
+which is a wrapper around the raw video 4 Linux devices. These are
+blocking to establish the capture events so that a loop needs to run in
+a thread:
 \begin{verbatim}
 while(running) {
     cv::Mat cap;
