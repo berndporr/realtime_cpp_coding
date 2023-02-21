@@ -36,6 +36,8 @@
 \label{timing}}
 \end{figure}
 
+\section{Event based coding in the Linux userspace}
+
 Realtime embedded coding is all about \textsl{events}.
 These can be a binary signal such as somebody opening a door or
 an ADC signalling that a sample is ready to be picked up.
@@ -61,7 +63,7 @@ which change an object's attributes and potentially do other processing.
 \label{gettersetters}}
 \end{figure}
 Fig.~\ref{gettersetters} shows the overall communication between C++
-classes in a realtime system. This communication is done via callbacks
+classes in a realtime system. This communication is done via \textbf{callbacks}
 (\textsl{not} getters) and setters, where an event from a sensor
 traverses according to its realtime requirements through the C++ classes via
 callbacks and then back to the control output via setters. For example,
@@ -126,6 +128,8 @@ an accelerometer.
 
 Besides S.O.L.I.D it's also essential that:
 \begin{enumerate}
+\item you use \textbf{C++11 (or later) memory management}: copy constructors, standard template library (STL) containers and no raw pointers
+  managed with new/delete.
 \item the project has a \textbf{build system} such as cmake. It's
   strongly recommended to use \textbf{cmake} (autoconf only for older existing
   projects). This is especially true for Qt projects, where cmake support
@@ -193,359 +197,9 @@ particular:
   a client program might use it.
 \end{enumerate}
 
-\section{Low level userspace device access}
-The following sections provide pointers of how to write
-the C++ driver classes for different hardware protocols.
-
-\subsection{SPI}
-\begin{table}[!ht]
-  \begin{center}
-  \caption{SPI modes\label{spimodes}}
-  \begin{tabular}{l|l|l|l}
-    SPI Mode & 	CPOL & 	CPHA & Idle state \\
-    \hline
-    0& 	0&	0& 	L \\
-    1& 	0&	1& 	L \\
-    2& 	1&	1& 	H \\
-    3& 	1&	0& 	H \\
-  \end{tabular}
-  \end{center}
-\end{table}
-SPI is a protocol which usually transmits and receives at the same
-time. Even though data might not be used it needs to be matched up,
-because the same clock is used to send and collect the data signal
-(it is \emph{isochronous}).
-So if you send 8 bytes the hardware receives 8 bytes at the same time.
-
-Transfer to/from SPI is best managed by the low level access to \texttt{/dev}.
-Open the SPI device with the standard \texttt{open()} function:
-\begin{verbatim}
-int fd = open( "/dev/spidev0.0", O_RDWR);
-\end{verbatim}
-
-Then set the SPI mode (see table~\ref{spimodes}):
-\begin{verbatim}
-int ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
-\end{verbatim}
-as explained, for example, here:
-\url{https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html}.
-
-Because SPI is isochronous, \texttt{read()} and \texttt{write()}
-can't be used to transmit and receive data. Instead, the simultaneous
-read and write is performed using an \texttt{ioctl()} to do the communication.
-Populate this struct:
-\begin{verbatim}
-struct spi_ioc_transfer tr {
-  .tx_buf = (unsigned long)tx1,
-  .rx_buf = (unsigned long)rx1,
-  .len = ARRAY_SIZE(tx1),
-  .delay_usecs = delay,
-  .speed_hz = speed,
-  .bits_per_word = 8,
-};
-\end{verbatim}
-which points to two character buffers ``tx'' and ``rx'' with the
-same length\footnote{This code fragment's use of designated initialisers
-officially requires C++2a, although most C++ compilers support it
-when compiling with older standards. In C it's been fine for a while!}.
-
-Reading and simultaneous writing then happens via this \texttt{ioctrl()}
-function call:
-\begin{verbatim}
-int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
-\end{verbatim}
-
-Sometimes the SPI protocol of a chip is so odd that even the raw I/O
-via \texttt{/dev} won't work and you need to write your own bit
-banging interface, for example done here for the ADC on the alphabot:
-\url{https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58}.
-This is obviously far from ideal as it might require \texttt{usleep()}
-commands so that acquisition needs to be run in a separate thread (the
-alphabot indeed uses a timer callback in a separate thread).
-
-Overall the SPI protocol is often device dependent and calls
-for experimentation to get it to work. On some ADCs the SPI clock is also
-the conversion clock and a longer lasting clock signal sequence is required,
-making it necessary to transmit dummy bytes in addition to the payload.
-
-As a general recommendation do not use SAR converters which use the
-SPI data clock also as acquisition clock as they are often not compatible
-with the standard SPI transfers via \texttt{/dev}. Use sensors or ADCs which
-have their own clock signal.
 
 
-\subsection{I2C}
-The I2C bus has two signal lines (SDA \& SDL) which must be pulled up
-by resistors. Every I2C device has an address on the bus. You can scan
-a bus with \textbf{i2cdetect} (part of the i2c-tools package):
-\begin{verbatim}
-root@raspberrypi:/home/pi# i2cdetect -y 1
-     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-00:                         -- -- -- -- -- -- -- -- 
-10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- 1e -- 
-20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
-50: -- -- -- -- -- -- -- -- 58 -- -- -- -- -- -- -- 
-60: -- -- -- -- -- -- -- -- -- -- -- 6b -- -- -- -- 
-70: -- -- -- -- -- -- -- --                         
-root@raspberrypi:/home/pi# 
-\end{verbatim}
-In this case there are 3 I2C devices on the I2C bus at addresses
-1E, 58 and 6B and need to be specified when
-accessing the I2C device.
-
-\subsubsection{Raw \texttt{/dev/i2c} access}
-I2C either transmits or receives but never at the same time so here we
-can use the standard C read/write commands. However, we need to use ioctrl to tell
-the kernel the I2C address:
-\begin{verbatim}
-char buf[2];
-int file = open("/dev/i2c-2",O_RDWR);
-int addr = 0x58;
-ioctl(file, I2C_SLAVE, addr);
-write(file, buf, 1)
-read(file, buf, 2)
-\end{verbatim}
-where \texttt{addr} is the I2C address. Then use standard \texttt{read()}
-or \texttt{write()} commands. Usually the 1st write operation tells the chip
-which register to read or write to. Subsequent operations read
-or write that register.
-
-\subsubsection{I2C access via pigpio}
-Access via pigpio (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
-is preferred in contrast to direct
-access of the raw /dev/i2c because many different devices
-can be connected to the I2C bus and pigpio manages this.
-Simply install the development package:
-\begin{verbatim}
-sudo apt-get install libpigpio-dev
-\end{verbatim}
-which triggers then the install of the other relevant packages.
-For example writing a byte to a register in an I2C sensor can be done with a
-few commands:
-\begin{verbatim}
-int fd = i2cOpen(i2c_bus, address, 0);
-i2cWriteByteData(fd, subAddress, data);
-i2cClose(fd);
-\end{verbatim}
-where \texttt{i2c\_bus} is the I2C bus number (usually 1 on the RPI)
-and the \texttt{address} is the I2C address of the device on that bus.
-The \texttt{subAddress} here is the register address in the device.
-
-\subsection{Access GPIO pins}
-\subsubsection{\texttt{/sys} filesystem}
-The GPIO of the raspberry PI can easily be controlled via
-the \texttt{/sys} filesystem. This is slow but good for
-debugging as you can directly write a
-``0'' or ``1'' string to it and print the result. The
-pseudo files are here:
-\begin{verbatim}
-/sys/class/gpio
-\end{verbatim}
-which contains files which directly relate to individual pins.
-To be able to access a pin we need to tell Linux to make
-it visible:
-\begin{verbatim}
-/sys/class/gpio/export
-\end{verbatim}
-For example, writing a 5 (in text form) to this file would
-create the subdirectory \texttt{/sys/class/gpio/gpio5} for GPIO pin 5.
-Then reading from
-\begin{verbatim}
-/sys/class/gpio/gpio5/value
-\end{verbatim}
-would give you the status of GPIO pin 5 and writing
-to it would change it.
-A thin wrapper around the GPIO sys filesystem is here: \url{https://github.com/berndporr/gpio-sysfs}.
-
-\paragraph{GPIO interrupt handling via \texttt{/sys}\label{gpioIRQ}.}
-The most important application for the /sys filesystem is to
-do interrupt processing in userspace.
-A thread can be put to sleep until an interrupt has happened on one of
-the GPIO pins. This is done by monitoring the ``value''
-of a GPIO pin in the \texttt{/sys} filesystem with the ``poll'' command:
-\begin{verbatim}
-struct pollfd fdset[1];
-int nfds = 1;
-int gpio_fd = open("/sys/class/gpio/gpio5/value", O_RDONLY | O_NONBLOCK );
-memset((void*)fdset, 0, sizeof(fdset));
-fdset[0].fd = gpio_fd;
-fdset[0].events = POLLPRI;
-int rc = poll(fdset, nfds, timeout);
-if (fdset[0].revents & POLLPRI) {
-   // dummy
-   read(fdset[0].fd, buf, MAX_BUF);
-}
-\end{verbatim}
-This code makes the thread go to sleep until an interrupt has occurred on
-GPIO pin~5. Then the thread wakes up and execution continues.
-
-\subsubsection{pigpio}
-The above section has given you a deep understanding what's happening
-under the hood on the sysfs-level but it's highly recommended to
-use the pigpio library (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
-to read/write to GPIO pins or do interrupt programming.
-
-For example to set GPIO pin 24 as an input just call:
-\begin{verbatim}
-gpioSetMode(24,PI_INPUT);
-\end{verbatim}
-
-To read from GPIO pin 24 just call:
-\begin{verbatim}
-int a = gpioRead(24)
-\end{verbatim}
-
-\paragraph{interrupt handling via pigpio.}
-pigpio manages GPIO interrupt handling by wrapping all the above
-functionality into a single command where the client registers a
-callback function. The callback occurs whenever a GPIO pin changes.
-Specifically a method of the form:
-\begin{verbatim}
-class mySensorClass {
-  ...
-  static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)
-  ...
-}
-\end{verbatim}
-is registered with pigpio:
-\begin{verbatim}
-gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
-\end{verbatim}
-where ``this'' is the pointer to your class instance.
-The callback registered will then be \texttt{this->dataReady()}.
-\begin{verbatim}
-class LSM9DS1 {
-  void dataReady();
-  static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
-    {
-        ((LSM9DS1*)userdata)->dataReady();
-    }
-};
-\end{verbatim}
-where here within the static function the void pointer is cast back into the instance pointer.
-See \url{https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library} for the complete code.
-
-
-
-\subsection{Access to hardware via special devices in \texttt{/sys}}
-Some sensors are directly available via the sys filesystem in human readable format.
-For example
-\begin{verbatim}
-cat /sys/class/thermal/thermal_zone0/temp
-\end{verbatim}
-gives you the temperature of the CPU.
-
-
-
-
-\subsection{I2S: Audio}
-The standard framework for audio is alsa: \url{https://github.com/alsa-project}.
-
-ALSA is packet based with a read command
-returning a chunk ("buffer") of audio and write emitting one.
-There are calls to set the sample format, sample rate, buffer size
-and so forth.
-
-First, the parameters are requested and the driver can modify or
-reject them:
-\begin{verbatim}
-/* Signed 16-bit little-endian format */
-  snd_pcm_hw_params_set_format(handle, params,
-                               SND_PCM_FORMAT_S16_LE);
-
-  /* One channel (mono) */
-  snd_pcm_hw_params_set_channels(handle, params, 1);
-
-  /* 44100 bits/second sampling rate (CD quality) */
-  val = 44100;
-  snd_pcm_hw_params_set_rate_near(handle, params,
-                                  &val, &dir);
-\end{verbatim}
-
-Then playing sound is done in an endless loop were a read()
-or write() command is issued. Both are blocking so that
-it needs to run in a thread:
-
-\begin{verbatim}
- while (running) {
-   if ((err = snd_pcm_readi (handle, buffer, buffer_frames)) != buffer_frames) {
-     if (errCallback) errCallback->hasError();
-   }
-   if (sampleCallback) sampleCallback->hasData(buffer);
- }
-\end{verbatim}
-
-For a full coding example ``aplay'' and ``arecord'' are a good start.
-Both can be found here:
-\url{https://github.com/alsa-project}.
-
-
-\subsection{Video camera capture (openCV)}
-Reading from a video camera is usually done with the help of openCV
-which is a wrapper around the raw video 4 Linux devices. These are
-blocking to establish the capture events so that a loop needs to run in
-a thread:
-\begin{verbatim}
-while(running) {
-    cv::Mat cap;
-    videoCapture.read(cap);
-    sceneCallback->nextScene(cap);
-}
-\end{verbatim}
-The \texttt{read(cap)} command is blocking till a new frame has
-arrived which is then transmitted with the callback \texttt{nextScene}
-to the client. The full code of the example camera class is here:
-\url{https://github.com/berndporr/opencv-camera-callback}.
-
-
-\subsection{Accessing physical memory locations (danger!)}
-
-Don't.
-In case you really need to access registers you can
-also access memory directly. This should only be used as a last resort.
-For example, setting the clock for the AD converter requires
-turning a GPIO pin into a clock output pin. This is not yet
-supported by the drivers so we need to program registers
-on the RPI.
-\begin{itemize}
-\item Linux uses virtual addresses so that a pointer won't
-point to a physical memory location. It points to three page
-tables with an offset.
-\item Special device \texttt{/dev/mem} allows access to physical
-memory.
-\item The command \textbf{mmap} provides a pointer to a physical
-address by opening \texttt{/dev/mem}.
-\item Example:
-\begin{verbatim}
-int *addr;
-if ((fd = open("/dev/mem", O_RDWR|O_SYNC)) < 0 ) {
-    printf("Error opening file. \n");
-    close(fd);
-    return (-1);
-}
-addr = (int *)mmap(0, num*STRUCT_PAGE_SIZE, PROT_READ, MAP_PRIVATE,
-            fd, 0x0000620000000000);
-printf("addr: %p \n",addr);
-printf("addr: %d \n",*addr);
-\end{verbatim}
-\item Use this with care! It's dangerous if not used properly.
-\end{itemize}
-
-
-\section{Kernel driver programming}
-You can also create your own \texttt{/dev/mydevice} in the \texttt{/dev} filesystem
-by writing a kernel driver and a matching userspace library. For
-example the USB mouse has a driver in kernel space and translates
-the raw data from the mouse into coordinates. However,
-this is beyond the scope of this handout. If you want to embark
-on this adventure then the best approach is to
-find a kernel driver which does approximately what you want and
-modify it for your purposes.
-
-
-\section{Callbacks in C++ device classes (getting data)}
+\section{Callbacks in C++ device classes}
 As said in the introduction your hardware device class has callback interfaces
 to hand back the data to the client.
 
@@ -602,7 +256,7 @@ void LSM9DS1::dataReady() {
 The pointer to the interface instance is transmitted via a setter which
 receives the pointer of the interface as an argument, for example:
 \begin{verbatim}
-        void registerCallback(LSM9DS1callback* cb);
+void LSM9DS1::registerCallback(LSM9DS1callback* cb);
 \end{verbatim}
 This allows to register a callback optionally. The client may or may not need
 one.
@@ -681,6 +335,389 @@ In terms of \textsl{memory management}:
   array and pass on a \textsl{reference}. See \texttt{getData()} in
   \url{https://github.com/berndporr/rplidar_rpi}.
 \end{enumerate}
+
+
+
+
+
+
+\section{Low level userspace device access}
+The following sections provide pointers of how to write
+the C++ driver classes for different hardware protocols.
+
+Note that the best I/O is blocking and by itself provides the timing for example
+when waiting for a GPIO change, doing audio or video I/O.
+
+
+
+\subsection{Access GPIO pins}
+\subsubsection{\texttt{/sys} filesystem}
+The GPIO of the raspberry PI can easily be controlled via
+the \texttt{/sys} filesystem. This is slow but good for
+debugging as you can directly write a
+``0'' or ``1'' string to it and print the result. The
+pseudo files are here:
+\begin{verbatim}
+/sys/class/gpio
+\end{verbatim}
+which contains files which directly relate to individual pins.
+To be able to access a pin we need to tell Linux to make
+it visible:
+\begin{verbatim}
+/sys/class/gpio/export
+\end{verbatim}
+For example, writing a 5 (in text form) to this file would
+create the subdirectory \texttt{/sys/class/gpio/gpio5} for GPIO pin 5.
+Then reading from
+\begin{verbatim}
+/sys/class/gpio/gpio5/value
+\end{verbatim}
+would give you the status of GPIO pin 5 and writing
+to it would change it.
+A thin wrapper around the GPIO sys filesystem is here: \url{https://github.com/berndporr/gpio-sysfs}.
+
+\paragraph{GPIO interrupt handling via \texttt{/sys}\label{gpioIRQ}.}
+The most important application for the /sys filesystem is to
+do interrupt processing in userspace.
+A thread can be put to sleep until an interrupt has happened on one of
+the GPIO pins. This is done by monitoring the ``value''
+of a GPIO pin in the \texttt{/sys} filesystem with the ``poll'' command:
+\begin{verbatim}
+struct pollfd fdset[1];
+int nfds = 1;
+int gpio_fd = open("/sys/class/gpio/gpio5/value", O_RDONLY | O_NONBLOCK );
+memset((void*)fdset, 0, sizeof(fdset));
+fdset[0].fd = gpio_fd;
+fdset[0].events = POLLPRI;
+int rc = poll(fdset, nfds, timeout);
+if (fdset[0].revents & POLLPRI) {
+   // dummy
+   read(fdset[0].fd, buf, MAX_BUF);
+}
+\end{verbatim}
+This code makes the thread go to sleep until an interrupt has occurred on
+GPIO pin~5. Then the thread wakes up and execution continues.
+
+\subsubsection{pigpio}
+The above section has given you a deep understanding what's happening
+under the hood on the sysfs-level but it's \textsl{highly recommended} to
+use the pigpio library (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
+to read/write to GPIO pins or do interrupt programming.
+
+For example to set GPIO pin 24 as an output just call:
+\begin{verbatim}
+gpioSetMode(24,PI_OUTPUT);
+\end{verbatim}
+
+To set the GPIO pin 24 to high just call:
+\begin{verbatim}
+int a = gpioWrite(24,1)
+\end{verbatim}
+
+\paragraph{Interrupt handling via pigpio:}
+pigpio manages GPIO interrupt handling by wrapping all the above
+functionality into a single command where the client registers a
+callback function. The callback occurs whenever a GPIO pin changes.
+Specifically a method of the form:
+\begin{verbatim}
+class mySensorClass {
+  ...
+  static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)
+  ...
+}
+\end{verbatim}
+is registered with pigpio:
+\begin{verbatim}
+gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
+\end{verbatim}
+where ``this'' is the pointer to your class instance.
+The callback registered will then be \texttt{this->dataReady()}.
+\begin{verbatim}
+class LSM9DS1 {
+  void dataReady();
+  static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
+    {
+        ((LSM9DS1*)userdata)->dataReady();
+    }
+};
+\end{verbatim}
+where here within the static function the void pointer is cast back into the instance pointer.
+See \url{https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library} for the complete code.
+
+
+
+
+
+
+\subsection{Video camera capture (openCV)}
+Reading from a video camera is usually done with the help of openCV
+which is a wrapper around the raw video 4 Linux devices. These are
+blocking to establish the capture events so that a loop needs to run in
+a thread:
+\begin{verbatim}
+while(running) {
+    cv::Mat cap;
+    videoCapture.read(cap);
+    sceneCallback->nextScene(cap);
+}
+\end{verbatim}
+The \texttt{read(cap)} command is blocking till a new frame has
+arrived which is then transmitted with the callback \texttt{nextScene}
+to the client. The full code of the example camera class is here:
+\url{https://github.com/berndporr/opencv-camera-callback}.
+
+
+
+
+
+
+
+
+\subsection{I2S: Audio}
+The standard framework for audio is alsa: \url{https://github.com/alsa-project}.
+
+ALSA is packet based with a read command
+returning a chunk ("buffer") of audio and write emitting one.
+There are calls to set the sample format, sample rate, buffer size
+and so forth.
+
+First, the parameters are requested and the driver can modify or
+reject them:
+\begin{verbatim}
+/* Signed 16-bit little-endian format */
+  snd_pcm_hw_params_set_format(handle, params,
+                               SND_PCM_FORMAT_S16_LE);
+
+  /* One channel (mono) */
+  snd_pcm_hw_params_set_channels(handle, params, 1);
+
+  /* 44100 bits/second sampling rate (CD quality) */
+  val = 44100;
+  snd_pcm_hw_params_set_rate_near(handle, params,
+                                  &val, &dir);
+\end{verbatim}
+
+Then playing sound is done in an endless loop were a read()
+or write() command is issued. Both are blocking so that
+it needs to run in a thread:
+
+\begin{verbatim}
+ while (running) {
+   if ((err = snd_pcm_readi (handle, buffer, buffer_frames)) != buffer_frames) {
+     if (errCallback) errCallback->hasError();
+   }
+   if (sampleCallback) sampleCallback->hasData(buffer);
+ }
+\end{verbatim}
+
+For a full coding example ``aplay'' and ``arecord'' are a good start.
+Both can be found here:
+\url{https://github.com/alsa-project}.
+
+
+
+
+
+
+\subsection{SPI}
+\begin{table}[!ht]
+  \begin{center}
+  \caption{SPI modes\label{spimodes}}
+  \begin{tabular}{l|l|l|l}
+    SPI Mode & 	CPOL & 	CPHA & Idle state \\
+    \hline
+    0& 	0&	0& 	L \\
+    1& 	0&	1& 	L \\
+    2& 	1&	1& 	H \\
+    3& 	1&	0& 	H \\
+  \end{tabular}
+  \end{center}
+\end{table}
+SPI is a protocol which usually transmits and receives at the same
+time. Its calls are blocking for the duration of receive and transmit but cannot be used for
+event based processing. If an SPI device is used events should be transmitted via an additional
+GPIO line. 
+Even though data might not be used it needs to be matched up,
+because the same clock is used to send and collect the data signal
+(it is \emph{isochronous}).
+So if you send 8 bytes the hardware receives 8 bytes at the same time.
+
+Transfer to/from SPI is best managed by the low level access to \texttt{/dev}.
+Open the SPI device with the standard \texttt{open()} function:
+\begin{verbatim}
+int fd = open( "/dev/spidev0.0", O_RDWR);
+\end{verbatim}
+
+Then set the SPI mode (see table~\ref{spimodes}):
+\begin{verbatim}
+int ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
+\end{verbatim}
+as explained, for example, here:
+\url{https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html}.
+
+Because SPI is isochronous, \texttt{read()} and \texttt{write()}
+can't be used to transmit and receive data. Instead, the simultaneous
+read and write is performed using an \texttt{ioctl()} to do the communication.
+Populate this struct:
+\begin{verbatim}
+struct spi_ioc_transfer tr {
+  .tx_buf = (unsigned long)tx1,
+  .rx_buf = (unsigned long)rx1,
+  .len = ARRAY_SIZE(tx1),
+  .delay_usecs = delay,
+  .speed_hz = speed,
+  .bits_per_word = 8,
+};
+\end{verbatim}
+which points to two character buffers ``tx'' and ``rx'' with the
+same length\footnote{This code fragment's use of designated initialisers
+officially requires C++2a, although most C++ compilers support it
+when compiling with older standards. In C it's been fine for a while!}.
+
+Reading and simultaneous writing then happens via this \texttt{ioctrl()}
+function call:
+\begin{verbatim}
+int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &tr);
+\end{verbatim}
+
+Sometimes the SPI protocol of a chip is so odd that even the raw I/O
+via \texttt{/dev} won't work and you need to write your own bit
+banging interface, for example done here for the ADC on the alphabot:
+\url{https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58}.
+This is obviously far from ideal as it might require \texttt{usleep()}
+commands so that acquisition needs to be run in a separate thread (the
+alphabot indeed uses a timer callback in a separate thread).
+
+Overall the SPI protocol is often device dependent and calls
+for experimentation to get it to work. On some ADCs the SPI clock is also
+the conversion clock and a longer lasting clock signal sequence is required,
+making it necessary to transmit dummy bytes in addition to the payload.
+
+As a general recommendation do not use SAR converters which use the
+SPI data clock also as acquisition clock as they are often not compatible
+with the standard SPI transfers via \texttt{/dev}. Use sensors or ADCs which
+have their own clock signal.
+
+
+\subsection{I2C}
+I2C is a protocol which either receives or transmits. Its calls are blocking for the duration of receive or transmit 
+but only in rare cases can be used for event based processing. It is recommended to use an additonal GPIO pin for
+events for example for a data-ready event.
+
+The I2C bus has two signal lines (SDA \& SDL) which must be pulled up
+by resistors. Every I2C device has an address on the bus. You can scan
+a bus with \textbf{i2cdetect} (part of the i2c-tools package):
+\begin{verbatim}
+root@raspberrypi:/home/pi# i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- 1e -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- 58 -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- 6b -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+root@raspberrypi:/home/pi# 
+\end{verbatim}
+In this case there are 3 I2C devices on the I2C bus at addresses
+1E, 58 and 6B and need to be specified when
+accessing the I2C device.
+
+\subsubsection{Raw \texttt{/dev/i2c} access}
+I2C either transmits or receives but never at the same time so here we
+can use the standard C read/write commands. However, we need to use ioctrl to tell
+the kernel the I2C address:
+\begin{verbatim}
+char buf[2];
+int file = open("/dev/i2c-2",O_RDWR);
+int addr = 0x58;
+ioctl(file, I2C_SLAVE, addr);
+write(file, buf, 1)
+read(file, buf, 2)
+\end{verbatim}
+where \texttt{addr} is the I2C address. Then use standard \texttt{read()}
+or \texttt{write()} commands. Usually the 1st write operation tells the chip
+which register to read or write to. Subsequent operations read
+or write that register.
+
+\subsubsection{I2C access via pigpio}
+Access via pigpio (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
+is preferred in contrast to direct
+access of the raw /dev/i2c because many different devices
+can be connected to the I2C bus and pigpio manages this.
+Simply install the development package:
+\begin{verbatim}
+sudo apt-get install libpigpio-dev
+\end{verbatim}
+which triggers then the install of the other relevant packages.
+For example writing a byte to a register in an I2C sensor can be done with a
+few commands:
+\begin{verbatim}
+int fd = i2cOpen(i2c_bus, address, 0);
+i2cWriteByteData(fd, subAddress, data);
+i2cClose(fd);
+\end{verbatim}
+where \texttt{i2c\_bus} is the I2C bus number (usually 1 on the RPI)
+and the \texttt{address} is the I2C address of the device on that bus.
+The \texttt{subAddress} here is the register address in the device.
+
+\subsection{Access to hardware via special devices in \texttt{/sys}}
+Some sensors are directly available via the sys filesystem in human readable format.
+For example
+\begin{verbatim}
+cat /sys/class/thermal/thermal_zone0/temp
+\end{verbatim}
+gives you the temperature of the CPU.
+
+
+
+
+
+
+\subsection{Accessing physical memory locations (danger!)}
+
+Don't.
+In case you really need to access registers you can
+also access memory directly. This should only be used as a last resort.
+For example, setting the clock for the AD converter requires
+turning a GPIO pin into a clock output pin. This is not yet
+supported by the drivers so we need to program registers
+on the RPI.
+\begin{itemize}
+\item Linux uses virtual addresses so that a pointer won't
+point to a physical memory location. It points to three page
+tables with an offset.
+\item Special device \texttt{/dev/mem} allows access to physical
+memory.
+\item The command \textbf{mmap} provides a pointer to a physical
+address by opening \texttt{/dev/mem}.
+\item Example:
+\begin{verbatim}
+int *addr;
+if ((fd = open("/dev/mem", O_RDWR|O_SYNC)) < 0 ) {
+    printf("Error opening file. \n");
+    close(fd);
+    return (-1);
+}
+addr = (int *)mmap(0, num*STRUCT_PAGE_SIZE, PROT_READ, MAP_PRIVATE,
+            fd, 0x0000620000000000);
+printf("addr: %p \n",addr);
+printf("addr: %d \n",*addr);
+\end{verbatim}
+\item Use this with care! It's dangerous if not used properly.
+\end{itemize}
+
+
+\section{Kernel driver programming}
+You can also create your own \texttt{/dev/mydevice} in the \texttt{/dev} filesystem
+by writing a kernel driver and a matching userspace library. For
+example the USB mouse has a driver in kernel space and translates
+the raw data from the mouse into coordinates. However,
+this is beyond the scope of this handout. If you want to embark
+on this adventure then the best approach is to
+find a kernel driver which does approximately what you want and
+modify it for your purposes.
 
 
 \section{Conclusion}

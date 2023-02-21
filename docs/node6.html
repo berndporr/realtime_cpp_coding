@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 
-<!--Converted with LaTeX2HTML 2019.2 (Released June 5, 2019) -->
-<HTML lang="EN">
+<!--Converted with LaTeX2HTML 2021.2 (Released July 1, 2021) -->
+<HTML lang="en">
 <HEAD>
 <TITLE>Realtime web server/client communication</TITLE>
 <META NAME="description" CONTENT="Realtime embedded coding in C++ under Linux">
@@ -12,7 +12,7 @@
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
 <META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2019.2">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2021.2">
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
@@ -33,7 +33,7 @@
 <A
  HREF="node5.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html169"
+<A ID="tex2html172"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node5.html">Realtime/event processing within the</A>
- &nbsp; <B>  <A ID="tex2html170"
+ &nbsp; <B>  <A ID="tex2html173"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,39 +52,43 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html171"
+<LI><A ID="tex2html174"
   HREF="node6.html#SECTION00610000000000000000">Introduction</A>
-<LI><A ID="tex2html172"
+<LI><A ID="tex2html175"
   HREF="node6.html#SECTION00620000000000000000">REST</A>
-<LI><A ID="tex2html173"
+<LI><A ID="tex2html176"
   HREF="node6.html#SECTION00630000000000000000">Data formats</A>
 <UL>
-<LI><A ID="tex2html174"
-  HREF="node6.html#SECTION00631000000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+<LI><A ID="tex2html177"
+  HREF="node6.html#SECTION00631000000000000000">Server <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> client: JSON</A>
-<LI><A ID="tex2html175"
-  HREF="node6.html#SECTION00632000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+<LI><A ID="tex2html178"
+  HREF="node6.html#SECTION00632000000000000000">Client <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST</A>
 </UL>
 <BR>
-<LI><A ID="tex2html176"
+<LI><A ID="tex2html179"
   HREF="node6.html#SECTION00640000000000000000">Server</A>
 <UL>
-<LI><A ID="tex2html177"
-  HREF="node6.html#SECTION00641000000000000000">Web servers (http/https)</A>
-<LI><A ID="tex2html178"
-  HREF="node6.html#SECTION00642000000000000000">FastCGI</A>
-<LI><A ID="tex2html179"
-  HREF="node6.html#SECTION00643000000000000000">Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON</A>
 <LI><A ID="tex2html180"
-  HREF="node6.html#SECTION00644000000000000000">Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+  HREF="node6.html#SECTION00641000000000000000">Web servers (http/https)</A>
+<LI><A ID="tex2html181"
+  HREF="node6.html#SECTION00642000000000000000">FastCGI</A>
+<LI><A ID="tex2html182"
+  HREF="node6.html#SECTION00643000000000000000">Server <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
+ ALT="$\to $"></SPAN> client: JSON</A>
+<LI><A ID="tex2html183"
+  HREF="node6.html#SECTION00644000000000000000">Client <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST</A>
 </UL>
 <BR>
-<LI><A ID="tex2html181"
+<LI><A ID="tex2html184"
   HREF="node6.html#SECTION00650000000000000000">Client code: javascript for websites</A>
-<LI><A ID="tex2html182"
+<LI><A ID="tex2html185"
   HREF="node6.html#SECTION00660000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -155,7 +159,8 @@ Data formats</A>
 </H1>
 
 <H2><A ID="SECTION00631000000000000000">
-Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+Server <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> client: JSON</A>
 </H2>
 The most popular dataformat is JSON (<SPAN  CLASS="texttt">application/json</SPAN>) which
@@ -175,7 +180,8 @@ instead of html.
 <P>
 
 <H2><A ID="SECTION00632000000000000000">
-Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+Client <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST</A>
 </H2>
 When a website or mobile app wants to send data
@@ -220,14 +226,14 @@ makes it very easy to achieve this.
 
 <P>
 
-<DIV class="CENTER"><A ID="cgi"></A><A ID="391"></A>
+<DIV class="CENTER"><A ID="cgi"></A><A ID="395"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 5.1:</STRONG>
 FastCGI dataflow.</CAPTION>
 <TR><TD>
 <DIV class="CENTER">
-<IMG STYLE=""
- SRC="img4.svg"
+<IMG
+ STYLE="height: 12.67ex; vertical-align: -0.09ex; " SRC="img4.svg"
  ALT="\includegraphics[width=\linewidth]{restdataflow}">
 
 </DIV></TD></TR>
@@ -273,7 +279,8 @@ its callback handlers now.
 <P>
 
 <H2><A ID="SECTION00643000000000000000">
-Server <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+Server <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> client: JSON</A>
 </H2>
 The fastCGI callback expects a JSON string (<SPAN  CLASS="texttt">application/json</SPAN>) with the data
@@ -300,7 +307,8 @@ virtual std::string getJSONString() {
 <P>
 
 <H2><A ID="SECTION00644000000000000000">
-Client <SPAN CLASS="MATH"><IMG STYLE="height: 1.01ex; vertical-align: -0.09ex; " SRC="img1.svg"
+Client <SPAN CLASS="MATH"><IMG
+ STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST</A>
 </H2>
 Like in any GUI the client can press a button and create an event.  On

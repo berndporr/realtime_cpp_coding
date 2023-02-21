@@ -30,8 +30,6 @@
 
 \usepackage{xcolor}
 
-\usepackage[]{inputenc}
-
 
 
 \makeatletter
@@ -56,7 +54,6 @@
 \addtolength{\textheight}{\topmargin}\setlength{\topmargin}{0pt}
 \addtolength{\textheight}{\headheight}\setlength{\headheight}{0pt}
 \addtolength{\textheight}{\headsep}\setlength{\headsep}{0pt}
-\setlength{\textwidth}{349pt}
 \newwrite\lthtmlwrite
 \makeatletter
 \let\realnormalsize=\normalsize
@@ -74,39 +71,43 @@
  \def\phantompar{\csname par\endcsname}\normalsize}%
 \def\lthtmltypeout#1{{\let\protect\string \immediate\write\lthtmlwrite{#1}}}%
 \usepackage[tightpage,active]{preview}
+\PreviewBorder=1bp
 \newbox\lthtmlPageBox
 \newdimen\lthtmlCropMarkHeight
 \newdimen\lthtmlCropMarkDepth
-\long\def\lthtmlTightVBox#1#2{%
-    \setbox\lthtmlPageBox\vbox{\hbox{\catcode`\_=8 #2}}%
+\long\def\lthtmlTightVBoxA#1{\def\lthtmllabel{#1}
+    \setbox\lthtmlPageBox\vbox\bgroup\catcode`\_=8 }%
+\long\def\lthtmlTightVBoxZ{\egroup
     \lthtmlCropMarkHeight=\ht\lthtmlPageBox \advance \lthtmlCropMarkHeight 6pt
     \lthtmlCropMarkDepth=\dp\lthtmlPageBox
-    \lthtmltypeout{^^J:#1:lthtmlCropMarkHeight:=\the\lthtmlCropMarkHeight}%
-    \lthtmltypeout{^^J:#1:lthtmlCropMarkDepth:=\the\lthtmlCropMarkDepth:1ex:=\the \dimexpr 1ex}%
+    \lthtmltypeout{^^J:\lthtmllabel:lthtmlCropMarkHeight:=\the\lthtmlCropMarkHeight}%
+    \lthtmltypeout{^^J:\lthtmllabel:lthtmlCropMarkDepth:=\the\lthtmlCropMarkDepth:1ex:=\the \dimexpr 1ex}%
     \begin{preview}\copy\lthtmlPageBox\end{preview}}%
-\long\def\lthtmlTightFBox#1#2{%
-    \adjustnormalsize\setbox\lthtmlPageBox=\vbox\bgroup %
+\long\def\lthtmlTightFBoxA#1{\def\lthtmllabel{#1}%
+    \adjustnormalsize\setbox\lthtmlPageBox=\vbox\bgroup\hbox\bgroup %
     \let\ifinner=\iffalse \let\)\liih@math %
-    {\catcode`\_=8 #2}%
+    \bgroup\catcode`\_=8 }%
+\long\def\lthtmlTightFBoxZ{\egroup\egroup
     \@next\next\@currlist{}{\def\next{\voidb@x}}%
     \expandafter\box\next\egroup %
     \lthtmlCropMarkHeight=\ht\lthtmlPageBox \advance \lthtmlCropMarkHeight 6pt
     \lthtmlCropMarkDepth=\dp\lthtmlPageBox
-    \lthtmltypeout{^^J:#1:lthtmlCropMarkHeight:=\the\lthtmlCropMarkHeight}%
-    \lthtmltypeout{^^J:#1:lthtmlCropMarkDepth:=\the\lthtmlCropMarkDepth:1ex:=\the \dimexpr 1ex}%
+    \lthtmltypeout{^^J:\lthtmllabel:lthtmlCropMarkHeight:=\the\lthtmlCropMarkHeight}%
+    \lthtmltypeout{^^J:\lthtmllabel:lthtmlCropMarkDepth:=\the\lthtmlCropMarkDepth:1ex:=\the \dimexpr 1ex}%
     \begin{preview}\copy\lthtmlPageBox\end{preview}}%
-    \long\def\lthtmlinlinemathA#1#2\lthtmlindisplaymathZ{\lthtmlTightVBox{#1}{#2}}
-    \def\lthtmlinlineA#1#2\lthtmlinlineZ{\lthtmlTightVBox{#1}{#2}}
-    \long\def\lthtmldisplayA#1#2\lthtmldisplayZ{\lthtmlTightVBox{#1}{#2}}
-    \long\def\lthtmlinlinemathA#1#2\lthtmlindisplaymathZ{\lthtmlTightVBox{#1}{#2}}
-    \def\lthtmlinlineA#1#2\lthtmlinlineZ{\lthtmlTightVBox{#1}{#2}}
-    \long\def\lthtmldisplayA#1#2\lthtmldisplayZ{\lthtmlTightVBox{#1}{#2}}
+    \long\def\lthtmlinlinemathA#1#2\lthtmlindisplaymathZ{\lthtmlTightVBoxA{#1}{\hbox\bgroup#2\egroup}\lthtmlTightVBoxZ}
+    \def\lthtmlinlineA#1#2\lthtmlinlineZ{\lthtmlTightVBoxA{#1}{\hbox\bgroup#2\egroup}\lthtmlTightVBoxZ}
+    \long\def\lthtmldisplayA#1#2\lthtmldisplayZ{\lthtmlTightVBoxA{#1}{#2}\lthtmlTightVBoxZ}
     \long\def\lthtmldisplayB#1#2\lthtmldisplayZ{\\edef\preveqno{(\theequation)}%
-        \lthtmlTightVBox{#1}{\let\@eqnnum\relax#2}}
-    \long\def\lthtmlfigureA#1#2\lthtmlfigureZ{\let\@savefreelist\@freelist
-        \lthtmlTightFBox{#1}{#2}\global\let\@freelist\@savefreelist}
-    \long\def\lthtmlpictureA#1#2\lthtmlpictureZ{\let\@savefreelist\@freelist
-        \lthtmlTightVBox{#1}{#2}\global\let\@freelist\@savefreelist}
+        \lthtmlTightVBoxA{#1}{\let\@eqnnum\relax#2}\lthtmlTightVBoxZ}
+    \long\def\lthtmlfigureA#1{\let\@savefreelist\@freelist
+        \lthtmlTightFBoxA{#1}}
+    \long\def\lthtmlfigureZ{
+        \lthtmlTightFBoxZ\global\let\@freelist\@savefreelist}
+    \long\def\lthtmlpictureA#1{\let\@savefreelist\@freelist
+        \lthtmlTightVBoxA{#1}}
+    \long\def\lthtmlpictureZ{
+        \lthtmlTightVBoxZ\global\let\@freelist\@savefreelist}
 \def\lthtmlcheckvsize{\ifdim\ht\sizebox<\vsize 
   \ifdim\wd\sizebox<\hsize\expandafter\hfill\fi \expandafter\vfill
   \else\expandafter\vss\fi}%
@@ -137,20 +138,21 @@
 % !!! IMAGES START HERE !!!
 
 {\newpage\clearpage
-\lthtmlinlinemathA{tex2html_wrap_inline1645}%
+\lthtmlinlinemathA{tex2html_wrap_inline1289}%
 $\to $%
 \lthtmlindisplaymathZ
 \lthtmlcheckvsize\clearpage}
 
 \stepcounter{chapter}
 {\newpage\clearpage
-\lthtmlpictureA{tex2html_wrap1659}%
+\lthtmlpictureA{tex2html_wrap1303}%
 \includegraphics[width=\textwidth]{signals-timings}%
 \lthtmlpictureZ
 \lthtmlcheckvsize\clearpage}
 
+\stepcounter{section}
 {\newpage\clearpage
-\lthtmlpictureA{tex2html_wrap1663}%
+\lthtmlpictureA{tex2html_wrap1308}%
 \includegraphics[width=\textwidth]{gettersetters}%
 \lthtmlpictureZ
 \lthtmlcheckvsize\clearpage}
@@ -160,8 +162,8 @@ $\to $%
 \stepcounter{section}
 \stepcounter{subsection}
 \stepcounter{subsection}
-\stepcounter{subsubsection}
-\stepcounter{subsubsection}
+\stepcounter{subsection}
+\stepcounter{section}
 \stepcounter{subsection}
 \stepcounter{subsubsection}
 \stepcounter{paragraph}
@@ -171,11 +173,11 @@ $\to $%
 \stepcounter{subsection}
 \stepcounter{subsection}
 \stepcounter{subsection}
+\stepcounter{subsubsection}
+\stepcounter{subsubsection}
+\stepcounter{subsection}
+\stepcounter{subsection}
 \stepcounter{section}
-\stepcounter{section}
-\stepcounter{subsection}
-\stepcounter{subsection}
-\stepcounter{subsection}
 \stepcounter{section}
 \stepcounter{chapter}
 \stepcounter{section}
@@ -204,7 +206,7 @@ $\to $%
 \stepcounter{section}
 \stepcounter{subsection}
 {\newpage\clearpage
-\lthtmlpictureA{tex2html_wrap1753}%
+\lthtmlpictureA{tex2html_wrap1398}%
 \includegraphics[width=\linewidth]{restdataflow}%
 \lthtmlpictureZ
 \lthtmlcheckvsize\clearpage}
@@ -216,13 +218,13 @@ $\to $%
 \stepcounter{section}
 \stepcounter{chapter}
 {\newpage\clearpage
-\lthtmlinlinemathA{tex2html_wrap_inline401}%
+\lthtmlinlinemathA{tex2html_wrap_inline405}%
 $-1$%
 \lthtmlindisplaymathZ
 \lthtmlcheckvsize\clearpage}
 
 {\newpage\clearpage
-\lthtmlinlinemathA{tex2html_wrap_inline403}%
+\lthtmlinlinemathA{tex2html_wrap_inline407}%
 $+1$%
 \lthtmlindisplaymathZ
 \lthtmlcheckvsize\clearpage}

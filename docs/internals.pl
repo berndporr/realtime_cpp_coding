@@ -1,4 +1,4 @@
-# LaTeX2HTML 2019.2 (Released June 5, 2019)
+# LaTeX2HTML 2021.2 (Released July 1, 2021)
 # Associate internals original text with physical files.
 
 
