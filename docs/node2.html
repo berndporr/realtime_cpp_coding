@@ -33,7 +33,7 @@
 <A
  HREF="node1.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html128"
+<A ID="tex2html132"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node1.html">Contents</A>
- &nbsp; <B>  <A ID="tex2html129"
+ &nbsp; <B>  <A ID="tex2html133"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,8 +52,12 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html130"
+<LI><A ID="tex2html134"
   HREF="node2.html#SECTION00210000000000000000">Event based coding in the Linux userspace</A>
+<LI><A ID="tex2html135"
+  HREF="node2.html#SECTION00220000000000000000">S.O.L.I.D.</A>
+<LI><A ID="tex2html136"
+  HREF="node2.html#SECTION00230000000000000000">Additional coding requirements</A>
 </UL>
 <!--End of Table of Child-Links-->
 <HR>
@@ -64,7 +68,7 @@ Introduction</A>
 
 <P>
 
-<DIV class="CENTER"><A ID="timing"></A><A ID="381"></A>
+<DIV class="CENTER"><A ID="timing"></A><A ID="383"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.1:</STRONG>
 Dataflow and timing in low level realtime coding
@@ -101,7 +105,7 @@ which change an object's attributes and potentially do other processing.
 
 <P>
 
-<DIV class="CENTER"><A ID="gettersetters"></A><A ID="383"></A>
+<DIV class="CENTER"><A ID="gettersetters"></A><A ID="385"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.2:</STRONG>
 A realtime system with two C++ classes. Communication
@@ -129,6 +133,10 @@ callback to issue an avoidance action which in turn then sets the
 motors in reverse.
 
 <P>
+
+<H1><A ID="SECTION00220000000000000000">
+S.O.L.I.D.</A>
+</H1>
 When developing the C++ classes keep 
 <a href="https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design">S.O.L.I.D.</a>
 in mind:
@@ -193,6 +201,10 @@ an accelerometer.
 </DL>
 
 <P>
+
+<H1><A ID="SECTION00230000000000000000">
+Additional coding requirements</A>
+</H1>
 Besides S.O.L.I.D it's also essential that:
 
 <OL>
