@@ -770,31 +770,29 @@ is often called a \textsl{worker}.
 
 \subsection{Creating threads}
 In C++ a worker is a method within
-a class and needs to be \textsl{static} which means it won't be
-able to access the instance variables of a class. The trick
-is to pass a pointer to the instance of the class (\texttt{this}) as the argument of
-the worker, in the following example called \texttt{exec}:
+a class:
 \begin{verbatim}
-uthread = new std::thread(MyClassWithAThread::exec, this);
+uthread = new std::thread(&MyClassWithAThread::run, this);
 \end{verbatim}
-where \texttt{MyClassWithAThread} is a class containing the static function ``exec'':
+where \texttt{MyClassWithAThread} is a class containing the function ``run'':
 \begin{verbatim}
 class MyClassWithAThread {
         void run() {
                 // ... hard work is done here
                 doCallback(result); // hand the result over
         }
-        static void exec(MyClassWithAThread* cppThread) {
-                cppThread->run();
-        }
 }
 \end{verbatim}
-which in turn then calls a non-static class method \texttt{run()}.
-\texttt{run} will then have access to all of the instance's attributes
-and methods.
+Note that the \& signifies a functor, a method prototype.
+Instead of using functors you can also use a lambda function
+to call a method in the instance:
+\begin{verbatim}
+uthread = std::thread([this](){run();});
+\end{verbatim}
+
 
 \subsection{Lifetime of a thread}
-Threads terminate simply once the static worker has finished its job.
+Threads terminate simply once the worker has finished its job.
 To tell the client that a thread has finished you can use a
 \textsl{callback} to trigger an event.
 
