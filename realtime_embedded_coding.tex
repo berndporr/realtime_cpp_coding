@@ -878,6 +878,26 @@ void run() {
        }
 }
 \end{verbatim}
+If the I/O is non-blocking or if you are making blocking I/O non-blocking with:
+\begin{verbatim}
+int flags = fcntl(fd, F_GETFL, 0);
+fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+\end{verbatim}
+you can then use \texttt{select()} to wait for data:
+\begin{verbatim}
+FD_ZERO(&rdset);
+FD_SET(fd,&rdset);
+struct timeval timeout;
+timeout.tv_sec = 0;
+timeout.tv_usec = 500000;
+int ret = select(fd+1,&rdset,NULL,NULL,&timeout);
+if (ret < 0) return ret;
+// non-blocking I/O read
+ret = read(fd,buffer,bytes_per_sample * n_chan);
+\end{verbatim}
+which has the advantage that it has a timeout so that
+you can create both error and data
+callbacks.
 
 
 \section{Timing with Linux/pigpio timers}

@@ -135,35 +135,32 @@ is often called a <SPAN  CLASS="textsl">worker</SPAN>.
 Creating threads</A>
 </H2>
 In C++ a worker is a method within
-a class and needs to be <SPAN  CLASS="textsl">static</SPAN> which means it won't be
-able to access the instance variables of a class. The trick
-is to pass a pointer to the instance of the class (<SPAN  CLASS="texttt">this</SPAN>) as the argument of
-the worker, in the following example called <SPAN  CLASS="texttt">exec</SPAN>:
+a class:
 <PRE>
-uthread = new std::thread(MyClassWithAThread::exec, this);
+uthread = new std::thread(&amp;MyClassWithAThread::run, this);
 </PRE>
-where <SPAN  CLASS="texttt">MyClassWithAThread</SPAN> is a class containing the static function &ldquo;exec&rdquo;:
+where <SPAN  CLASS="texttt">MyClassWithAThread</SPAN> is a class containing the function &ldquo;run&rdquo;:
 <PRE>
 class MyClassWithAThread {
         void run() {
                 // ... hard work is done here
                 doCallback(result); // hand the result over
         }
-        static void exec(MyClassWithAThread* cppThread) {
-                cppThread-&gt;run();
-        }
 }
 </PRE>
-which in turn then calls a non-static class method <SPAN  CLASS="texttt">run()</SPAN>.
-<SPAN  CLASS="texttt">run</SPAN> will then have access to all of the instance's attributes
-and methods.
+Note that the &amp; signifies a functor, a method prototype.
+Instead of using functors you can also use a lambda function
+to call a method in the instance:
+<PRE>
+uthread = std::thread([this](){run();});
+</PRE>
 
 <P>
 
 <H2><A ID="SECTION00432000000000000000">
 Lifetime of a thread</A>
 </H2>
-Threads terminate simply once the static worker has finished its job.
+Threads terminate simply once the worker has finished its job.
 To tell the client that a thread has finished you can use a
 <SPAN  CLASS="textsl">callback</SPAN> to trigger an event.
 
@@ -267,6 +264,26 @@ void run() {
        }
 }
 </PRE>
+If the I/O is non-blocking or if you are making blocking I/O non-blocking with:
+<PRE>
+int flags = fcntl(fd, F_GETFL, 0);
+fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+</PRE>
+you can then use <SPAN  CLASS="texttt">select()</SPAN> to wait for data:
+<PRE>
+FD_ZERO(&amp;rdset);
+FD_SET(fd,&amp;rdset);
+struct timeval timeout;
+timeout.tv_sec = 0;
+timeout.tv_usec = 500000;
+int ret = select(fd+1,&amp;rdset,NULL,NULL,&amp;timeout);
+if (ret &lt; 0) return ret;
+// non-blocking I/O read
+ret = read(fd,buffer,bytes_per_sample * n_chan);
+</PRE>
+which has the advantage that it has a timeout so that
+you can create both error and data
+callbacks.
 
 <P>
 
