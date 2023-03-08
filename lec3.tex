@@ -1,0 +1,158 @@
+\documentclass[xcolor=dvipsnames]{beamer}
+\date{}
+\title{GUI}
+\author{Bernd Porr}
+\begin{document}
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Introduction}
+
+\begin{itemize}
+\item \textbf{Qt} is a cross-platform windows development environment for
+Linux, Windows and Mac.
+
+\item QT works with callbacks as introduced above
+but they are wrapped in a QT-specific signal/slot concept.
+
+\item Elements in Qt are \textsl{Widgets} which can contain anything form
+  plots, buttons or text fields. They are classes.
+  
+\end{itemize}
+  
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+  \frametitle{Layout}
+
+\begin{figure}[!hbt]
+\begin{center}
+\mbox{\includegraphics[width=0.5\textwidth]{qwtex}}
+\end{center}
+\caption{QT example layout
+\label{qwtex}}
+\end{figure}
+
+Widgets are organised into
+nested vertical and horizontal layouts
+for the result).
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+  \frametitle{Layout II}
+
+\begin{verbatim}
+// create 3 widgets
+button = new QPushButton;
+thermo = new QwtThermo; 
+plot = new QwtPlot;
+
+// vertical layout
+vLayout = new QVBoxLayout;
+vLayout->addWidget(button);
+vLayout->addWidget(thermo);
+
+// horizontal layout
+hLayout = new QHBoxLayout;
+hLayout->addLayout(vLayout);
+hLayout->addWidget(plot);
+
+// main layout
+setLayout(hLayout);
+\end{verbatim}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Events from widgets}
+In contrast to our low level callback mechanism using interfaces, Qt rather
+directly calls methods in classes. The problem is that function pointers
+cannot be directly used as a class has instance pointers to its local
+data. So a method of a class needs to be combined with the instance
+pointer. The Qt method ``connect'' does exactly that:
+\begin{verbatim}
+connect(button, &QPushButton::clicked,
+        this, &Window::reset);
+\end{verbatim}
+The QPushButton instance \texttt{button} has a method called \texttt{clicked()} which is
+called whenever the user clicks on the button. This is then forwarded to the
+method \texttt{reset()} in the application Widget.
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Plotting realtime data arriving via a callback}
+The general idea is to store the real-time samples from a callback in a
+buffer and trigger a screen refresh at a lower rate. For example, we may
+choose to replot the samples in the buffer every
+40~ms because that fast enough for the user, whereas plotting the
+whole buffer every sample would be too CPU-intensive.
+
+A callback \texttt{addSample()} is called in real-time whenever
+a sample has arrived:
+%should probably change memmove to std::move or whatever
+\begin{verbatim}
+void Window::addSample( float v ) {
+    // add the new input to the plot
+    std::move( yData, yData + plotDataSize - 1, yData+1 );
+    yData[0] = v;
+}
+\end{verbatim}
+which stores the sample \texttt{v} in the shift buffer \texttt{yData}.
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Plotting realtime data arriving via a callback}
+Then the screen refresh (which is slow) is done at
+a lower and unreliable rate:
+\begin{verbatim}
+void Window::timerEvent( QTimerEvent * )
+{
+    curve->setSamples(xData, yData, plotDataSize);
+    plot->replot();
+    update();
+}
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Plotting realtime data arriving via a callback}
+\texttt{update()} in the timer event-handler generates a
+paint event and Qt then invokes the repaint
+handler ``as soon as possible'' (which is to say, not in real-time) to repaint
+the canvas of the widget:
+\begin{verbatim}
+void ScopeWindow::paintEvent(QPaintEvent *) {
+        QPainter paint( this );
+
+        paint.drawLine( ... )
+}
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Plotting realtime data arriving via a callback}
+Note that neither the timer nor the \texttt{update()} function
+is called in a reliable way but whenever Qt chooses to do it.
+So Qt timers cannot be used to sample data but should
+only be used for screen refresh and other non-time-critical
+reasons.
+\end{frame}
+
+
+
+
+
+
+
+\end{document}
