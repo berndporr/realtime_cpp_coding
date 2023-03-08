@@ -7,22 +7,69 @@
 \titlepage
 \end{frame}
 
+
+
+
 \begin{frame}[fragile]
   \frametitle{Introduction}
 
-\begin{itemize}
+  GUIs have
+  \begin{enumerate}
+  \item Layout elements
+  \item Interactive elements
+  \end{enumerate}
+
+  \begin{enumerate}
+  \item Old approach: XML for Layout, code for rest
+  \item New approach: Everything is code
+  \end{enumerate}
+  
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+  \frametitle{Example: Jackpack compose}
+\begin{figure}[!hbt]
+\begin{center}
+\mbox{\includegraphics[width=\textwidth]{jetpack}}
+\end{center}
+\end{figure}
+Definition of the layout with class instances.
+\end{frame}
+
+
+
+  
+\begin{frame}[fragile]
+  \frametitle{Example: SwiftUI}
+\begin{figure}[!hbt]
+\begin{center}
+\mbox{\includegraphics[width=\textwidth]{swiftui}}
+\end{center}
+\end{figure}
+Again, definition of the layout with class instances.
+\end{frame}
+
+
+
+  
+
+\begin{frame}[fragile]
+  \frametitle{QT}
+
+  \begin{itemize}
 \item \textbf{Qt} is a cross-platform windows development environment for
 Linux, Windows and Mac.
 
+\item Elements in Qt are \textsl{Widgets} which can contain anything form
+  plots, buttons, text fields or the layout themselves. They are classes.
+  
 \item QT works with callbacks as introduced above
 but they are wrapped in a QT-specific signal/slot concept.
-
-\item Elements in Qt are \textsl{Widgets} which can contain anything form
-  plots, buttons or text fields. They are classes.
-  
 \end{itemize}
-  
 \end{frame}
+  
 
 
 
@@ -72,29 +119,22 @@ setLayout(hLayout);
 
 \begin{frame}[fragile]
 \frametitle{Events from widgets}
-In contrast to our low level callback mechanism using interfaces, Qt rather
-directly calls methods in classes. The problem is that function pointers
-cannot be directly used as a class has instance pointers to its local
-data. So a method of a class needs to be combined with the instance
+A method of a class needs to be combined with the instance
 pointer. The Qt method ``connect'' does exactly that:
 \begin{verbatim}
 connect(button, &QPushButton::clicked,
         this, &Window::reset);
 \end{verbatim}
-The QPushButton instance \texttt{button} has a method called \texttt{clicked()} which is
-called whenever the user clicks on the button. This is then forwarded to the
+The QPushButton instance \texttt{button}
+has a method called \texttt{clicked()} which is
+called whenever the user clicks on the button.
+This is then forwarded to the
 method \texttt{reset()} in the application Widget.
 \end{frame}
 
 
 \begin{frame}[fragile]
 \frametitle{Plotting realtime data arriving via a callback}
-The general idea is to store the real-time samples from a callback in a
-buffer and trigger a screen refresh at a lower rate. For example, we may
-choose to replot the samples in the buffer every
-40~ms because that fast enough for the user, whereas plotting the
-whole buffer every sample would be too CPU-intensive.
-
 A callback \texttt{addSample()} is called in real-time whenever
 a sample has arrived:
 %should probably change memmove to std::move or whatever
@@ -102,7 +142,9 @@ a sample has arrived:
 void Window::addSample( float v ) {
     // add the new input to the plot
     std::move( yData, yData + plotDataSize - 1, yData+1 );
+    curve->setSamples(xData, yData, plotDataSize);
     yData[0] = v;
+    plot->replot(); // triggers replot but not now
 }
 \end{verbatim}
 which stores the sample \texttt{v} in the shift buffer \texttt{yData}.
@@ -116,9 +158,7 @@ a lower and unreliable rate:
 \begin{verbatim}
 void Window::timerEvent( QTimerEvent * )
 {
-    curve->setSamples(xData, yData, plotDataSize);
-    plot->replot();
-    update();
+    update(); // triggers the update of all Widgets
 }
 \end{verbatim}
 \end{frame}
