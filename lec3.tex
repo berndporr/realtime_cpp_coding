@@ -11,13 +11,7 @@
 
 
 \begin{frame}[fragile]
-  \frametitle{Introduction}
-
-  GUIs have
-  \begin{enumerate}
-  \item Layout elements
-  \item Interactive elements
-  \end{enumerate}
+  \frametitle{GUI: Introduction}
 
   \begin{enumerate}
   \item Old approach: XML for Layout, code for rest
@@ -29,13 +23,13 @@
 
 
 \begin{frame}[fragile]
-  \frametitle{Example: Jackpack compose}
+\frametitle{Example: Jackpack compose}
 \begin{figure}[!hbt]
 \begin{center}
 \mbox{\includegraphics[width=\textwidth]{jetpack}}
 \end{center}
 \end{figure}
-Definition of the layout with class instances.
+Definition of the layout with KOTLIN class instances.
 \end{frame}
 
 
@@ -48,7 +42,7 @@ Definition of the layout with class instances.
 \mbox{\includegraphics[width=\textwidth]{swiftui}}
 \end{center}
 \end{figure}
-Again, definition of the layout with class instances.
+Again, definition of the layout with SWIFT class instances.
 \end{frame}
 
 
@@ -60,13 +54,12 @@ Again, definition of the layout with class instances.
 
   \begin{itemize}
 \item \textbf{Qt} is a cross-platform windows development environment for
-Linux, Windows and Mac.
+Linux, Windows and Mac written in C++.
 
 \item Elements in Qt are \textsl{Widgets} which can contain anything form
   plots, buttons, text fields or the layout themselves. They are classes.
   
-\item QT works with callbacks as introduced above
-but they are wrapped in a QT-specific signal/slot concept.
+\item QT works with callbacks using a QT-specific signal/slot concept.
 \end{itemize}
 \end{frame}
   
@@ -84,9 +77,9 @@ but they are wrapped in a QT-specific signal/slot concept.
 \label{qwtex}}
 \end{figure}
 
-Widgets are organised into
+Widgets are usually organised into
 nested vertical and horizontal layouts
-for the result).
+for the result). A lot of other options available.
 \end{frame}
 
 
@@ -165,10 +158,10 @@ void Window::timerEvent( QTimerEvent * )
 
 
 \begin{frame}[fragile]
-\frametitle{Plotting realtime data arriving via a callback}
-\texttt{update()} in the timer event-handler generates a
-paint event and Qt then invokes the repaint
-handler ``as soon as possible'' (which is to say, not in real-time) to repaint
+\frametitle{the \texttt{paintEvent()} callback}
+\texttt{update()} triggers a
+paint event and then Qt calls the callback \texttt{paintEvent()}
+``as soon as possible'' (which is to say, not in real-time) to repaint
 the canvas of the widget:
 \begin{verbatim}
 void ScopeWindow::paintEvent(QPaintEvent *) {
@@ -181,17 +174,62 @@ void ScopeWindow::paintEvent(QPaintEvent *) {
 
 
 \begin{frame}[fragile]
-\frametitle{Plotting realtime data arriving via a callback}
-Note that neither the timer nor the \texttt{update()} function
-is called in a reliable way but whenever Qt chooses to do it.
+\frametitle{In Qt timing is not guaranteed}
+Note that neither the timer callback nor the \texttt{update()} function
+provide reliable realtime timing.
 So Qt timers cannot be used to sample data but should
 only be used for screen refresh and other non-time-critical
-reasons.
+tasks.
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{\ldots but what about QML???}
+
+
+\textbf{GUI in QML (javascript-ish) $\Leftrightarrow$ C++ application}
+
+\bigskip
+
+The problem is that QML needs to call C++ but we have two
+very different languages.
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{\ldots but what about QML? Part 2}
+
+QML:\\
+\mbox{\includegraphics[width=0.5\textwidth]{qml_frontend.eps}}
+
+C++\\
+\mbox{\includegraphics[width=\textwidth]{qml_backend.eps}}
+
+
 \end{frame}
 
 
 
 
+\begin{frame}[fragile]
+\frametitle{\ldots but what about QML? Part 3}
+
+\mbox{\includegraphics[width=\textwidth]{qml_choose.eps}}
+
+\mbox{\includegraphics[width=0.1\textwidth]{emoj-dead.eps}} \ldots so in a nutshell: don't do QML.
+
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{GUI summary}
+
+  Stick with C++ for both frontend (GUI) and backend.
+
+  Generally, the trend goes towards GUI- and backend in the same language.
+\end{frame}
 
 
 
