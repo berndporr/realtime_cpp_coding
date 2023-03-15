@@ -11,8 +11,123 @@
 
 
 \begin{frame}[fragile]
-  \frametitle{Web: Introduction}
+  \frametitle{Web server/client communication: REST}
+\begin{description}
+\item[Uniform interface:] Any device connecting to the URL should
+  get the same reply. No matter if a web page or mobile phone
+  requests the temperature of a sensor the returned format must always be the same.
+\item[Client-server decoupling:] The only information
+  the client needs to know is the URL of the server to request data or send data.
+\item[Statelessness:] Each request needs to include all the
+  information necessary and must not depend on previous requests. For
+  example a request to a buffer must not alter the
+  buffer but just read from it so that another user reading the buffer
+  shortly after receives the same data.
+\end{description}
+See \url{https://www.ibm.com/cloud/learn/rest-apis}
 \end{frame}
-  
+
+
+
+\begin{frame}[fragile]
+  \frametitle{Data format: JSON}
+
+\begin{verbatim}
+{
+    temperature: [20, 21, 20, 19, 17],
+    steps: 100,
+    comment: "all good!"
+}
+\end{verbatim}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Web servers}
+\begin{itemize}
+  \item NGINX: Easy to configure but very flexible web server. Pronounced ``Engine-X''.
+  \item Apache: Hard to configure but safe option
+  \item lighttpd: Smaller web server with a small memory footprint. Pronounced ``lighty''.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Fast CGI}
+A fast CGI program is a UNIX commandline program which communicates with the web server
+(nginx, Apache, \ldots) via a UNIX socket which in turn is a pseudo file located
+in a temporary directory for example \texttt{/tmp/sensorsocket}.
+
+The web server then maps certain http/https requests to
+this socket. An example configuration for nginx looks like this:
+\begin{verbatim}
+       location /sensor/ {
+          include        fastcgi_params;
+          fastcgi_pass   unix:/tmp/sensorsocket;
+        }
+\end{verbatim}
+via the URL \texttt{www.mywebpage.com/sensor/}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{JSON C++ encoding with jsoncpp}
+\begin{verbatim}
+virtual std::string getJSONString() {
+Json::Value root;
+root["epoch"] = (long)time(NULL);
+Json::Value values;
+for(int i = 0; i < datasink->values.size(); i++) {
+    values[i] = datasink->values[i];
+}
+root["values"]  = values;
+Json::StreamWriterBuilder builder;
+const std::string json_file = Json::writeString(builder, root);
+return json_file;
+};
+\end{verbatim}
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{JSON C++ decoding with jsoncpp}
+  \begin{verbatim}
+virtual void postString(std::string postArg) {
+  const auto rawJsonLength = postArg.length();
+  JSONCPP_STRING err;
+  Json::Value root;
+  Json::CharReaderBuilder builder;
+  const std::unique_ptr<Json::CharReader>
+    reader(builder.newCharReader());
+  reader->parse(postArg.c_str(), postArg.c_str() + rawJsonLength, &root, &err)
+  // do something with root
+}
+\end{verbatim}
+  where \texttt{root} is a \texttt{std::map}.
+\end{frame}
+
+
+\begin{frame}[fragile]
+  \frametitle{Web browser: javascript}
+
+  \begin{verbatim}
+function getterCallback(result) {
+  var temperatureArray = result.temperatures;
+}
+
+function getTemperature() {
+  $.getJSON("/sensor/:80",getterCallback);
+}
+
+function documentReady() {
+  window.intervalId = setInterval(getTemperature , 1000);
+}
+
+$(document).ready( documentReady );
+\end{verbatim}
+\end{frame}
+
+\end{document}
+
+
 
 \end{document}
