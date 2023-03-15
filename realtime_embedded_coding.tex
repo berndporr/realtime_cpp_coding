@@ -1095,8 +1095,7 @@ for this API are very general and won't define the actual data format:
 See \url{https://www.ibm.com/cloud/learn/rest-apis} for the complete
 list of REST design principles.
 
-\section{Data formats}
-\subsection{Server $\to$ client: JSON}
+\section{Data format: JSON}
 The most popular dataformat is JSON (\texttt{application/json}) which
 is basically a map of (nestable) key/value pairs:
 \begin{verbatim}
@@ -1110,18 +1109,6 @@ Since JSON is human-readable text a web server can simply
 generate that text send it over via http or https. There
 is no difference except that the MIME format is \textquotesingle application/json\textquotesingle{}
 instead of html.
-
-\subsection{Client $\to$ server: POST}
-When a website or mobile app wants to send data
-(\texttt{application/x-www-form-urlencoded}) back to the server it needs to
-encode it in the form of a single text-line where the key/value pairs
-are combined with \&-signs:
-\begin{verbatim}
-temperature=20&steps=100&comment=all+good%33
-\end{verbatim}
-The receiver then has the task to entangle this stream into a suitable
-data-format, for example a map.
-
 
 \section{Server}
 On the Linux system a web server needs to be set up. There are
@@ -1150,9 +1137,9 @@ makes it very easy to achieve this.
 \subsection{FastCGI}
 FastCGI (see Fig~\ref{cgi}) is written in C++ and generates the entire
 content of the http/https request. In particular here we generate
-JSON packets server side which can then be processed by client JavaScripts.
+JSON packets which can then be processed by client JavaScripts and vice versa.
 For realtime applications JSON transmission is perfect because the client-side
-JavaScript can request JSON packages and directly turn them into variables.
+JavaScript can request and receive JSON packages
 
 A fast CGI program is a UNIX commandline program which communicates with the web server
 (nginx, Apache, \ldots) via a UNIX socket which in turn is a pseudo file located
@@ -1171,52 +1158,51 @@ nginx contacts the fastcgi program via this socket. The fastcgi program
 then needs to return the content. Internally this will be a C++ callback
 inside of the fastcgi program.
 
-The C++ fastcgi API \url{https://github.com/berndporr/json_fastcgi_web_api} 
+The C++ fastcgi API \url{https://github.com/berndporr/fastcgi_json_cpp_api} 
 is wrapper around the quite cryptic fastcgi C library and we discuss
 its callback handlers now.
 
-\subsection{Server $\to$ client: JSON}
+\subsection{Server $\to$ client}
 The fastCGI callback expects a JSON string (\texttt{application/json}) with the data
-transmitted form the server to the client. There is helper
-class JSONGenerator which generates the JSON data from various
-C++ types:
+transmitted form the server to the client. Use the \texttt{jsoncpp} library (standard debian/Ubuntu package)
+to create JSON.
 \begin{verbatim}
 class JSONcallback : public JSONCGIHandler::GETCallback {
 public:
 /**
 * Gets the data and sends it to the webserver.
 * The callback creates two JSON entries. One with the
-* timestamp and one with the temperature from the sensor.
+* timestamp and an array of sensor readings.
 **/
 virtual std::string getJSONString() {
-      JSONCGIHandler::JSONGenerator jsonGenerator;
-      jsonGenerator.add("epoch",(long)time(NULL));
-      jsonGenerator.add("temperatures",temperatureArray);
-      return jsonGenerator.getJSON();
-    }
+  Json::Value root;
+  root["epoch"] = (long)time(NULL);
+  Json::Value values;
+  for(int i = 0; i < datasink->values.size(); i++) {
+    values[i] = datasink->values[i];
+  }
+  root["values"]  = values;
+  Json::StreamWriterBuilder builder;
+  const std::string json_file = Json::writeString(builder, root);
+  return json_file;
 };
 \end{verbatim} 
 
 \subsection{Client $\to$ server: POST}
-Like in any GUI the client can press a button and create an event.  On
-the client side this is packaged with jquery into an
-\texttt{application/x-www-form-urlencoded} stream and then sent over to the
-server. In the server, \texttt{libcurl} is the standard tool for decoding
-the \texttt{application/x-www-form-urlencoded} stream back into a C++ data
-structure, for example a map.
-
-Here, the server then receives the
-\texttt{application/x-www-form-urlencoded} data as a callback
-called ``postArg'':
+Like in any GUI the client can press a button and create an event.
+Here, the server then receives the JSON data as a callback called ``postArg'':
 \begin{verbatim}
 virtual void postString(std::string postArg) {
-    auto m = JSONCGIHandler::postDecoder(postArg);
-    float temp = atof(m["volt"].c_str());
-    std::cerr << m["hello"] << "\n";
-    sensorfastcgi->forceValue(temp);
+  const auto rawJsonLength = static_cast<int>(postArg.length());
+  JSONCPP_STRING err;
+  Json::Value root;
+  Json::CharReaderBuilder builder;
+  const std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
+  reader->parse(postArg.c_str(), postArg.c_str() + rawJsonLength, &root, &err)
+  // do something with root
 }
 \end{verbatim}
-which is then decoded into key/value pairs in the form of a C++ \texttt{std::map}.
+where \texttt{root} is a \texttt{std::map}.
 
 \section{Client code: javascript for websites}
 Generally on the client side (= web page), HTML with embedded

@@ -33,7 +33,7 @@
 <A
  HREF="node5.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html178"
+<A ID="tex2html174"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node5.html">Realtime/event processing within the</A>
- &nbsp; <B>  <A ID="tex2html179"
+ &nbsp; <B>  <A ID="tex2html175"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,43 +52,32 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html180"
+<LI><A ID="tex2html176"
   HREF="node6.html#SECTION00610000000000000000">Introduction</A>
-<LI><A ID="tex2html181"
+<LI><A ID="tex2html177"
   HREF="node6.html#SECTION00620000000000000000">REST</A>
-<LI><A ID="tex2html182"
-  HREF="node6.html#SECTION00630000000000000000">Data formats</A>
-<UL>
-<LI><A ID="tex2html183"
-  HREF="node6.html#SECTION00631000000000000000">Server <SPAN CLASS="MATH"><IMG
- STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON</A>
-<LI><A ID="tex2html184"
-  HREF="node6.html#SECTION00632000000000000000">Client <SPAN CLASS="MATH"><IMG
- STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST</A>
-</UL>
-<BR>
-<LI><A ID="tex2html185"
+<LI><A ID="tex2html178"
+  HREF="node6.html#SECTION00630000000000000000">Data format: JSON</A>
+<LI><A ID="tex2html179"
   HREF="node6.html#SECTION00640000000000000000">Server</A>
 <UL>
-<LI><A ID="tex2html186"
+<LI><A ID="tex2html180"
   HREF="node6.html#SECTION00641000000000000000">Web servers (http/https)</A>
-<LI><A ID="tex2html187"
+<LI><A ID="tex2html181"
   HREF="node6.html#SECTION00642000000000000000">FastCGI</A>
-<LI><A ID="tex2html188"
+<LI><A ID="tex2html182"
   HREF="node6.html#SECTION00643000000000000000">Server <SPAN CLASS="MATH"><IMG
  STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON</A>
-<LI><A ID="tex2html189"
+ ALT="$\to $"></SPAN> client</A>
+<LI><A ID="tex2html183"
   HREF="node6.html#SECTION00644000000000000000">Client <SPAN CLASS="MATH"><IMG
  STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST</A>
 </UL>
 <BR>
-<LI><A ID="tex2html190"
+<LI><A ID="tex2html184"
   HREF="node6.html#SECTION00650000000000000000">Client code: javascript for websites</A>
-<LI><A ID="tex2html191"
+<LI><A ID="tex2html185"
   HREF="node6.html#SECTION00660000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -155,14 +144,8 @@ list of REST design principles.
 <P>
 
 <H1><A ID="SECTION00630000000000000000">
-Data formats</A>
+Data format: JSON</A>
 </H1>
-
-<H2><A ID="SECTION00631000000000000000">
-Server <SPAN CLASS="MATH"><IMG
- STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON</A>
-</H2>
 The most popular dataformat is JSON (<SPAN  CLASS="texttt">application/json</SPAN>) which
 is basically a map of (nestable) key/value pairs:
 <PRE>
@@ -176,23 +159,6 @@ Since JSON is human-readable text a web server can simply
 generate that text send it over via http or https. There
 is no difference except that the MIME format is application/json
 instead of html.
-
-<P>
-
-<H2><A ID="SECTION00632000000000000000">
-Client <SPAN CLASS="MATH"><IMG
- STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> server: POST</A>
-</H2>
-When a website or mobile app wants to send data
-(<SPAN  CLASS="texttt">application/x-www-form-urlencoded</SPAN>) back to the server it needs to
-encode it in the form of a single text-line where the key/value pairs
-are combined with &amp;-signs:
-<PRE>
-temperature=20&amp;steps=100&amp;comment=all+good%33
-</PRE>
-The receiver then has the task to entangle this stream into a suitable
-data-format, for example a map.
 
 <P>
 
@@ -226,7 +192,7 @@ makes it very easy to achieve this.
 
 <P>
 
-<DIV class="CENTER"><A ID="cgi"></A><A ID="399"></A>
+<DIV class="CENTER"><A ID="cgi"></A><A ID="392"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 5.1:</STRONG>
 FastCGI dataflow.</CAPTION>
@@ -247,9 +213,9 @@ FastCGI</A>
 </H2>
 FastCGI (see Fig&nbsp;<A HREF="#cgi">5.1</A>) is written in C++ and generates the entire
 content of the http/https request. In particular here we generate
-JSON packets server side which can then be processed by client JavaScripts.
+JSON packets which can then be processed by client JavaScripts and vice versa.
 For realtime applications JSON transmission is perfect because the client-side
-JavaScript can request JSON packages and directly turn them into variables.
+JavaScript can request and receive JSON packages
 
 <P>
 A fast CGI program is a UNIX commandline program which communicates with the web server
@@ -272,7 +238,7 @@ inside of the fastcgi program.
 
 <P>
 The C++ fastcgi API <kbd><A ID="tex2html22"
-  HREF="https://github.com/berndporr/json_fastcgi_web_api">https://github.com/berndporr/json_fastcgi_web_api</A></kbd> 
+  HREF="https://github.com/berndporr/fastcgi_json_cpp_api">https://github.com/berndporr/fastcgi_json_cpp_api</A></kbd> 
 is wrapper around the quite cryptic fastcgi C library and we discuss
 its callback handlers now.
 
@@ -281,26 +247,30 @@ its callback handlers now.
 <H2><A ID="SECTION00643000000000000000">
 Server <SPAN CLASS="MATH"><IMG
  STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
- ALT="$\to $"></SPAN> client: JSON</A>
+ ALT="$\to $"></SPAN> client</A>
 </H2>
 The fastCGI callback expects a JSON string (<SPAN  CLASS="texttt">application/json</SPAN>) with the data
-transmitted form the server to the client. There is helper
-class JSONGenerator which generates the JSON data from various
-C++ types:
+transmitted form the server to the client. Use the <SPAN  CLASS="texttt">jsoncpp</SPAN> library (standard debian/Ubuntu package)
+to create JSON.
 <PRE>
 class JSONcallback : public JSONCGIHandler::GETCallback {
 public:
 /**
 * Gets the data and sends it to the webserver.
 * The callback creates two JSON entries. One with the
-* timestamp and one with the temperature from the sensor.
+* timestamp and an array of sensor readings.
 **/
 virtual std::string getJSONString() {
-      JSONCGIHandler::JSONGenerator jsonGenerator;
-      jsonGenerator.add("epoch",(long)time(NULL));
-      jsonGenerator.add("temperatures",temperatureArray);
-      return jsonGenerator.getJSON();
-    }
+  Json::Value root;
+  root["epoch"] = (long)time(NULL);
+  Json::Value values;
+  for(int i = 0; i &lt; datasink-&gt;values.size(); i++) {
+    values[i] = datasink-&gt;values[i];
+  }
+  root["values"]  = values;
+  Json::StreamWriterBuilder builder;
+  const std::string json_file = Json::writeString(builder, root);
+  return json_file;
 };
 </PRE> 
 
@@ -311,26 +281,20 @@ Client <SPAN CLASS="MATH"><IMG
  STYLE="height: 1.20ex; vertical-align: -0.09ex; " SRC="img1.svg"
  ALT="$\to $"></SPAN> server: POST</A>
 </H2>
-Like in any GUI the client can press a button and create an event.  On
-the client side this is packaged with jquery into an
-<SPAN  CLASS="texttt">application/x-www-form-urlencoded</SPAN> stream and then sent over to the
-server. In the server, <SPAN  CLASS="texttt">libcurl</SPAN> is the standard tool for decoding
-the <SPAN  CLASS="texttt">application/x-www-form-urlencoded</SPAN> stream back into a C++ data
-structure, for example a map.
-
-<P>
-Here, the server then receives the
-<SPAN  CLASS="texttt">application/x-www-form-urlencoded</SPAN> data as a callback
-called &ldquo;postArg&rdquo;:
+Like in any GUI the client can press a button and create an event.
+Here, the server then receives the JSON data as a callback called &ldquo;postArg&rdquo;:
 <PRE>
 virtual void postString(std::string postArg) {
-    auto m = JSONCGIHandler::postDecoder(postArg);
-    float temp = atof(m["volt"].c_str());
-    std::cerr &lt;&lt; m["hello"] &lt;&lt; "\n";
-    sensorfastcgi-&gt;forceValue(temp);
+  const auto rawJsonLength = static_cast&lt;int&gt;(postArg.length());
+  JSONCPP_STRING err;
+  Json::Value root;
+  Json::CharReaderBuilder builder;
+  const std::unique_ptr&lt;Json::CharReader&gt; reader(builder.newCharReader());
+  reader-&gt;parse(postArg.c_str(), postArg.c_str() + rawJsonLength, &amp;root, &amp;err)
+  // do something with root
 }
 </PRE>
-which is then decoded into key/value pairs in the form of a C++ <SPAN  CLASS="texttt">std::map</SPAN>.
+where <SPAN  CLASS="texttt">root</SPAN> is a <SPAN  CLASS="texttt">std::map</SPAN>.
 
 <P>
 
