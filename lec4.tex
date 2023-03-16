@@ -1,6 +1,6 @@
 \documentclass[xcolor=dvipsnames]{beamer}
 \date{}
-\title{Realtime browser JS C++ communication}
+\title{Realtime browser JS $\Leftrightarrow$ C++ communication}
 \author{Bernd Porr}
 \begin{document}
 \begin{frame}
@@ -15,7 +15,15 @@
 
 \begin{frame}[fragile]
   \frametitle{Web server/client communication: Intro}
-\includegraphics[width=\linewidth]{restdataflow}
+  \includegraphics[width=\linewidth]{restdataflow}
+
+  Focus on pure server (C++) $\Leftrightarrow$ client (JS) web communication
+  using \texttt{fastCGI} and \texttt{nodejs}.
+
+  \bigskip
+
+  For standard generation of dynamic content please
+  use PHP, nodejs or other well documented frameworks.
 
 \end{frame}
 
