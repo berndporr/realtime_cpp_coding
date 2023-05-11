@@ -71,6 +71,16 @@ a collision sensor at a robot triggers a GPIO pin, which then triggers a
 callback to issue an avoidance action which in turn then sets the
 motors in reverse.
 
+Callbacks can be seen as userspace interrupt service routines.
+These must always complete immediately so that the caller is
+not experience any noticeable delay. For example when a user
+presses a button in a GUI the callback must be
+processed without any noticeable delay which is application specific.
+If processing takes
+longer then a thread should be started which in turn then will
+then have a callback signalling success.
+
+
 \section{S.O.L.I.D.}
 When developing the C++ classes keep 
 \href{https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design}{S.O.L.I.D.}
@@ -848,7 +858,13 @@ nor delete a thread until you've joined it.
 
 \subsection{Timing within threads}
 Threads are perfect to create timing without using sleep commands
-with the help of \textsl{blocking I/O}.
+with the help of \textsl{blocking I/O}. 
+Blocking I/O puts a thread
+to sleep and is woken up after new data has arrived or has been
+written to a device. Blocking I/O won't consume any CPU power
+and is perfect to tell the kernel that it can execute other threads
+in the meantime.
+
 
 \subsubsection{select/poll commands waiting for GPIO interrupts}
 In section~\ref{gpioIRQ} we introduced the so called ``poll'' command
