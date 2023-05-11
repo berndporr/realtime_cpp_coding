@@ -133,6 +133,16 @@ callback to issue an avoidance action which in turn then sets the
 motors in reverse.
 
 <P>
+Callbacks can be seen as userspace interrupt service routines.
+These must always complete immediately so that the caller is
+not experience any noticeable delay. For example when a user
+presses a button in a GUI the callback must be
+processed without any noticeable delay which is application specific.
+If processing takes
+longer then a thread should be started which in turn then will
+then have a callback signalling success.
+
+<P>
 
 <H1><A ID="SECTION00220000000000000000">
 S.O.L.I.D.</A>

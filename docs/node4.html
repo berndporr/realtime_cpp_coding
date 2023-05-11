@@ -225,7 +225,12 @@ nor delete a thread until you've joined it.
 Timing within threads</A>
 </H2>
 Threads are perfect to create timing without using sleep commands
-with the help of <SPAN  CLASS="textsl">blocking I/O</SPAN>.
+with the help of <SPAN  CLASS="textsl">blocking I/O</SPAN>. 
+Blocking I/O puts a thread
+to sleep and is woken up after new data has arrived or has been
+written to a device. Blocking I/O won't consume any CPU power
+and is perfect to tell the kernel that it can execute other threads
+in the meantime.
 
 <P>
 
