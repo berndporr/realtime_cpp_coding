@@ -14,10 +14,6 @@ $key = q/gettersetters/;
 $ref_files{$key} = "$dir".q|node2.html|; 
 $noresave{$key} = "$nosave";
 
-$key = q/gpioIRQ/;
-$ref_files{$key} = "$dir".q|node3.html|; 
-$noresave{$key} = "$nosave";
-
 $key = q/qt/;
 $ref_files{$key} = "$dir".q|node5.html|; 
 $noresave{$key} = "$nosave";

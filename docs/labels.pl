@@ -14,10 +14,6 @@ $key = q/gettersetters/;
 $external_labels{$key} = "$URL/" . q|node2.html|; 
 $noresave{$key} = "$nosave";
 
-$key = q/gpioIRQ/;
-$external_labels{$key} = "$URL/" . q|node3.html|; 
-$noresave{$key} = "$nosave";
-
 $key = q/qt/;
 $external_labels{$key} = "$URL/" . q|node5.html|; 
 $noresave{$key} = "$nosave";
@@ -59,10 +55,6 @@ $noresave{$key} = "$nosave";
 
 $key = q/gettersetters/;
 $external_latex_labels{$key} = q|1.2 A realtime system with two C++ classes. Communication between classes is achieved with callbacks (not getters) for incoming events and setters to send out control events. The control output itself receives its timing from the events so that the loop is traversed as quickly as possible. |; 
-$noresave{$key} = "$nosave";
-
-$key = q/gpioIRQ/;
-$external_latex_labels{$key} = q|2.3.1 GPIO interrupt handling via <SPAN  CLASS="texttt">/sys</SPAN>|; 
 $noresave{$key} = "$nosave";
 
 $key = q/qt/;

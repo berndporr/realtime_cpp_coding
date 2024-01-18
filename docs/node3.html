@@ -33,7 +33,7 @@
 <A
  HREF="node2.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html127"
+<A ID="tex2html129"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node2.html">Introduction</A>
- &nbsp; <B>  <A ID="tex2html128"
+ &nbsp; <B>  <A ID="tex2html130"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,53 +52,55 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html129"
+<LI><A ID="tex2html131"
   HREF="node3.html#SECTION00310000000000000000">General recommendations on how to write your C++ classes for devices</A>
-<LI><A ID="tex2html130"
+<LI><A ID="tex2html132"
   HREF="node3.html#SECTION00320000000000000000">Callbacks in C++ device classes</A>
 <UL>
-<LI><A ID="tex2html131"
-  HREF="node3.html#SECTION00321000000000000000">Creating a callback interface</A>
-<LI><A ID="tex2html132"
-  HREF="node3.html#SECTION00322000000000000000">Adding directly an abstract method to the device driver class</A>
 <LI><A ID="tex2html133"
+  HREF="node3.html#SECTION00321000000000000000">Creating a callback interface</A>
+<LI><A ID="tex2html134"
+  HREF="node3.html#SECTION00322000000000000000">Adding directly an abstract method to the device driver class</A>
+<LI><A ID="tex2html135"
   HREF="node3.html#SECTION00323000000000000000">Callback arguments</A>
 </UL>
 <BR>
-<LI><A ID="tex2html134"
+<LI><A ID="tex2html136"
   HREF="node3.html#SECTION00330000000000000000">Low level userspace device access</A>
 <UL>
-<LI><A ID="tex2html135"
-  HREF="node3.html#SECTION00331000000000000000">Access GPIO pins</A>
-<UL>
-<LI><A ID="tex2html136"
-  HREF="node3.html#SECTION00331100000000000000"><SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
 <LI><A ID="tex2html137"
-  HREF="node3.html#SECTION00331200000000000000">pigpio</A>
-</UL>
+  HREF="node3.html#SECTION00331000000000000000">Video camera capture (openCV)</A>
 <LI><A ID="tex2html138"
-  HREF="node3.html#SECTION00332000000000000000">Video camera capture (openCV)</A>
+  HREF="node3.html#SECTION00332000000000000000">Audio (ALSA)</A>
 <LI><A ID="tex2html139"
-  HREF="node3.html#SECTION00333000000000000000">I2S: Audio</A>
+  HREF="node3.html#SECTION00333000000000000000">Bluetooth</A>
 <LI><A ID="tex2html140"
-  HREF="node3.html#SECTION00334000000000000000">SPI</A>
-<LI><A ID="tex2html141"
-  HREF="node3.html#SECTION00335000000000000000">I2C</A>
+  HREF="node3.html#SECTION00334000000000000000">General purpose I/O (GPIO)</A>
 <UL>
+<LI><A ID="tex2html141"
+  HREF="node3.html#SECTION00334100000000000000"><SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
 <LI><A ID="tex2html142"
-  HREF="node3.html#SECTION00335100000000000000">Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
-<LI><A ID="tex2html143"
-  HREF="node3.html#SECTION00335200000000000000">I2C access via pigpio</A>
+  HREF="node3.html#SECTION00334200000000000000">pigpio</A>
 </UL>
+<LI><A ID="tex2html143"
+  HREF="node3.html#SECTION00335000000000000000">SPI</A>
 <LI><A ID="tex2html144"
-  HREF="node3.html#SECTION00336000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
+  HREF="node3.html#SECTION00336000000000000000">I2C</A>
+<UL>
 <LI><A ID="tex2html145"
-  HREF="node3.html#SECTION00337000000000000000">Accessing physical memory locations (danger!)</A>
+  HREF="node3.html#SECTION00336100000000000000">Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
+<LI><A ID="tex2html146"
+  HREF="node3.html#SECTION00336200000000000000">I2C access via pigpio</A>
+</UL>
+<LI><A ID="tex2html147"
+  HREF="node3.html#SECTION00337000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
+<LI><A ID="tex2html148"
+  HREF="node3.html#SECTION00338000000000000000">Accessing physical memory locations (danger!)</A>
 </UL>
 <BR>
-<LI><A ID="tex2html146"
+<LI><A ID="tex2html149"
   HREF="node3.html#SECTION00340000000000000000">Kernel driver programming</A>
-<LI><A ID="tex2html147"
+<LI><A ID="tex2html150"
   HREF="node3.html#SECTION00350000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -322,137 +324,22 @@ The following sections provide pointers of how to write
 the C++ driver classes for different hardware protocols.
 
 <P>
-Note that the best I/O is blocking and by itself provides the timing for example
+To emulate an &ldquo;interrupt&rdquo; or event in userspace we need blocking I/O which provides the timing for example
 when waiting for a GPIO change, doing audio or video I/O.
+
+<P>
+Generally any userspace program talks to the kernel via pseudo files in the <SPAN  CLASS="texttt">/dev</SPAN> or <SPAN  CLASS="texttt">/sys</SPAN>
+directories.
 
 <P>
 
 <H2><A ID="SECTION00331000000000000000">
-Access GPIO pins</A>
-</H2>
-
-<H3><A ID="SECTION00331100000000000000">
-<SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
-</H3>
-The GPIO of the raspberry PI can easily be controlled via
-the <SPAN  CLASS="texttt">/sys</SPAN> filesystem. This is slow but good for
-debugging as you can directly write a
-&ldquo;0&rdquo; or &ldquo;1&rdquo; string to it and print the result. The
-pseudo files are here:
-<PRE>
-/sys/class/gpio
-</PRE>
-which contains files which directly relate to individual pins.
-To be able to access a pin we need to tell Linux to make
-it visible:
-<PRE>
-/sys/class/gpio/export
-</PRE>
-For example, writing a 5 (in text form) to this file would
-create the subdirectory <SPAN  CLASS="texttt">/sys/class/gpio/gpio5</SPAN> for GPIO pin 5.
-Then reading from
-<PRE>
-/sys/class/gpio/gpio5/value
-</PRE>
-would give you the status of GPIO pin 5 and writing
-to it would change it.
-A thin wrapper around the GPIO sys filesystem is here: <kbd><A ID="tex2html7"
-  HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>.
-
-<P>
-
-<H4><A ID="SECTION00331110000000000000"></A><A ID="gpioIRQ"></A>
-<BR>
-GPIO interrupt handling via <SPAN  CLASS="texttt">/sys</SPAN>.
-</H4>
-The most important application for the /sys filesystem is to
-do interrupt processing in userspace.
-A thread can be put to sleep until an interrupt has happened on one of
-the GPIO pins. This is done by monitoring the &ldquo;value&rdquo;
-of a GPIO pin in the <SPAN  CLASS="texttt">/sys</SPAN> filesystem with the &ldquo;poll&rdquo; command:
-<PRE>
-struct pollfd fdset[1];
-int nfds = 1;
-int gpio_fd = open("/sys/class/gpio/gpio5/value", O_RDONLY | O_NONBLOCK );
-memset((void*)fdset, 0, sizeof(fdset));
-fdset[0].fd = gpio_fd;
-fdset[0].events = POLLPRI;
-int rc = poll(fdset, nfds, timeout);
-if (fdset[0].revents &amp; POLLPRI) {
-   // dummy
-   read(fdset[0].fd, buf, MAX_BUF);
-}
-</PRE>
-This code makes the thread go to sleep until an interrupt has occurred on
-GPIO pin&nbsp;5. Then the thread wakes up and execution continues.
-
-<P>
-
-<H3><A ID="SECTION00331200000000000000">
-pigpio</A>
-</H3>
-The above section has given you a deep understanding what's happening
-under the hood on the sysfs-level but it's <SPAN  CLASS="textsl">highly recommended</SPAN> to
-use the pigpio library (<kbd><A ID="tex2html8"
-  HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
-to read/write to GPIO pins or do interrupt programming.
-
-<P>
-For example to set GPIO pin 24 as an output just call:
-<PRE>
-gpioSetMode(24,PI_OUTPUT);
-</PRE>
-
-<P>
-To set the GPIO pin 24 to high just call:
-<PRE>
-int a = gpioWrite(24,1)
-</PRE>
-
-<P>
-
-<H4><A ID="SECTION00331210000000000000">
-Interrupt handling via pigpio:</A>
-</H4>
-pigpio manages GPIO interrupt handling by wrapping all the above
-functionality into a single command where the client registers a
-callback function. The callback occurs whenever a GPIO pin changes.
-Specifically a method of the form:
-<PRE>
-class mySensorClass {
-  ...
-  static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)
-  ...
-}
-</PRE>
-is registered with pigpio:
-<PRE>
-gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
-</PRE>
-where &ldquo;this&rdquo; is the pointer to your class instance.
-The callback registered will then be <SPAN  CLASS="texttt">this-&gt;dataReady()</SPAN>.
-<PRE>
-class LSM9DS1 {
-  void dataReady();
-  static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
-    {
-        ((LSM9DS1*)userdata)-&gt;dataReady();
-    }
-};
-</PRE>
-where here within the static function the void pointer is cast back into the instance pointer.
-See <kbd><A ID="tex2html9"
-  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library</A></kbd> for the complete code.
-
-<P>
-
-<H2><A ID="SECTION00332000000000000000">
 Video camera capture (openCV)</A>
 </H2>
-Reading from a video camera is usually done with the help of openCV
-which is a wrapper around the raw video 4 Linux devices. These are
-blocking to establish the capture events so that a loop needs to run in
-a thread:
+Reading from a video camera is usually done with the help of openCV which
+in turn then talks to the low level C API which in turn talks to the kernel
+via its pseudo devices. Note that from bookworm onwards that is done via
+gstreamer.
 <PRE>
 while(running) {
     cv::Mat cap;
@@ -463,15 +350,15 @@ while(running) {
 The <SPAN  CLASS="texttt">read(cap)</SPAN> command is blocking till a new frame has
 arrived which is then transmitted with the callback <SPAN  CLASS="texttt">nextScene</SPAN>
 to the client. The full code of the example camera class is here:
-<kbd><A ID="tex2html10"
+<kbd><A ID="tex2html7"
   HREF="https://github.com/berndporr/opencv-camera-callback">https://github.com/berndporr/opencv-camera-callback</A></kbd>.
 
 <P>
 
-<H2><A ID="SECTION00333000000000000000">
-I2S: Audio</A>
+<H2><A ID="SECTION00332000000000000000">
+Audio (ALSA)</A>
 </H2>
-The standard framework for audio is alsa: <kbd><A ID="tex2html11"
+The standard framework for audio is alsa: <kbd><A ID="tex2html8"
   HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
 
 <P>
@@ -500,7 +387,7 @@ reject them:
 <P>
 Then playing sound is done in an endless loop were a read()
 or write() command is issued. Both are blocking so that
-it needs to run in a thread:
+they guarantee event timing of audio both way.
 
 <P>
 <PRE>
@@ -515,16 +402,150 @@ it needs to run in a thread:
 <P>
 For a full coding example &ldquo;aplay&rdquo; and &ldquo;arecord&rdquo; are a good start.
 Both can be found here:
-<kbd><A ID="tex2html12"
+<kbd><A ID="tex2html9"
   HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
 
 <P>
 
+<H2><A ID="SECTION00333000000000000000">
+Bluetooth</A>
+</H2>
+
+<P>
+Bluetooth has also blocking I/O so that one can wait for incoming packets on a socket:
+
+<P>
+<PRE>
+void run() {
+        doRun = 1;
+        while (doRun) {
+                recv(btsocket, recvbuffer, sizeof(recvbuffer), 0);
+                hasData(recvbuffer);
+        }
+};
+</PRE>
+
+<P>
+Here the <SPAN  CLASS="texttt">recv</SPAN> command blocks until new data has arrived.
+
+<P>
+
 <H2><A ID="SECTION00334000000000000000">
+General purpose I/O (GPIO)</A>
+</H2>
+GPIO pins are not just simple digital ports but they
+can be used to turn non-blocking I/O into blocking I/O!
+
+<P>
+
+<H3><A ID="SECTION00334100000000000000">
+<SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
+</H3>
+The GPIO of the raspberry PI can easily be controlled via
+the <SPAN  CLASS="texttt">/sys</SPAN> filesystem. This is slow but good for
+debugging as you can directly write a
+&ldquo;0&rdquo; or &ldquo;1&rdquo; string to it and print the result. The
+pseudo files are here:
+<PRE>
+/sys/class/gpio
+</PRE>
+which contains files which directly relate to individual pins.
+To be able to access a pin we need to tell Linux to make
+it visible:
+<PRE>
+/sys/class/gpio/export
+</PRE>
+For example, writing a 5 (in text form) to this file would
+create the subdirectory <SPAN  CLASS="texttt">/sys/class/gpio/gpio5</SPAN> for GPIO pin 5.
+Then reading from
+<PRE>
+/sys/class/gpio/gpio5/value
+</PRE>
+would give you the status of GPIO pin 5 and writing
+to it would change it.
+A thin wrapper around the GPIO sys filesystem is here: <kbd><A ID="tex2html10"
+  HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>.
+
+<P>
+Both reading and writing to GPIO is <SPAN  CLASS="textsl">not blocking</SPAN> but we need to be able to block on GPIO input events.
+This is done with the &ldquo;poll&rdquo; command:
+<PRE>
+struct pollfd fdset[1];
+int nfds = 1;
+int gpio_fd = open("/sys/class/gpio/gpio5/value", O_RDONLY | O_NONBLOCK );
+memset((void*)fdset, 0, sizeof(fdset));
+fdset[0].fd = gpio_fd;
+fdset[0].events = POLLPRI;
+int rc = poll(fdset, nfds, timeout);
+if (fdset[0].revents &amp; POLLPRI) {
+   read(fdset[0].fd, buf, MAX_BUF);
+}
+</PRE>
+This code makes the thread go to sleep until an event has occurred on
+GPIO pin&nbsp;5. Thus you can put the poll command before a non-blocking
+I/O operation and make it blocking.
+
+<P>
+
+<H3><A ID="SECTION00334200000000000000">
+pigpio</A>
+</H3>
+The above section has given you a deep understanding what's happening
+under the hood on the sysfs-level but it's <SPAN  CLASS="textsl">highly recommended</SPAN> to
+use the pigpio library (<kbd><A ID="tex2html11"
+  HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
+to read/write to GPIO pins or do interrupt programming.
+
+<P>
+For example to set GPIO pin 24 as an output just call:
+<PRE>
+gpioSetMode(24,PI_OUTPUT);
+</PRE>
+
+<P>
+To set the GPIO pin 24 to high just call:
+<PRE>
+int a = gpioWrite(24,1)
+</PRE>
+
+<P>
+Pigpio manages GPIO interrupt handling by wrapping all the above
+functionality into a single command where the client registers a
+callback function. The callback occurs whenever a GPIO pin changes.
+Specifically a method of the form:
+<PRE>
+class mySensorClass {
+  ...
+  static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)
+  ...
+}
+</PRE>
+is registered with pigpio:
+<PRE>
+gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
+</PRE>
+where &ldquo;this&rdquo; is the pointer to your class instance.
+The callback registered will then be <SPAN  CLASS="texttt">this-&gt;dataReady()</SPAN>.
+<PRE>
+class LSM9DS1 {
+  void dataReady();
+  static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
+    {
+        ((LSM9DS1*)userdata)-&gt;dataReady();
+    }
+};
+</PRE>
+where here within the static function the void pointer is cast back into the instance pointer.
+See <kbd><A ID="tex2html12"
+  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library</A></kbd> for the complete code.
+
+<P>
+
+<H2><A ID="SECTION00335000000000000000">
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="362"></A>
+  <A ID="364"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 2.1:</STRONG>
 SPI modes</CAPTION>
@@ -598,7 +619,7 @@ struct spi_ioc_transfer tr {
 </PRE>
 which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with the
 same length<A ID="tex2html15"
-  HREF="footnode.html#foot158"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
+  HREF="footnode.html#foot161"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
 
 <P>
 Reading and simultaneous writing then happens via this <SPAN  CLASS="texttt">ioctrl()</SPAN>
@@ -631,7 +652,7 @@ have their own clock signal.
 
 <P>
 
-<H2><A ID="SECTION00335000000000000000">
+<H2><A ID="SECTION00336000000000000000">
 I2C</A>
 </H2>
 I2C is a protocol which either receives or transmits. Its calls are blocking for the duration of receive or transmit 
@@ -661,7 +682,7 @@ accessing the I2C device.
 
 <P>
 
-<H3><A ID="SECTION00335100000000000000">
+<H3><A ID="SECTION00336100000000000000">
 Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
 </H3>
 I2C either transmits or receives but never at the same time so here we
@@ -682,7 +703,7 @@ or write that register.
 
 <P>
 
-<H3><A ID="SECTION00335200000000000000">
+<H3><A ID="SECTION00336200000000000000">
 I2C access via pigpio</A>
 </H3>
 Access via pigpio (<kbd><A ID="tex2html17"
@@ -708,7 +729,7 @@ The <SPAN  CLASS="texttt">subAddress</SPAN> here is the register address in the 
 
 <P>
 
-<H2><A ID="SECTION00336000000000000000">
+<H2><A ID="SECTION00337000000000000000">
 Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
 </H2>
 Some sensors are directly available via the sys filesystem in human readable format.
@@ -720,7 +741,7 @@ gives you the temperature of the CPU.
 
 <P>
 
-<H2><A ID="SECTION00337000000000000000">
+<H2><A ID="SECTION00338000000000000000">
 Accessing physical memory locations (danger!)</A>
 </H2>
 
