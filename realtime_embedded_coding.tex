@@ -276,12 +276,102 @@ In terms of \textsl{memory management}:
 The following sections provide pointers of how to write
 the C++ driver classes for different hardware protocols.
 
-Note that the best I/O is blocking and by itself provides the timing for example
+To emulate an ``interrupt'' or event in userspace we need blocking I/O which provides the timing for example
 when waiting for a GPIO change, doing audio or video I/O.
 
+Generally any userspace program talks to the kernel via pseudo files in the \texttt{\dev} or \texttt{\sys}
+directories.
 
 
-\subsection{Access GPIO pins}
+
+\subsection{Video camera capture (openCV)}
+Reading from a video camera is usually done with the help of openCV which
+in turn then talks to the low level C API which in turn talks to the kernel
+via its pseudo devices. Note that from bookworm onwards that is done via
+gstreamer.
+\begin{verbatim}
+while(running) {
+    cv::Mat cap;
+    videoCapture.read(cap);
+    sceneCallback->nextScene(cap);
+}
+\end{verbatim}
+The \texttt{read(cap)} command is blocking till a new frame has
+arrived which is then transmitted with the callback \texttt{nextScene}
+to the client. The full code of the example camera class is here:
+\url{https://github.com/berndporr/opencv-camera-callback}.
+
+
+
+
+
+\subsection{Audio (ALSA)}
+The standard framework for audio is alsa: \url{https://github.com/alsa-project}.
+
+ALSA is packet based with a read command
+returning a chunk ("buffer") of audio and write emitting one.
+There are calls to set the sample format, sample rate, buffer size
+and so forth.
+
+First, the parameters are requested and the driver can modify or
+reject them:
+\begin{verbatim}
+/* Signed 16-bit little-endian format */
+  snd_pcm_hw_params_set_format(handle, params,
+                               SND_PCM_FORMAT_S16_LE);
+
+  /* One channel (mono) */
+  snd_pcm_hw_params_set_channels(handle, params, 1);
+
+  /* 44100 bits/second sampling rate (CD quality) */
+  val = 44100;
+  snd_pcm_hw_params_set_rate_near(handle, params,
+                                  &val, &dir);
+\end{verbatim}
+
+Then playing sound is done in an endless loop were a read()
+or write() command is issued. Both are blocking so that
+they guarantee event timing of audio both way.
+
+\begin{verbatim}
+ while (running) {
+   if ((err = snd_pcm_readi (handle, buffer, buffer_frames)) != buffer_frames) {
+     if (errCallback) errCallback->hasError();
+   }
+   if (sampleCallback) sampleCallback->hasData(buffer);
+ }
+\end{verbatim}
+
+For a full coding example ``aplay'' and ``arecord'' are a good start.
+Both can be found here:
+\url{https://github.com/alsa-project}.
+
+
+
+\subsection{Bluetooth}
+
+Bluetooth has also blocking I/O so that one can wait for incoming packets on a socket:
+
+\begin{verbatim}
+void run() {
+        doRun = 1;
+        while (doRun) {
+                recv(btsocket, recvbuffer, sizeof(recvbuffer), 0);
+                hasData(recvbuffer);
+        }
+};
+\end{verbatim}
+
+Here the \texttt{recv} command blocks until new data has arrived.
+
+
+
+
+
+\subsection{General purpose I/O (GPIO)}
+GPIO pins are not just simple digital ports but they
+can be used to turn non-blocking I/O into blocking I/O!
+
 \subsubsection{\texttt{/sys} filesystem}
 The GPIO of the raspberry PI can easily be controlled via
 the \texttt{/sys} filesystem. This is slow but good for
@@ -307,12 +397,8 @@ would give you the status of GPIO pin 5 and writing
 to it would change it.
 A thin wrapper around the GPIO sys filesystem is here: \url{https://github.com/berndporr/gpio-sysfs}.
 
-\paragraph{GPIO interrupt handling via \texttt{/sys}\label{gpioIRQ}.}
-The most important application for the /sys filesystem is to
-do interrupt processing in userspace.
-A thread can be put to sleep until an interrupt has happened on one of
-the GPIO pins. This is done by monitoring the ``value''
-of a GPIO pin in the \texttt{/sys} filesystem with the ``poll'' command:
+Both reading and writing to GPIO is \textsl{not blocking} but we need to be able to block on GPIO input events.
+This is done with the ``poll'' command:
 \begin{verbatim}
 struct pollfd fdset[1];
 int nfds = 1;
@@ -322,12 +408,12 @@ fdset[0].fd = gpio_fd;
 fdset[0].events = POLLPRI;
 int rc = poll(fdset, nfds, timeout);
 if (fdset[0].revents & POLLPRI) {
-   // dummy
    read(fdset[0].fd, buf, MAX_BUF);
 }
 \end{verbatim}
-This code makes the thread go to sleep until an interrupt has occurred on
-GPIO pin~5. Then the thread wakes up and execution continues.
+This code makes the thread go to sleep until an event has occurred on
+GPIO pin~5. Thus you can put the poll command before a non-blocking
+I/O operation and make it blocking.
 
 \subsubsection{pigpio}
 The above section has given you a deep understanding what's happening
@@ -345,8 +431,7 @@ To set the GPIO pin 24 to high just call:
 int a = gpioWrite(24,1)
 \end{verbatim}
 
-\paragraph{Interrupt handling via pigpio:}
-pigpio manages GPIO interrupt handling by wrapping all the above
+Pigpio manages GPIO interrupt handling by wrapping all the above
 functionality into a single command where the client registers a
 callback function. The callback occurs whenever a GPIO pin changes.
 Specifically a method of the form:
@@ -374,76 +459,6 @@ class LSM9DS1 {
 \end{verbatim}
 where here within the static function the void pointer is cast back into the instance pointer.
 See \url{https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library} for the complete code.
-
-
-
-
-
-
-\subsection{Video camera capture (openCV)}
-Reading from a video camera is usually done with the help of openCV
-which is a wrapper around the raw video 4 Linux devices. These are
-blocking to establish the capture events so that a loop needs to run in
-a thread:
-\begin{verbatim}
-while(running) {
-    cv::Mat cap;
-    videoCapture.read(cap);
-    sceneCallback->nextScene(cap);
-}
-\end{verbatim}
-The \texttt{read(cap)} command is blocking till a new frame has
-arrived which is then transmitted with the callback \texttt{nextScene}
-to the client. The full code of the example camera class is here:
-\url{https://github.com/berndporr/opencv-camera-callback}.
-
-
-
-
-
-
-
-
-\subsection{I2S: Audio}
-The standard framework for audio is alsa: \url{https://github.com/alsa-project}.
-
-ALSA is packet based with a read command
-returning a chunk ("buffer") of audio and write emitting one.
-There are calls to set the sample format, sample rate, buffer size
-and so forth.
-
-First, the parameters are requested and the driver can modify or
-reject them:
-\begin{verbatim}
-/* Signed 16-bit little-endian format */
-  snd_pcm_hw_params_set_format(handle, params,
-                               SND_PCM_FORMAT_S16_LE);
-
-  /* One channel (mono) */
-  snd_pcm_hw_params_set_channels(handle, params, 1);
-
-  /* 44100 bits/second sampling rate (CD quality) */
-  val = 44100;
-  snd_pcm_hw_params_set_rate_near(handle, params,
-                                  &val, &dir);
-\end{verbatim}
-
-Then playing sound is done in an endless loop were a read()
-or write() command is issued. Both are blocking so that
-it needs to run in a thread:
-
-\begin{verbatim}
- while (running) {
-   if ((err = snd_pcm_readi (handle, buffer, buffer_frames)) != buffer_frames) {
-     if (errCallback) errCallback->hasError();
-   }
-   if (sampleCallback) sampleCallback->hasData(buffer);
- }
-\end{verbatim}
-
-For a full coding example ``aplay'' and ``arecord'' are a good start.
-Both can be found here:
-\url{https://github.com/alsa-project}.
 
 
 
