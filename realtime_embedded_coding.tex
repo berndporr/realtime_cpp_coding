@@ -285,10 +285,10 @@ directories.
 
 
 \subsection{Video camera capture (openCV)}
+\subsubsection{Ubuntu / Debian Linux systems\label{videodesk}}
 Reading from a video camera is usually done with the help of openCV which
 in turn then talks to the low level C API which in turn talks to the kernel
-via its pseudo devices. Note that from bookworm onwards that is done via
-gstreamer.
+via \texttt{/dev/video*}.
 \begin{verbatim}
 while(running) {
     cv::Mat cap;
@@ -300,6 +300,22 @@ The \texttt{read(cap)} command is blocking till a new frame has
 arrived which is then transmitted with the callback \texttt{nextScene}
 to the client. The full code of the example camera class is here:
 \url{https://github.com/berndporr/opencv-camera-callback}.
+
+
+\subsubsection{Raspberry PI}
+On the raspberry PI a new video stack has been implemented which talks
+to the kernel via \texttt{/dev/media*}. This is incompatible with
+openCV and the code in section~\ref{videodesk} won't work. The good
+news is that \texttt{libcamera} already implements a callback
+interface so a loop is no longer needed. Instead, one just needs to register a
+callback to receive the video frames. The bad news is that libcamera
+is highly complex and requires a lot of additional code
+(\url{https://github.com/libcamera-org/libcamera/blob/master/Documentation/guides/application-developer.rst}).
+To make life easier we have written a C++ wrapper around the libcamera C++ API
+which exposes a callback which delivers image frames in openCV format to
+mimick the behaviour of the openCV code of the previous
+section~\ref{videodesk}:
+\url{https://github.com/berndporr/libcamera2opencv}.
 
 
 

@@ -33,7 +33,7 @@
 <A
  HREF="node2.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html129"
+<A ID="tex2html131"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node2.html">Introduction</A>
- &nbsp; <B>  <A ID="tex2html130"
+ &nbsp; <B>  <A ID="tex2html132"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,55 +52,61 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html131"
+<LI><A ID="tex2html133"
   HREF="node3.html#SECTION00310000000000000000">General recommendations on how to write your C++ classes for devices</A>
-<LI><A ID="tex2html132"
+<LI><A ID="tex2html134"
   HREF="node3.html#SECTION00320000000000000000">Callbacks in C++ device classes</A>
 <UL>
-<LI><A ID="tex2html133"
-  HREF="node3.html#SECTION00321000000000000000">Creating a callback interface</A>
-<LI><A ID="tex2html134"
-  HREF="node3.html#SECTION00322000000000000000">Adding directly an abstract method to the device driver class</A>
 <LI><A ID="tex2html135"
+  HREF="node3.html#SECTION00321000000000000000">Creating a callback interface</A>
+<LI><A ID="tex2html136"
+  HREF="node3.html#SECTION00322000000000000000">Adding directly an abstract method to the device driver class</A>
+<LI><A ID="tex2html137"
   HREF="node3.html#SECTION00323000000000000000">Callback arguments</A>
 </UL>
 <BR>
-<LI><A ID="tex2html136"
+<LI><A ID="tex2html138"
   HREF="node3.html#SECTION00330000000000000000">Low level userspace device access</A>
 <UL>
-<LI><A ID="tex2html137"
-  HREF="node3.html#SECTION00331000000000000000">Video camera capture (openCV)</A>
-<LI><A ID="tex2html138"
-  HREF="node3.html#SECTION00332000000000000000">Audio (ALSA)</A>
 <LI><A ID="tex2html139"
-  HREF="node3.html#SECTION00333000000000000000">Bluetooth</A>
+  HREF="node3.html#SECTION00331000000000000000">Video camera capture (openCV)</A>
+<UL>
 <LI><A ID="tex2html140"
+  HREF="node3.html#SECTION00331100000000000000">Ubuntu / Debian Linux systems</A>
+<LI><A ID="tex2html141"
+  HREF="node3.html#SECTION00331200000000000000">Raspberry PI</A>
+</UL>
+<LI><A ID="tex2html142"
+  HREF="node3.html#SECTION00332000000000000000">Audio (ALSA)</A>
+<LI><A ID="tex2html143"
+  HREF="node3.html#SECTION00333000000000000000">Bluetooth</A>
+<LI><A ID="tex2html144"
   HREF="node3.html#SECTION00334000000000000000">General purpose I/O (GPIO)</A>
 <UL>
-<LI><A ID="tex2html141"
+<LI><A ID="tex2html145"
   HREF="node3.html#SECTION00334100000000000000"><SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
-<LI><A ID="tex2html142"
+<LI><A ID="tex2html146"
   HREF="node3.html#SECTION00334200000000000000">pigpio</A>
 </UL>
-<LI><A ID="tex2html143"
+<LI><A ID="tex2html147"
   HREF="node3.html#SECTION00335000000000000000">SPI</A>
-<LI><A ID="tex2html144"
+<LI><A ID="tex2html148"
   HREF="node3.html#SECTION00336000000000000000">I2C</A>
 <UL>
-<LI><A ID="tex2html145"
+<LI><A ID="tex2html149"
   HREF="node3.html#SECTION00336100000000000000">Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
-<LI><A ID="tex2html146"
+<LI><A ID="tex2html150"
   HREF="node3.html#SECTION00336200000000000000">I2C access via pigpio</A>
 </UL>
-<LI><A ID="tex2html147"
+<LI><A ID="tex2html151"
   HREF="node3.html#SECTION00337000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
-<LI><A ID="tex2html148"
+<LI><A ID="tex2html152"
   HREF="node3.html#SECTION00338000000000000000">Accessing physical memory locations (danger!)</A>
 </UL>
 <BR>
-<LI><A ID="tex2html149"
+<LI><A ID="tex2html153"
   HREF="node3.html#SECTION00340000000000000000">Kernel driver programming</A>
-<LI><A ID="tex2html150"
+<LI><A ID="tex2html154"
   HREF="node3.html#SECTION00350000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -336,10 +342,14 @@ directories.
 <H2><A ID="SECTION00331000000000000000">
 Video camera capture (openCV)</A>
 </H2>
+
+<H3><A ID="SECTION00331100000000000000"></A><A ID="videodesk"></A>
+<BR>
+Ubuntu / Debian Linux systems
+</H3>
 Reading from a video camera is usually done with the help of openCV which
 in turn then talks to the low level C API which in turn talks to the kernel
-via its pseudo devices. Note that from bookworm onwards that is done via
-gstreamer.
+via <SPAN  CLASS="texttt">/dev/video*</SPAN>.
 <PRE>
 while(running) {
     cv::Mat cap;
@@ -355,10 +365,31 @@ to the client. The full code of the example camera class is here:
 
 <P>
 
+<H3><A ID="SECTION00331200000000000000">
+Raspberry PI</A>
+</H3>
+On the raspberry PI a new video stack has been implemented which talks
+to the kernel via <SPAN  CLASS="texttt">/dev/media*</SPAN>. This is incompatible with
+openCV and the code in section&nbsp;<A HREF="#videodesk">2.3.1</A> won't work. The good
+news is that <SPAN  CLASS="texttt">libcamera</SPAN> already implements a callback
+interface so a loop is no longer needed. Instead, one just needs to register a
+callback to receive the video frames. The bad news is that libcamera
+is highly complex and requires a lot of additional code
+(<kbd><A ID="tex2html8"
+  HREF="https://github.com/libcamera-org/libcamera/blob/master/Documentation/guides/application-developer.rst">https://github.com/libcamera-org/libcamera/blob/master/Documentation/guides/application-developer.rst</A></kbd>).
+To make life easier we have written a C++ wrapper around the libcamera C++ API
+which exposes a callback which delivers image frames in openCV format to
+mimick the behaviour of the openCV code of the previous
+section&nbsp;<A HREF="#videodesk">2.3.1</A>:
+<kbd><A ID="tex2html9"
+  HREF="https://github.com/berndporr/libcamera2opencv">https://github.com/berndporr/libcamera2opencv</A></kbd>.
+
+<P>
+
 <H2><A ID="SECTION00332000000000000000">
 Audio (ALSA)</A>
 </H2>
-The standard framework for audio is alsa: <kbd><A ID="tex2html8"
+The standard framework for audio is alsa: <kbd><A ID="tex2html10"
   HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
 
 <P>
@@ -402,7 +433,7 @@ they guarantee event timing of audio both way.
 <P>
 For a full coding example &ldquo;aplay&rdquo; and &ldquo;arecord&rdquo; are a good start.
 Both can be found here:
-<kbd><A ID="tex2html9"
+<kbd><A ID="tex2html11"
   HREF="https://github.com/alsa-project">https://github.com/alsa-project</A></kbd>.
 
 <P>
@@ -463,7 +494,7 @@ Then reading from
 </PRE>
 would give you the status of GPIO pin 5 and writing
 to it would change it.
-A thin wrapper around the GPIO sys filesystem is here: <kbd><A ID="tex2html10"
+A thin wrapper around the GPIO sys filesystem is here: <kbd><A ID="tex2html12"
   HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>.
 
 <P>
@@ -492,7 +523,7 @@ pigpio</A>
 </H3>
 The above section has given you a deep understanding what's happening
 under the hood on the sysfs-level but it's <SPAN  CLASS="textsl">highly recommended</SPAN> to
-use the pigpio library (<kbd><A ID="tex2html11"
+use the pigpio library (<kbd><A ID="tex2html13"
   HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
 to read/write to GPIO pins or do interrupt programming.
 
@@ -536,7 +567,7 @@ class LSM9DS1 {
 };
 </PRE>
 where here within the static function the void pointer is cast back into the instance pointer.
-See <kbd><A ID="tex2html12"
+See <kbd><A ID="tex2html14"
   HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library</A></kbd> for the complete code.
 
 <P>
@@ -545,7 +576,7 @@ See <kbd><A ID="tex2html12"
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="364"></A>
+  <A ID="374"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 2.1:</STRONG>
 SPI modes</CAPTION>
@@ -599,7 +630,7 @@ Then set the SPI mode (see table&nbsp;<A HREF="#spimodes">2.1</A>):
 int ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);
 </PRE>
 as explained, for example, here:
-<kbd><A ID="tex2html14"
+<kbd><A ID="tex2html16"
   HREF="https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html">https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html</A></kbd>.
 
 <P>
@@ -618,8 +649,8 @@ struct spi_ioc_transfer tr {
 };
 </PRE>
 which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with the
-same length<A ID="tex2html15"
-  HREF="footnode.html#foot161"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
+same length<A ID="tex2html17"
+  HREF="footnode.html#foot170"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
 
 <P>
 Reading and simultaneous writing then happens via this <SPAN  CLASS="texttt">ioctrl()</SPAN>
@@ -632,7 +663,7 @@ int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
 Sometimes the SPI protocol of a chip is so odd that even the raw I/O
 via <SPAN  CLASS="texttt">/dev</SPAN> won't work and you need to write your own bit
 banging interface, for example done here for the ADC on the alphabot:
-<kbd><A ID="tex2html16"
+<kbd><A ID="tex2html18"
   HREF="https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58">https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58</A></kbd>.
 This is obviously far from ideal as it might require <SPAN  CLASS="texttt">usleep()</SPAN>
 commands so that acquisition needs to be run in a separate thread (the
@@ -706,7 +737,7 @@ or write that register.
 <H3><A ID="SECTION00336200000000000000">
 I2C access via pigpio</A>
 </H3>
-Access via pigpio (<kbd><A ID="tex2html17"
+Access via pigpio (<kbd><A ID="tex2html19"
   HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
 is preferred in contrast to direct
 access of the raw /dev/i2c because many different devices

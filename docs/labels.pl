@@ -34,6 +34,10 @@ $key = q/timing/;
 $external_labels{$key} = "$URL/" . q|node2.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/videodesk/;
+$external_labels{$key} = "$URL/" . q|node3.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/webserver/;
 $external_labels{$key} = "$URL/" . q|node6.html|; 
 $noresave{$key} = "$nosave";
@@ -79,6 +83,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/timing/;
 $external_latex_labels{$key} = q|1.1 Dataflow and timing in low level realtime coding |; 
+$noresave{$key} = "$nosave";
+
+$key = q/videodesk/;
+$external_latex_labels{$key} = q|2.3.1 Ubuntu / Debian Linux systems|; 
 $noresave{$key} = "$nosave";
 
 $key = q/webserver/;
