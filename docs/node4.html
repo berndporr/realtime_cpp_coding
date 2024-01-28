@@ -76,7 +76,7 @@
 </UL>
 <BR>
 <LI><A ID="tex2html166"
-  HREF="node4.html#SECTION00440000000000000000">Timing with Linux/pigpio timers</A>
+  HREF="node4.html#SECTION00440000000000000000">Timing with Linux timers</A>
 <LI><A ID="tex2html167"
   HREF="node4.html#SECTION00450000000000000000">Conclusion</A>
 </UL>
@@ -293,19 +293,44 @@ callbacks.
 <P>
 
 <H1><A ID="SECTION00440000000000000000">
-Timing with Linux/pigpio timers</A>
+Timing with Linux timers</A>
 </H1>
-As a last resort one can use a timer. Similar to threads one can
-create timers which are then called at certain intervals. As with threads
-timers should be <SPAN  CLASS="textsl">hidden</SPAN> within a C++ class as
-<SPAN  CLASS="textsl">private</SPAN> members which then trigger <SPAN  CLASS="textsl">public callbacks</SPAN>
-via C++ callback mechanisms as described above. These timers emit a
-Linux signal at a specified interval and then this signal is caught by
-a global (static) function.  Generally it's <SPAN  CLASS="textsl">not recommended</SPAN>
-to use timers for anything which needs to be reliably sampled, for
+If no timing info from the sensor is available
+one can use a timer as a last resort. Under Linux reliable timing
+can be again created with the help of blocking I/O
+and threads. Here, a
+special file descriptor receives information when a timer
+has fired first and at which intervals
+after:
+<PRE>
+fd = timerfd_create(CLOCK_MONOTONIC, 0);
+its.it_value.tv_sec = millisecs / 1000;
+its.it_value.tv_nsec = (millisecs % 1000) * 1000000;
+its.it_interval.tv_sec = millisecs / 1000;
+its.it_interval.tv_nsec = (millisecs % 1000) * 1000000;
+if (timerfd_settime(fd, 0, &amp;its, NULL) == -1)
+  throw("Could not start timer");
+</PRE>
+This file descriptor is then used
+in a loop with a blocking <SPAN  CLASS="texttt">read</SPAN> command which then
+wakes up at the specified intervals:
+<PRE>
+running = true;
+while (running) {
+  uint64_t exp;
+  read(fd, &amp;exp, sizeof(uint64_t));
+  timerEvent();
+}
+</PRE>
+where <SPAN  CLASS="texttt">timerEvent</SPAN> is as usual the callback which is
+called at the specified intervals.
+
+<P>
+However, generally it's <SPAN  CLASS="textsl">not recommended</SPAN>
+to use timers for anything which needs to be sampled at high temporal
+precision, for
 example ADC converters or sensors with sampling rates higher than a
-few Hz. On the raspberry PI use the pigpio library and its timer
-callbacks &mdash; if needed at all.
+few Hz.
 
 <P>
 

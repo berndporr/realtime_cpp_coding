@@ -866,18 +866,42 @@ you can create both error and data
 callbacks.
 
 
-\section{Timing with Linux/pigpio timers}
-As a last resort one can use a timer. Similar to threads one can
-create timers which are then called at certain intervals. As with threads
-timers should be \textsl{hidden} within a C++ class as
-\textsl{private} members which then trigger \textsl{public callbacks}
-via C++ callback mechanisms as described above. These timers emit a
-Linux signal at a specified interval and then this signal is caught by
-a global (static) function.  Generally it's \textsl{not recommended}
-to use timers for anything which needs to be reliably sampled, for
+\section{Timing with Linux timers}
+If no timing info from the sensor is available
+one can use a timer as a last resort. Under Linux reliable timing
+can be again created with the help of blocking I/O
+and threads. Here, a
+special file descriptor receives information when a timer
+has fired first and at which intervals
+after:
+\begin{verbatim}
+fd = timerfd_create(CLOCK_MONOTONIC, 0);
+its.it_value.tv_sec = millisecs / 1000;
+its.it_value.tv_nsec = (millisecs % 1000) * 1000000;
+its.it_interval.tv_sec = millisecs / 1000;
+its.it_interval.tv_nsec = (millisecs % 1000) * 1000000;
+if (timerfd_settime(fd, 0, &its, NULL) == -1)
+  throw("Could not start timer");
+\end{verbatim}
+This file descriptor is then used
+in a loop with a blocking \texttt{read} command which then
+wakes up at the specified intervals:
+\begin{verbatim}
+running = true;
+while (running) {
+  uint64_t exp;
+  read(fd, &exp, sizeof(uint64_t));
+  timerEvent();
+}
+\end{verbatim}
+where \texttt{timerEvent} is as usual the callback which is
+called at the specified intervals.
+
+However, generally it's \textsl{not recommended}
+to use timers for anything which needs to be sampled at high temporal
+precision, for
 example ADC converters or sensors with sampling rates higher than a
-few Hz. On the raspberry PI use the pigpio library and its timer
-callbacks --- if needed at all.
+few Hz.
 
 \section{Conclusion}
 Threads play a central role in real-time coding as,
