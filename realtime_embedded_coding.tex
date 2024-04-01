@@ -102,10 +102,9 @@ hiding away the complexity (and messy) low level C APIs and/or raw
 device access. How are events translated into I/O operations? On the
 hardware-side we have event signals such as data-ready signals or by
 the timing of a serial or audio interface. The Linux kernel translates
-this timing info into blocking I/O on pseudo filesystems such as /dev
-or /sys which means that a read operation blocks until data has arrived
-or an event has happened. Some low level libraries such as \textbf{pigpio}
-translate them back into C callbacks. The task of a C++ programmer is
+this timing info into blocking I/O on the pseudo filesystem \texttt{/dev}
+which means that a read operation blocks until data has arrived
+or an event has happened. The task of a C++ programmer is
 to hide this complexity and these quite different approaches in C++
 classes which communicate via callbacks and setters with the client
 classes. The rest of the program will then appear simple and be
@@ -388,93 +387,74 @@ Here the \texttt{recv} command blocks until new data has arrived.
 GPIO pins are not just simple digital ports but they
 can be used to turn non-blocking I/O into blocking I/O!
 
-\subsubsection{\texttt{/sys} filesystem}
-The GPIO of the raspberry PI can easily be controlled via
-the \texttt{/sys} filesystem. This is slow but good for
-debugging as you can directly write a
-``0'' or ``1'' string to it and print the result. The
-pseudo files are here:
-\begin{verbatim}
-/sys/class/gpio
-\end{verbatim}
-which contains files which directly relate to individual pins.
-To be able to access a pin we need to tell Linux to make
-it visible:
-\begin{verbatim}
-/sys/class/gpio/export
-\end{verbatim}
-For example, writing a 5 (in text form) to this file would
-create the subdirectory \texttt{/sys/class/gpio/gpio5} for GPIO pin 5.
-Then reading from
-\begin{verbatim}
-/sys/class/gpio/gpio5/value
-\end{verbatim}
-would give you the status of GPIO pin 5 and writing
-to it would change it.
-A thin wrapper around the GPIO sys filesystem is here: \url{https://github.com/berndporr/gpio-sysfs}.
+\subsubsection{libgpiod}
+The GPIO (of the raspberry PI) can easily be controlled via
+the \texttt{/dev} filesystem and \texttt{libgpiod}.
 
-Both reading and writing to GPIO is \textsl{not blocking} but we need to be able to block on GPIO input events.
-This is done with the ``poll'' command:
+When you use the gpiod library you:
+\begin{enumerate}
+\item first choose the I/O \textsl{chip} either by its number, name or pseudo-file:
 \begin{verbatim}
-struct pollfd fdset[1];
-int nfds = 1;
-int gpio_fd = open("/sys/class/gpio/gpio5/value", O_RDONLY | O_NONBLOCK );
-memset((void*)fdset, 0, sizeof(fdset));
-fdset[0].fd = gpio_fd;
-fdset[0].events = POLLPRI;
-int rc = poll(fdset, nfds, timeout);
-if (fdset[0].revents & POLLPRI) {
-   read(fdset[0].fd, buf, MAX_BUF);
-}
+  struct gpiod_chip *chip = gpiod_chip_open_by_name("gpiochip0");
 \end{verbatim}
-This code makes the thread go to sleep until an event has occurred on
-GPIO pin~5. Thus you can put the poll command before a non-blocking
-I/O operation and make it blocking.
-
-\subsubsection{pigpio}
-The above section has given you a deep understanding what's happening
-under the hood on the sysfs-level but it's \textsl{highly recommended} to
-use the pigpio library (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
-to read/write to GPIO pins or do interrupt programming.
-
-For example to set GPIO pin 24 as an output just call:
+and then,
+\item as a 2nd step you select the pin on the chip:
 \begin{verbatim}
-gpioSetMode(24,PI_OUTPUT);
+  struct gpiod_line *pinRed = gpiod_chip_get_line(chip, 24);
+\end{verbatim}
+\end{enumerate}
+
+\subsubsection{Output}
+One you have a pointer to the pin then you can set its direction, for example
+as an output pin with:
+\begin{verbatim}
+gpiod_line_request_output(pinRed, "example1", 0);
+\end{verbatim}
+and set its value with:
+\begin{verbatim}
+gpiod_line_set_value(pinRed, 1);
+\end{verbatim}
+Once you are finished release the GPIO pin with:
+\begin{verbatim}
+gpiod_line_release(pinRed);
+\end{verbatim}
+and close the chip:
+\begin{verbatim}
+gpiod_chip_close(chip);
 \end{verbatim}
 
-To set the GPIO pin 24 to high just call:
-\begin{verbatim}
-int a = gpioWrite(24,1)
-\end{verbatim}
+\subsubsection{Events}
+For event progressing with need blocking I/O which then wakes up a thread.
+This means that a change in level from low to high or high
+to low unblocks an I/O operation, the underlying thread wakes up and
+then a callback can be triggered.
 
-Pigpio manages GPIO interrupt handling by wrapping all the above
-functionality into a single command where the client registers a
-callback function. The callback occurs whenever a GPIO pin changes.
-Specifically a method of the form:
+To request event processing on a pin simply request it with this single
+command:
 \begin{verbatim}
-class mySensorClass {
-  ...
-  static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)
-  ...
-}
+int ret = gpiod_line_request_rising_edge_events(pinSwitch, "Consumer");
 \end{verbatim}
-is registered with pigpio:
+This will turn the GPIO pin \texttt{pinSwitch} into an input pin and enables
+blocking I/O on this pin.
+
+Then start a tread where its worker contains:
 \begin{verbatim}
-gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
-\end{verbatim}
-where ``this'' is the pointer to your class instance.
-The callback registered will then be \texttt{this->dataReady()}.
-\begin{verbatim}
-class LSM9DS1 {
-  void dataReady();
-  static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
-    {
-        ((LSM9DS1*)userdata)->dataReady();
+void worker() {
+	while (running) {
+	    const struct timespec ts = { 1, 0 };
+	    gpiod_line_event_wait(pinSwitch, &ts);
+	    struct gpiod_line_event event;
+	    gpiod_line_event_read(pinSwitch, &event);
+	    event_callback();
+	}
     }
-};
 \end{verbatim}
-where here within the static function the void pointer is cast back into the instance pointer.
-See \url{https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library} for the complete code.
+The \texttt{gpiod\_line\_event\_wait} waits for a rising edge at the GPIO
+pin and then unblocks. Then \texttt{gpiod\_line\_event\_read} transfers the
+kernel event to userspace and clears it out of the kernel space. It's important
+to do the read operation even, if the struct is never used. Then call
+the callback and repeat until the user terminates the thread.
+See \url{https://github.com/berndporr/rpi_ads1115} for a complete example.
 
 
 
@@ -601,28 +581,29 @@ read(file, buf, 2)
 where \texttt{addr} is the I2C address. Then use standard \texttt{read()}
 or \texttt{write()} commands. Usually the 1st write operation tells the chip
 which register to read or write to. Subsequent operations read
-or write that register.
+or write that register. For example, reading a 16~bit register:
+\begin{verbatim}
+unsigned 2c_readWord(uint8_t reg)
+{
+	uint8_t tmp[2];
+	tmp[0] = reg;
+	write(fd_i2c,&tmp,1);
+        read(fd_i2c, tmp, 2);
+        return (((unsigned)(tmp[0])) << 8) | ((unsigned)(tmp[1]));
+}
+\end{verbatim}
+Similarly writing a 16~bit register writes 3 bytes to the I2C bus (register and the 16~bit data):
+\begin{verbatim}
+void i2c_writeWord(uint8_t reg, unsigned data)
+{
+	uint8_t tmp[3];
+	tmp[0] = reg;
+	tmp[1] = (char)((data & 0xff00) >> 8);
+	tmp[2] = (char)(data & 0x00ff);
+	write(fd_i2c,&tmp,3);
+}
+\end{verbatim}
 
-\subsubsection{I2C access via pigpio}
-Access via pigpio (\url{http://abyz.me.uk/rpi/pigpio/cif.html})
-is preferred in contrast to direct
-access of the raw /dev/i2c because many different devices
-can be connected to the I2C bus and pigpio manages this.
-Simply install the development package:
-\begin{verbatim}
-sudo apt-get install libpigpio-dev
-\end{verbatim}
-which triggers then the install of the other relevant packages.
-For example writing a byte to a register in an I2C sensor can be done with a
-few commands:
-\begin{verbatim}
-int fd = i2cOpen(i2c_bus, address, 0);
-i2cWriteByteData(fd, subAddress, data);
-i2cClose(fd);
-\end{verbatim}
-where \texttt{i2c\_bus} is the I2C bus number (usually 1 on the RPI)
-and the \texttt{address} is the I2C address of the device on that bus.
-The \texttt{subAddress} here is the register address in the device.
 
 \subsection{Access to hardware via special devices in \texttt{/sys}}
 Some sensors are directly available via the sys filesystem in human readable format.
@@ -816,18 +797,6 @@ and is perfect to tell the kernel that it can execute other threads
 in the meantime.
 
 
-\subsubsection{select/poll commands waiting for GPIO interrupts}
-In section~\ref{gpioIRQ} we introduced the so called ``poll'' command
-which is not polling an IRQ pin but \textsl{putting a thread to sleep} till an
-external event has happened. Then of course a callback function should
-be called reacting to the external event. This is the preferred method
-for low latency responses.
-
-As said previously, use \textbf{pigpio} on the Raspberry PI
-which wraps the select/poll commands into a thread and calls a
-\textsl{callback} function whenever an GPIO pin has been triggered.
-
-
 \subsubsection{Timing with blocking I/O}
 Blocking I/O (read, write, etc) \textsl{is by far the best approach} to time
 the data coming in because the thread goes to sleep when it's waiting for
@@ -863,7 +832,12 @@ ret = read(fd,buffer,bytes_per_sample * n_chan);
 \end{verbatim}
 which has the advantage that it has a timeout so that
 you can create both error and data
-callbacks.
+callbacks. Even if the I/O is blocking using select or poll
+has the advantage that these commands have timeouts while
+the read and write commands would block forever. This is also
+the recommended approach for libgpiod where the \texttt{gpiod\_line\_event\_wait}
+is not needed because \texttt{gpiod\_line\_event\_read} is blocking
+but would block indefinitely.
 
 
 \section{Timing with Linux timers}

@@ -33,7 +33,7 @@
 <A
  HREF="node2.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html131"
+<A ID="tex2html128"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
@@ -43,7 +43,7 @@
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node2.html">Introduction</A>
- &nbsp; <B>  <A ID="tex2html132"
+ &nbsp; <B>  <A ID="tex2html129"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,61 +52,61 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html133"
+<LI><A ID="tex2html130"
   HREF="node3.html#SECTION00310000000000000000">General recommendations on how to write your C++ classes for devices</A>
-<LI><A ID="tex2html134"
+<LI><A ID="tex2html131"
   HREF="node3.html#SECTION00320000000000000000">Callbacks in C++ device classes</A>
 <UL>
-<LI><A ID="tex2html135"
+<LI><A ID="tex2html132"
   HREF="node3.html#SECTION00321000000000000000">Creating a callback interface</A>
-<LI><A ID="tex2html136"
+<LI><A ID="tex2html133"
   HREF="node3.html#SECTION00322000000000000000">Adding directly an abstract method to the device driver class</A>
-<LI><A ID="tex2html137"
+<LI><A ID="tex2html134"
   HREF="node3.html#SECTION00323000000000000000">Callback arguments</A>
 </UL>
 <BR>
-<LI><A ID="tex2html138"
+<LI><A ID="tex2html135"
   HREF="node3.html#SECTION00330000000000000000">Low level userspace device access</A>
 <UL>
-<LI><A ID="tex2html139"
+<LI><A ID="tex2html136"
   HREF="node3.html#SECTION00331000000000000000">Video camera capture (openCV)</A>
 <UL>
-<LI><A ID="tex2html140"
+<LI><A ID="tex2html137"
   HREF="node3.html#SECTION00331100000000000000">Ubuntu / Debian Linux systems</A>
-<LI><A ID="tex2html141"
+<LI><A ID="tex2html138"
   HREF="node3.html#SECTION00331200000000000000">Raspberry PI</A>
 </UL>
-<LI><A ID="tex2html142"
+<LI><A ID="tex2html139"
   HREF="node3.html#SECTION00332000000000000000">Audio (ALSA)</A>
-<LI><A ID="tex2html143"
+<LI><A ID="tex2html140"
   HREF="node3.html#SECTION00333000000000000000">Bluetooth</A>
-<LI><A ID="tex2html144"
+<LI><A ID="tex2html141"
   HREF="node3.html#SECTION00334000000000000000">General purpose I/O (GPIO)</A>
 <UL>
-<LI><A ID="tex2html145"
-  HREF="node3.html#SECTION00334100000000000000"><SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
-<LI><A ID="tex2html146"
-  HREF="node3.html#SECTION00334200000000000000">pigpio</A>
+<LI><A ID="tex2html142"
+  HREF="node3.html#SECTION00334100000000000000">libgpiod</A>
+<LI><A ID="tex2html143"
+  HREF="node3.html#SECTION00334200000000000000">Output</A>
+<LI><A ID="tex2html144"
+  HREF="node3.html#SECTION00334300000000000000">Events</A>
 </UL>
-<LI><A ID="tex2html147"
+<LI><A ID="tex2html145"
   HREF="node3.html#SECTION00335000000000000000">SPI</A>
-<LI><A ID="tex2html148"
+<LI><A ID="tex2html146"
   HREF="node3.html#SECTION00336000000000000000">I2C</A>
 <UL>
-<LI><A ID="tex2html149"
+<LI><A ID="tex2html147"
   HREF="node3.html#SECTION00336100000000000000">Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
-<LI><A ID="tex2html150"
-  HREF="node3.html#SECTION00336200000000000000">I2C access via pigpio</A>
 </UL>
-<LI><A ID="tex2html151"
+<LI><A ID="tex2html148"
   HREF="node3.html#SECTION00337000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
-<LI><A ID="tex2html152"
+<LI><A ID="tex2html149"
   HREF="node3.html#SECTION00338000000000000000">Accessing physical memory locations (danger!)</A>
 </UL>
 <BR>
-<LI><A ID="tex2html153"
+<LI><A ID="tex2html150"
   HREF="node3.html#SECTION00340000000000000000">Kernel driver programming</A>
-<LI><A ID="tex2html154"
+<LI><A ID="tex2html151"
   HREF="node3.html#SECTION00350000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -121,10 +121,9 @@ hiding away the complexity (and messy) low level C APIs and/or raw
 device access. How are events translated into I/O operations? On the
 hardware-side we have event signals such as data-ready signals or by
 the timing of a serial or audio interface. The Linux kernel translates
-this timing info into blocking I/O on pseudo filesystems such as /dev
-or /sys which means that a read operation blocks until data has arrived
-or an event has happened. Some low level libraries such as <SPAN  CLASS="textbf">pigpio</SPAN>
-translate them back into C callbacks. The task of a C++ programmer is
+this timing info into blocking I/O on the pseudo filesystem <SPAN  CLASS="texttt">/dev</SPAN>
+which means that a read operation blocks until data has arrived
+or an event has happened. The task of a C++ programmer is
 to hide this complexity and these quite different approaches in C++
 classes which communicate via callbacks and setters with the client
 classes. The rest of the program will then appear simple and be
@@ -470,105 +469,90 @@ can be used to turn non-blocking I/O into blocking I/O!
 <P>
 
 <H3><A ID="SECTION00334100000000000000">
-<SPAN  CLASS="texttt">/sys</SPAN> filesystem</A>
+libgpiod</A>
 </H3>
-The GPIO of the raspberry PI can easily be controlled via
-the <SPAN  CLASS="texttt">/sys</SPAN> filesystem. This is slow but good for
-debugging as you can directly write a
-&ldquo;0&rdquo; or &ldquo;1&rdquo; string to it and print the result. The
-pseudo files are here:
-<PRE>
-/sys/class/gpio
-</PRE>
-which contains files which directly relate to individual pins.
-To be able to access a pin we need to tell Linux to make
-it visible:
-<PRE>
-/sys/class/gpio/export
-</PRE>
-For example, writing a 5 (in text form) to this file would
-create the subdirectory <SPAN  CLASS="texttt">/sys/class/gpio/gpio5</SPAN> for GPIO pin 5.
-Then reading from
-<PRE>
-/sys/class/gpio/gpio5/value
-</PRE>
-would give you the status of GPIO pin 5 and writing
-to it would change it.
-A thin wrapper around the GPIO sys filesystem is here: <kbd><A ID="tex2html12"
-  HREF="https://github.com/berndporr/gpio-sysfs">https://github.com/berndporr/gpio-sysfs</A></kbd>.
+The GPIO (of the raspberry PI) can easily be controlled via
+the <SPAN  CLASS="texttt">/dev</SPAN> filesystem and <SPAN  CLASS="texttt">libgpiod</SPAN>.
 
 <P>
-Both reading and writing to GPIO is <SPAN  CLASS="textsl">not blocking</SPAN> but we need to be able to block on GPIO input events.
-This is done with the &ldquo;poll&rdquo; command:
+When you use the gpiod library you:
+
+<OL>
+<LI>first choose the I/O <SPAN  CLASS="textsl">chip</SPAN> either by its number, name or pseudo-file:
 <PRE>
-struct pollfd fdset[1];
-int nfds = 1;
-int gpio_fd = open("/sys/class/gpio/gpio5/value", O_RDONLY | O_NONBLOCK );
-memset((void*)fdset, 0, sizeof(fdset));
-fdset[0].fd = gpio_fd;
-fdset[0].events = POLLPRI;
-int rc = poll(fdset, nfds, timeout);
-if (fdset[0].revents &amp; POLLPRI) {
-   read(fdset[0].fd, buf, MAX_BUF);
-}
+  struct gpiod_chip *chip = gpiod_chip_open_by_name("gpiochip0");
 </PRE>
-This code makes the thread go to sleep until an event has occurred on
-GPIO pin&nbsp;5. Thus you can put the poll command before a non-blocking
-I/O operation and make it blocking.
+and then,
+</LI>
+<LI>as a 2nd step you select the pin on the chip:
+<PRE>
+  struct gpiod_line *pinRed = gpiod_chip_get_line(chip, 24);
+</PRE>
+</LI>
+</OL>
 
 <P>
 
 <H3><A ID="SECTION00334200000000000000">
-pigpio</A>
+Output</A>
 </H3>
-The above section has given you a deep understanding what's happening
-under the hood on the sysfs-level but it's <SPAN  CLASS="textsl">highly recommended</SPAN> to
-use the pigpio library (<kbd><A ID="tex2html13"
-  HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
-to read/write to GPIO pins or do interrupt programming.
-
-<P>
-For example to set GPIO pin 24 as an output just call:
+One you have a pointer to the pin then you can set its direction, for example
+as an output pin with:
 <PRE>
-gpioSetMode(24,PI_OUTPUT);
+gpiod_line_request_output(pinRed, "example1", 0);
+</PRE>
+and set its value with:
+<PRE>
+gpiod_line_set_value(pinRed, 1);
+</PRE>
+Once you are finished release the GPIO pin with:
+<PRE>
+gpiod_line_release(pinRed);
+</PRE>
+and close the chip:
+<PRE>
+gpiod_chip_close(chip);
 </PRE>
 
 <P>
-To set the GPIO pin 24 to high just call:
-<PRE>
-int a = gpioWrite(24,1)
-</PRE>
+
+<H3><A ID="SECTION00334300000000000000">
+Events</A>
+</H3>
+For event progressing with need blocking I/O which then wakes up a thread.
+This means that a change in level from low to high or high
+to low unblocks an I/O operation, the underlying thread wakes up and
+then a callback can be triggered.
 
 <P>
-Pigpio manages GPIO interrupt handling by wrapping all the above
-functionality into a single command where the client registers a
-callback function. The callback occurs whenever a GPIO pin changes.
-Specifically a method of the form:
+To request event processing on a pin simply request it with this single
+command:
 <PRE>
-class mySensorClass {
-  ...
-  static void gpioISR(int gpio, int level, uint32\_t tick, void* userdata)
-  ...
-}
+int ret = gpiod_line_request_rising_edge_events(pinSwitch, "Consumer");
 </PRE>
-is registered with pigpio:
+This will turn the GPIO pin <SPAN  CLASS="texttt">pinSwitch</SPAN> into an input pin and enables
+blocking I/O on this pin.
+
+<P>
+Then start a tread where its worker contains:
 <PRE>
-gpioSetISRFuncEx(24,RISING_EDGE,ISR_TIMEOUT,gpioISR,(void*)this);
-</PRE>
-where &ldquo;this&rdquo; is the pointer to your class instance.
-The callback registered will then be <SPAN  CLASS="texttt">this-&gt;dataReady()</SPAN>.
-<PRE>
-class LSM9DS1 {
-  void dataReady();
-  static void gpioISR(int gpio, int level, uint32_t tick, void* userdata)
-    {
-        ((LSM9DS1*)userdata)-&gt;dataReady();
+void worker() {
+	while (running) {
+	    const struct timespec ts = { 1, 0 };
+	    gpiod_line_event_wait(pinSwitch, &amp;ts);
+	    struct gpiod_line_event event;
+	    gpiod_line_event_read(pinSwitch, &amp;event);
+	    event_callback();
+	}
     }
-};
 </PRE>
-where here within the static function the void pointer is cast back into the instance pointer.
-See <kbd><A ID="tex2html14"
-  HREF="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library</A></kbd> for the complete code.
+The <SPAN  CLASS="texttt">gpiod_line_event_wait</SPAN> waits for a rising edge at the GPIO
+pin and then unblocks. Then <SPAN  CLASS="texttt">gpiod_line_event_read</SPAN> transfers the
+kernel event to userspace and clears it out of the kernel space. It's important
+to do the read operation even, if the struct is never used. Then call
+the callback and repeat until the user terminates the thread.
+See <kbd><A ID="tex2html12"
+  HREF="https://github.com/berndporr/rpi_ads1115">https://github.com/berndporr/rpi_ads1115</A></kbd> for a complete example.
 
 <P>
 
@@ -576,7 +560,7 @@ See <kbd><A ID="tex2html14"
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="377"></A>
+  <A ID="368"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 2.1:</STRONG>
 SPI modes</CAPTION>
@@ -630,7 +614,7 @@ Then set the SPI mode (see table&nbsp;<A HREF="#spimodes">2.1</A>):
 int ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);
 </PRE>
 as explained, for example, here:
-<kbd><A ID="tex2html16"
+<kbd><A ID="tex2html14"
   HREF="https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html">https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html</A></kbd>.
 
 <P>
@@ -649,7 +633,7 @@ struct spi_ioc_transfer tr {
 };
 </PRE>
 which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with the
-same length<A ID="tex2html17"
+same length<A ID="tex2html15"
   HREF="footnode.html#foot170"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
 
 <P>
@@ -663,7 +647,7 @@ int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
 Sometimes the SPI protocol of a chip is so odd that even the raw I/O
 via <SPAN  CLASS="texttt">/dev</SPAN> won't work and you need to write your own bit
 banging interface, for example done here for the ADC on the alphabot:
-<kbd><A ID="tex2html18"
+<kbd><A ID="tex2html16"
   HREF="https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58">https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58</A></kbd>.
 This is obviously far from ideal as it might require <SPAN  CLASS="texttt">usleep()</SPAN>
 commands so that acquisition needs to be run in a separate thread (the
@@ -730,33 +714,28 @@ read(file, buf, 2)
 where <SPAN  CLASS="texttt">addr</SPAN> is the I2C address. Then use standard <SPAN  CLASS="texttt">read()</SPAN>
 or <SPAN  CLASS="texttt">write()</SPAN> commands. Usually the 1st write operation tells the chip
 which register to read or write to. Subsequent operations read
-or write that register.
-
-<P>
-
-<H3><A ID="SECTION00336200000000000000">
-I2C access via pigpio</A>
-</H3>
-Access via pigpio (<kbd><A ID="tex2html19"
-  HREF="http://abyz.me.uk/rpi/pigpio/cif.html">http://abyz.me.uk/rpi/pigpio/cif.html</A></kbd>)
-is preferred in contrast to direct
-access of the raw /dev/i2c because many different devices
-can be connected to the I2C bus and pigpio manages this.
-Simply install the development package:
+or write that register. For example, reading a 16&nbsp;bit register:
 <PRE>
-sudo apt-get install libpigpio-dev
+unsigned 2c_readWord(uint8_t reg)
+{
+	uint8_t tmp[2];
+	tmp[0] = reg;
+	write(fd_i2c,&amp;tmp,1);
+        read(fd_i2c, tmp, 2);
+        return (((unsigned)(tmp[0])) &lt;&lt; 8) | ((unsigned)(tmp[1]));
+}
 </PRE>
-which triggers then the install of the other relevant packages.
-For example writing a byte to a register in an I2C sensor can be done with a
-few commands:
+Similarly writing a 16&nbsp;bit register writes 3 bytes to the I2C bus (register and the 16&nbsp;bit data):
 <PRE>
-int fd = i2cOpen(i2c_bus, address, 0);
-i2cWriteByteData(fd, subAddress, data);
-i2cClose(fd);
+void i2c_writeWord(uint8_t reg, unsigned data)
+{
+	uint8_t tmp[3];
+	tmp[0] = reg;
+	tmp[1] = (char)((data &amp; 0xff00) &gt;&gt; 8);
+	tmp[2] = (char)(data &amp; 0x00ff);
+	write(fd_i2c,&amp;tmp,3);
+}
 </PRE>
-where <SPAN  CLASS="texttt">i2c_bus</SPAN> is the I2C bus number (usually 1 on the RPI)
-and the <SPAN  CLASS="texttt">address</SPAN> is the I2C address of the device on that bus.
-The <SPAN  CLASS="texttt">subAddress</SPAN> here is the register address in the device.
 
 <P>
 
