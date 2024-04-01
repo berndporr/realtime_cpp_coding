@@ -385,7 +385,7 @@ Here the \texttt{recv} command blocks until new data has arrived.
 
 \subsection{General purpose I/O (GPIO)}
 GPIO pins are not just simple digital ports but they
-can be used to turn non-blocking I/O into blocking I/O!
+can be used to turn non-blocking I/O into blocking I/O or in other words: events!
 
 \subsubsection{libgpiod}
 The GPIO (of the raspberry PI) can easily be controlled via
@@ -398,14 +398,14 @@ When you use the gpiod library you:
   struct gpiod_chip *chip = gpiod_chip_open_by_name("gpiochip0");
 \end{verbatim}
 and then,
-\item as a 2nd step you select the pin on the chip:
+\item as a 2nd step select a pin on the chip:
 \begin{verbatim}
   struct gpiod_line *pinRed = gpiod_chip_get_line(chip, 24);
 \end{verbatim}
 \end{enumerate}
 
 \subsubsection{Output}
-Once you have a pointer to the pin then you can set its direction, for example
+Once you have a pointer to the pin you can then set its direction, for example
 as an output pin with:
 \begin{verbatim}
 gpiod_line_request_output(pinRed, "example1", 0);
@@ -413,14 +413,6 @@ gpiod_line_request_output(pinRed, "example1", 0);
 and set its value with:
 \begin{verbatim}
 gpiod_line_set_value(pinRed, 1);
-\end{verbatim}
-Once you are finished release the GPIO pin with:
-\begin{verbatim}
-gpiod_line_release(pinRed);
-\end{verbatim}
-and close the chip:
-\begin{verbatim}
-gpiod_chip_close(chip);
 \end{verbatim}
 
 \subsubsection{Events}
@@ -432,12 +424,12 @@ then a callback can be triggered.
 To request event processing on a pin simply request it with this single
 command:
 \begin{verbatim}
-int ret = gpiod_line_request_rising_edge_events(pinSwitch, "Consumer");
+int ret = gpiod_line_request_rising_edge_events(pinSwitch, "Consumer1");
 \end{verbatim}
 This will turn the GPIO pin \texttt{pinSwitch} into an input pin and enables
 blocking I/O on this pin.
 
-Then start a tread where its worker contains:
+Then start a thread where its worker contains:
 \begin{verbatim}
 void worker() {
 	while (running) {
@@ -451,10 +443,21 @@ void worker() {
 \end{verbatim}
 The \texttt{gpiod\_line\_event\_wait} waits for a rising edge at the GPIO
 pin and then unblocks. Then \texttt{gpiod\_line\_event\_read} transfers the
-kernel event to userspace and clears it out of the kernel space. It's important
-to do the read operation even, if the struct is never used. Then call
+kernel event to userspace and clears it out of the kernel event queue. It's important
+to do the read operation even if the event-struct is never used. Then call
 the callback and repeat until the user terminates the thread.
 See \url{https://github.com/berndporr/rpi_ads1115} for a complete example.
+
+\subsubsection{Releasing the GPIO}
+Once you are finished release the GPIO pin with:
+\begin{verbatim}
+gpiod_line_release(pinRed);
+\end{verbatim}
+and close the chip:
+\begin{verbatim}
+gpiod_chip_close(chip);
+\end{verbatim}
+
 
 
 

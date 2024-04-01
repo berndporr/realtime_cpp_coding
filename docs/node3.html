@@ -89,24 +89,26 @@
   HREF="node3.html#SECTION00334200000000000000">Output</A>
 <LI><A ID="tex2html144"
   HREF="node3.html#SECTION00334300000000000000">Events</A>
-</UL>
 <LI><A ID="tex2html145"
-  HREF="node3.html#SECTION00335000000000000000">SPI</A>
+  HREF="node3.html#SECTION00334400000000000000">Releasing the GPIO</A>
+</UL>
 <LI><A ID="tex2html146"
+  HREF="node3.html#SECTION00335000000000000000">SPI</A>
+<LI><A ID="tex2html147"
   HREF="node3.html#SECTION00336000000000000000">I2C</A>
 <UL>
-<LI><A ID="tex2html147"
+<LI><A ID="tex2html148"
   HREF="node3.html#SECTION00336100000000000000">Raw <SPAN  CLASS="texttt">/dev/i2c</SPAN> access</A>
 </UL>
-<LI><A ID="tex2html148"
-  HREF="node3.html#SECTION00337000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
 <LI><A ID="tex2html149"
+  HREF="node3.html#SECTION00337000000000000000">Access to hardware via special devices in <SPAN  CLASS="texttt">/sys</SPAN></A>
+<LI><A ID="tex2html150"
   HREF="node3.html#SECTION00338000000000000000">Accessing physical memory locations (danger!)</A>
 </UL>
 <BR>
-<LI><A ID="tex2html150"
-  HREF="node3.html#SECTION00340000000000000000">Kernel driver programming</A>
 <LI><A ID="tex2html151"
+  HREF="node3.html#SECTION00340000000000000000">Kernel driver programming</A>
+<LI><A ID="tex2html152"
   HREF="node3.html#SECTION00350000000000000000">Conclusion</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -464,7 +466,7 @@ Here the <SPAN  CLASS="texttt">recv</SPAN> command blocks until new data has arr
 General purpose I/O (GPIO)</A>
 </H2>
 GPIO pins are not just simple digital ports but they
-can be used to turn non-blocking I/O into blocking I/O!
+can be used to turn non-blocking I/O into blocking I/O or in other words: events!
 
 <P>
 
@@ -484,7 +486,7 @@ When you use the gpiod library you:
 </PRE>
 and then,
 </LI>
-<LI>as a 2nd step you select the pin on the chip:
+<LI>as a 2nd step select a pin on the chip:
 <PRE>
   struct gpiod_line *pinRed = gpiod_chip_get_line(chip, 24);
 </PRE>
@@ -496,7 +498,7 @@ and then,
 <H3><A ID="SECTION00334200000000000000">
 Output</A>
 </H3>
-Once you have a pointer to the pin then you can set its direction, for example
+Once you have a pointer to the pin you can then set its direction, for example
 as an output pin with:
 <PRE>
 gpiod_line_request_output(pinRed, "example1", 0);
@@ -504,14 +506,6 @@ gpiod_line_request_output(pinRed, "example1", 0);
 and set its value with:
 <PRE>
 gpiod_line_set_value(pinRed, 1);
-</PRE>
-Once you are finished release the GPIO pin with:
-<PRE>
-gpiod_line_release(pinRed);
-</PRE>
-and close the chip:
-<PRE>
-gpiod_chip_close(chip);
 </PRE>
 
 <P>
@@ -528,13 +522,13 @@ then a callback can be triggered.
 To request event processing on a pin simply request it with this single
 command:
 <PRE>
-int ret = gpiod_line_request_rising_edge_events(pinSwitch, "Consumer");
+int ret = gpiod_line_request_rising_edge_events(pinSwitch, "Consumer1");
 </PRE>
 This will turn the GPIO pin <SPAN  CLASS="texttt">pinSwitch</SPAN> into an input pin and enables
 blocking I/O on this pin.
 
 <P>
-Then start a tread where its worker contains:
+Then start a thread where its worker contains:
 <PRE>
 void worker() {
 	while (running) {
@@ -548,11 +542,25 @@ void worker() {
 </PRE>
 The <SPAN  CLASS="texttt">gpiod_line_event_wait</SPAN> waits for a rising edge at the GPIO
 pin and then unblocks. Then <SPAN  CLASS="texttt">gpiod_line_event_read</SPAN> transfers the
-kernel event to userspace and clears it out of the kernel space. It's important
-to do the read operation even, if the struct is never used. Then call
+kernel event to userspace and clears it out of the kernel event queue. It's important
+to do the read operation even if the event-struct is never used. Then call
 the callback and repeat until the user terminates the thread.
 See <kbd><A ID="tex2html12"
   HREF="https://github.com/berndporr/rpi_ads1115">https://github.com/berndporr/rpi_ads1115</A></kbd> for a complete example.
+
+<P>
+
+<H3><A ID="SECTION00334400000000000000">
+Releasing the GPIO</A>
+</H3>
+Once you are finished release the GPIO pin with:
+<PRE>
+gpiod_line_release(pinRed);
+</PRE>
+and close the chip:
+<PRE>
+gpiod_chip_close(chip);
+</PRE>
 
 <P>
 
@@ -560,7 +568,7 @@ See <kbd><A ID="tex2html12"
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="368"></A>
+  <A ID="369"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 2.1:</STRONG>
 SPI modes</CAPTION>
@@ -634,7 +642,7 @@ struct spi_ioc_transfer tr {
 </PRE>
 which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with the
 same length<A ID="tex2html15"
-  HREF="footnode.html#foot170"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
+  HREF="footnode.html#foot171"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
 
 <P>
 Reading and simultaneous writing then happens via this <SPAN  CLASS="texttt">ioctrl()</SPAN>
