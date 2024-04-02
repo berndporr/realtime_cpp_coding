@@ -391,9 +391,12 @@ can be used to turn non-blocking I/O into blocking I/O, or in other words: event
 The GPIO (of the raspberry PI) can easily be controlled via
 the \texttt{/dev} filesystem and \texttt{libgpiod}.
 
+Use the commandline tool
+\texttt{gpioinfo} to print a list of all available GPIO pins.
+
 When you use the gpiod library you:
 \begin{enumerate}
-\item Choose the I/O \textsl{chip} you want to use. Raspberry PI 1-4
+\item first choose the GPIO \textsl{chip} you want to use. Raspberry PIs 1-4
   have only one chip. The Raspberry PI 5 has 4 chips.
   Selection can be made either by number, name or pseudo-file:
 \begin{verbatim}

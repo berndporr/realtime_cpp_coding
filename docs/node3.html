@@ -477,13 +477,16 @@ The GPIO (of the raspberry PI) can easily be controlled via
 the <SPAN  CLASS="texttt">/dev</SPAN> filesystem and <SPAN  CLASS="texttt">libgpiod</SPAN>.
 
 <P>
+Use the commandline tool
+<SPAN  CLASS="texttt">gpioinfo</SPAN> to print a list of all available GPIO pins.
+
+<P>
 When you use the gpiod library you:
 
 <OL>
-<LI>choose the I/O subsystem you want to use.
-A subsystem is referred to as <SPAN  CLASS="textsl">chip</SPAN> dating back to when
-each group of GPIO pins had their own physical device. Selection can be
-made either by number, name or pseudo-file:
+<LI>first choose the GPIO <SPAN  CLASS="textsl">chip</SPAN> you want to use. Raspberry PIs 1-4
+  have only one chip. The Raspberry PI 5 has 4 chips.
+  Selection can be made either by number, name or pseudo-file:
 <PRE>
   struct gpiod_chip *chip = 
              gpiod_chip_open_by_name("gpiochip0");
@@ -584,7 +587,7 @@ and close the chip:
 SPI</A>
 </H2>
 <BR>  <DIV class="CENTER">
-  <A ID="369"></A>
+  <A ID="370"></A>
 <TABLE class="PAD  BORDER" style="">
 <CAPTION><STRONG>Table 2.1:</STRONG>
 SPI modes</CAPTION>
@@ -658,7 +661,7 @@ struct spi_ioc_transfer tr {
 </PRE>
 which points to two character buffers &ldquo;tx&rdquo; and &ldquo;rx&rdquo; with the
 same length<A ID="tex2html15"
-  HREF="footnode.html#foot171"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
+  HREF="footnode.html#foot172"><SUP><SPAN CLASS="arabic">2</SPAN>.<SPAN CLASS="arabic">1</SPAN></SUP></A>.
 
 <P>
 Reading and simultaneous writing then happens via this <SPAN  CLASS="texttt">ioctrl()</SPAN>
