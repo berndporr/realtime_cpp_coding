@@ -385,7 +385,7 @@ Here the \texttt{recv} command blocks until new data has arrived.
 
 \subsection{General purpose I/O (GPIO)}
 GPIO pins are not just simple digital ports but they
-can be used to turn non-blocking I/O into blocking I/O or in other words: events!
+can be used to turn non-blocking I/O into blocking I/O, or in other words: events!
 
 \subsubsection{libgpiod}
 The GPIO (of the raspberry PI) can easily be controlled via
@@ -393,20 +393,25 @@ the \texttt{/dev} filesystem and \texttt{libgpiod}.
 
 When you use the gpiod library you:
 \begin{enumerate}
-\item first choose the I/O \textsl{chip} either by its number, name or pseudo-file:
+\item choose the I/O subsystem you want to use.
+A subsystem is referred to as \textsl{chip} dating back to when
+each group of GPIO pins had their own physical device. Selection can be
+made either by number, name or pseudo-file:
 \begin{verbatim}
-  struct gpiod_chip *chip = gpiod_chip_open_by_name("gpiochip0");
+  struct gpiod_chip *chip = 
+             gpiod_chip_open_by_name("gpiochip0");
 \end{verbatim}
 and then,
-\item as a 2nd step select a pin on the chip:
+\item select a pin on the chip:
 \begin{verbatim}
-  struct gpiod_line *pinRed = gpiod_chip_get_line(chip, 24);
+  struct gpiod_line *pinRed =
+             gpiod_chip_get_line(chip, 24);
 \end{verbatim}
 \end{enumerate}
 
 \subsubsection{Output}
 Once you have a pointer to the pin you can then set its direction, for example
-as an output pin with:
+as an output pin, with:
 \begin{verbatim}
 gpiod_line_request_output(pinRed, "example1", 0);
 \end{verbatim}
@@ -416,46 +421,57 @@ gpiod_line_set_value(pinRed, 1);
 \end{verbatim}
 
 \subsubsection{Events}
-For event progressing with need blocking I/O which then wakes up a thread.
+Blocking I/O is very good for event processing.
+Calling a blocking I/O function causes the thread
+to wait efficiently, then
+when the I/O call returns, the thread will wake up.
 This means that a change in level from low to high or high
-to low unblocks an I/O operation, the underlying thread wakes up and
-then a callback can be triggered.
+to low unblocks an I/O operation, awakening its underlying
+thread which then performs a callback.
 
-To request event processing on a pin simply request it with this single
+To request event processing on a pin simply
+requires this single
 command:
 \begin{verbatim}
-int ret = gpiod_line_request_rising_edge_events(pinSwitch, "Consumer1");
+int ret =
+   gpiod_line_request_rising_edge_events(pinSwitch, "Consumer1");
 \end{verbatim}
-This will turn the GPIO pin \texttt{pinSwitch} into an input pin and enables
+This will turn the GPIO pin \texttt{pinSwitch} into an input pin and enable
 blocking I/O on this pin.
 
 Then start a thread where its worker contains:
 \begin{verbatim}
 void worker() {
-	while (running) {
-	    const struct timespec ts = { 1, 0 };
-	    gpiod_line_event_wait(pinSwitch, &ts);
-	    struct gpiod_line_event event;
-	    gpiod_line_event_read(pinSwitch, &event);
-	    event_callback();
-	}
+    while (running) {
+        constexpr struct timespec ts = { 1, 0 };
+        gpiod_line_event_wait(pinSwitch, &ts);
+        struct gpiod_line_event event;
+        gpiod_line_event_read(pinSwitch, &event);
+        event_callback();
     }
+}
 \end{verbatim}
 The \texttt{gpiod\_line\_event\_wait} waits for a rising edge at the GPIO
-pin and then unblocks. Then \texttt{gpiod\_line\_event\_read} transfers the
-kernel event to userspace and clears it out of the kernel event queue. It's important
-to do the read operation even if the event-struct is never used. Then call
-the callback and repeat until the user terminates the thread.
+pin, or for 1~second (+ 0\,ns), whichever is longer, and then unblocks.
+The return value is 1 if a GPIO event occurred, 0 if timeout interval
+was exceeded, and -1 in the event of an error. In production code,
+you'd need to check this return value.
+Then \texttt{gpiod\_line\_event\_read} transfers the
+kernel event to userspace and clears it out of the kernel event queue.
+It's important to do the read operation
+even if the event-struct is never used. The callback is made,
+and the loop repeats until another thread requrests termination
+by setting \verb!running! to \verb!false!.
 See \url{https://github.com/berndporr/rpi_ads1115} for a complete example.
 
 \subsubsection{Releasing the GPIO}
-Once you are finished release the GPIO pin with:
+Once you are finished, release the GPIO pin with:
 \begin{verbatim}
-gpiod_line_release(pinRed);
+    gpiod_line_release(pinRed);
 \end{verbatim}
 and close the chip:
 \begin{verbatim}
-gpiod_chip_close(chip);
+    gpiod_chip_close(chip);
 \end{verbatim}
 
 
