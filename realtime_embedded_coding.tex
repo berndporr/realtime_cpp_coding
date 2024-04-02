@@ -393,10 +393,9 @@ the \texttt{/dev} filesystem and \texttt{libgpiod}.
 
 When you use the gpiod library you:
 \begin{enumerate}
-\item choose the I/O subsystem you want to use.
-A subsystem is referred to as \textsl{chip} dating back to when
-each group of GPIO pins had their own physical device. Selection can be
-made either by number, name or pseudo-file:
+\item Choose the I/O \textsl{chip} you want to use. Raspberry PI 1-4
+  have only one chip. The Raspberry PI 5 has 4 chips.
+  Selection can be made either by number, name or pseudo-file:
 \begin{verbatim}
   struct gpiod_chip *chip = 
              gpiod_chip_open_by_name("gpiochip0");

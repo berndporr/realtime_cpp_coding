@@ -466,7 +466,7 @@ Here the <SPAN  CLASS="texttt">recv</SPAN> command blocks until new data has arr
 General purpose I/O (GPIO)</A>
 </H2>
 GPIO pins are not just simple digital ports but they
-can be used to turn non-blocking I/O into blocking I/O or in other words: events!
+can be used to turn non-blocking I/O into blocking I/O, or in other words: events!
 
 <P>
 
@@ -480,15 +480,20 @@ the <SPAN  CLASS="texttt">/dev</SPAN> filesystem and <SPAN  CLASS="texttt">libgp
 When you use the gpiod library you:
 
 <OL>
-<LI>first choose the I/O <SPAN  CLASS="textsl">chip</SPAN> either by its number, name or pseudo-file:
+<LI>choose the I/O subsystem you want to use.
+A subsystem is referred to as <SPAN  CLASS="textsl">chip</SPAN> dating back to when
+each group of GPIO pins had their own physical device. Selection can be
+made either by number, name or pseudo-file:
 <PRE>
-  struct gpiod_chip *chip = gpiod_chip_open_by_name("gpiochip0");
+  struct gpiod_chip *chip = 
+             gpiod_chip_open_by_name("gpiochip0");
 </PRE>
 and then,
 </LI>
-<LI>as a 2nd step select a pin on the chip:
+<LI>select a pin on the chip:
 <PRE>
-  struct gpiod_line *pinRed = gpiod_chip_get_line(chip, 24);
+  struct gpiod_line *pinRed =
+             gpiod_chip_get_line(chip, 24);
 </PRE>
 </LI>
 </OL>
@@ -499,7 +504,7 @@ and then,
 Output</A>
 </H3>
 Once you have a pointer to the pin you can then set its direction, for example
-as an output pin with:
+as an output pin, with:
 <PRE>
 gpiod_line_request_output(pinRed, "example1", 0);
 </PRE>
@@ -513,38 +518,49 @@ gpiod_line_set_value(pinRed, 1);
 <H3><A ID="SECTION00334300000000000000">
 Events</A>
 </H3>
-For event progressing with need blocking I/O which then wakes up a thread.
+Blocking I/O is very good for event processing.
+Calling a blocking I/O function causes the thread
+to wait efficiently, then
+when the I/O call returns, the thread will wake up.
 This means that a change in level from low to high or high
-to low unblocks an I/O operation, the underlying thread wakes up and
-then a callback can be triggered.
+to low unblocks an I/O operation, awakening its underlying
+thread which then performs a callback.
 
 <P>
-To request event processing on a pin simply request it with this single
+To request event processing on a pin simply
+requires this single
 command:
 <PRE>
-int ret = gpiod_line_request_rising_edge_events(pinSwitch, "Consumer1");
+int ret =
+   gpiod_line_request_rising_edge_events(pinSwitch, "Consumer1");
 </PRE>
-This will turn the GPIO pin <SPAN  CLASS="texttt">pinSwitch</SPAN> into an input pin and enables
+This will turn the GPIO pin <SPAN  CLASS="texttt">pinSwitch</SPAN> into an input pin and enable
 blocking I/O on this pin.
 
 <P>
 Then start a thread where its worker contains:
 <PRE>
 void worker() {
-	while (running) {
-	    const struct timespec ts = { 1, 0 };
-	    gpiod_line_event_wait(pinSwitch, &amp;ts);
-	    struct gpiod_line_event event;
-	    gpiod_line_event_read(pinSwitch, &amp;event);
-	    event_callback();
-	}
+    while (running) {
+        constexpr struct timespec ts = { 1, 0 };
+        gpiod_line_event_wait(pinSwitch, &amp;ts);
+        struct gpiod_line_event event;
+        gpiod_line_event_read(pinSwitch, &amp;event);
+        event_callback();
     }
+}
 </PRE>
 The <SPAN  CLASS="texttt">gpiod_line_event_wait</SPAN> waits for a rising edge at the GPIO
-pin and then unblocks. Then <SPAN  CLASS="texttt">gpiod_line_event_read</SPAN> transfers the
-kernel event to userspace and clears it out of the kernel event queue. It's important
-to do the read operation even if the event-struct is never used. Then call
-the callback and repeat until the user terminates the thread.
+pin, or for 1&nbsp;second (+ 0&nbsp;ns), whichever is longer, and then unblocks.
+The return value is 1 if a GPIO event occurred, 0 if timeout interval
+was exceeded, and -1 in the event of an error. In production code,
+you'd need to check this return value.
+Then <SPAN  CLASS="texttt">gpiod_line_event_read</SPAN> transfers the
+kernel event to userspace and clears it out of the kernel event queue.
+It's important to do the read operation
+even if the event-struct is never used. The callback is made,
+and the loop repeats until another thread requrests termination
+by setting <code>running</code> to <code>false</code>.
 See <kbd><A ID="tex2html12"
   HREF="https://github.com/berndporr/rpi_ads1115">https://github.com/berndporr/rpi_ads1115</A></kbd> for a complete example.
 
@@ -553,13 +569,13 @@ See <kbd><A ID="tex2html12"
 <H3><A ID="SECTION00334400000000000000">
 Releasing the GPIO</A>
 </H3>
-Once you are finished release the GPIO pin with:
+Once you are finished, release the GPIO pin with:
 <PRE>
-gpiod_line_release(pinRed);
+    gpiod_line_release(pinRed);
 </PRE>
 and close the chip:
 <PRE>
-gpiod_chip_close(chip);
+    gpiod_chip_close(chip);
 </PRE>
 
 <P>
