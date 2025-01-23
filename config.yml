@@ -3,5 +3,5 @@ code: ENG5220
 year: 2025
 author: Bernd Porr
 structure: 
-    - type: introduction
+    - type: standalone
       source: realtime_embedded_coding.tex
