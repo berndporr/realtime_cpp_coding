@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 
-<!--Converted with LaTeX2HTML 2021.2 (Released July 1, 2021) -->
+<!--Converted with LaTeX2HTML 2024 (Released January 1, 2024) -->
 <HTML lang="en">
 <HEAD>
 <TITLE>Introduction</TITLE>
@@ -12,7 +12,7 @@
 
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
 <META NAME="viewport" CONTENT="width=device-width, initial-scale=1.0">
-<META NAME="Generator" CONTENT="LaTeX2HTML v2021.2">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2024">
 
 <LINK REL="STYLESHEET" HREF="realtime_embedded_coding.css">
 
@@ -33,17 +33,17 @@
 <A
  HREF="node1.html">
 <IMG WIDTH="63" HEIGHT="24" ALT="previous" SRC="prev.png"></A> 
-<A ID="tex2html125"
+<A ID="tex2html120"
   HREF="node1.html">
 <IMG WIDTH="65" HEIGHT="24" ALT="contents" SRC="contents.png"></A>  
 <BR>
 <B> Next:</B> <A
- HREF="node3.html">Writing C++ device driver</A>
+ HREF="node3.html">Writing C++ classes for</A>
 <B> Up:</B> <A
  HREF="realtime_embedded_coding.html">Realtime embedded coding in</A>
 <B> Previous:</B> <A
  HREF="node1.html">Contents</A>
- &nbsp; <B>  <A ID="tex2html126"
+ &nbsp; <B>  <A ID="tex2html121"
   HREF="node1.html">Contents</A></B> 
 <BR>
 <BR></DIV>
@@ -52,7 +52,7 @@
 <A ID="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
 
 <UL CLASS="ChildLinks">
-<LI><A ID="tex2html127"
+<LI><A ID="tex2html122"
   HREF="node2.html#SECTION00210000000000000000">Event based coding in the Linux userspace</A>
 </UL>
 <!--End of Table of Child-Links-->
@@ -64,7 +64,7 @@ Introduction</A>
 
 <P>
 
-<DIV class="CENTER"><A ID="timing"></A><A ID="365"></A>
+<DIV class="CENTER"><A ID="timing"></A><A ID="360"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.1:</STRONG>
 Dataflow and timing in low level realtime coding
@@ -72,7 +72,7 @@ Dataflow and timing in low level realtime coding
 <TR><TD>
 <DIV class="CENTER">
 <IMG
- STYLE="height: 16.78ex; vertical-align: -0.09ex; " SRC="img2.svg"
+ STYLE="height: 16.60ex; vertical-align: -0.09ex; " SRC="img2.svg"
  ALT="\includegraphics[width=\textwidth]{signals-timings}">
 
 </DIV></TD></TR>
@@ -93,15 +93,15 @@ Fig.&nbsp;<A HREF="#timing">1.1</A> shows the basic dataflow and how event timin
 established: devices by themselves have event signals such as &ldquo;data
 ready&rdquo; or &ldquo;crash sensor has been triggered&rdquo;. The Linux kernel receives
 these as interrupt callbacks. However, userspace has no direct interrupt
-mechanism; instead it has blocking I/O where a read or write operation blocks
-until a kernel-side interrupt has happened. A blocking I/O call returning
-may then be translated callbacks between classes by waking up threads.
+mechanism; instead it has <SPAN  CLASS="textsl">blocking I/O</SPAN> where a read or write operation blocks
+until a kernel-side interrupt/event has happened. A blocking I/O call returning
+may then be translated to callbacks between classes by waking up threads.
 Data is transmitted back to the hardware via methods called &ldquo;setters&rdquo;,
 which change an object's attributes and potentially do other processing.
 
 <P>
 
-<DIV class="CENTER"><A ID="gettersetters"></A><A ID="367"></A>
+<DIV class="CENTER"><A ID="gettersetters"></A><A ID="362"></A>
 <TABLE>
 <CAPTION class="BOTTOM"><STRONG>Figure 1.2:</STRONG>
 A realtime system with two C++ classes. Communication
@@ -113,7 +113,7 @@ A realtime system with two C++ classes. Communication
 <TR><TD>
 <DIV class="CENTER">
 <IMG
- STYLE="height: 15.40ex; vertical-align: -0.09ex; " SRC="img3.svg"
+ STYLE="height: 15.22ex; vertical-align: -0.09ex; " SRC="img3.svg"
  ALT="\includegraphics[width=\textwidth]{gettersetters}">
 
 </DIV></TD></TR>
@@ -130,7 +130,7 @@ motors in reverse.
 
 <P>
 Callbacks can be seen as userspace interrupt service routines.
-These must always complete immediately so that the caller is
+These must always complete immediately so that the caller does
 not experience any noticeable delay. For example when a user
 presses a button in a GUI the callback must be
 processed without any noticeable delay which is application specific.
@@ -140,8 +140,15 @@ then have a callback signalling success.
 
 <P>
 In the following sections we are describing how to write event driven
-code in C++. Important here is the interplay between blocking I/O and
-threads: chapter&nbsp;<A HREF="node3.html#drivers">2</A> focuses on how to wrap the low
+code in C++. Important here is
+
+<OL>
+<LI>blocking I/O and,
+</LI>
+<LI>threads woken up by blocking I/O.
+</LI>
+</OL>
+Chapter&nbsp;<A HREF="node3.html#drivers">2</A> focuses on how to wrap the low
 level blocking Linux I/O in a class and how to establish the
 communication between classes while the chapter&nbsp;<A HREF="node4.html#threads">3</A>
 describes how threads can effectively be used to trigger callbacks

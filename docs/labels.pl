@@ -1,4 +1,4 @@
-# LaTeX2HTML 2021.2 (Released July 1, 2021)
+# LaTeX2HTML 2024 (Released January 1, 2024)
 # Associate labels original text with physical files.
 
 
@@ -26,6 +26,10 @@ $key = q/setters/;
 $external_labels{$key} = "$URL/" . q|node7.html|; 
 $noresave{$key} = "$nosave";
 
+$key = q/spimodes/;
+$external_labels{$key} = "$URL/" . q|node3.html|; 
+$noresave{$key} = "$nosave";
+
 $key = q/threads/;
 $external_labels{$key} = "$URL/" . q|node4.html|; 
 $noresave{$key} = "$nosave";
@@ -45,20 +49,20 @@ $noresave{$key} = "$nosave";
 1;
 
 
-# LaTeX2HTML 2021.2 (Released July 1, 2021)
+# LaTeX2HTML 2024 (Released January 1, 2024)
 # labels from external_latex_labels array.
 
 
 $key = q/cgi/;
-$external_latex_labels{$key} = q|5.1 FastCGI dataflow.|; 
+$external_latex_labels{$key} = q|5.1 FastCGI dataflow|; 
 $noresave{$key} = "$nosave";
 
 $key = q/drivers/;
-$external_latex_labels{$key} = q|2 Writing C++ device driver classes|; 
+$external_latex_labels{$key} = q|2 Writing C++ classes for userspace event processing|; 
 $noresave{$key} = "$nosave";
 
 $key = q/gettersetters/;
-$external_latex_labels{$key} = q|1.2 A realtime system with two C++ classes. Communication between classes is achieved with callbacks (not getters) for incoming events and setters to send out control events. The control output itself receives its timing from the events so that the loop is traversed as quickly as possible. |; 
+$external_latex_labels{$key} = q|1.2 A realtime system with two C++ classes. Communication between classes is achieved with callbacks (not getters) for incoming events and setters to send out control events. The control output itself receives its timing from the events so that the loop is traversed as quickly as possible|; 
 $noresave{$key} = "$nosave";
 
 $key = q/qt/;
@@ -66,7 +70,7 @@ $external_latex_labels{$key} = q|4 Realtime/event processing within the Graphica
 $noresave{$key} = "$nosave";
 
 $key = q/qwtex/;
-$external_latex_labels{$key} = q|4.1 QT example layout |; 
+$external_latex_labels{$key} = q|4.1 QT example layout|; 
 $noresave{$key} = "$nosave";
 
 $key = q/setters/;
@@ -82,7 +86,7 @@ $external_latex_labels{$key} = q|3 Threads|;
 $noresave{$key} = "$nosave";
 
 $key = q/timing/;
-$external_latex_labels{$key} = q|1.1 Dataflow and timing in low level realtime coding |; 
+$external_latex_labels{$key} = q|1.1 Dataflow and timing in low level realtime coding|; 
 $noresave{$key} = "$nosave";
 
 $key = q/videodesk/;

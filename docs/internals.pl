@@ -1,4 +1,4 @@
-# LaTeX2HTML 2021.2 (Released July 1, 2021)
+# LaTeX2HTML 2024 (Released January 1, 2024)
 # Associate internals original text with physical files.
 
 
@@ -24,6 +24,10 @@ $noresave{$key} = "$nosave";
 
 $key = q/setters/;
 $ref_files{$key} = "$dir".q|node7.html|; 
+$noresave{$key} = "$nosave";
+
+$key = q/spimodes/;
+$ref_files{$key} = "$dir".q|node3.html|; 
 $noresave{$key} = "$nosave";
 
 $key = q/threads/;

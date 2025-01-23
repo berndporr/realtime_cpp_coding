@@ -45,9 +45,9 @@ Fig.~\ref{timing} shows the basic dataflow and how event timing is
 established: devices by themselves have event signals such as ``data
 ready'' or ``crash sensor has been triggered''. The Linux kernel receives
 these as interrupt callbacks. However, userspace has no direct interrupt
-mechanism; instead it has blocking I/O where a read or write operation blocks
-until a kernel-side interrupt has happened. A blocking I/O call returning
-may then be translated callbacks between classes by waking up threads.
+mechanism; instead it has \textsl{blocking I/O} where a read or write operation blocks
+until a kernel-side interrupt/event has happened. A blocking I/O call returning
+may then be translated to callbacks between classes by waking up threads.
 Data is transmitted back to the hardware via methods called ``setters'',
 which change an object's attributes and potentially do other processing.
 
@@ -72,7 +72,7 @@ callback to issue an avoidance action which in turn then sets the
 motors in reverse.
 
 Callbacks can be seen as userspace interrupt service routines.
-These must always complete immediately so that the caller is
+These must always complete immediately so that the caller does
 not experience any noticeable delay. For example when a user
 presses a button in a GUI the callback must be
 processed without any noticeable delay which is application specific.
@@ -81,8 +81,12 @@ longer then a thread should be started which in turn then will
 then have a callback signalling success.
 
 In the following sections we are describing how to write event driven
-code in C++. Important here is the interplay between blocking I/O and
-threads: chapter~\ref{drivers} focuses on how to wrap the low
+code in C++. Important here is
+\begin{enumerate}
+\item blocking I/O and,
+\item threads woken up by blocking I/O.
+\end{enumerate}
+Chapter~\ref{drivers} focuses on how to wrap the low
 level blocking Linux I/O in a class and how to establish the
 communication between classes while the chapter~\ref{threads}
 describes how threads can effectively be used to trigger callbacks
@@ -94,10 +98,8 @@ describes how events are transmitted back from a C++ class to the user
 with the help of setters.
 
 
-
-
-\chapter{Writing C++ device driver classes\label{drivers}}
-This chapter focuses on writing your own C++ device driver class
+\chapter{Writing C++ classes for userspace event processing\label{drivers}}
+This chapter focuses on writing your own C++ class for event processing by
 hiding away the complexity (and messy) low level C APIs and/or raw
 device access. How are events translated into I/O operations? On the
 hardware-side we have event signals such as data-ready signals or by
@@ -107,10 +109,9 @@ which means that a read operation blocks until data has arrived
 or an event has happened. The task of a C++ programmer is
 to hide this complexity and these quite different approaches in C++
 classes which communicate via callbacks and setters with the client
-classes. The rest of the program will then appear simple and be
-easy to maintain.
+classes.
 
-\section{General recommendations on how to write your C++ classes for devices}
+\section{General recommendations on how to write C++ event processing classes}
 As said above the main purpose of object oriented coding here is to
 hide away the complexity of low level driver access and offer the
 client a simple and safe way of connecting to the sensor. In
@@ -123,93 +124,57 @@ particular:
   voltage, temperature) and not sensor registers. Default config parameters
   should be specified that the class can be used straight away with
   default parameters.
+\item In the build system bundle classes into separate libraries so that they
+  can be re-used easily.
 \item The class comes with simple demo programs demonstrating how
   a client program might use it.
 \end{enumerate}
 
 
 
-\section{Callbacks in C++ device classes}
-As said in the introduction your hardware device class has callback interfaces
-to hand back the data to the client.
-
+\section{Callbacks between C++ classes}
+Events between C++ classes are transmitted via callbacks.
 There are different ways of tackling the issue of callbacks but the
-simplest one is defining a method as \textsl{abstract} and asking the
-client to implement it in a derived class. That abstract function can
-either be in a separate interface class or part of the device class
-itself. So, we have two options:
-\begin{enumerate}
-\item The callback is part of the device driver class:
+most effective way is defining a method in an \textsl{interface class} as \textsl{abstract} and asking the
+client class to implement it in a derived class.
+
+The callback is part of an interface class:
 \begin{verbatim}
-class MyDriver {
-          void start(DevSettings settings = DevSettings() );
-          void stop();
-          virtual void callback(float sample) = 0;
-};
-\end{verbatim}
-\item The callback is part of an interface class:
-\begin{verbatim}
-class CallbackInterface {
-          virtual void callback(float sample) = 0;
-};
+  struct ADSCallbackInterface {
+	    /**
+	     * Called when a new sample is available.
+	     * This needs to be implemented in a derived
+	     * class by the client. Defined as abstract.
+	     * \param sample Voltage from the selected channel.
+	     **/
+	virtual void hasADS1115Sample(float sample) = 0;
+    };
 \end{verbatim}
 and then registering it in the main device driver class:
 \begin{verbatim}
-class MyDriver {
-          void registerCallback(CallbackInterface* cb);
-};
+    void registerCallback(ADSCallbackInterface* ci) {
+	adsCallbackInterfaces.push_back(ci);
+    }
 \end{verbatim}
-\end{enumerate}
-These two options are now explained in greater detail.
+where \texttt{adsCallbackInterfaces} is a \texttt{std::vector} of containing instances of
+\texttt{ADSCallbackInterface}.
 
-
-\subsection{Creating a callback interface}
-Here, we create a separate interface class containing a callback
-as an abstract method:
+This then allows the C++ class to transmit an event to the receiving classes by looping through
+the interface pointers:
 \begin{verbatim}
-class LSM9DS1callback {
-public:
-        virtual void hasSample(LSM9DS1Sample sample) = 0;
-};
-\end{verbatim}
-
-The client then implements the abstract method \texttt{hasSample()}, instantiates
-the interface class and then saves its pointer in the device class, here called \texttt{lsm9ds1Callback}.
-\begin{verbatim}
-void LSM9DS1::dataReady() {
-        LSM9DS1Sample sample;
-        // fills the sample struct with data
-        // ...
-        lsm9ds1Callback->hasSample(sample);
+for(auto &cb: adsCallbackInterfaces) {
+    cb->hasADS1115Sample(v);
 }
 \end{verbatim}
-The pointer to the interface instance is transmitted via a setter which
-receives the pointer of the interface as an argument, for example:
-\begin{verbatim}
-void LSM9DS1::registerCallback(LSM9DS1callback* cb);
-\end{verbatim}
-This allows to register a callback optionally. The client may or may not need
-one.
-See
-\url{https://github.com/berndporr/rpi_AD7705_daq}
-for a complete example.
 
-\subsection{Adding directly an abstract method to the device driver class}
-Instead of creating a separate class containing the callback you
-can also add the callback straight to the device driver class.
-\begin{verbatim}
-class ADS1115rpi {
-        ...
-        virtual void hasSample(float sample) = 0;
-        ...
-};
-\end{verbatim}
-This forces the client to implement the callback to be able to use
-the class. This creates a very safe environment as all dependencies
-are set at compile time and the abstract nature of the base class
-makes clear what needs to be implemented.
-See
-\url{https://github.com/berndporr/rpi_ads1115} for a complete example.
+See \url{https://github.com/berndporr/rpi_ads1115} for a complete example.
+
+Note that an interface can also be defined by \texttt{std::function} but this is a lot
+slower than using interfaces. The reason is that interfaces are standard C++ and the
+compiler can optimise these constructs while \texttt{std::function} does a lot of trickery
+behind the scenes which a compiler won't understand and thus won't be able to optimise.
+The other reason why \texttt{std::function} is discouraged is the difficulty to provide
+proper documentation for the function arguments and return values.
 
 \subsection{Callback arguments}
 Above the callbacks just delivered one floating point value. However,
@@ -273,7 +238,7 @@ In terms of \textsl{memory management}:
 
 \section{Low level userspace device access}
 The following sections provide pointers of how to write
-the C++ driver classes for different hardware protocols.
+the C++ driver classes for different hardware protocols which then emit events via callback interfaces.
 
 To emulate an ``interrupt'' or event in userspace we need blocking I/O which provides the timing for example
 when waiting for a GPIO change, doing audio or video I/O.
@@ -305,8 +270,7 @@ to the client. The full code of the example camera class is here:
 On the raspberry PI a new video stack has been implemented which talks
 to the kernel via \texttt{/dev/media*}. This is incompatible with
 openCV and the code in section~\ref{videodesk} won't work. The good
-news is that \texttt{libcamera} already implements a callback
-interface so a loop is no longer needed. Instead, one just needs to register a
+news is that \texttt{libcamera} already implements a callback. Instead, one just needs to register a
 callback to receive the video frames. The bad news is that libcamera
 is highly complex and requires a lot of additional code
 (\url{https://github.com/libcamera-org/libcamera/blob/master/Documentation/guides/application-developer.rst}).
@@ -386,6 +350,9 @@ Here the \texttt{recv} command blocks until new data has arrived.
 \subsection{General purpose I/O (GPIO)}
 GPIO pins are not just simple digital ports but they
 can be used to turn non-blocking I/O into blocking I/O, or in other words: events!
+SPI and I2C are only blocking for their read/write operations but they don't know
+when new data is available at a sensor so one needs to connect the DATA-READY output
+of a sensor to a GPIO port which then feeds into blocking I/O.
 
 \subsubsection{libgpiod}
 The GPIO (of the raspberry PI) can easily be controlled via
@@ -423,13 +390,10 @@ gpiod_line_set_value(pinRed, 1);
 \end{verbatim}
 
 \subsubsection{Events}
-Blocking I/O is very good for event processing.
-Calling a blocking I/O function causes the thread
-to wait efficiently, then
-when the I/O call returns, the thread will wake up.
-This means that a change in level from low to high or high
+libgpiod offers all the functionality of event processing via blocking I/O!
+Here, change in level from low to high or high
 to low unblocks an I/O operation, awakening its underlying
-thread which then performs a callback.
+thread which then one can perform a callback.
 
 To request event processing on a pin simply
 requires this single
@@ -462,9 +426,9 @@ Then \texttt{gpiod\_line\_event\_read} transfers the
 kernel event to userspace and clears it out of the kernel event queue.
 It's important to do the read operation
 even if the event-struct is never used. The callback is made,
-and the loop repeats until another thread requrests termination
+and the loop repeats until another thread requests termination
 by setting \verb!running! to \verb!false!.
-See \url{https://github.com/berndporr/rpi_ads1115} for a complete example.
+See \url{https://github.com/berndporr/libgpiod_event_demo} for a complete example.
 
 \subsubsection{Releasing the GPIO}
 Once you are finished, release the GPIO pin with:
@@ -563,8 +527,8 @@ have their own clock signal.
 
 
 \subsection{I2C}
-I2C is a protocol which either receives or transmits. Its calls are blocking for the duration of receive or transmit 
-but only in rare cases can be used for event based processing. It is recommended to use an additonal GPIO pin for
+I2C is a protocol which either receives or transmits. Its I/O operations are blocking but only
+for the duration of receive or transmit. Use an additional GPIO pin for
 events for example for a data-ready event.
 
 The I2C bus has two signal lines (SDA \& SDL) which must be pulled up
@@ -640,7 +604,6 @@ gives you the temperature of the CPU.
 
 
 \subsection{Accessing physical memory locations (danger!)}
-
 Don't.
 In case you really need to access registers you can
 also access memory directly. This should only be used as a last resort.
