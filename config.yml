@@ -1,7 +1,0 @@
-title: "Realtime embedded coding in C++ under Linux"
-code: ENG5220
-year: 2025
-author: Bernd Porr
-structure: 
-    - type: standalone
-      source: realtime_embedded_coding.tex
