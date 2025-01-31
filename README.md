@@ -11,7 +11,7 @@ At the heart are *callback* interfaces which transmit *events*
 from C++ class to C++ class.
 
 ## Download
-https://github.com/berndporr/realtime_cpp_coding/blob/main/realtime_embedded_coding.pdf
+[PDF](docs/realtime_embedded_co.pdf)
 
 ## Online
 https://berndporr.github.io/realtime_cpp_coding/
