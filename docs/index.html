@@ -7,7 +7,7 @@
             <meta name="robots" content="noindex">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <meta name="author" content="Bernd Porr" />
-            <meta name="date" content="2025-01-23" />
+            <meta name="date" content="2025-01-31" />
         
 
         <title>realtime_embedded_coding | Realtime embedded coding in C++ under Linux</title>
@@ -15,41 +15,41 @@
         
     
     
-            <link rel="stylesheet" href="static/styles.css?build_time=1737660730.473153">
+            <link rel="stylesheet" href="static/styles.css?build_time=1738336772.070045">
             
             
         
-    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1737660730.473153">
+    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1738336772.070045">
 
-    <link rel="stylesheet" href="static/print.css?build_time=1737660730.473153">
+    <link rel="stylesheet" href="static/print.css?build_time=1738336772.070045">
 
 
         
     
 			<script>
-				var chirun_static_url = new URL('static?build_time=1737660730.473153', location.href);
+				var chirun_static_url = new URL('static?build_time=1738336772.070045', location.href);
 			</script>
 
             
-                <script defer src="static/mathjax_config.js?build_time=1737660730.473153"></script>
+                <script defer src="static/mathjax_config.js?build_time=1738336772.070045"></script>
                 <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
             
 
-            <script type="module" src="static/localisation.js?build_time=1737660730.473153"></script>
+            <script type="module" src="static/localisation.js?build_time=1738336772.070045"></script>
 
-            <script defer src="static/customisation.js?build_time=1737660730.473153"></script>
+            <script defer src="static/customisation.js?build_time=1738336772.070045"></script>
 
             
 
             
         
-    <script defer src="static/code.js?build_time=1737660730.473153" type="module"></script>
-    <script defer src="static/embed_numbas.js?build_time=1737660730.473153" type="module"></script>
-    <script defer src="static/embed_qrcode.js?build_time=1737660730.473153" type="module"></script>
+    <script defer src="static/code.js?build_time=1738336772.070045" type="module"></script>
+    <script defer src="static/embed_numbas.js?build_time=1738336772.070045" type="module"></script>
+    <script defer src="static/embed_qrcode.js?build_time=1738336772.070045" type="module"></script>
 
 
         <template id="runnable-code-template">
-            <link rel="stylesheet" href="static/code.css?build_time=1737660730.473153">
+            <link rel="stylesheet" href="static/code.css?build_time=1738336772.070045">
             <div class="runnable-code-wrapper">
                 <section class="fullscreenable code">
                     <div id="code"></div>
@@ -230,7 +230,7 @@
         </template>
 
         <template id="embed-numbas-template">
-            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1737660730.473153">
+            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1738336772.070045">
             <details id="wrapper" data-completion-status="incomplete">
                 <summary>
                     <h1 id="title">Test Yourself</h1>
@@ -1484,7 +1484,7 @@ From the sections above it’s clear that Linux user-space low level device acce
 <ol class="enumerate" id="a0000000051">
 <li id="a0000000052" value="1">
 <p>
-Endless loops with blocking I/O or GPIO wakeups to establish <b class="bfseries">precise timing</b> for callbacks. 
+Loops with blocking I/O to establish <b class="bfseries">precise timing</b> for callbacks. 
 </p>
 </li>
 <li id="a0000000053" value="2">
@@ -1509,7 +1509,7 @@ Endless loops with blocking I/O or GPIO wakeups to establish <b class="bfseries"
  In C++ a worker is a method within a class: 
 </p>
 <pre class="verbatim">
-uthread = new std::thread(&amp;MyClassWithAThread::run, this);
+uthread = std::thread(&amp;MyClassWithAThread::run, this);
 </pre>
 <p>
  where <span class="ttfamily">MyClassWithAThread</span> is a class containing the function “run”: 
@@ -1538,12 +1538,11 @@ Sometimes it’s important to wait for the termination of the thread, for exampl
 </p>
 <pre class="verbatim">
         void stop() {
-                uthread-&gt;join();
-                delete uthread;
+                uthread.join();
         }
 </pre>
 <p>
- It’s also important is also to release the memory of a thread after it has finished to avoid memory leaks, hence the <span class="ttfamily">delete</span> command. 
+ In a realtime system <span class="ttfamily">join</span> is most likely only needed when shutting down the program. 
 </p>
 </section><section class="subsection">
 <h3 id="a0000000058">3.3.3 Running/stopping workers with endless loops</h3>
@@ -1565,8 +1564,7 @@ void run() {
 <pre class="verbatim">
         void stop() {
                 running = false; // &lt;----- HERE!!
-                uthread-&gt;join();
-                delete uthread;
+                uthread.join();
         }
 </pre>
 <p>
@@ -1578,7 +1576,7 @@ If your program creates and joins several threads while executing, with care you
 </section><section class="subsection">
 <h3 id="a0000000059">3.3.4 Timing within threads</h3>
 <p>
- Threads are perfect to create timing without using sleep commands with the help of <i class="slshape">blocking I/O</i>. Blocking I/O puts a thread to sleep and is woken up after new data has arrived or has been written to a device. Blocking I/O won’t consume any CPU power and is perfect to tell the kernel that it can execute other threads in the meantime. 
+ Threads are perfect to create timing without using <span class="ttfamily">sleep</span> commands with the help of <i class="slshape">blocking I/O</i>. Blocking I/O puts a thread to sleep and is woken up after new data has arrived or has been written to a device. Blocking I/O won’t consume any CPU power and is perfect to tell the kernel that it can execute other threads in the meantime. 
 </p>
 <section class="subsubsection">
 <h4 id="a0000000060">Timing with blocking I/O</h4>
@@ -1605,7 +1603,7 @@ int flags = fcntl(fd, F_GETFL, 0);
 fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 </pre>
 <p>
- you can then use <span class="ttfamily">select()</span> to wait for data: 
+ you can then use <span class="ttfamily">select()</span> which blocks on the file descriptor: 
 </p>
 <pre class="verbatim">
 FD_ZERO(&amp;rdset);
@@ -2052,7 +2050,7 @@ If a setter sets large buffers then it’s highly recommended to allocate the me
 
     <div id="footer-text">
         <p>Generated using <a target="_blank" href="https://chirun.org.uk">Chirun</a> v1.2.1, written by the Digital Learning Unit, School of Mathematics &amp; Statistics, Newcastle University</p>
-        <p>This page last generated: 2025-01-23</p>
+        <p>This page last generated: 2025-01-31</p>
         
         
         
