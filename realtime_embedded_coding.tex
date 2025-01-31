@@ -669,7 +669,7 @@ an easy-to-understand interface.
 \section{Introduction}
 In realtime systems threads have two distinct functions:
 \begin{enumerate}
-\item Endless loops with blocking I/O or GPIO wakeups
+\item Loops with blocking I/O
   to establish \textbf{precise timing} for callbacks.
 \item \textbf{Asynchronous execution} of time-consuming tasks
   with a callback after the task has completed.
@@ -697,7 +697,7 @@ is often called a \textsl{worker}.
 In C++ a worker is a method within
 a class:
 \begin{verbatim}
-uthread = new std::thread(&MyClassWithAThread::run, this);
+uthread = std::thread(&MyClassWithAThread::run, this);
 \end{verbatim}
 where \texttt{MyClassWithAThread} is a class containing the function ``run'':
 \begin{verbatim}
@@ -727,12 +727,10 @@ you stop an endless loop in a thread. To wait for the termination
 of the thread use the ``join()'' method:
 \begin{verbatim}
         void stop() {
-                uthread->join();
-                delete uthread;
+                uthread.join();
         }
 \end{verbatim}
-It's also important is also to release the memory of a thread after it has finished
-to avoid memory leaks, hence the \texttt{delete} command.
+In a realtime system \texttt{join} is most likely only needed when shutting down the program.
 
 
 \subsection{Running/stopping workers with endless loops}
@@ -752,8 +750,7 @@ the thread:
 \begin{verbatim}
         void stop() {
                 running = false; // <----- HERE!!
-                uthread->join();
-                delete uthread;
+                uthread.join();
         }
 \end{verbatim}
 Note that \texttt{join()} is a blocking operation and needs to be used with care not to
@@ -767,12 +764,12 @@ tidying up in the background after you stop it by setting \texttt{running = fals
 In this case only need execute \texttt{join()} to be sure that
 the thread has finished. Joining a terminated thread is OK
 (the call just returns immediately)
-but you absolutely  must not join a thread more than once,
+but you absolutely must not join a thread more than once,
 nor delete a thread until you've joined it.
 
 
 \subsection{Timing within threads}
-Threads are perfect to create timing without using sleep commands
+Threads are perfect to create timing without using \texttt{sleep} commands
 with the help of \textsl{blocking I/O}. 
 Blocking I/O puts a thread
 to sleep and is woken up after new data has arrived or has been
@@ -802,7 +799,7 @@ If the I/O is non-blocking or if you are making blocking I/O non-blocking with:
 int flags = fcntl(fd, F_GETFL, 0);
 fcntl(fd, F_SETFL, flags | O_NONBLOCK);
 \end{verbatim}
-you can then use \texttt{select()} to wait for data:
+you can then use \texttt{select()} which blocks on the file descriptor:
 \begin{verbatim}
 FD_ZERO(&rdset);
 FD_SET(fd,&rdset);
