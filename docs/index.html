@@ -7,7 +7,7 @@
             <meta name="robots" content="noindex">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <meta name="author" content="Bernd Porr" />
-            <meta name="date" content="2025-01-31" />
+            <meta name="date" content="2025-02-01" />
         
 
         <title>realtime_embedded_coding | Realtime embedded coding in C++ under Linux</title>
@@ -15,41 +15,41 @@
         
     
     
-            <link rel="stylesheet" href="static/styles.css?build_time=1738336772.070045">
+            <link rel="stylesheet" href="static/styles.css?build_time=1738438194.068532">
             
             
         
-    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1738336772.070045">
+    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1738438194.068532">
 
-    <link rel="stylesheet" href="static/print.css?build_time=1738336772.070045">
+    <link rel="stylesheet" href="static/print.css?build_time=1738438194.068532">
 
 
         
     
 			<script>
-				var chirun_static_url = new URL('static?build_time=1738336772.070045', location.href);
+				var chirun_static_url = new URL('static?build_time=1738438194.068532', location.href);
 			</script>
 
             
-                <script defer src="static/mathjax_config.js?build_time=1738336772.070045"></script>
+                <script defer src="static/mathjax_config.js?build_time=1738438194.068532"></script>
                 <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
             
 
-            <script type="module" src="static/localisation.js?build_time=1738336772.070045"></script>
+            <script type="module" src="static/localisation.js?build_time=1738438194.068532"></script>
 
-            <script defer src="static/customisation.js?build_time=1738336772.070045"></script>
+            <script defer src="static/customisation.js?build_time=1738438194.068532"></script>
 
             
 
             
         
-    <script defer src="static/code.js?build_time=1738336772.070045" type="module"></script>
-    <script defer src="static/embed_numbas.js?build_time=1738336772.070045" type="module"></script>
-    <script defer src="static/embed_qrcode.js?build_time=1738336772.070045" type="module"></script>
+    <script defer src="static/code.js?build_time=1738438194.068532" type="module"></script>
+    <script defer src="static/embed_numbas.js?build_time=1738438194.068532" type="module"></script>
+    <script defer src="static/embed_qrcode.js?build_time=1738438194.068532" type="module"></script>
 
 
         <template id="runnable-code-template">
-            <link rel="stylesheet" href="static/code.css?build_time=1738336772.070045">
+            <link rel="stylesheet" href="static/code.css?build_time=1738438194.068532">
             <div class="runnable-code-wrapper">
                 <section class="fullscreenable code">
                     <div id="code"></div>
@@ -230,7 +230,7 @@
         </template>
 
         <template id="embed-numbas-template">
-            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1738336772.070045">
+            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1738438194.068532">
             <details id="wrapper" data-completion-status="incomplete">
                 <summary>
                     <h1 id="title">Test Yourself</h1>
@@ -422,389 +422,659 @@
         <h1>Table of Contents</h1>
         <a class="jump-to-item-content" href="#item-content">Jump to content</a>
         
-            <ol class="table-of-contents">
+            <ol class="table-of-contents" role="tree">
                 
                     
-    <li>
-        <a href="#realtime_embedded_co">Realtime embedded coding in C++ under Linux</a>
+<li role="none" data-toc-level="1" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-realtime_embedded_co" href="#realtime_embedded_co">
         
-    </li>
+        Realtime embedded coding in C++ under Linux
+    </a>
 
-    <li>
-        <a href="#a0000000002">1 Introduction</a>
-        
-        <ol>
-            
-            
-    <li>
-        <a href="#a0000000004">1.1 Event based coding in the Linux userspace</a>
-        
-    </li>
+    
+</li>
 
-            
-        </ol>
-        
-    </li>
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000002" href="#a0000000002">
+        <span class="toc-marker"></span>
+        1 Introduction
+    </a>
 
-    <li>
-        <a href="#drivers">2 Writing C++ classes for userspace event processing</a>
-        
-        <ol>
+    
+        <ol role="group" id="toc-subtree-a0000000002">
             
             
-    <li>
-        <a href="#a0000000009">2.1 General recommendations on how to write C++ event processing classes</a>
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000004" href="#a0000000004">
         
-    </li>
+        1.1 Event based coding in the Linux userspace
+    </a>
 
-    <li>
-        <a href="#a0000000015">2.2 Callbacks between C++ classes</a>
-        
-        <ol>
-            
-            
-    <li>
-        <a href="#a0000000016">2.2.1 Callback arguments</a>
-        
-    </li>
+    
+</li>
 
             
         </ol>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#a0000000023">2.3 Low level userspace device access</a>
-        
-        <ol>
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-drivers" href="#drivers">
+        <span class="toc-marker"></span>
+        2 Writing C++ classes for userspace event processing
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-drivers">
             
             
-    <li>
-        <a href="#a0000000024">2.3.1 Video camera capture (openCV)</a>
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000009" href="#a0000000009">
         
-        <ol>
+        2.1 General recommendations on how to write C++ event processing classes
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000015" href="#a0000000015">
+        <span class="toc-marker"></span>
+        2.2 Callbacks between C++ classes
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000015">
             
             
-    <li>
-        <a href="#videodesk">Ubuntu / Debian Linux systems</a>
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000016" href="#a0000000016">
         
-    </li>
+        2.2.1 Callback arguments
+    </a>
 
-    <li>
-        <a href="#a0000000025">Raspberry PI</a>
-        
-    </li>
-
-            
-        </ol>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000026">2.3.2 Audio (ALSA)</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000027">2.3.3 Bluetooth</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000028">2.3.4 General purpose I/O (GPIO)</a>
-        
-        <ol>
-            
-            
-    <li>
-        <a href="#a0000000029">libgpiod</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000033">Output</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000034">Events</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000035">Releasing the GPIO</a>
-        
-    </li>
+    
+</li>
 
             
         </ol>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#a0000000036">2.3.5 SPI</a>
-        
-    </li>
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000023" href="#a0000000023">
+        <span class="toc-marker"></span>
+        2.3 Low level userspace device access
+    </a>
 
-    <li>
-        <a href="#a0000000038">2.3.6 I2C</a>
-        
-        <ol>
+    
+        <ol role="group" id="toc-subtree-a0000000023">
             
             
-    <li>
-        <a href="#a0000000039">Raw <span class="ttfamily">/dev/i2c</span> access</a>
-        
-    </li>
+<li role="none" data-toc-level="3" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000024" href="#a0000000024">
+        <span class="toc-marker"></span>
+        2.3.1 Video camera capture (openCV)
+    </a>
 
+    
+        <ol role="group" id="toc-subtree-a0000000024">
             
-        </ol>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000040">2.3.7 Access to hardware via special devices in <span class="ttfamily">/sys</span></a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000041">2.3.8 Accessing physical memory locations (danger!)</a>
-        
-    </li>
-
             
-        </ol>
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-videodesk" href="#videodesk">
         
-    </li>
+        Ubuntu / Debian Linux systems
+    </a>
 
-    <li>
-        <a href="#a0000000048">2.4 Kernel driver programming</a>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#a0000000049">2.5 Conclusion</a>
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000025" href="#a0000000025">
         
-    </li>
+        Raspberry PI
+    </a>
+
+    
+</li>
 
             
         </ol>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#threads">3 Threads</a>
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000026" href="#a0000000026">
         
-        <ol>
+        2.3.2 Audio (ALSA)
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000027" href="#a0000000027">
+        
+        2.3.3 Bluetooth
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000028" href="#a0000000028">
+        <span class="toc-marker"></span>
+        2.3.4 General purpose I/O (GPIO)
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000028">
             
             
-    <li>
-        <a href="#a0000000050">3.1 Introduction</a>
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000029" href="#a0000000029">
         
-    </li>
+        libgpiod
+    </a>
 
-    <li>
-        <a href="#a0000000054">3.2 Processes and Threads</a>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#a0000000055">3.3 Thread and worker</a>
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000033" href="#a0000000033">
         
-        <ol>
-            
-            
-    <li>
-        <a href="#a0000000056">3.3.1 Creating threads</a>
-        
-    </li>
+        Output
+    </a>
 
-    <li>
-        <a href="#a0000000057">3.3.2 Lifetime of a thread</a>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#a0000000058">3.3.3 Running/stopping workers with endless loops</a>
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000034" href="#a0000000034">
         
-    </li>
+        Events
+    </a>
 
-    <li>
-        <a href="#a0000000059">3.3.4 Timing within threads</a>
-        
-        <ol>
-            
-            
-    <li>
-        <a href="#a0000000060">Timing with blocking I/O</a>
-        
-    </li>
+    
+</li>
 
-            
-        </ol>
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000035" href="#a0000000035">
         
-    </li>
+        Releasing the GPIO
+    </a>
 
-            
-        </ol>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000061">3.4 Timing with Linux timers</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000062">3.5 Conclusion</a>
-        
-    </li>
+    
+</li>
 
             
         </ol>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#qt">4 Realtime/event processing within the Graphical User Interface Qt</a>
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000036" href="#a0000000036">
         
-        <ol>
+        2.3.5 SPI
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000038" href="#a0000000038">
+        <span class="toc-marker"></span>
+        2.3.6 I2C
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000038">
             
             
-    <li>
-        <a href="#a0000000063">4.1 Introduction</a>
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000039" href="#a0000000039">
         
-    </li>
+        Raw <span class="ttfamily">/dev/i2c</span> access
+    </a>
 
-    <li>
-        <a href="#a0000000065">4.2 Callbacks in Qt</a>
-        
-        <ol>
-            
-            
-    <li>
-        <a href="#a0000000066">4.2.1 Events from widgets</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000067">4.2.2 Plotting realtime data arriving via a callback</a>
-        
-    </li>
-
-            
-        </ol>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000068">4.3 Conclusion</a>
-        
-    </li>
+    
+</li>
 
             
         </ol>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#webserver">5 Realtime web server/client communication</a>
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000040" href="#a0000000040">
         
-        <ol>
-            
-            
-    <li>
-        <a href="#a0000000069">5.1 Introduction</a>
-        
-    </li>
+        2.3.7 Access to hardware via special devices in <span class="ttfamily">/sys</span>
+    </a>
 
-    <li>
-        <a href="#a0000000070">5.2 REST</a>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#a0000000071">5.3 Data format: JSON</a>
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000041" href="#a0000000041">
         
-    </li>
+        2.3.8 Accessing physical memory locations (danger!)
+    </a>
 
-    <li>
-        <a href="#a0000000072">5.4 Server</a>
-        
-        <ol>
-            
-            
-    <li>
-        <a href="#a0000000073">5.4.1 Web servers (http/https)</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000078">5.4.2 FastCGI</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000079">5.4.3 Server \(\to \) client</a>
-        
-    </li>
-
-    <li>
-        <a href="#a0000000080">5.4.4 Client \(\to \) server: POST</a>
-        
-    </li>
+    
+</li>
 
             
         </ol>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#a0000000081">5.5 Client code: javascript for websites</a>
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000048" href="#a0000000048">
         
-    </li>
+        2.4 Kernel driver programming
+    </a>
 
-    <li>
-        <a href="#a0000000082">5.6 Conclusion</a>
-        
-    </li>
+    
+</li>
 
-            
-        </ol>
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000049" href="#a0000000049">
         
-    </li>
+        2.5 Conclusion
+    </a>
 
-    <li>
-        <a href="#setters">6 Setters</a>
-        
-        <ol>
-            
-            
-    <li>
-        <a href="#a0000000084">6.1 Conclusion</a>
-        
-    </li>
+    
+</li>
 
             
         </ol>
-        
-    </li>
+    
+</li>
 
-    <li>
-        <a href="#a0000000085">A License</a>
-        
-        <ol>
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-threads" href="#threads">
+        <span class="toc-marker"></span>
+        3 Threads
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-threads">
             
             
-    <li>
-        <a href="#footnot_1">Footnotes</a>
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000050" href="#a0000000050">
         
-    </li>
+        3.1 Introduction
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000054" href="#a0000000054">
+        
+        3.2 Processes and Threads
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000055" href="#a0000000055">
+        <span class="toc-marker"></span>
+        3.3 Thread and worker
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000055">
+            
+            
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000056" href="#a0000000056">
+        
+        3.3.1 Creating threads
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000057" href="#a0000000057">
+        
+        3.3.2 Lifetime of a thread
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000058" href="#a0000000058">
+        
+        3.3.3 Running/stopping workers with endless loops
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000059" href="#a0000000059">
+        <span class="toc-marker"></span>
+        3.3.4 Timing within threads
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000059">
+            
+            
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000060" href="#a0000000060">
+        
+        Timing with blocking I/O
+    </a>
+
+    
+</li>
 
             
         </ol>
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000061" href="#a0000000061">
         
-    </li>
+        3.4 Timing with Linux timers
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000062" href="#a0000000062">
+        
+        3.5 Conclusion
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-qt" href="#qt">
+        <span class="toc-marker"></span>
+        4 Realtime/event processing within the Graphical User Interface Qt
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-qt">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000063" href="#a0000000063">
+        
+        4.1 Introduction
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000065" href="#a0000000065">
+        <span class="toc-marker"></span>
+        4.2 Callbacks in Qt
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000065">
+            
+            
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000066" href="#a0000000066">
+        
+        4.2.1 Events from widgets
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000067" href="#a0000000067">
+        
+        4.2.2 Plotting realtime data arriving via a callback
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000068" href="#a0000000068">
+        
+        4.3 Conclusion
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000069" href="#a0000000069">
+        <span class="toc-marker"></span>
+        5 Realtime publisher-subscriber communication with DDS
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000069">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000070" href="#a0000000070">
+        
+        5.1 Define the data structure
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000071" href="#a0000000071">
+        
+        5.2 Publisher
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000072" href="#a0000000072">
+        
+        5.3 Subscriber
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-webserver" href="#webserver">
+        <span class="toc-marker"></span>
+        6 Realtime web server/client communication
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-webserver">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000073" href="#a0000000073">
+        
+        6.1 Introduction
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000074" href="#a0000000074">
+        
+        6.2 REST
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000075" href="#a0000000075">
+        
+        6.3 Data format: JSON
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000076" href="#a0000000076">
+        <span class="toc-marker"></span>
+        6.4 Server
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000076">
+            
+            
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000077" href="#a0000000077">
+        
+        6.4.1 Web servers (http/https)
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000082" href="#a0000000082">
+        
+        6.4.2 FastCGI
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000083" href="#a0000000083">
+        
+        6.4.3 Server \(\to \) client
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000084" href="#a0000000084">
+        
+        6.4.4 Client \(\to \) server: POST
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000085" href="#a0000000085">
+        
+        6.5 Client code: javascript for websites
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000086" href="#a0000000086">
+        
+        6.6 Conclusion
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-setters" href="#setters">
+        <span class="toc-marker"></span>
+        7 Setters
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-setters">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000088" href="#a0000000088">
+        
+        7.1 Conclusion
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000089" href="#a0000000089">
+        <span class="toc-marker"></span>
+        A License
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000089">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-footnot_1" href="#footnot_1">
+        
+        Footnotes
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
 
                 
             </ol>
@@ -864,7 +1134,7 @@ threads woken up by blocking I/O.
 </li>
 </ol>
 <p>
- Chapter <a class="ref" href="#drivers">2</a> focuses on how to wrap the low level blocking Linux I/O in a class and how to establish the communication between classes while the chapter <a class="ref" href="#threads">3</a> describes how threads can effectively be used to trigger callbacks with blocking I/O. Chapter <a class="ref" href="#qt">4</a> then presents the event based communication in Qt, in particular user interaction and animations. Chapter <a class="ref" href="#webserver">5</a> tackles the same issues as for Qt but for website server communication. The final chapter <a class="ref" href="#setters">6</a> then describes how events are transmitted back from a C++ class to the user with the help of setters. 
+ Chapter <a class="ref" href="#drivers">2</a> focuses on how to wrap the low level blocking Linux I/O in a class and how to establish the communication between classes while the chapter <a class="ref" href="#threads">3</a> describes how threads can effectively be used to trigger callbacks with blocking I/O. Chapter <a class="ref" href="#qt">4</a> then presents the event based communication in Qt, in particular user interaction and animations. Chapter <a class="ref" href="#webserver">6</a> tackles the same issues as for Qt but for website server communication. The final chapter <a class="ref" href="#setters">7</a> then describes how events are transmitted back from a C++ class to the user with the help of setters. 
 </p>
 </section><!-- Latex Chapter/Part -->
 <h1 id="drivers">2 Writing C++ classes for userspace event processing</h1>
@@ -1767,9 +2037,90 @@ Note that neither the timer nor the <span class="ttfamily">update()</span> funct
  Events in Qt are generated by user interaction, for example a button press or moving the mouse. As before Qt provides a callback mechanism via the <span class="ttfamily">connect()</span> method. Callbacks from Qt timers may be used for animations but must not be used for real-time events as Qt timers won’t guarantee a reliable timing. 
 </p>
 </section><!-- Latex Chapter/Part -->
-<h1 id="webserver">5 Realtime web server/client communication</h1>
+<h1 id="a0000000069">5 Realtime publisher-subscriber communication with DDS</h1>
+<figure id="dds1">
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{fastdds1}" src="images/img-0003.svg" style="width:469.755pt"/> </div>
+<figcaption>
+<span class="caption_title">Figure</span>
+<span class="caption_ref">5.1</span>
+<span class="caption_text">FastDDS.</span>
+</figcaption>
+</figure>
+<p>
+So far communicaton has only been between classes within the same program on the same computer. However, often data needs to be transmitted in realtime to other computers. The Data Distribution Service (DDS) is a middleware protocol and API which has been developed to provide low-latency publisher-subscriber communication, extreme reliability, and a scalable architecture (see Fig. <a class="ref" href="#dds1">5.1</a>). The publisher publishes a data structure (here a C++ struct) and then at the receiver a callback will be triggered delivering the data. We focus on fastDDS which uses the RTPS (Real Time Publish Subscribe) protocol. It offers plug and play connectivity which won’t require to specify IP addresses in a local network so that any new application is automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system. 
+</p>
+<p>
+Here are the steps how to use fastDDS. 
+</p>
 <section class="section">
-<h2 id="a0000000069">5.1 Introduction</h2>
+<h2 id="a0000000070">5.1 Define the data structure</h2>
+<p>
+The idea with fastDDS is to specify a data structure as a template which is then converted into a header and cpp file. For example the template <span class="ttfamily">HelloWorldMsg.idl</span>: 
+</p>
+<pre class="verbatim">
+struct HelloWorldMsg
+{
+    unsigned long index;
+    string message;
+};
+</pre>
+<p>
+ contains a number and a C++ string. This template file is then converted to two C++ header and cpp files with the helper: 
+</p>
+<pre class="verbatim">
+fastddsgen HelloWorldMsg.idl
+</pre>
+<p>
+ which of course should be part of your cmake build system. Include the headers into your publisher and receiver. 
+</p>
+</section><section class="section">
+<h2 id="a0000000071">5.2 Publisher</h2>
+<p>
+Write a publisher class which publishes the message: 
+</p>
+<pre class="verbatim">
+class HelloWorldPublisher
+{
+    //!Send a publication
+    bool publish(HelloWorldMsg&amp; hello)
+    {
+        if (listener_.matched_ &gt; 0)
+        {
+            writer_-&gt;write(&amp;hello);
+            return true;
+        }
+        return false;
+    }
+}
+</pre>
+</section><section class="section">
+<h2 id="a0000000072">5.3 Subscriber</h2>
+<p>
+Write a subscriber which listens to the published topic: 
+</p>
+<pre class="verbatim">
+class SubListener : public DataReaderListener {
+public:
+// callback
+void on_data_available(DataReader* reader) override {
+  SampleInfo info;
+  HelloWorldMsg hello;
+  if (reader-&gt;take_next_sample(&amp;hello, &amp;info) == ReturnCode_t::RETCODE_OK) {
+    if (info.valid_data) {
+      std::cout &lt;&lt; "Message: " &lt;&lt; hello.message()
+                               &lt;&lt; " with index: " &lt;&lt; hello.index()
+                               &lt;&lt; " RECEIVED." &lt;&lt; std::endl;
+    }
+  }
+}
+</pre>
+<p>
+ which has a callback which is called after the publisher has sent a message. 
+</p>
+</section><!-- Latex Chapter/Part -->
+<h1 id="webserver">6 Realtime web server/client communication</h1>
+<section class="section">
+<h2 id="a0000000073">6.1 Introduction</h2>
 <p>
 There is a wide diversity of Web server / client applications ranging from shopping baskets on vendor sites to social media. 
 </p>
@@ -1780,7 +2131,7 @@ Generally it’s easy to create dynamic content (see PHP or nodejs) and this is 
 It’s important to recognise where <i class="slshape">events</i> are generated: it is always the client (web browser or mobile app) which triggers an event, be it sending data over to the server or requesting data. It’s always initiated by the client. 
 </p>
 </section><section class="section">
-<h2 id="a0000000070">5.2 REST</h2>
+<h2 id="a0000000074">6.2 REST</h2>
 <p>
  The interface between a web client (browser or phone app) is usually implemented as a Representational State Transfer Architectural (REST) API by communicating via an URL on a web server. The requirements for this API are very general and won’t define the actual data format: 
 </p>
@@ -1805,7 +2156,7 @@ Each request needs to include all the information necessary and must not depend 
  See <a href="https://www.ibm.com/cloud/learn/rest-apis">https://www.ibm.com/cloud/learn/rest-apis</a> for the complete list of REST design principles. 
 </p>
 </section><section class="section">
-<h2 id="a0000000071">5.3 Data format: JSON</h2>
+<h2 id="a0000000075">6.3 Data format: JSON</h2>
 <p>
  The most popular dataformat is JSON (<span class="ttfamily">application/json</span>) which is basically a map of (nestable) key/value pairs: 
 </p>
@@ -1820,24 +2171,24 @@ Each request needs to include all the information necessary and must not depend 
  Since JSON is human-readable text a web server can simply generate that text send it over via http or https. There is no difference except that the MIME format is application/json instead of html. 
 </p>
 </section><section class="section">
-<h2 id="a0000000072">5.4 Server</h2>
+<h2 id="a0000000076">6.4 Server</h2>
 <p>
  On the Linux system a web server needs to be set up. There are a variety of different options available but we are focusing here on the ones which can be used for C++ communication (i.e. CGI). 
 </p>
 <section class="subsection">
-<h3 id="a0000000073">5.4.1 Web servers (http/https)</h3>
-<ul class="itemize" id="a0000000074">
-<li id="a0000000075">
+<h3 id="a0000000077">6.4.1 Web servers (http/https)</h3>
+<ul class="itemize" id="a0000000078">
+<li id="a0000000079">
 <p>
 NGINX: Easy to configure but very flexible web server. Pronounced “Engine-X”. 
 </p>
 </li>
-<li id="a0000000076">
+<li id="a0000000080">
 <p>
 Apache: Hard to configure but safe option 
 </p>
 </li>
-<li id="a0000000077">
+<li id="a0000000081">
 <p>
 lighttpd: Smaller web server with a small memory footprint. Pronounced “lighty”. 
 </p>
@@ -1847,17 +2198,17 @@ lighttpd: Smaller web server with a small memory footprint. Pronounced “lighty
  Note that it’s possible to run different web servers at the same time where they then act as proxies for a central web server visible to the outside world. In particular nginx makes it very easy to achieve this. 
 </p>
 <figure id="cgi">
-<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{restdataflow}" src="images/img-0003.svg" style="width:469.755pt"/> </div>
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{restdataflow}" src="images/img-0004.svg" style="width:469.755pt"/> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
-<span class="caption_ref">5.1</span>
+<span class="caption_ref">6.1</span>
 <span class="caption_text">FastCGI dataflow.</span>
 </figcaption>
 </figure>
 </section><section class="subsection">
-<h3 id="a0000000078">5.4.2 FastCGI</h3>
+<h3 id="a0000000082">6.4.2 FastCGI</h3>
 <p>
- FastCGI (see Fig <a class="ref" href="#cgi">5.1</a>) is written in C++ and generates the entire content of the http/https request. In particular here we generate JSON packets which can then be processed by client JavaScripts and vice versa. For realtime applications JSON transmission is perfect because the client-side JavaScript can request and receive JSON packages 
+ FastCGI (see Fig <a class="ref" href="#cgi">6.1</a>) is written in C++ and generates the entire content of the http/https request. In particular here we generate JSON packets which can then be processed by client JavaScripts and vice versa. For realtime applications JSON transmission is perfect because the client-side JavaScript can request and receive JSON packages 
 </p>
 <p>
 A fast CGI program is a UNIX commandline program which communicates with the web server (nginx, Apache, …) via a UNIX socket which in turn is a pseudo file located in a temporary directory for example <span class="ttfamily">/tmp/sensorsocket</span>. 
@@ -1878,7 +2229,7 @@ The web server then maps certain http/https requests to this socket. An example 
 The C++ fastcgi API <a href="https://github.com/berndporr/fastcgi_json_cpp_api">https://github.com/berndporr/fastcgi_json_cpp_api</a> is wrapper around the quite cryptic fastcgi C library and we discuss its callback handlers now. 
 </p>
 </section><section class="subsection">
-<h3 id="a0000000079">5.4.3 Server \(\to \) client</h3>
+<h3 id="a0000000083">6.4.3 Server \(\to \) client</h3>
 <p>
  The fastCGI callback expects a JSON string (<span class="ttfamily">application/json</span>) with the data transmitted form the server to the client. Use the <span class="ttfamily">jsoncpp</span> library (standard debian/Ubuntu package) to create JSON. 
 </p>
@@ -1904,7 +2255,7 @@ virtual std::string getJSONString() {
 };
 </pre>
 </section><section class="subsection">
-<h3 id="a0000000080">5.4.4 Client \(\to \) server: POST</h3>
+<h3 id="a0000000084">6.4.4 Client \(\to \) server: POST</h3>
 <p>
  Like in any GUI the client can press a button and create an event. Here, the server then receives the JSON data as a callback called “postArg”: 
 </p>
@@ -1924,7 +2275,7 @@ virtual void postString(std::string postArg) {
 </p>
 </section>
 </section><section class="section">
-<h2 id="a0000000081">5.5 Client code: javascript for websites</h2>
+<h2 id="a0000000085">6.5 Client code: javascript for websites</h2>
 <p>
  Generally on the client side (= web page), HTML with embedded <i class="slshape">JavaScript</i> is used to generate realtime output/input without reloading the page. JavaScript is <i class="slshape">event driven</i> and has callbacks so it’s perfect for realtime applications. Use <span class="ttfamily">jQuery</span> to request and post JSON from/to the server. 
 </p>
@@ -1957,12 +2308,12 @@ $(document).ready( documentReady );
 Mobile phone programming in JAVA, Kotlin or Swift is also purely callback driven as the JS code above and differs only in its syntax. 
 </p>
 </section><section class="section">
-<h2 id="a0000000082">5.6 Conclusion</h2>
+<h2 id="a0000000086">6.6 Conclusion</h2>
 <p>
  Events in web based communication are always triggered by the web browser or the mobile app in exactly the same way as Qt does it, for example by a button press. The same applies for animations where a client-side timer requests data from the server. Thus, these client side events either cause transmission of data from the web browser to the web server or request data from the web server. Nowadays the protocol is always http or https and a RESTful interface with JSON being the most popular data format. 
 </p>
 </section><!-- Latex Chapter/Part -->
-<h1 id="setters">6 Setters</h1>
+<h1 id="setters">7 Setters</h1>
 <p>
  In Fig. <a class="ref" href="#gettersetters">1.2</a> we have seen that data flows from the sensors to the C++ classes via <i class="slshape">callbacks</i> then returns from the inner C++ classes to motor or display outputs is via <i class="slshape">setters</i>. Setters are also used for setting configuration parameters. 
 </p>
@@ -2012,12 +2363,12 @@ void start(ADS1115settings settings = ADS1115settings() );
 If a setter sets large buffers then it’s highly recommended to allocate the memory in the constructor of the class and then call the setter by reference while running. Use array types which convey their length, for example std::array or a standard const array which implicitly carries their length. 
 </p>
 <p class="paragraph">
-<strong class="paragraph-title" id="a0000000083">Constant sampling rate output (audio, …)</strong>
+<strong class="paragraph-title" id="a0000000087">Constant sampling rate output (audio, …)</strong>
 
      There are many applications where the output device has a fixed sampling rate, for example digital to analogue converters. In this case the C++ driver class will again have a blocking write-loop periodically reading a buffer populated by the setter, which is ideally always ahead of time. You need to decide what happens if no fresh data has arrived, for example interpolating the output or putting it on hold. Of course you can also implement a callback by the audio write-loop to <i class="slshape">request</i> samples but ultimately the conflict between audio arriving and being dispatched needs to be resolved. 
 
 </p><section class="section">
-<h2 id="a0000000084">6.1 Conclusion</h2>
+<h2 id="a0000000088">7.1 Conclusion</h2>
 <p>
  Setters are simply methods which transmit an event back to the physical device. Setters should, as callbacks, always hide the low level complexity of the hardware device and receive normalised or physical units. 
 </p>
@@ -2025,7 +2376,7 @@ If a setter sets large buffers then it’s highly recommended to allocate the me
 <br/>
 </p>
 </section><!-- Latex Chapter/Part -->
-<h1 id="a0000000085">A License</h1>
+<h1 id="a0000000089">A License</h1>
 <p>
  This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit <a href="http://creativecommons.org/licenses/by-sa/4.0/">http://creativecommons.org/licenses/by-sa/4.0/</a> or send a letter to Creative Commons, PO Box 1866, Mountain View, CA. 
 </p>
@@ -2035,7 +2386,7 @@ If a setter sets large buffers then it’s highly recommended to allocate the me
 <li id="a0000000037"><a aria-label="Jump to reference" class="footnote-jump" href="#a0000000037-reference">^</a> This code fragment’s use of designated initialisers officially requires C++2a, although most C++ compilers support it when compiling with older standards. In C it’s been fine for a while!</li>
 </ol>
 </footer>
-<script id="plastex-labels" type="application/json">{"timing": {"ref": "1.1", "url": "#timing"}, "gettersetters": {"ref": "1.2", "url": "#gettersetters"}, "drivers": {"ref": "2", "url": "#drivers"}, "videodesk": {"ref": "None", "url": "#videodesk"}, "spimodes": {"ref": "2.1", "url": "#spimodes"}, "threads": {"ref": "3", "url": "#threads"}, "qt": {"ref": "4", "url": "#qt"}, "qwtex": {"ref": "4.1", "url": "#qwtex"}, "webserver": {"ref": "5", "url": "#webserver"}, "cgi": {"ref": "5.1", "url": "#cgi"}, "setters": {"ref": "6", "url": "#setters"}}</script>
+<script id="plastex-labels" type="application/json">{"timing": {"ref": "1.1", "url": "#timing"}, "gettersetters": {"ref": "1.2", "url": "#gettersetters"}, "drivers": {"ref": "2", "url": "#drivers"}, "videodesk": {"ref": "None", "url": "#videodesk"}, "spimodes": {"ref": "2.1", "url": "#spimodes"}, "threads": {"ref": "3", "url": "#threads"}, "qt": {"ref": "4", "url": "#qt"}, "qwtex": {"ref": "4.1", "url": "#qwtex"}, "dds1": {"ref": "5.1", "url": "#dds1"}, "webserver": {"ref": "6", "url": "#webserver"}, "cgi": {"ref": "6.1", "url": "#cgi"}, "setters": {"ref": "7", "url": "#setters"}}</script>
     </article>
 
         </main>
@@ -2050,7 +2401,7 @@ If a setter sets large buffers then it’s highly recommended to allocate the me
 
     <div id="footer-text">
         <p>Generated using <a target="_blank" href="https://chirun.org.uk">Chirun</a> v1.2.1, written by the Digital Learning Unit, School of Mathematics &amp; Statistics, Newcastle University</p>
-        <p>This page last generated: 2025-01-31</p>
+        <p>This page last generated: 2025-02-01</p>
         
         
         

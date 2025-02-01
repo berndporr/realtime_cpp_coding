@@ -1000,8 +1000,86 @@ via the \texttt{connect()} method. Callbacks from Qt timers may be used for
 animations but must not be used for real-time events as Qt timers won't
 guarantee a reliable timing.
 
+\chapter{Realtime publisher-subscriber communication with DDS}
 
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=\linewidth]{fastdds1}
+\end{center}
+\caption{FastDDS.\label{dds1}}
+\end{figure}
 
+So far communicaton has only been between classes within the same
+program on the same computer. However, often data needs to be transmitted
+in realtime to other computers. The Data Distribution Service (DDS)
+is a middleware protocol and API which has been developed to provide low-latency publisher-subscriber communication, extreme reliability, and a scalable architecture (see Fig.~\ref{dds1}). The publisher publishes a data structure
+(here a C++ struct) and then at the receiver a callback will be triggered
+delivering the data.
+We focus on fastDDS which uses the RTPS (Real Time Publish Subscribe) protocol.
+It offers plug and play connectivity which won't require to specify IP addresses in a local network so that any new application is automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system.
+
+Here are the steps how to use fastDDS.
+
+\section{Define the data structure}
+
+The idea with fastDDS is to specify a data structure as a
+template which is then converted into a header and cpp file.
+For example the template \texttt{HelloWorldMsg.idl}:
+\begin{verbatim}
+struct HelloWorldMsg
+{
+    unsigned long index;
+    string message;
+};
+\end{verbatim}
+contains a number and a C++ string. This template file is then
+converted to two C++ header and cpp files with the helper:
+\begin{verbatim}
+fastddsgen HelloWorldMsg.idl
+\end{verbatim}
+which of course should be part of your cmake build system.
+Include the headers into your publisher and receiver.
+
+\section{Publisher}
+
+Write a publisher class which publishes the message:
+
+\begin{verbatim}
+class HelloWorldPublisher
+{
+    //!Send a publication
+    bool publish(HelloWorldMsg& hello)
+    {
+        if (listener_.matched_ > 0)
+        {
+            writer_->write(&hello);
+            return true;
+        }
+        return false;
+    }
+}
+\end{verbatim}
+
+\section{Subscriber}
+
+Write a subscriber which listens to the published topic:
+\begin{verbatim}
+class SubListener : public DataReaderListener {
+public:
+// callback
+void on_data_available(DataReader* reader) override {
+  SampleInfo info;
+  HelloWorldMsg hello;
+  if (reader->take_next_sample(&hello, &info) == ReturnCode_t::RETCODE_OK) {
+    if (info.valid_data) {
+      std::cout << "Message: " << hello.message()
+                               << " with index: " << hello.index()
+                               << " RECEIVED." << std::endl;
+    }
+  }
+}
+\end{verbatim}
+which has a callback which is called after the publisher has sent a message.
 
 \chapter{Realtime web server/client communication\label{webserver}}
 
