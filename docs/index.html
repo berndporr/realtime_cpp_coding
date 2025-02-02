@@ -7,7 +7,7 @@
             <meta name="robots" content="noindex">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <meta name="author" content="Bernd Porr" />
-            <meta name="date" content="2025-02-01" />
+            <meta name="date" content="2025-02-02" />
         
 
         <title>realtime_embedded_coding | Realtime embedded coding in C++ under Linux</title>
@@ -15,41 +15,41 @@
         
     
     
-            <link rel="stylesheet" href="static/styles.css?build_time=1738438194.068532">
+            <link rel="stylesheet" href="static/styles.css?build_time=1738530361.419575">
             
             
         
-    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1738438194.068532">
+    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1738530361.419575">
 
-    <link rel="stylesheet" href="static/print.css?build_time=1738438194.068532">
+    <link rel="stylesheet" href="static/print.css?build_time=1738530361.419575">
 
 
         
     
 			<script>
-				var chirun_static_url = new URL('static?build_time=1738438194.068532', location.href);
+				var chirun_static_url = new URL('static?build_time=1738530361.419575', location.href);
 			</script>
 
             
-                <script defer src="static/mathjax_config.js?build_time=1738438194.068532"></script>
+                <script defer src="static/mathjax_config.js?build_time=1738530361.419575"></script>
                 <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
             
 
-            <script type="module" src="static/localisation.js?build_time=1738438194.068532"></script>
+            <script type="module" src="static/localisation.js?build_time=1738530361.419575"></script>
 
-            <script defer src="static/customisation.js?build_time=1738438194.068532"></script>
+            <script defer src="static/customisation.js?build_time=1738530361.419575"></script>
 
             
 
             
         
-    <script defer src="static/code.js?build_time=1738438194.068532" type="module"></script>
-    <script defer src="static/embed_numbas.js?build_time=1738438194.068532" type="module"></script>
-    <script defer src="static/embed_qrcode.js?build_time=1738438194.068532" type="module"></script>
+    <script defer src="static/code.js?build_time=1738530361.419575" type="module"></script>
+    <script defer src="static/embed_numbas.js?build_time=1738530361.419575" type="module"></script>
+    <script defer src="static/embed_qrcode.js?build_time=1738530361.419575" type="module"></script>
 
 
         <template id="runnable-code-template">
-            <link rel="stylesheet" href="static/code.css?build_time=1738438194.068532">
+            <link rel="stylesheet" href="static/code.css?build_time=1738530361.419575">
             <div class="runnable-code-wrapper">
                 <section class="fullscreenable code">
                     <div id="code"></div>
@@ -230,7 +230,7 @@
         </template>
 
         <template id="embed-numbas-template">
-            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1738438194.068532">
+            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1738530361.419575">
             <details id="wrapper" data-completion-status="incomplete">
                 <summary>
                     <h1 id="title">Test Yourself</h1>
@@ -2047,15 +2047,15 @@ Note that neither the timer nor the <span class="ttfamily">update()</span> funct
 </figcaption>
 </figure>
 <p>
-So far communicaton has only been between classes within the same program on the same computer. However, often data needs to be transmitted in realtime to other computers. The Data Distribution Service (DDS) is a middleware protocol and API which has been developed to provide low-latency publisher-subscriber communication, extreme reliability, and a scalable architecture (see Fig. <a class="ref" href="#dds1">5.1</a>). The publisher publishes a data structure (here a C++ struct) and then at the receiver a callback will be triggered delivering the data. We focus on fastDDS which uses the RTPS (Real Time Publish Subscribe) protocol. It offers plug and play connectivity which won’t require to specify IP addresses in a local network so that any new application is automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system. 
+So far communication has only been between classes within the same program on the same computer. However, often data needs to be transmitted in realtime over a network. The Data Distribution Service (DDS) is a middleware protocol and API which has been developed to provide reliable and low-latency publisher-subscriber communication (see Fig. <a class="ref" href="#dds1">5.1</a>). The publisher sends a data structure (here a C++ <span class="ttfamily">struct</span>) and then at the receiver a callback is triggered delivering the data structure. We focus on fastDDS which uses the RTPS (Real Time Publish Subscribe) protocol. It offers plug and play connectivity which won’t require to specify IP addresses in a local networks so that applications are automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system. 
 </p>
 <p>
-Here are the steps how to use fastDDS. 
+Here are the steps how to use fastDDS. A complete demo application is here: <a href="https://github.com/berndporr/fastdds_demo">https://github.com/berndporr/fastdds_demo</a>. 
 </p>
 <section class="section">
 <h2 id="a0000000070">5.1 Define the data structure</h2>
 <p>
-The idea with fastDDS is to specify a data structure as a template which is then converted into a header and cpp file. For example the template <span class="ttfamily">HelloWorldMsg.idl</span>: 
+The idea with fastDDS is to specify a data structure as a C++ style template which is then converted into a header and cpp file. For example the template <span class="ttfamily">HelloWorldMsg.idl</span>: 
 </p>
 <pre class="verbatim">
 struct HelloWorldMsg
@@ -2065,18 +2065,18 @@ struct HelloWorldMsg
 };
 </pre>
 <p>
- contains a number and a C++ string. This template file is then converted to two C++ header and cpp files with the helper: 
+ contains a number and a C++ string. This template file is then converted to C++ header and cpp files with the helper: 
 </p>
 <pre class="verbatim">
 fastddsgen HelloWorldMsg.idl
 </pre>
 <p>
- which of course should be part of your cmake build system. Include the headers into your publisher and receiver. 
+ which of course should be automated by your cmake build system. 
 </p>
 </section><section class="section">
 <h2 id="a0000000071">5.2 Publisher</h2>
 <p>
-Write a publisher class which publishes the message: 
+ Write a publisher class which publishes the message <span class="ttfamily">HelloWorldMsg</span>: 
 </p>
 <pre class="verbatim">
 class HelloWorldPublisher
@@ -2093,6 +2093,9 @@ class HelloWorldPublisher
     }
 }
 </pre>
+<p>
+ whenever <span class="ttfamily">publish</span> is called. 
+</p>
 </section><section class="section">
 <h2 id="a0000000072">5.3 Subscriber</h2>
 <p>
@@ -2115,7 +2118,7 @@ void on_data_available(DataReader* reader) override {
 }
 </pre>
 <p>
- which has a callback which is called after the publisher has sent a message. 
+ which has the callback <span class="ttfamily">on_data_available</span> which is called after the publisher has sent a message. 
 </p>
 </section><!-- Latex Chapter/Part -->
 <h1 id="webserver">6 Realtime web server/client communication</h1>
@@ -2401,7 +2404,7 @@ If a setter sets large buffers then it’s highly recommended to allocate the me
 
     <div id="footer-text">
         <p>Generated using <a target="_blank" href="https://chirun.org.uk">Chirun</a> v1.2.1, written by the Digital Learning Unit, School of Mathematics &amp; Statistics, Newcastle University</p>
-        <p>This page last generated: 2025-02-01</p>
+        <p>This page last generated: 2025-02-02</p>
         
         
         

@@ -1009,20 +1009,20 @@ guarantee a reliable timing.
 \caption{FastDDS.\label{dds1}}
 \end{figure}
 
-So far communicaton has only been between classes within the same
+So far communication has only been between classes within the same
 program on the same computer. However, often data needs to be transmitted
-in realtime to other computers. The Data Distribution Service (DDS)
-is a middleware protocol and API which has been developed to provide low-latency publisher-subscriber communication, extreme reliability, and a scalable architecture (see Fig.~\ref{dds1}). The publisher publishes a data structure
-(here a C++ struct) and then at the receiver a callback will be triggered
-delivering the data.
+in realtime over a network. The Data Distribution Service (DDS)
+is a middleware protocol and API which has been developed to provide reliable and low-latency publisher-subscriber communication (see Fig.~\ref{dds1}). The publisher sends a data structure
+(here a C++ \texttt{struct}) and then at the receiver a callback is triggered
+delivering the data structure.
 We focus on fastDDS which uses the RTPS (Real Time Publish Subscribe) protocol.
-It offers plug and play connectivity which won't require to specify IP addresses in a local network so that any new application is automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system.
+It offers plug and play connectivity which won't require to specify IP addresses in a local networks so that applications are automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system.
 
-Here are the steps how to use fastDDS.
+Here are the steps how to use fastDDS. A complete demo application is here: \url{https://github.com/berndporr/fastdds_demo}.
 
 \section{Define the data structure}
 
-The idea with fastDDS is to specify a data structure as a
+The idea with fastDDS is to specify a data structure as a C++ style
 template which is then converted into a header and cpp file.
 For example the template \texttt{HelloWorldMsg.idl}:
 \begin{verbatim}
@@ -1033,16 +1033,14 @@ struct HelloWorldMsg
 };
 \end{verbatim}
 contains a number and a C++ string. This template file is then
-converted to two C++ header and cpp files with the helper:
+converted to C++ header and cpp files with the helper:
 \begin{verbatim}
 fastddsgen HelloWorldMsg.idl
 \end{verbatim}
-which of course should be part of your cmake build system.
-Include the headers into your publisher and receiver.
+which of course should be automated by your cmake build system.
 
 \section{Publisher}
-
-Write a publisher class which publishes the message:
+Write a publisher class which publishes the message \texttt{HelloWorldMsg}:
 
 \begin{verbatim}
 class HelloWorldPublisher
@@ -1059,6 +1057,7 @@ class HelloWorldPublisher
     }
 }
 \end{verbatim}
+whenever \texttt{publish} is called.
 
 \section{Subscriber}
 
@@ -1079,7 +1078,8 @@ void on_data_available(DataReader* reader) override {
   }
 }
 \end{verbatim}
-which has a callback which is called after the publisher has sent a message.
+which has the callback \texttt{on\_data\_available}
+which is called after the publisher has sent a message.
 
 \chapter{Realtime web server/client communication\label{webserver}}
 
