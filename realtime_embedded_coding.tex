@@ -1010,20 +1010,26 @@ guarantee a reliable timing.
 \end{figure}
 
 So far communication has only been between classes within the same
-program on the same computer. However, often data needs to be transmitted
-in realtime over a network. The Data Distribution Service (DDS)
-is a middleware protocol and API which has been developed to provide reliable and low-latency publisher-subscriber communication (see Fig.~\ref{dds1}). The publisher sends a data structure
-(here a C++ \texttt{struct}) and then at the receiver a callback is triggered
-delivering the data structure.
-We focus on fastDDS which uses the RTPS (Real Time Publish Subscribe) protocol.
-It offers plug and play connectivity which won't require to specify IP addresses in a local networks so that applications are automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system.
+program on the same computer. However, often data needs to be
+transmitted in realtime over a network. The Data Distribution Service
+(DDS) is a middleware protocol and API which has been developed to
+provide reliable and low-latency publisher-subscriber communication
+(see Fig.~\ref{dds1}): a publisher sends a message (here a
+C++ \texttt{struct}) through a communcation channel which is called
+``topic''. At the subscriber side this message is received via the topic and then triggers a callback
+delivering that message.  We focus on fastDDS which uses the
+RTPS (Real Time Publish Subscribe) protocol. It offers plug and play
+connectivity which won't require to specify IP addresses in a local
+networks so that applications are automatically discovered. fastDDS is
+now the standard middleware of ROS2, the popular robotic operating
+system.
 
 Here are the steps how to use fastDDS. A complete demo application is here: \url{https://github.com/berndporr/fastdds_demo}.
 
 \section{Define the data structure}
 
 The idea with fastDDS is to specify a data structure as a C++ style
-template which is then converted into a header and cpp file.
+\texttt{struct} which is then converted into header and cpp files.
 For example the template \texttt{HelloWorldMsg.idl}:
 \begin{verbatim}
 struct HelloWorldMsg
@@ -1032,7 +1038,7 @@ struct HelloWorldMsg
     string message;
 };
 \end{verbatim}
-contains a number and a C++ string. This template file is then
+contains an unsigned long int and a C++ string. This template file is then
 converted to C++ header and cpp files with the helper:
 \begin{verbatim}
 fastddsgen HelloWorldMsg.idl
@@ -1040,7 +1046,30 @@ fastddsgen HelloWorldMsg.idl
 which of course should be automated by your cmake build system.
 
 \section{Publisher}
-Write a publisher class which publishes the message \texttt{HelloWorldMsg}:
+Create a topic which associates the struct of the message with a human readable
+name:
+\begin{verbatim}
+topic_ = participant_->create_topic("HelloWorldTopic",
+                                    "HelloWorldMsg",
+                                    TOPIC_QOS_DEFAULT);
+\end{verbatim}
+
+create a publisher
+\begin{verbatim}
+publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT,
+                                            nullptr);
+\end{verbatim}
+
+and with that the datawriter:
+\begin{verbatim}
+writer_ = publisher_->create_datawriter(topic_,
+                                        DATAWRITER_QOS_DEFAULT,
+                                        &listener_);
+\end{verbatim}
+where the \texttt{listener\_} is a callback interface derived from \texttt{DataWriterListener}
+which signals when a subscriber has been found matching the topic.
+
+Package this all in a class which publishes the message \texttt{HelloWorldMsg}:
 
 \begin{verbatim}
 class HelloWorldPublisher
@@ -1059,9 +1088,28 @@ class HelloWorldPublisher
 \end{verbatim}
 whenever \texttt{publish} is called.
 
-\section{Subscriber}
 
-Write a subscriber which listens to the published topic:
+\section{Subscriber}
+Very similar to the publisher associate the topic with the data-structure:
+\begin{verbatim}
+topic_ = participant_->create_topic("HelloWorldTopic",
+                                    "HelloWorldMsg",
+                                    TOPIC_QOS_DEFAULT);
+\end{verbatim}
+
+Then create a subscriber:
+\begin{verbatim}
+subscriber_ = participant_->create_subscriber(SUBSCRIBER_QOS_DEFAULT,
+                                              nullptr);
+\end{verbatim}
+
+and finally the datareader:
+\begin{verbatim}
+reader_ = subscriber_->create_datareader(topic_,
+                                         DATAREADER_QOS_DEFAULT,
+                                         &listener_);
+\end{verbatim}
+where \texttt{listener} is a callback interface which is called whenever data is available:
 \begin{verbatim}
 class SubListener : public DataReaderListener {
 public:
@@ -1078,8 +1126,6 @@ void on_data_available(DataReader* reader) override {
   }
 }
 \end{verbatim}
-which has the callback \texttt{on\_data\_available}
-which is called after the publisher has sent a message.
 
 \chapter{Realtime web server/client communication\label{webserver}}
 

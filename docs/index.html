@@ -7,7 +7,7 @@
             <meta name="robots" content="noindex">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <meta name="author" content="Bernd Porr" />
-            <meta name="date" content="2025-02-02" />
+            <meta name="date" content="2025-02-05" />
         
 
         <title>realtime_embedded_coding | Realtime embedded coding in C++ under Linux</title>
@@ -15,41 +15,41 @@
         
     
     
-            <link rel="stylesheet" href="static/styles.css?build_time=1738530361.419575">
+            <link rel="stylesheet" href="static/styles.css?build_time=1738790834.884771">
             
             
         
-    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1738530361.419575">
+    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1738790834.884771">
 
-    <link rel="stylesheet" href="static/print.css?build_time=1738530361.419575">
+    <link rel="stylesheet" href="static/print.css?build_time=1738790834.884771">
 
 
         
     
 			<script>
-				var chirun_static_url = new URL('static?build_time=1738530361.419575', location.href);
+				var chirun_static_url = new URL('static?build_time=1738790834.884771', location.href);
 			</script>
 
             
-                <script defer src="static/mathjax_config.js?build_time=1738530361.419575"></script>
+                <script defer src="static/mathjax_config.js?build_time=1738790834.884771"></script>
                 <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
             
 
-            <script type="module" src="static/localisation.js?build_time=1738530361.419575"></script>
+            <script type="module" src="static/localisation.js?build_time=1738790834.884771"></script>
 
-            <script defer src="static/customisation.js?build_time=1738530361.419575"></script>
+            <script defer src="static/customisation.js?build_time=1738790834.884771"></script>
 
             
 
             
         
-    <script defer src="static/code.js?build_time=1738530361.419575" type="module"></script>
-    <script defer src="static/embed_numbas.js?build_time=1738530361.419575" type="module"></script>
-    <script defer src="static/embed_qrcode.js?build_time=1738530361.419575" type="module"></script>
+    <script defer src="static/code.js?build_time=1738790834.884771" type="module"></script>
+    <script defer src="static/embed_numbas.js?build_time=1738790834.884771" type="module"></script>
+    <script defer src="static/embed_qrcode.js?build_time=1738790834.884771" type="module"></script>
 
 
         <template id="runnable-code-template">
-            <link rel="stylesheet" href="static/code.css?build_time=1738530361.419575">
+            <link rel="stylesheet" href="static/code.css?build_time=1738790834.884771">
             <div class="runnable-code-wrapper">
                 <section class="fullscreenable code">
                     <div id="code"></div>
@@ -230,7 +230,7 @@
         </template>
 
         <template id="embed-numbas-template">
-            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1738530361.419575">
+            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1738790834.884771">
             <details id="wrapper" data-completion-status="incomplete">
                 <summary>
                     <h1 id="title">Test Yourself</h1>
@@ -422,659 +422,415 @@
         <h1>Table of Contents</h1>
         <a class="jump-to-item-content" href="#item-content">Jump to content</a>
         
-            <ol class="table-of-contents" role="tree">
+            <ol class="table-of-contents">
                 
                     
-<li role="none" data-toc-level="1" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-realtime_embedded_co" href="#realtime_embedded_co">
+    <li>
+        <a href="#realtime_embedded_co">Realtime embedded coding in C++ under Linux</a>
         
-        Realtime embedded coding in C++ under Linux
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="1" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000002" href="#a0000000002">
-        <span class="toc-marker"></span>
-        1 Introduction
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000002">
+    <li>
+        <a href="#a0000000002">1 Introduction</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000004" href="#a0000000004">
+    <li>
+        <a href="#a0000000004">1.1 Event based coding in the Linux userspace</a>
         
-        1.1 Event based coding in the Linux userspace
-    </a>
-
-    
-</li>
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="1" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-drivers" href="#drivers">
-        <span class="toc-marker"></span>
-        2 Writing C++ classes for userspace event processing
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-drivers">
-            
-            
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000009" href="#a0000000009">
         
-        2.1 General recommendations on how to write C++ event processing classes
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000015" href="#a0000000015">
-        <span class="toc-marker"></span>
-        2.2 Callbacks between C++ classes
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000015">
-            
-            
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000016" href="#a0000000016">
+    <li>
+        <a href="#drivers">2 Writing C++ classes for userspace event processing</a>
         
-        2.2.1 Callback arguments
-    </a>
+        <ol>
+            
+            
+    <li>
+        <a href="#a0000000009">2.1 General recommendations on how to write C++ event processing classes</a>
+        
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000015">2.2 Callbacks between C++ classes</a>
+        
+        <ol>
+            
+            
+    <li>
+        <a href="#a0000000016">2.2.1 Callback arguments</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000023" href="#a0000000023">
-        <span class="toc-marker"></span>
-        2.3 Low level userspace device access
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000023">
-            
-            
-<li role="none" data-toc-level="3" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000024" href="#a0000000024">
-        <span class="toc-marker"></span>
-        2.3.1 Video camera capture (openCV)
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000024">
-            
-            
-<li role="none" data-toc-level="4" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-videodesk" href="#videodesk">
         
-        Ubuntu / Debian Linux systems
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="4" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000025" href="#a0000000025">
+    <li>
+        <a href="#a0000000023">2.3 Low level userspace device access</a>
         
-        Raspberry PI
-    </a>
+        <ol>
+            
+            
+    <li>
+        <a href="#a0000000024">2.3.1 Video camera capture (openCV)</a>
+        
+        <ol>
+            
+            
+    <li>
+        <a href="#videodesk">Ubuntu / Debian Linux systems</a>
+        
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000025">Raspberry PI</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000026" href="#a0000000026">
         
-        2.3.2 Audio (ALSA)
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000027" href="#a0000000027">
+    <li>
+        <a href="#a0000000026">2.3.2 Audio (ALSA)</a>
         
-        2.3.3 Bluetooth
-    </a>
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000027">2.3.3 Bluetooth</a>
+        
+    </li>
 
-<li role="none" data-toc-level="3" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000028" href="#a0000000028">
-        <span class="toc-marker"></span>
-        2.3.4 General purpose I/O (GPIO)
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000028">
+    <li>
+        <a href="#a0000000028">2.3.4 General purpose I/O (GPIO)</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="4" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000029" href="#a0000000029">
+    <li>
+        <a href="#a0000000029">libgpiod</a>
         
-        libgpiod
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="4" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000033" href="#a0000000033">
+    <li>
+        <a href="#a0000000033">Output</a>
         
-        Output
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="4" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000034" href="#a0000000034">
+    <li>
+        <a href="#a0000000034">Events</a>
         
-        Events
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="4" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000035" href="#a0000000035">
+    <li>
+        <a href="#a0000000035">Releasing the GPIO</a>
         
-        Releasing the GPIO
-    </a>
-
-    
-</li>
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000036" href="#a0000000036">
         
-        2.3.5 SPI
-    </a>
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000036">2.3.5 SPI</a>
+        
+    </li>
 
-<li role="none" data-toc-level="3" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000038" href="#a0000000038">
-        <span class="toc-marker"></span>
-        2.3.6 I2C
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000038">
+    <li>
+        <a href="#a0000000038">2.3.6 I2C</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="4" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000039" href="#a0000000039">
+    <li>
+        <a href="#a0000000039">Raw <span class="ttfamily">/dev/i2c</span> access</a>
         
-        Raw <span class="ttfamily">/dev/i2c</span> access
-    </a>
-
-    
-</li>
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000040" href="#a0000000040">
         
-        2.3.7 Access to hardware via special devices in <span class="ttfamily">/sys</span>
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000041" href="#a0000000041">
+    <li>
+        <a href="#a0000000040">2.3.7 Access to hardware via special devices in <span class="ttfamily">/sys</span></a>
         
-        2.3.8 Accessing physical memory locations (danger!)
-    </a>
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000041">2.3.8 Accessing physical memory locations (danger!)</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000048" href="#a0000000048">
         
-        2.4 Kernel driver programming
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000049" href="#a0000000049">
+    <li>
+        <a href="#a0000000048">2.4 Kernel driver programming</a>
         
-        2.5 Conclusion
-    </a>
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000049">2.5 Conclusion</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
+        
+    </li>
 
-<li role="none" data-toc-level="1" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-threads" href="#threads">
-        <span class="toc-marker"></span>
-        3 Threads
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-threads">
+    <li>
+        <a href="#threads">3 Threads</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000050" href="#a0000000050">
+    <li>
+        <a href="#a0000000050">3.1 Introduction</a>
         
-        3.1 Introduction
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000054" href="#a0000000054">
+    <li>
+        <a href="#a0000000054">3.2 Processes and Threads</a>
         
-        3.2 Processes and Threads
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000055" href="#a0000000055">
-        <span class="toc-marker"></span>
-        3.3 Thread and worker
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000055">
+    <li>
+        <a href="#a0000000055">3.3 Thread and worker</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000056" href="#a0000000056">
+    <li>
+        <a href="#a0000000056">3.3.1 Creating threads</a>
         
-        3.3.1 Creating threads
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000057" href="#a0000000057">
+    <li>
+        <a href="#a0000000057">3.3.2 Lifetime of a thread</a>
         
-        3.3.2 Lifetime of a thread
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000058" href="#a0000000058">
+    <li>
+        <a href="#a0000000058">3.3.3 Running/stopping workers with endless loops</a>
         
-        3.3.3 Running/stopping workers with endless loops
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000059" href="#a0000000059">
-        <span class="toc-marker"></span>
-        3.3.4 Timing within threads
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000059">
+    <li>
+        <a href="#a0000000059">3.3.4 Timing within threads</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="4" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000060" href="#a0000000060">
+    <li>
+        <a href="#a0000000060">Timing with blocking I/O</a>
         
-        Timing with blocking I/O
-    </a>
-
-    
-</li>
+    </li>
 
             
         </ol>
-    
-</li>
+        
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000061" href="#a0000000061">
         
-        3.4 Timing with Linux timers
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000062" href="#a0000000062">
+    <li>
+        <a href="#a0000000061">3.4 Timing with Linux timers</a>
         
-        3.5 Conclusion
-    </a>
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000062">3.5 Conclusion</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="1" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-qt" href="#qt">
-        <span class="toc-marker"></span>
-        4 Realtime/event processing within the Graphical User Interface Qt
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-qt">
-            
-            
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000063" href="#a0000000063">
         
-        4.1 Introduction
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000065" href="#a0000000065">
-        <span class="toc-marker"></span>
-        4.2 Callbacks in Qt
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000065">
+    <li>
+        <a href="#qt">4 Realtime/event processing within the Graphical User Interface Qt</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000066" href="#a0000000066">
+    <li>
+        <a href="#a0000000063">4.1 Introduction</a>
         
-        4.2.1 Events from widgets
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000067" href="#a0000000067">
+    <li>
+        <a href="#a0000000065">4.2 Callbacks in Qt</a>
         
-        4.2.2 Plotting realtime data arriving via a callback
-    </a>
+        <ol>
+            
+            
+    <li>
+        <a href="#a0000000066">4.2.1 Events from widgets</a>
+        
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000067">4.2.2 Plotting realtime data arriving via a callback</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000068" href="#a0000000068">
         
-        4.3 Conclusion
-    </a>
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000068">4.3 Conclusion</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
+        
+    </li>
 
-<li role="none" data-toc-level="1" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000069" href="#a0000000069">
-        <span class="toc-marker"></span>
-        5 Realtime publisher-subscriber communication with DDS
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000069">
+    <li>
+        <a href="#a0000000069">5 Realtime publisher-subscriber communication with DDS</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000070" href="#a0000000070">
+    <li>
+        <a href="#a0000000070">5.1 Define the data structure</a>
         
-        5.1 Define the data structure
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000071" href="#a0000000071">
+    <li>
+        <a href="#a0000000071">5.2 Publisher</a>
         
-        5.2 Publisher
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000072" href="#a0000000072">
+    <li>
+        <a href="#a0000000072">5.3 Subscriber</a>
         
-        5.3 Subscriber
-    </a>
-
-    
-</li>
+    </li>
 
             
         </ol>
-    
-</li>
+        
+    </li>
 
-<li role="none" data-toc-level="1" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-webserver" href="#webserver">
-        <span class="toc-marker"></span>
-        6 Realtime web server/client communication
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-webserver">
+    <li>
+        <a href="#webserver">6 Realtime web server/client communication</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000073" href="#a0000000073">
+    <li>
+        <a href="#a0000000073">6.1 Introduction</a>
         
-        6.1 Introduction
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000074" href="#a0000000074">
+    <li>
+        <a href="#a0000000074">6.2 REST</a>
         
-        6.2 REST
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000075" href="#a0000000075">
+    <li>
+        <a href="#a0000000075">6.3 Data format: JSON</a>
         
-        6.3 Data format: JSON
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000076" href="#a0000000076">
-        <span class="toc-marker"></span>
-        6.4 Server
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000076">
+    <li>
+        <a href="#a0000000076">6.4 Server</a>
+        
+        <ol>
             
             
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000077" href="#a0000000077">
+    <li>
+        <a href="#a0000000077">6.4.1 Web servers (http/https)</a>
         
-        6.4.1 Web servers (http/https)
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000082" href="#a0000000082">
+    <li>
+        <a href="#a0000000082">6.4.2 FastCGI</a>
         
-        6.4.2 FastCGI
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000083" href="#a0000000083">
+    <li>
+        <a href="#a0000000083">6.4.3 Server \(\to \) client</a>
         
-        6.4.3 Server \(\to \) client
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="3" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000084" href="#a0000000084">
+    <li>
+        <a href="#a0000000084">6.4.4 Client \(\to \) server: POST</a>
         
-        6.4.4 Client \(\to \) server: POST
-    </a>
-
-    
-</li>
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000085" href="#a0000000085">
         
-        6.5 Client code: javascript for websites
-    </a>
+    </li>
 
-    
-</li>
-
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000086" href="#a0000000086">
+    <li>
+        <a href="#a0000000085">6.5 Client code: javascript for websites</a>
         
-        6.6 Conclusion
-    </a>
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000086">6.6 Conclusion</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="1" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-setters" href="#setters">
-        <span class="toc-marker"></span>
-        7 Setters
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-setters">
-            
-            
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-a0000000088" href="#a0000000088">
         
-        7.1 Conclusion
-    </a>
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#setters">7 Setters</a>
+        
+        <ol>
+            
+            
+    <li>
+        <a href="#a0000000088">7.1 Conclusion</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
-
-<li role="none" data-toc-level="1" class="toc-header  has-children">
-    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000089" href="#a0000000089">
-        <span class="toc-marker"></span>
-        A License
-    </a>
-
-    
-        <ol role="group" id="toc-subtree-a0000000089">
-            
-            
-<li role="none" data-toc-level="2" class="toc-header ">
-    <a role="treeitem"  aria-owns="#toc-subtree-footnot_1" href="#footnot_1">
         
-        Footnotes
-    </a>
+    </li>
 
-    
-</li>
+    <li>
+        <a href="#a0000000089">A License</a>
+        
+        <ol>
+            
+            
+    <li>
+        <a href="#footnot_1">Footnotes</a>
+        
+    </li>
 
             
         </ol>
-    
-</li>
+        
+    </li>
 
                 
             </ol>
@@ -2047,7 +1803,7 @@ Note that neither the timer nor the <span class="ttfamily">update()</span> funct
 </figcaption>
 </figure>
 <p>
-So far communication has only been between classes within the same program on the same computer. However, often data needs to be transmitted in realtime over a network. The Data Distribution Service (DDS) is a middleware protocol and API which has been developed to provide reliable and low-latency publisher-subscriber communication (see Fig. <a class="ref" href="#dds1">5.1</a>). The publisher sends a data structure (here a C++ <span class="ttfamily">struct</span>) and then at the receiver a callback is triggered delivering the data structure. We focus on fastDDS which uses the RTPS (Real Time Publish Subscribe) protocol. It offers plug and play connectivity which won’t require to specify IP addresses in a local networks so that applications are automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system. 
+So far communication has only been between classes within the same program on the same computer. However, often data needs to be transmitted in realtime over a network. The Data Distribution Service (DDS) is a middleware protocol and API which has been developed to provide reliable and low-latency publisher-subscriber communication (see Fig. <a class="ref" href="#dds1">5.1</a>): a publisher sends a message (here a C++ <span class="ttfamily">struct</span>) through a communcation channel which is called “topic”. At the subscriber side this message is received via the topic and then triggers a callback delivering that message. We focus on fastDDS which uses the RTPS (Real Time Publish Subscribe) protocol. It offers plug and play connectivity which won’t require to specify IP addresses in a local networks so that applications are automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system. 
 </p>
 <p>
 Here are the steps how to use fastDDS. A complete demo application is here: <a href="https://github.com/berndporr/fastdds_demo">https://github.com/berndporr/fastdds_demo</a>. 
@@ -2055,7 +1811,7 @@ Here are the steps how to use fastDDS. A complete demo application is here: <a h
 <section class="section">
 <h2 id="a0000000070">5.1 Define the data structure</h2>
 <p>
-The idea with fastDDS is to specify a data structure as a C++ style template which is then converted into a header and cpp file. For example the template <span class="ttfamily">HelloWorldMsg.idl</span>: 
+The idea with fastDDS is to specify a data structure as a C++ style <span class="ttfamily">struct</span> which is then converted into header and cpp files. For example the template <span class="ttfamily">HelloWorldMsg.idl</span>: 
 </p>
 <pre class="verbatim">
 struct HelloWorldMsg
@@ -2065,7 +1821,7 @@ struct HelloWorldMsg
 };
 </pre>
 <p>
- contains a number and a C++ string. This template file is then converted to C++ header and cpp files with the helper: 
+ contains an unsigned long int and a C++ string. This template file is then converted to C++ header and cpp files with the helper: 
 </p>
 <pre class="verbatim">
 fastddsgen HelloWorldMsg.idl
@@ -2076,7 +1832,33 @@ fastddsgen HelloWorldMsg.idl
 </section><section class="section">
 <h2 id="a0000000071">5.2 Publisher</h2>
 <p>
- Write a publisher class which publishes the message <span class="ttfamily">HelloWorldMsg</span>: 
+ Create a topic which associates the struct of the message with a human readable name: 
+</p>
+<pre class="verbatim">
+topic_ = participant_-&gt;create_topic("HelloWorldTopic",
+                                    "HelloWorldMsg",
+                                    TOPIC_QOS_DEFAULT);
+</pre>
+<p>
+create a publisher 
+</p>
+<pre class="verbatim">
+publisher_ = participant_-&gt;create_publisher(PUBLISHER_QOS_DEFAULT,
+                                            nullptr);
+</pre>
+<p>
+and with that the datawriter: 
+</p>
+<pre class="verbatim">
+writer_ = publisher_-&gt;create_datawriter(topic_,
+                                        DATAWRITER_QOS_DEFAULT,
+                                        &amp;listener_);
+</pre>
+<p>
+ where the <span class="ttfamily">listener_</span> is a callback interface derived from <span class="ttfamily">DataWriterListener</span> which signals when a subscriber has been found matching the topic. 
+</p>
+<p>
+Package this all in a class which publishes the message <span class="ttfamily">HelloWorldMsg</span>: 
 </p>
 <pre class="verbatim">
 class HelloWorldPublisher
@@ -2099,7 +1881,30 @@ class HelloWorldPublisher
 </section><section class="section">
 <h2 id="a0000000072">5.3 Subscriber</h2>
 <p>
-Write a subscriber which listens to the published topic: 
+ Very similar to the publisher associate the topic with the data-structure: 
+</p>
+<pre class="verbatim">
+topic_ = participant_-&gt;create_topic("HelloWorldTopic",
+                                    "HelloWorldMsg",
+                                    TOPIC_QOS_DEFAULT);
+</pre>
+<p>
+Then create a subscriber: 
+</p>
+<pre class="verbatim">
+subscriber_ = participant_-&gt;create_subscriber(SUBSCRIBER_QOS_DEFAULT,
+                                              nullptr);
+</pre>
+<p>
+and finally the datareader: 
+</p>
+<pre class="verbatim">
+reader_ = subscriber_-&gt;create_datareader(topic_,
+                                         DATAREADER_QOS_DEFAULT,
+                                         &amp;listener_);
+</pre>
+<p>
+ where <span class="ttfamily">listener</span> is a callback interface which is called whenever data is available: 
 </p>
 <pre class="verbatim">
 class SubListener : public DataReaderListener {
@@ -2117,9 +1922,6 @@ void on_data_available(DataReader* reader) override {
   }
 }
 </pre>
-<p>
- which has the callback <span class="ttfamily">on_data_available</span> which is called after the publisher has sent a message. 
-</p>
 </section><!-- Latex Chapter/Part -->
 <h1 id="webserver">6 Realtime web server/client communication</h1>
 <section class="section">
@@ -2404,7 +2206,7 @@ If a setter sets large buffers then it’s highly recommended to allocate the me
 
     <div id="footer-text">
         <p>Generated using <a target="_blank" href="https://chirun.org.uk">Chirun</a> v1.2.1, written by the Digital Learning Unit, School of Mathematics &amp; Statistics, Newcastle University</p>
-        <p>This page last generated: 2025-02-02</p>
+        <p>This page last generated: 2025-02-05</p>
         
         
         
