@@ -1,0 +1,2728 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+        
+            <meta charset="utf-8">
+            <meta name="robots" content="noindex">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <meta name="author" content="Bernd Porr" />
+            <meta name="date" content="2025-02-10" />
+        
+
+        <title>realtime_embedded_coding | Realtime embedded coding in C++ under Linux</title>
+
+        
+    
+    
+            <link rel="stylesheet" href="static/styles.css?build_time=1739204482.971554">
+            
+            
+        
+    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1739204482.971554">
+
+    <link rel="stylesheet" href="static/print.css?build_time=1739204482.971554">
+
+
+        
+    
+			<script>
+				var chirun_static_url = new URL('static?build_time=1739204482.971554', location.href);
+			</script>
+
+            
+                <script defer src="static/mathjax_config.js?build_time=1739204482.971554"></script>
+                <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+            
+
+            <script type="module" src="static/localisation.js?build_time=1739204482.971554"></script>
+
+            <script defer src="static/customisation.js?build_time=1739204482.971554"></script>
+
+            
+
+            
+        
+    <script defer src="static/code.js?build_time=1739204482.971554" type="module"></script>
+    <script defer src="static/embed_numbas.js?build_time=1739204482.971554" type="module"></script>
+    <script defer src="static/embed_qrcode.js?build_time=1739204482.971554" type="module"></script>
+
+
+        <template id="runnable-code-template">
+            <link rel="stylesheet" href="static/code.css?build_time=1739204482.971554">
+            <div class="runnable-code-wrapper">
+                <section class="fullscreenable code">
+                    <div id="code"></div>
+                    <button class="fullscreen icon-button" title="Fullscreen code"><svg class="icon" aria-label="Fullscreen code" viewBox="0 0 180 180">
+    <use href="#fullscreen"/>
+</svg></button>
+                </section>
+                <section class="fullscreenable output">
+                    <div id="output" aria-live="polite">
+                        <pre class="stdout"></pre>
+                        <pre class="result"></pre>
+                        <div class="images"></div>
+                    </div>
+                    <button class="fullscreen icon-button" title="Fullscreen output"><svg class="icon" aria-label="Fullscreen output" viewBox="0 0 180 180">
+    <use href="#fullscreen"/>
+</svg></button>
+                </section>
+                <div class="buttons">
+                    <button type="button" class="run-code">Run code</button>
+                </div>
+                <svg
+   width="180"
+   height="180"
+   viewBox="0 0 180 180"
+   version="1.1"
+   id="icon-defs"
+   xml:space="preserve"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+>
+    <defs>
+        <g id="cog">
+            <path 
+                style="fill:currentColor;fill-opacity:1;stroke:none;stroke-width:2.91107"
+                d="m 97.752501,14.130132 -9.381402,13.321575 -0.875593,3.780985 0.153413,10.126218 -15.231962,2.683646 -3.320429,-9.569021 -2.115099,-3.246528 -13.372747,-9.313164 -6.817124,3.940185 1.375919,16.23265 1.756892,3.456901 6.623829,7.658625 -9.938582,11.848983 -8.693428,-5.196724 -3.712755,-1.125768 -16.226967,1.461225 -2.695014,7.397083 11.490766,11.553325 3.570636,1.518082 10.001112,1.609049 v 15.465082 l -10.001112,1.609049 -3.570636,1.51808 -11.490766,11.55333 2.695014,7.39707 16.226967,1.46124 3.712755,-1.12577 8.693428,-5.19673 9.938582,11.849 -6.623829,7.6586 -1.756892,3.4569 -1.375919,16.23267 6.817124,3.94017 13.372747,-9.31317 2.115099,-3.24651 3.320429,-9.56902 15.231962,2.68363 -0.153413,10.12623 0.875593,3.78099 9.381402,13.32157 7.749599,-1.37024 4.25858,-15.72665 -0.46624,-3.84919 -3.60472,-9.46099 13.3898,-7.73254 6.39641,7.85192 3.09872,2.33113 15.74934,4.17332 5.06027,-6.02683 -6.84557,-14.78849 -2.83716,-2.64385 -8.84125,-4.93518 5.28767,-14.532632 9.94426,1.910392 3.8777,-0.21038 14.74863,-6.925177 v -7.868995 l -14.74863,-6.925174 -3.8777,-0.210383 -9.94426,1.910392 -5.28767,-14.532629 8.84125,-4.935179 2.83716,-2.643849 6.84557,-14.788484 -5.06027,-6.026831 -15.74934,4.173298 -3.09872,2.331133 -6.39641,7.851938 -13.3898,-7.73254 3.60472,-9.460991 0.46624,-3.849211 -4.25858,-15.726624 z M 88.371099,75.44463 A 14.55537,14.55537 0 0 1 102.92647,90 14.55537,14.55537 0 0 1 88.371099,104.55537 14.55537,14.55537 0 0 1 73.815728,90 14.55537,14.55537 0 0 1 88.371099,75.44463 Z"
+            />
+        </g>
+        <g id="pdf">
+            <path
+                style="fill:var(--bg-colour);fill-opacity:1;fill-rule:nonzero;stroke:currentColor;stroke-width:5.73751;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+                d="m 115.96038,9.1011226 31.41471,31.7977544 m 0,11.232914 V 159.42386 c 0,6.35716 -5.11786,11.47502 -11.47502,11.47502 H 44.099928 c -6.35716,0 -11.475018,-5.11786 -11.475018,-11.47502 V 20.576141 c 0,-6.35716 5.117858,-11.4750184 11.475018,-11.4750184 h 71.860452 l -0.14159,20.0812814 c -0.0449,6.357008 5.11832,11.398586 11.47503,11.475018 l 20.08127,0.241455"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:4.74634;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="M 56.949794,109.50753 C 70.723931,123.86069 104.41318,45.431956 83.05466,47.805125 61.696136,50.178294 111.53269,116.62705 123.39853,100.01485 135.26439,83.402664 43.175657,95.15437 56.949794,109.50753 Z"
+            />
+        </g>
+        <g id="slides">
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,21.25 30,137.5"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="M 90,21.25 60,158.75"
+            />
+            <rect
+                style="fill:var(--bg-colour);fill-opacity:1;stroke:currentColor;stroke-width:10.4525;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+                width="119.79137"
+                height="82.273766"
+                x="30.104315"
+                y="36.476234"
+                ry="4.7737675"
+                rx="4.7737675"
+            />
+            <rect
+                style="fill:currentColor;fill-opacity:1;stroke:currentColor;stroke-width:5.90268;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+                width="140"
+                height="5.2262344"
+                x="20"
+                y="31.25"
+                ry="1.6724058"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,66.25 h 50"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,76.25 h 50"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,86.25 h 50"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,56.25 h 50"
+            />
+            <path
+                style="fill:currentColor;fill-opacity:1;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+                d="M 80.000002,78.84906 A 20.099062,20.099062 0 0 1 67.592518,97.418172 20.099062,20.099062 0 0 1 45.688757,93.061243 20.099062,20.099062 0 0 1 41.331828,71.157482 20.099062,20.099062 0 0 1 59.90094,58.749998 V 78.84906 Z"
+            />
+        </g>
+
+        <g id="notebook">
+            <path
+                style="fill:var(--bg-colour);stroke:currentColor;stroke-width:4.964;stroke-linecap:butt;stroke-linejoin:round;paint-order:stroke fill markers;stroke-dasharray:none"
+                d="M 34.482063,31.89923 V 16.261703 c 0,-5.41792 4.36172,-9.7796397 9.77964,-9.7796397 H 135.7383 c 5.41792,0 9.77964,4.3617197 9.77964,9.7796397 V 163.7383 c 0,5.41792 -4.36172,9.77964 -9.77964,9.77964 H 44.261703 c -5.41792,0 -9.77964,-4.36172 -9.77964,-9.77964 v -23.96224"
+            />
+            <circle
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               cx="58.699139"
+               cy="59.503937"
+               r="3.8077738"
+            />
+            <circle
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               cx="113.59385"
+               cy="52.885151"
+               r="4.9348516"
+            />
+            <path
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               d="M 88.900432,54.782256 C 74.053011,55.067917 59.927013,65.025096 57.261258,76.89961 69.209289,67.830932 79.817786,64.804678 88.900432,64.855157 97.983077,64.804678 108.59157,67.830932 120.53961,76.89961 117.87385,65.025096 103.74785,55.067917 88.900432,54.782256 Z"
+           
+            />
+            <path
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               d="M 88.900432,121.58085 C 74.053011,121.29519 59.927013,111.33801 57.261258,99.46349 c 11.948031,9.06868 22.556528,12.09494 31.639174,12.04445 9.082643,0.0505 19.691138,-2.97577 31.639178,-12.04445 -2.66576,11.87452 -16.79176,21.8317 -31.639178,22.11736 z"
+              
+            />
+            <ellipse
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               cx="63.813011"
+               cy="125.96338"
+               rx="6.4332962"
+               ry="6.4347191"
+            />
+            <path
+                style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+                d="m 28,40 c 2.806997,-4.320074 9.452509,-3.66881 12,0"
+            />
+            <path
+                style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+                d="M 34,46.266514 V 62.316215"
+            
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="m 28,71.583335 c 2.806997,-4.320073 9.452509,-3.668809 12,0"
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="M 34,77.849849 V 93.89955"
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="m 28,103.16667 c 2.806997,-4.320071 9.452509,-3.668807 12,0"
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="m 34,109.43318 v 16.0497"
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="m 28,134.75 c 2.806997,-4.32007 9.452509,-3.66881 12,0"
+            />
+        </g>
+
+        <g id="fullscreen">
+            <path
+               style="fill:none;stroke:currentColor;stroke-width:10;stroke-dasharray:none;paint-order:stroke markers fill"
+               d="M 19.402776,9.9953678 H 160.51388 c 5.2117,0 9.40741,4.1957032 9.40741,9.4074042 V 160.51388 c 0,5.2117 -4.19571,9.40741 -9.40741,9.40741 H 19.402776 c -5.211704,0 -9.4074082,-4.19571 -9.4074082,-9.40741 V 19.402772 c 0,-5.211701 4.1957042,-9.4074042 9.4074082,-9.4074042 z" />
+            />
+            <path
+               style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+               d="M 150.95833,68.801471 V 28.958332 h -39.84314"
+            />
+            <path
+               style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+               d="m 28.958332,111.11519 v 39.84314 h 39.843139"
+            />
+        </g>
+    </defs>
+</svg>
+            </div>
+        </template>
+
+        <template id="embed-numbas-template">
+            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1739204482.971554">
+            <details id="wrapper" data-completion-status="incomplete">
+                <summary>
+                    <h1 id="title">Test Yourself</h1>
+                    <div id="completion-status" data-completion-status="unknown">
+                        <span class="complete">Complete</span>
+                        <span class="incomplete">Incomplete</span>
+                    </div>
+                    <label id="score-feedback">
+                        Score:
+                        <progress min="0"></progress>
+                    </label>
+                </summary>
+                <iframe class="embed" title="Numbas"></iframe>
+            </details>
+        </template>
+
+    </head>
+    <body class="" >
+        
+
+        <a class="skip-to-content-link" href="#main-content">Skip to content</a>
+        
+            <form id="display-options">
+    <div class="buttons">
+        <button type="button" id="reset-display-options">Reset to defaults</button>
+
+        <a href="https://chirun.org.uk/accessibility-statement/material">Accessibility statement</a>
+
+        <button type="button" aria-controls="display-options" aria-expanded="false">
+            Close
+        </button>
+    </div>
+
+    <div class="inputs">
+        <div class="input-group">
+            <label for="display-options-font-scale">
+                Text size
+            </label>
+            <input type="range" min="50" max="600" step="5" value="100" id="display-options-font-scale">
+            <output for="display-options-font-scale">100%</output>
+        </div>
+
+        <div class="input-group">
+            <label for="display-options-spacing-factor">
+                Spacing
+            </label>
+            <input type="range" min="0" max="1200" step="5" value="100" id="display-options-spacing-factor">
+            <output for="display-options-spacing-factor">100%</output>
+        </div>
+
+        <div class="input-group">
+            <label for="display-options-font-family">
+                Text font
+            </label>
+            <select id="display-options-font-family">
+                <option value="var(--sans-serif-font)" selected>Sans-serif</option>
+                <option value="var(--serif-font)">Serif</option>
+                <option value="Atkinson Hyperlegible">Atkinson Hyperlegible</option>
+                <option value="Comic Sans MS">Comic Sans</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label for="display-options-colour-scheme">
+                Colour scheme
+            </label>
+            <select id="display-options-colour-scheme">
+                <option value="auto" selected>Automatic (default)</option>
+                <option value="light">Black text on white</option>
+                <option value="dark">White text on black</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+
+        <section id="custom-colour-scheme-options" class="inputs">
+            <div class="input-group">
+                <label for="display-options-text-colour">
+                    Text colour
+                </label>
+                <input type="color" value="#000000" id="display-options-text-colour">
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-link-colour">
+                    Link colour
+                </label>
+                <input type="color" value="#0000ee" id="display-options-link-colour">
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-bg-colour">
+                    Background colour
+                </label>
+                <input type="color" value="#ffffff" id="display-options-bg-colour">
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-bg-colour-off">
+                    Muted background colour
+                </label>
+                <input type="color" value="#eeeeee" id="display-options-bg-colour-off">
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-bg-colour-accent-1">
+                    Accent colour 1
+                </label>
+                <input type="color" value="#4caf50" id="display-options-bg-colour-accent-1">
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-bg-colour-accent-2">
+                    Accent colour 2
+                </label>
+                <input type="color" value="#f6f6ff" id="display-options-bg-colour-accent-2">
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-bg-colour-accent-3">
+                    Accent colour 3
+                </label>
+                <input type="color" value="#eeffd3" id="display-options-bg-colour-accent-3">
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-bg-colour-accent-4">
+                    Accent colour 4
+                </label>
+                <input type="color" value="#ffeeee" id="display-options-bg-colour-accent-4">
+            </div>
+        </section>
+
+        <section id="filter-colour-scheme-options" class="inputs">
+            <div class="input-group">
+                <label for="display-options-filter-sepia">
+                    Sepia filter
+                </label>
+                <input type="range" min="0" max="100" step="1" value="0" id="display-options-filter-sepia">
+                <output for="display-options-filter-sepia">0%</output>
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-filter-hue-rotate">
+                    Rotate hues
+                </label>
+                <input type="range" min="0" max="1" step="0.01" value="0" id="display-options-filter-hue-rotate">
+                <output for="display-options-filter-hue-rotate">0 turns</output>
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-invert-images">
+                    Invert images in dark mode
+                </label>
+                <input type="checkbox" id="display-options-invert-images">
+            </div>
+
+        </section>
+    </div>
+</form>
+        
+
+        <header>
+            
+<button class="icon-button" type="button" aria-controls="display-options" aria-expanded="false" title="Display options">
+    <svg class="icon" aria-label="Display options" viewBox="0 0 180 180">
+    <use href="#cog"/>
+</svg>
+</button>
+            
+    
+
+            
+            
+        </header>
+
+        <main id="main-content">
+            
+    <nav id="sidebar">
+        
+        <ul class="alternative-formats">
+            
+            <li><a rel="alternate" type="application/pdf" href="realtime_embedded_co.pdf"download><svg class="icon" aria-label="PDF" viewBox="0 0 180 180">
+    <use href="#pdf"/>
+</svg> Download as PDF</a></li>
+            
+        </ul>
+        
+
+        <h1>Table of Contents</h1>
+        <a class="jump-to-item-content" href="#item-content">Jump to content</a>
+        
+            <ol class="table-of-contents" role="tree">
+                
+                    
+<li role="none" data-toc-level="1" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-realtime_embedded_co" href="#realtime_embedded_co">
+        
+        Realtime embedded coding in C++ under Linux
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000002" href="#a0000000002">
+        <span class="toc-marker"></span>
+        1 Introduction
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000002">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000004" href="#a0000000004">
+        
+        1.1 Event based coding in the Linux userspace
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-drivers" href="#drivers">
+        <span class="toc-marker"></span>
+        2 Writing C++ classes for userspace event processing
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-drivers">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000009" href="#a0000000009">
+        
+        2.1 General recommendations on how to write C++ event processing classes
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000015" href="#a0000000015">
+        <span class="toc-marker"></span>
+        2.2 Callbacks between C++ classes
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000015">
+            
+            
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000016" href="#a0000000016">
+        
+        2.2.1 Callback arguments
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000023" href="#a0000000023">
+        <span class="toc-marker"></span>
+        2.3 Low level userspace device access
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000023">
+            
+            
+<li role="none" data-toc-level="3" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000024" href="#a0000000024">
+        <span class="toc-marker"></span>
+        2.3.1 Video camera capture (openCV)
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000024">
+            
+            
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-videodesk" href="#videodesk">
+        
+        Ubuntu / Debian Linux systems
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000025" href="#a0000000025">
+        
+        Raspberry PI
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000026" href="#a0000000026">
+        
+        2.3.2 Audio (ALSA)
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000027" href="#a0000000027">
+        
+        2.3.3 Bluetooth
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000028" href="#a0000000028">
+        <span class="toc-marker"></span>
+        2.3.4 General purpose I/O (GPIO)
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000028">
+            
+            
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000029" href="#a0000000029">
+        
+        libgpiod
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000033" href="#a0000000033">
+        
+        Output
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000034" href="#a0000000034">
+        
+        Events
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000035" href="#a0000000035">
+        
+        Releasing the GPIO
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000036" href="#a0000000036">
+        
+        2.3.5 SPI
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000038" href="#a0000000038">
+        <span class="toc-marker"></span>
+        2.3.6 I2C
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000038">
+            
+            
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000039" href="#a0000000039">
+        
+        Raw <span class="ttfamily">/dev/i2c</span> access
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000040" href="#a0000000040">
+        
+        2.3.7 Access to hardware via special devices in <span class="ttfamily">/sys</span>
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000041" href="#a0000000041">
+        
+        2.3.8 Accessing physical memory locations (danger!)
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000048" href="#a0000000048">
+        
+        2.4 Kernel driver programming
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000049" href="#a0000000049">
+        
+        2.5 Conclusion
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-threads" href="#threads">
+        <span class="toc-marker"></span>
+        3 Threads
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-threads">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000050" href="#a0000000050">
+        
+        3.1 Introduction
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000054" href="#a0000000054">
+        
+        3.2 Processes and Threads
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000055" href="#a0000000055">
+        <span class="toc-marker"></span>
+        3.3 Thread and worker
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000055">
+            
+            
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000056" href="#a0000000056">
+        
+        3.3.1 Creating threads
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000057" href="#a0000000057">
+        
+        3.3.2 Lifetime of a thread
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000058" href="#a0000000058">
+        
+        3.3.3 Running/stopping workers with endless loops
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="false" aria-owns="#toc-subtree-a0000000059" href="#a0000000059">
+        <span class="toc-marker"></span>
+        3.3.4 Timing within threads
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000059">
+            
+            
+<li role="none" data-toc-level="4" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000060" href="#a0000000060">
+        
+        Timing with blocking I/O
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000061" href="#a0000000061">
+        
+        3.4 Timing with Linux timers
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000062" href="#a0000000062">
+        
+        3.5 Conclusion
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-qt" href="#qt">
+        <span class="toc-marker"></span>
+        4 Realtime/event processing within the Graphical User Interface Qt
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-qt">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000063" href="#a0000000063">
+        
+        4.1 Introduction
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000065" href="#a0000000065">
+        <span class="toc-marker"></span>
+        4.2 Callbacks in Qt
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000065">
+            
+            
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000066" href="#a0000000066">
+        
+        4.2.1 Events from widgets
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000067" href="#a0000000067">
+        
+        4.2.2 Plotting realtime data arriving via a callback
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000068" href="#a0000000068">
+        
+        4.3 Conclusion
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000069" href="#a0000000069">
+        <span class="toc-marker"></span>
+        5 Realtime publisher-subscriber communication with DDS
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000069">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000070" href="#a0000000070">
+        
+        5.1 Essential classes and their rôles
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000071" href="#a0000000071">
+        
+        5.2 Define the data structure
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000072" href="#a0000000072">
+        <span class="toc-marker"></span>
+        5.3 Publisher
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000072">
+            
+            
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000077" href="#a0000000077">
+        
+        5.3.1 Creating a Topic
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000078" href="#a0000000078">
+        
+        5.3.2 Creating a Publisher and a Writer
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000079" href="#a0000000079">
+        
+        5.3.3 Specifying the Writer’s callback function
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000080" href="#a0000000080">
+        
+        5.3.4 Sending messages
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000081" href="#a0000000081">
+        
+        5.4 Subscriber
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-webserver" href="#webserver">
+        <span class="toc-marker"></span>
+        6 Realtime web server/client communication
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-webserver">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000082" href="#a0000000082">
+        
+        6.1 Introduction
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000083" href="#a0000000083">
+        
+        6.2 REST
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000084" href="#a0000000084">
+        
+        6.3 Data format: JSON
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000085" href="#a0000000085">
+        <span class="toc-marker"></span>
+        6.4 Server
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000085">
+            
+            
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000086" href="#a0000000086">
+        
+        6.4.1 Web servers (http/https)
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000091" href="#a0000000091">
+        
+        6.4.2 FastCGI
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000092" href="#a0000000092">
+        
+        6.4.3 Server \(\to \) client
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="3" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000093" href="#a0000000093">
+        
+        6.4.4 Client \(\to \) server: POST
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000094" href="#a0000000094">
+        
+        6.5 Client code: javascript for websites
+    </a>
+
+    
+</li>
+
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000095" href="#a0000000095">
+        
+        6.6 Conclusion
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-setters" href="#setters">
+        <span class="toc-marker"></span>
+        7 Setters
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-setters">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-a0000000097" href="#a0000000097">
+        
+        7.1 Conclusion
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+<li role="none" data-toc-level="1" class="toc-header  has-children">
+    <a role="treeitem" aria-expanded="true" aria-owns="#toc-subtree-a0000000098" href="#a0000000098">
+        <span class="toc-marker"></span>
+        A License
+    </a>
+
+    
+        <ol role="group" id="toc-subtree-a0000000098">
+            
+            
+<li role="none" data-toc-level="2" class="toc-header ">
+    <a role="treeitem"  aria-owns="#toc-subtree-footnot_1" href="#footnot_1">
+        
+        Footnotes
+    </a>
+
+    
+</li>
+
+            
+        </ol>
+    
+</li>
+
+                
+            </ol>
+        
+
+    </nav>
+
+    <article class="item-content" id="item-content">
+        <div class="titlepage">
+<h1 id="realtime_embedded_co">Realtime embedded coding in C++ under Linux</h1>
+<p class="authors">
+<span class="author">Bernd Porr &amp; Nick Bailey</span>
+</p>
+</div>
+<!-- Latex Chapter/Part -->
+<h1 id="a0000000002">1 Introduction</h1>
+<figure id="timing">
+<div class="centered"> <div class="mbox" id="a0000000003" style="width: "><img alt="\includegraphics[width=\textwidth ]{signals-timings}" src="images/img-0001.svg" style="width:469.755pt"/></div> </div>
+<figcaption>
+<span class="caption_title">Figure</span>
+<span class="caption_ref">1.1</span>
+<span class="caption_text">Dataflow and timing in low level realtime coding </span>
+</figcaption>
+</figure>
+<section class="section">
+<h2 id="a0000000004">1.1 Event based coding in the Linux userspace</h2>
+<p>
+Realtime embedded coding is all about <i class="slshape">events</i>. These can be a binary signal such as somebody opening a door or an ADC signalling that a sample is ready to be picked up. Fig. <a class="ref" href="#timing">1.1</a> shows the basic dataflow and how event timing is established: devices by themselves have event signals such as “data ready” or “crash sensor has been triggered”. The Linux kernel receives these as interrupt callbacks. However, userspace has no direct interrupt mechanism; instead it has <i class="slshape">blocking I/O</i> where a read or write operation blocks until a kernel-side interrupt/event has happened. A blocking I/O call returning may then be translated to callbacks between classes by waking up threads. Data is transmitted back to the hardware via methods called “setters”, which change an object’s attributes and potentially do other processing. 
+</p>
+<figure id="gettersetters">
+<div class="centered"> <div class="mbox" id="a0000000005" style="width: "><img alt="\includegraphics[width=\textwidth ]{gettersetters}" src="images/img-0002.svg" style="width:469.755pt"/></div> </div>
+<figcaption>
+<span class="caption_title">Figure</span>
+<span class="caption_ref">1.2</span>
+<span class="caption_text">A realtime system with two C++ classes. Communication between classes is achieved with callbacks (not getters) for incoming events and setters to send out control events. The control output itself receives its timing from the events so that the loop is traversed as quickly as possible. </span>
+</figcaption>
+</figure>
+<p>
+ Fig. <a class="ref" href="#gettersetters">1.2</a> shows the overall communication between C++ classes in a realtime system. This communication is done via <b class="bfseries">callbacks</b> (<i class="slshape">not</i> getters) and setters, where an event from a sensor traverses according to its realtime requirements through the C++ classes via callbacks and then back to the control output via setters. For example, a collision sensor at a robot triggers a GPIO pin, which then triggers a callback to issue an avoidance action which in turn then sets the motors in reverse. 
+</p>
+<p>
+Callbacks can be seen as userspace interrupt service routines. These must always complete immediately so that the caller does not experience any noticeable delay. For example when a user presses a button in a GUI the callback must be processed without any noticeable delay which is application specific. If processing takes longer then a thread should be started which in turn then will then have a callback signalling success. 
+</p>
+<p>
+In the following sections we are describing how to write event driven code in C++. Important here is 
+</p>
+<ol class="enumerate" id="a0000000006">
+<li id="a0000000007" value="1">
+<p>
+blocking I/O and, 
+</p>
+</li>
+<li id="a0000000008" value="2">
+<p>
+threads woken up by blocking I/O. 
+</p>
+</li>
+</ol>
+<p>
+ Chapter <a class="ref" href="#drivers">2</a> focuses on how to wrap the low level blocking Linux I/O in a class and how to establish the communication between classes while the chapter <a class="ref" href="#threads">3</a> describes how threads can effectively be used to trigger callbacks with blocking I/O. Chapter <a class="ref" href="#qt">4</a> then presents the event based communication in Qt, in particular user interaction and animations. Chapter <a class="ref" href="#webserver">6</a> tackles the same issues as for Qt but for website server communication. The final chapter <a class="ref" href="#setters">7</a> then describes how events are transmitted back from a C++ class to the user with the help of setters. 
+</p>
+</section><!-- Latex Chapter/Part -->
+<h1 id="drivers">2 Writing C++ classes for userspace event processing</h1>
+<p>
+ This chapter focuses on writing your own C++ class for event processing by hiding away the complexity (and messy) low level C APIs and/or raw device access. How are events translated into I/O operations? On the hardware-side we have event signals such as data-ready signals or by the timing of a serial or audio interface. The Linux kernel translates this timing info into blocking I/O on the pseudo filesystem <span class="ttfamily">/dev</span> which means that a read operation blocks until data has arrived or an event has happened. The task of a C++ programmer is to hide this complexity and these quite different approaches in C++ classes which communicate via callbacks and setters with the client classes. 
+</p>
+<section class="section">
+<h2 id="a0000000009">2.1 General recommendations on how to write C++ event processing classes</h2>
+<p>
+ As said above the main purpose of object oriented coding here is to hide away the complexity of low level driver access and offer the client a simple and safe way of connecting to the sensor. In particular: 
+</p>
+<ol class="enumerate" id="a0000000010">
+<li id="a0000000011" value="1">
+<p>
+Setters and callbacks hand over <i class="slshape">physical units</i> (temperature, acceleration, …) or relative units but not raw integer values with no meaning. 
+</p>
+</li>
+<li id="a0000000012" value="2">
+<p>
+The sensor is configured by specifying physical units (time, voltage, temperature) and not sensor registers. Default config parameters should be specified that the class can be used straight away with default parameters. 
+</p>
+</li>
+<li id="a0000000013" value="3">
+<p>
+In the build system bundle classes into separate libraries so that they can be re-used easily. 
+</p>
+</li>
+<li id="a0000000014" value="4">
+<p>
+The class comes with simple demo programs demonstrating how a client program might use it. 
+</p>
+</li>
+</ol>
+</section><section class="section">
+<h2 id="a0000000015">2.2 Callbacks between C++ classes</h2>
+<p>
+ Events between C++ classes are transmitted via callbacks. There are different ways of tackling the issue of callbacks but the most effective way is defining a method in an <i class="slshape">interface class</i> as <i class="slshape">abstract</i> and asking the client class to implement it in a derived class. 
+</p>
+<p>
+The callback is part of an interface class: 
+</p>
+<pre class="verbatim">
+  struct ADSCallbackInterface {
+	    /**
+	     * Called when a new sample is available.
+	     * This needs to be implemented in a derived
+	     * class by the client. Defined as abstract.
+	     * \param sample Voltage from the selected channel.
+	     **/
+	virtual void hasADS1115Sample(float sample) = 0;
+    };
+</pre>
+<p>
+ and then registering it in the main device driver class: 
+</p>
+<pre class="verbatim">
+    void registerCallback(ADSCallbackInterface* ci) {
+	adsCallbackInterfaces.push_back(ci);
+    }
+</pre>
+<p>
+ where <span class="ttfamily">adsCallbackInterfaces</span> is a <span class="ttfamily">std::vector</span> of containing instances of <span class="ttfamily">ADSCallbackInterface</span>. 
+</p>
+<p>
+This then allows the C++ class to transmit an event to the receiving classes by looping through the interface pointers: 
+</p>
+<pre class="verbatim">
+for(auto &amp;cb: adsCallbackInterfaces) {
+    cb-&gt;hasADS1115Sample(v);
+}
+</pre>
+<p>
+See <a href="https://github.com/berndporr/rpi_ads1115">https://github.com/berndporr/rpi_ads1115</a> for a complete example. 
+</p>
+<p>
+Note that an interface can also be defined by <span class="ttfamily">std::function</span> but this is a lot slower than using interfaces. The reason is that interfaces are standard C++ and the compiler can optimise these constructs while <span class="ttfamily">std::function</span> does a lot of trickery behind the scenes which a compiler won’t understand and thus won’t be able to optimise. The other reason why <span class="ttfamily">std::function</span> is discouraged is the difficulty to provide proper documentation for the function arguments and return values. 
+</p>
+<section class="subsection">
+<h3 id="a0000000016">2.2.1 Callback arguments</h3>
+<p>
+ Above the callbacks just delivered one floating point value. However, often more than one sample or more complex data are transmitted: 
+</p>
+<ul class="itemize" id="a0000000017">
+<li id="a0000000018">
+<p>
+Complex data: do not put loads of arguments into the callback but define a <i class="slshape">struct</i>. For example an ADC might deliver all 4 channels at once: 
+</p>
+<pre class="verbatim">
+class ADmulti {
+
+        struct ADCSample {
+            float ch1;
+            float ch2;
+            float ch3;
+            float ch4;
+        };
+
+        ...
+        virtual void hasSample(ADCSample&amp; sample) = 0;
+        ...
+};
+</pre>
+<p>
+ Depending on your application, you might consider the values not useful individually and therefore prefer a <span class="ttfamily">std::tuple</span>. 
+</p>
+</li>
+<li id="a0000000019">
+<p>
+Arrays: Use arrays which contain the length of the arrays: either std::array, std::vector, etc or const arrays and then references to these so that the callback knows the length. For example the LIDAR callback uses a reference to a const length array: 
+</p>
+<pre class="verbatim">
+/**
+ * Callback interface which needs to be implemented by the user.
+ **/
+struct DataInterface {
+        virtual void newScanAvail(
+                float rpm, 
+                A1LidarData (&amp;)[A1Lidar::nDistance]) = 0;
+};
+</pre>
+<p>
+ Here <span class="ttfamily">A1Lidar::nDistance</span> is a constant-expression giving the fixed array length, and <span class="ttfamily">(&amp;)[A1Lidar::nDistance]</span> a reference to a constant-length array which containing <span class="ttfamily">A1LidarData</span> stucts. If you’re going to use types that hard to key-in often, <span class="ttfamily">typedef</span> them. 
+</p>
+</li>
+</ul>
+<p>
+ In terms of <i class="slshape">memory management</i>: 
+</p>
+<ol class="enumerate" id="a0000000020">
+<li id="a0000000021" value="1">
+<p>
+Low sampling rate complex data structures: allocate as a local variable. It can be a simple type or a struct. See <span class="ttfamily">dataReady()</span> in: <a href="https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp">https://github.com/berndporr/LSM9DS1_RaspberryPi_CPP_Library/blob/master/LSM9DS1.cpp</a>. 
+</p>
+</li>
+<li id="a0000000022" value="2">
+<p>
+High sampling rate buffers: allocate memory on the heap in the constructor or in the private section of the class as a const length array and pass on a <i class="slshape">reference</i>. See <span class="ttfamily">getData()</span> in <a href="https://github.com/berndporr/rplidar_rpi">https://github.com/berndporr/rplidar_rpi</a>. 
+</p>
+</li>
+</ol>
+</section>
+</section><section class="section">
+<h2 id="a0000000023">2.3 Low level userspace device access</h2>
+<p>
+ The following sections provide pointers of how to write the C++ driver classes for different hardware protocols which then emit events via callback interfaces. 
+</p>
+<p>
+To emulate an “interrupt” or event in userspace we need blocking I/O which provides the timing for example when waiting for a GPIO change, doing audio or video I/O. 
+</p>
+<p>
+Generally any userspace program talks to the kernel via pseudo files in the <span class="ttfamily">/dev</span> or <span class="ttfamily">/sys</span> directories. 
+</p>
+<section class="subsection">
+<h3 id="a0000000024">2.3.1 Video camera capture (openCV)</h3>
+<section class="subsubsection">
+<h4 id="videodesk">Ubuntu / Debian Linux systems</h4>
+<p>
+ Reading from a video camera is usually done with the help of openCV which in turn then talks to the low level C API which in turn talks to the kernel via <span class="ttfamily">/dev/video*</span>. 
+</p>
+<pre class="verbatim">
+while(running) {
+    cv::Mat cap;
+    videoCapture.read(cap);
+    sceneCallback-&gt;nextScene(cap);
+}
+</pre>
+<p>
+ The <span class="ttfamily">read(cap)</span> command is blocking till a new frame has arrived which is then transmitted with the callback <span class="ttfamily">nextScene</span> to the client. The full code of the example camera class is here: <a href="https://github.com/berndporr/opencv-camera-callback">https://github.com/berndporr/opencv-camera-callback</a>. 
+</p>
+</section><section class="subsubsection">
+<h4 id="a0000000025">Raspberry PI</h4>
+<p>
+ On the raspberry PI a new video stack has been implemented which talks to the kernel via <span class="ttfamily">/dev/media*</span>. This is incompatible with openCV and the code in section <a class="ref" href="#videodesk">None</a> won’t work. The good news is that <span class="ttfamily">libcamera</span> already implements a callback. Instead, one just needs to register a callback to receive the video frames. The bad news is that libcamera is highly complex and requires a lot of additional code (<a href="https://github.com/libcamera-org/libcamera/blob/master/Documentation/guides/application-developer.rst">https://github.com/libcamera-org/libcamera/blob/master/Documentation/guides/application-developer.rst</a>). To make life easier we have written a C++ wrapper around the libcamera C++ API which exposes a callback which delivers image frames in openCV format to mimick the behaviour of the openCV code of the previous section <a class="ref" href="#videodesk">None</a>: <a href="https://github.com/berndporr/libcamera2opencv">https://github.com/berndporr/libcamera2opencv</a>. 
+</p>
+</section>
+</section><section class="subsection">
+<h3 id="a0000000026">2.3.2 Audio (ALSA)</h3>
+<p>
+ The standard framework for audio is alsa: <a href="https://github.com/alsa-project">https://github.com/alsa-project</a>. 
+</p>
+<p>
+ALSA is packet based with a read command returning a chunk ("buffer") of audio and write emitting one. There are calls to set the sample format, sample rate, buffer size and so forth. 
+</p>
+<p>
+First, the parameters are requested and the driver can modify or reject them: 
+</p>
+<pre class="verbatim">
+/* Signed 16-bit little-endian format */
+  snd_pcm_hw_params_set_format(handle, params,
+                               SND_PCM_FORMAT_S16_LE);
+
+  /* One channel (mono) */
+  snd_pcm_hw_params_set_channels(handle, params, 1);
+
+  /* 44100 bits/second sampling rate (CD quality) */
+  val = 44100;
+  snd_pcm_hw_params_set_rate_near(handle, params,
+                                  &amp;val, &amp;dir);
+</pre>
+<p>
+Then playing sound is done in an endless loop were a read() or write() command is issued. Both are blocking so that they guarantee event timing of audio both way. 
+</p>
+<pre class="verbatim">
+ while (running) {
+   if ((err = snd_pcm_readi (handle, buffer, buffer_frames)) != buffer_frames) {
+     if (errCallback) errCallback-&gt;hasError();
+   }
+   if (sampleCallback) sampleCallback-&gt;hasData(buffer);
+ }
+</pre>
+<p>
+For a full coding example “aplay” and “arecord” are a good start. Both can be found here: <a href="https://github.com/alsa-project">https://github.com/alsa-project</a>. 
+</p>
+</section><section class="subsection">
+<h3 id="a0000000027">2.3.3 Bluetooth</h3>
+<p>
+Bluetooth has also blocking I/O so that one can wait for incoming packets on a socket: 
+</p>
+<pre class="verbatim">
+void run() {
+        doRun = 1;
+        while (doRun) {
+                recv(btsocket, recvbuffer, sizeof(recvbuffer), 0);
+                hasData(recvbuffer);
+        }
+};
+</pre>
+<p>
+Here the <span class="ttfamily">recv</span> command blocks until new data has arrived. 
+</p>
+</section><section class="subsection">
+<h3 id="a0000000028">2.3.4 General purpose I/O (GPIO)</h3>
+<p>
+ GPIO pins are not just simple digital ports but they can be used to turn non-blocking I/O into blocking I/O, or in other words: events! SPI and I2C are only blocking for their read/write operations but they don’t know when new data is available at a sensor so one needs to connect the DATA-READY output of a sensor to a GPIO port which then feeds into blocking I/O. 
+</p>
+<section class="subsubsection">
+<h4 id="a0000000029">libgpiod</h4>
+<p>
+ The GPIO (of the raspberry PI) can easily be controlled via the <span class="ttfamily">/dev</span> filesystem and <span class="ttfamily">libgpiod</span>. 
+</p>
+<p>
+Use the commandline tool <span class="ttfamily">gpioinfo</span> to print a list of all available GPIO pins. 
+</p>
+<p>
+When you use the gpiod library you: 
+</p>
+<ol class="enumerate" id="a0000000030">
+<li id="a0000000031" value="1">
+<p>
+first choose the GPIO <i class="slshape">chip</i> you want to use. Raspberry PIs 1-4 have only one chip. The Raspberry PI 5 has 4 chips. Selection can be made either by number, name or pseudo-file: 
+</p>
+<pre class="verbatim">
+  struct gpiod_chip *chip = 
+             gpiod_chip_open_by_name("gpiochip0");
+</pre>
+<p>
+ and then, 
+</p>
+</li>
+<li id="a0000000032" value="2">
+<p>
+select a pin on the chip: 
+</p>
+<pre class="verbatim">
+  struct gpiod_line *pinRed =
+             gpiod_chip_get_line(chip, 24);
+</pre>
+</li>
+</ol>
+</section><section class="subsubsection">
+<h4 id="a0000000033">Output</h4>
+<p>
+ Once you have a pointer to the pin you can then set its direction, for example as an output pin, with: 
+</p>
+<pre class="verbatim">
+gpiod_line_request_output(pinRed, "example1", 0);
+</pre>
+<p>
+ and set its value with: 
+</p>
+<pre class="verbatim">
+gpiod_line_set_value(pinRed, 1);
+</pre>
+</section><section class="subsubsection">
+<h4 id="a0000000034">Events</h4>
+<p>
+ libgpiod offers all the functionality of event processing via blocking I/O! Here, change in level from low to high or high to low unblocks an I/O operation, awakening its underlying thread which then one can perform a callback. 
+</p>
+<p>
+To request event processing on a pin simply requires this single command: 
+</p>
+<pre class="verbatim">
+int ret =
+   gpiod_line_request_rising_edge_events(pinSwitch, "Consumer1");
+</pre>
+<p>
+ This will turn the GPIO pin <span class="ttfamily">pinSwitch</span> into an input pin and enable blocking I/O on this pin. 
+</p>
+<p>
+Then start a thread where its worker contains: 
+</p>
+<pre class="verbatim">
+void worker() {
+    while (running) {
+        constexpr struct timespec ts = { 1, 0 };
+        gpiod_line_event_wait(pinSwitch, &amp;ts);
+        struct gpiod_line_event event;
+        gpiod_line_event_read(pinSwitch, &amp;event);
+        event_callback();
+    }
+}
+</pre>
+<p>
+ The <span class="ttfamily">gpiod_line_event_wait</span> waits for a rising edge at the GPIO pin, or for 1 second (+ 0 ns), whichever is longer, and then unblocks. The return value is 1 if a GPIO event occurred, 0 if timeout interval was exceeded, and -1 in the event of an error. In production code, you’d need to check this return value. Then <span class="ttfamily">gpiod_line_event_read</span> transfers the kernel event to userspace and clears it out of the kernel event queue. It’s important to do the read operation even if the event-struct is never used. The callback is made, and the loop repeats until another thread requests termination by setting <code class="verbatim">running</code> to <code class="verbatim">false</code>. See <a href="https://github.com/berndporr/libgpiod_event_demo">https://github.com/berndporr/libgpiod_event_demo</a> for a complete example. 
+</p>
+</section><section class="subsubsection">
+<h4 id="a0000000035">Releasing the GPIO</h4>
+<p>
+ Once you are finished, release the GPIO pin with: 
+</p>
+<pre class="verbatim">
+    gpiod_line_release(pinRed);
+</pre>
+<p>
+ and close the chip: 
+</p>
+<pre class="verbatim">
+    gpiod_chip_close(chip);
+</pre>
+</section>
+</section><section class="subsection">
+<h3 id="a0000000036">2.3.5 SPI</h3>
+<div class="table" id="spimodes">
+<div class="centered"> <figcaption>
+<span class="caption_title">Table</span>
+<span class="caption_ref">2.1</span>
+<span class="caption_text">SPI modes</span>
+</figcaption> <table class="tabular">
+<tr><td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+ SPI Mode 
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+ CPOL 
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+ CPHA 
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"><p>
+ Idle state 
+</p>
+</td>
+</tr>
+<tr><td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black"><p>
+0
+</p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black"><p>
+ 0
+</p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left; border-right:1px solid black"><p>
+ 0
+</p>
+</td>
+<td colspan="" rowspan="" style="border-top-style:solid; border-top-color:black; border-top-width:1px; text-align:left"><p>
+ L 
+</p>
+</td>
+</tr>
+<tr><td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+1
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+ 0
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+ 1
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"><p>
+ L 
+</p>
+</td>
+</tr>
+<tr><td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+2
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+ 1
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+ 1
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"><p>
+ H 
+</p>
+</td>
+</tr>
+<tr><td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+3
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+ 1
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left; border-right:1px solid black"><p>
+ 0
+</p>
+</td>
+<td colspan="" rowspan="" style="text-align:left"><p>
+ H 
+</p>
+</td>
+</tr>
+</table> </div>
+</div>
+<p>
+ SPI is a protocol which usually transmits and receives at the same time. Its calls are blocking for the duration of receive and transmit but cannot be used for event based processing. If an SPI device is used events should be transmitted via an additional GPIO line. Even though data might not be used it needs to be matched up, because the same clock is used to send and collect the data signal (it is <em>isochronous</em>). So if you send 8 bytes the hardware receives 8 bytes at the same time. 
+</p>
+<p>
+Transfer to/from SPI is best managed by the low level access to <span class="ttfamily">/dev</span>. Open the SPI device with the standard <span class="ttfamily">open()</span> function: 
+</p>
+<pre class="verbatim">
+int fd = open( "/dev/spidev0.0", O_RDWR);
+</pre>
+<p>
+Then set the SPI mode (see table <a class="ref" href="#spimodes">2.1</a>): 
+</p>
+<pre class="verbatim">
+int ret = ioctl(fd, SPI_IOC_WR_MODE, &amp;mode);
+</pre>
+<p>
+ as explained, for example, here: <a href="https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html">https://www.analog.com/en/analog-dialogue/articles/introduction-to-spi-interface.html</a>. 
+</p>
+<p>
+Because SPI is isochronous, <span class="ttfamily">read()</span> and <span class="ttfamily">write()</span> can’t be used to transmit and receive data. Instead, the simultaneous read and write is performed using an <span class="ttfamily">ioctl()</span> to do the communication. Populate this struct: 
+</p>
+<pre class="verbatim">
+struct spi_ioc_transfer tr {
+  .tx_buf = (unsigned long)tx1,
+  .rx_buf = (unsigned long)rx1,
+  .len = ARRAY_SIZE(tx1),
+  .delay_usecs = delay,
+  .speed_hz = speed,
+  .bits_per_word = 8,
+};
+</pre>
+<p>
+ which points to two character buffers “tx” and “rx” with the same length<a class="footnote" href="#a0000000037" id="a0000000037-reference">
+<sup class="footnotemark">1</sup>
+</a>. 
+</p>
+<p>
+Reading and simultaneous writing then happens via this <span class="ttfamily">ioctrl()</span> function call: 
+</p>
+<pre class="verbatim">
+int ret = ioctl(fd, SPI_IOC_MESSAGE(1), &amp;tr);
+</pre>
+<p>
+Sometimes the SPI protocol of a chip is so odd that even the raw I/O via <span class="ttfamily">/dev</span> won’t work and you need to write your own bit banging interface, for example done here for the ADC on the alphabot: <a href="https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58">https://github.com/berndporr/alphabot/blob/main/alphabot.cpp#L58</a>. This is obviously far from ideal as it might require <span class="ttfamily">usleep()</span> commands so that acquisition needs to be run in a separate thread (the alphabot indeed uses a timer callback in a separate thread). 
+</p>
+<p>
+Overall the SPI protocol is often device dependent and calls for experimentation to get it to work. On some ADCs the SPI clock is also the conversion clock and a longer lasting clock signal sequence is required, making it necessary to transmit dummy bytes in addition to the payload. 
+</p>
+<p>
+As a general recommendation do not use SAR converters which use the SPI data clock also as acquisition clock as they are often not compatible with the standard SPI transfers via <span class="ttfamily">/dev</span>. Use sensors or ADCs which have their own clock signal. 
+</p>
+</section><section class="subsection">
+<h3 id="a0000000038">2.3.6 I2C</h3>
+<p>
+ I2C is a protocol which either receives or transmits. Its I/O operations are blocking but only for the duration of receive or transmit. Use an additional GPIO pin for events for example for a data-ready event. 
+</p>
+<p>
+The I2C bus has two signal lines (SDA &amp; SDL) which must be pulled up by resistors. Every I2C device has an address on the bus. You can scan a bus with <b class="bfseries">i2cdetect</b> (part of the i2c-tools package): 
+</p>
+<pre class="verbatim">
+root@raspberrypi:/home/pi# i2cdetect -y 1
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- 1e -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- 58 -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- 6b -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+root@raspberrypi:/home/pi# 
+</pre>
+<p>
+ In this case there are 3 I2C devices on the I2C bus at addresses 1E, 58 and 6B and need to be specified when accessing the I2C device. 
+</p>
+<section class="subsubsection">
+<h4 id="a0000000039">Raw <span class="ttfamily">/dev/i2c</span> access</h4>
+<p>
+ I2C either transmits or receives but never at the same time so here we can use the standard C read/write commands. However, we need to use ioctrl to tell the kernel the I2C address: 
+</p>
+<pre class="verbatim">
+char buf[2];
+int file = open("/dev/i2c-2",O_RDWR);
+int addr = 0x58;
+ioctl(file, I2C_SLAVE, addr);
+write(file, buf, 1)
+read(file, buf, 2)
+</pre>
+<p>
+ where <span class="ttfamily">addr</span> is the I2C address. Then use standard <span class="ttfamily">read()</span> or <span class="ttfamily">write()</span> commands. Usually the 1st write operation tells the chip which register to read or write to. Subsequent operations read or write that register. For example, reading a 16 bit register: 
+</p>
+<pre class="verbatim">
+unsigned 2c_readWord(uint8_t reg)
+{
+	uint8_t tmp[2];
+	tmp[0] = reg;
+	write(fd_i2c,&amp;tmp,1);
+        read(fd_i2c, tmp, 2);
+        return (((unsigned)(tmp[0])) &lt;&lt; 8) | ((unsigned)(tmp[1]));
+}
+</pre>
+<p>
+ Similarly writing a 16 bit register writes 3 bytes to the I2C bus (register and the 16 bit data): 
+</p>
+<pre class="verbatim">
+void i2c_writeWord(uint8_t reg, unsigned data)
+{
+	uint8_t tmp[3];
+	tmp[0] = reg;
+	tmp[1] = (char)((data &amp; 0xff00) &gt;&gt; 8);
+	tmp[2] = (char)(data &amp; 0x00ff);
+	write(fd_i2c,&amp;tmp,3);
+}
+</pre>
+</section>
+</section><section class="subsection">
+<h3 id="a0000000040">2.3.7 Access to hardware via special devices in <span class="ttfamily">/sys</span></h3>
+<p>
+ Some sensors are directly available via the sys filesystem in human readable format. For example 
+</p>
+<pre class="verbatim">
+cat /sys/class/thermal/thermal_zone0/temp
+</pre>
+<p>
+ gives you the temperature of the CPU. 
+</p>
+</section><section class="subsection">
+<h3 id="a0000000041">2.3.8 Accessing physical memory locations (danger!)</h3>
+<p>
+ Don’t. In case you really need to access registers you can also access memory directly. This should only be used as a last resort. For example, setting the clock for the AD converter requires turning a GPIO pin into a clock output pin. This is not yet supported by the drivers so we need to program registers on the RPI. 
+</p>
+<ul class="itemize" id="a0000000042">
+<li id="a0000000043">
+<p>
+Linux uses virtual addresses so that a pointer won’t point to a physical memory location. It points to three page tables with an offset. 
+</p>
+</li>
+<li id="a0000000044">
+<p>
+Special device <span class="ttfamily">/dev/mem</span> allows access to physical memory. 
+</p>
+</li>
+<li id="a0000000045">
+<p>
+The command <b class="bfseries">mmap</b> provides a pointer to a physical address by opening <span class="ttfamily">/dev/mem</span>. 
+</p>
+</li>
+<li id="a0000000046">
+<p>
+Example: 
+</p>
+<pre class="verbatim">
+int *addr;
+if ((fd = open("/dev/mem", O_RDWR|O_SYNC)) &lt; 0 ) {
+    printf("Error opening file. \n");
+    close(fd);
+    return (-1);
+}
+addr = (int *)mmap(0, num*STRUCT_PAGE_SIZE, PROT_READ, MAP_PRIVATE,
+            fd, 0x0000620000000000);
+printf("addr: %p \n",addr);
+printf("addr: %d \n",*addr);
+</pre>
+</li>
+<li id="a0000000047">
+<p>
+Use this with care! It’s dangerous if not used properly. 
+</p>
+</li>
+</ul>
+</section>
+</section><section class="section">
+<h2 id="a0000000048">2.4 Kernel driver programming</h2>
+<p>
+ You can also create your own <span class="ttfamily">/dev/mydevice</span> in the <span class="ttfamily">/dev</span> filesystem by writing a kernel driver and a matching userspace library. For example the USB mouse has a driver in kernel space and translates the raw data from the mouse into coordinates. However, this is beyond the scope of this handout. If you want to embark on this adventure then the best approach is to find a kernel driver which does approximately what you want and modify it for your purposes. 
+</p>
+</section><section class="section">
+<h2 id="a0000000049">2.5 Conclusion</h2>
+<p>
+ The communication between C++ classes is achieved via callbacks and setters. The event from the sensor traverses the C++ classes via callbacks and then back to the control output via setters. 
+</p>
+<p>
+From the sections above it’s clear that Linux user-space low level device access is complex, even without taking into account the complexity of contemporary chips which have often a multitude of registers and pages of documentation. Your task is to hide away all this (scary) complexity in a C++ class and offer the client an easy-to-understand interface. 
+</p>
+</section><!-- Latex Chapter/Part -->
+<h1 id="threads">3 Threads</h1>
+<section class="section">
+<h2 id="a0000000050">3.1 Introduction</h2>
+<p>
+ In realtime systems threads have two distinct functions: 
+</p>
+<ol class="enumerate" id="a0000000051">
+<li id="a0000000052" value="1">
+<p>
+Loops with blocking I/O to establish <b class="bfseries">precise timing</b> for callbacks. 
+</p>
+</li>
+<li id="a0000000053" value="2">
+<p>
+<b class="bfseries">Asynchronous execution</b> of time-consuming tasks with a callback after the task has completed. 
+</p>
+</li>
+</ol>
+</section><section class="section">
+<h2 id="a0000000054">3.2 Processes and Threads</h2>
+<p>
+ Processes are different programs which seem to be running at the same time. A small embedded system may only have a single CPU core, so this this is achieved by the operating system switching approximately every 10ms from one process to the next so it feels as if they are running concurrently. A thread is a lightweight process. A process may have multiple threads which share the same address-space and are all started from within the parent process. As with processes, the threads seem to be running at the same time. When a thread is started it runs simultaneously with the main process which created it. 
+</p>
+</section><section class="section">
+<h2 id="a0000000055">3.3 Thread and worker</h2>
+<p>
+ A thread is just a <i class="slshape">wrapper</i> for the actual method which is running independently. The method being run in the thread is often called a <i class="slshape">worker</i>. 
+</p>
+<section class="subsection">
+<h3 id="a0000000056">3.3.1 Creating threads</h3>
+<p>
+ In C++ a worker is a method within a class: 
+</p>
+<pre class="verbatim">
+uthread = std::thread(&amp;MyClassWithAThread::run, this);
+</pre>
+<p>
+ where <span class="ttfamily">MyClassWithAThread</span> is a class containing the function “run”: 
+</p>
+<pre class="verbatim">
+class MyClassWithAThread {
+        void run() {
+                // ... hard work is done here
+                doCallback(result); // hand the result over
+        }
+}
+</pre>
+<p>
+ Note that the &amp; signifies a functor, a method prototype. Instead of using functors you can also use a lambda function to call a method in the instance: 
+</p>
+<pre class="verbatim">
+uthread = std::thread([this](){run();});
+</pre>
+</section><section class="subsection">
+<h3 id="a0000000057">3.3.2 Lifetime of a thread</h3>
+<p>
+ Threads terminate simply once the worker has finished its job. To tell the client that a thread has finished you can use a <i class="slshape">callback</i> to trigger an event. 
+</p>
+<p>
+Sometimes it’s important to wait for the termination of the thread, for example when your whole program is terminating or when you stop an endless loop in a thread. To wait for the termination of the thread use the “join()” method: 
+</p>
+<pre class="verbatim">
+        void stop() {
+                uthread.join();
+        }
+</pre>
+<p>
+ In a realtime system <span class="ttfamily">join</span> is most likely only needed when shutting down the program. 
+</p>
+</section><section class="subsection">
+<h3 id="a0000000058">3.3.3 Running/stopping workers with endless loops</h3>
+<p>
+ Threads with endless loops are often used in conjunction with blocking I/O which provide the timing: 
+</p>
+<pre class="verbatim">
+void run() {
+       running = true;
+       while (running) {
+              read(buffer); // blocking
+              doCallback(buffer); // hand data to client
+       }
+}
+</pre>
+<p>
+ Note the flag <span class="ttfamily">running</span> which is controlled by the main program and is set to zero to terminate the thread: 
+</p>
+<pre class="verbatim">
+        void stop() {
+                running = false; // &lt;----- HERE!!
+                uthread.join();
+        }
+</pre>
+<p>
+ Note that <span class="ttfamily">join()</span> is a blocking operation and needs to be used with care not to lock up the main program. You probably only need it when your program is terminating. See <a href="https://github.com/berndporr/rpi_AD7705_daq">https://github.com/berndporr/rpi_AD7705_daq</a> for an example. 
+</p>
+<p>
+If your program creates and joins several threads while executing, with care you might be able to design your program to allow an end-of-life thread to carry on tidying up in the background after you stop it by setting <span class="ttfamily">running = false;</span>. In this case only need execute <span class="ttfamily">join()</span> to be sure that the thread has finished. Joining a terminated thread is OK (the call just returns immediately) but you absolutely must not join a thread more than once, nor delete a thread until you’ve joined it. 
+</p>
+</section><section class="subsection">
+<h3 id="a0000000059">3.3.4 Timing within threads</h3>
+<p>
+ Threads are perfect to create timing without using <span class="ttfamily">sleep</span> commands with the help of <i class="slshape">blocking I/O</i>. Blocking I/O puts a thread to sleep and is woken up after new data has arrived or has been written to a device. Blocking I/O won’t consume any CPU power and is perfect to tell the kernel that it can execute other threads in the meantime. 
+</p>
+<section class="subsubsection">
+<h4 id="a0000000060">Timing with blocking I/O</h4>
+<p>
+ Blocking I/O (read, write, etc) <i class="slshape">is by far the best approach</i> to time the data coming in because the thread goes to sleep when it’s waiting for I/O but wakes up very quickly after new data has arrived. 
+</p>
+<p>
+In this example the blocking <span class="ttfamily">read</span> command creates the timing of the callback: 
+</p>
+<pre class="verbatim">
+void run() {
+       running = 1;
+       while (running) {
+              read(buffer); // blocking
+              doCallback(buffer); // hand data to client
+       }
+}
+</pre>
+<p>
+ If the I/O is non-blocking or if you are making blocking I/O non-blocking with: 
+</p>
+<pre class="verbatim">
+int flags = fcntl(fd, F_GETFL, 0);
+fcntl(fd, F_SETFL, flags | O_NONBLOCK);
+</pre>
+<p>
+ you can then use <span class="ttfamily">select()</span> which blocks on the file descriptor: 
+</p>
+<pre class="verbatim">
+FD_ZERO(&amp;rdset);
+FD_SET(fd,&amp;rdset);
+struct timeval timeout;
+timeout.tv_sec = 0;
+timeout.tv_usec = 500000;
+int ret = select(fd+1,&amp;rdset,NULL,NULL,&amp;timeout);
+if (ret &lt; 0) return ret;
+// non-blocking I/O read
+ret = read(fd,buffer,bytes_per_sample * n_chan);
+</pre>
+<p>
+ which has the advantage that it has a timeout so that you can create both error and data callbacks. Even if the I/O is blocking using select or poll has the advantage that these commands have timeouts while the read and write commands would block forever. This is also the recommended approach for libgpiod where the <span class="ttfamily">gpiod_line_event_wait</span> is not needed because <span class="ttfamily">gpiod_line_event_read</span> is blocking but would block indefinitely. 
+</p>
+</section>
+</section>
+</section><section class="section">
+<h2 id="a0000000061">3.4 Timing with Linux timers</h2>
+<p>
+ If no timing info from the sensor is available one can use a timer as a last resort. Under Linux reliable timing can be again created with the help of blocking I/O and threads. Here, a special file descriptor receives information when a timer has fired first and at which intervals after: 
+</p>
+<pre class="verbatim">
+fd = timerfd_create(CLOCK_MONOTONIC, 0);
+its.it_value.tv_sec = millisecs / 1000;
+its.it_value.tv_nsec = (millisecs % 1000) * 1000000;
+its.it_interval.tv_sec = millisecs / 1000;
+its.it_interval.tv_nsec = (millisecs % 1000) * 1000000;
+if (timerfd_settime(fd, 0, &amp;its, NULL) == -1)
+  throw("Could not start timer");
+</pre>
+<p>
+ This file descriptor is then used in a loop with a blocking <span class="ttfamily">read</span> command which then wakes up at the specified intervals: 
+</p>
+<pre class="verbatim">
+running = true;
+while (running) {
+  uint64_t exp;
+  read(fd, &amp;exp, sizeof(uint64_t));
+  timerEvent();
+}
+</pre>
+<p>
+ where <span class="ttfamily">timerEvent</span> is as usual the callback which is called at the specified intervals. 
+</p>
+<p>
+However, generally it’s <i class="slshape">not recommended</i> to use timers for anything which needs to be sampled at high temporal precision, for example ADC converters or sensors with sampling rates higher than a few Hz. 
+</p>
+</section><section class="section">
+<h2 id="a0000000062">3.5 Conclusion</h2>
+<p>
+ Threads play a central role in real-time coding as, together with blocking I/O, they establish the callback interfaces. Every event handler runs in a separate thread. 
+</p>
+<p>
+Callbacks are also used to signal the termination of threads, which shows again the close relationship between threads and callbacks. 
+</p>
+</section><!-- Latex Chapter/Part -->
+<h1 id="qt">4 Realtime/event processing within the Graphical User Interface Qt</h1>
+<section class="section">
+<h2 id="a0000000063">4.1 Introduction</h2>
+<p>
+<b class="bfseries">Qt</b> is a cross-platform windows development environment for Linux, Windows and Mac. Such graphical user interfaces have realtime requirements because, for example, pressing a button should trigger an instant response by the application so that the user thinks this has been instantaneous. QT also works with callbacks as introduced above but they are wrapped in a QT-specific signal/slot concept. 
+</p>
+<p>
+Elements in Qt are <i class="slshape">Widgets</i> which can contain anything form plots, buttons or text fields. They are classes. You can define your own widgets or use ready-made ones. Realtime communication within QT happens between widgets where then one widget calls another widget, for example a button the calls the main window if a button press has happened. 
+</p>
+<figure id="qwtex">
+<div class="centered"> <div class="mbox" id="a0000000064" style="width: "><img alt="\includegraphics[width=0.5\textwidth ]{qwtex}" src="images/img-0001.png" style="width:234.8775pt"/></div> </div>
+<figcaption>
+<span class="caption_title">Figure</span>
+<span class="caption_ref">4.1</span>
+<span class="caption_text">QT example layout </span>
+</figcaption>
+</figure>
+<p>
+The arrangements of widgets on the screen is managed by layouts. There are different ways of declaring layout in Qt. One is using a markup language which then has matching classes; another is creating to use only C++ classes. We show how to organise the layout using the second method. This avoids having the learn an additional language and is consistent with the general trend to use code to declare the layout in this and other frameworks (<b class="bfseries">SwiftUI</b>, for example). 
+</p>
+<p>
+This is an example how widgets are organised into nested vertical and horizontal layouts (see Fig. <a class="ref" href="#qwtex">4.1</a> for the result). 
+</p>
+<pre class="verbatim">
+// create 3 widgets
+button = new QPushButton;
+thermo = new QwtThermo; 
+plot = new QwtPlot;
+
+// vertical layout
+vLayout = new QVBoxLayout;
+vLayout-&gt;addWidget(button);
+vLayout-&gt;addWidget(thermo);
+
+// horizontal layout
+hLayout = new QHBoxLayout;
+hLayout-&gt;addLayout(vLayout);
+hLayout-&gt;addWidget(plot);
+
+// main layout
+setLayout(hLayout);
+</pre>
+</section><section class="section">
+<h2 id="a0000000065">4.2 Callbacks in Qt</h2>
+<section class="subsection">
+<h3 id="a0000000066">4.2.1 Events from widgets</h3>
+<p>
+ In contrast to our low level callback mechanism using interfaces, Qt rather directly calls methods in classes. The problem is that function pointers cannot be directly used as a class has instance pointers to its local data. So a method of a class needs to be combined with the instance pointer. The Qt method “connect” does exactly that: 
+</p>
+<pre class="verbatim">
+connect(button, &amp;QPushButton::clicked,
+        this, &amp;Window::reset);
+</pre>
+<p>
+ The QPushButton instance <span class="ttfamily">button</span> has a method called <span class="ttfamily">clicked()</span> which is called whenever the user clicks on the button. This is then forwarded to the method <span class="ttfamily">reset()</span> in the application Widget. 
+</p>
+</section><section class="subsection">
+<h3 id="a0000000067">4.2.2 Plotting realtime data arriving via a callback</h3>
+<p>
+ The general idea is to store the real-time samples from a callback in a buffer and trigger a screen refresh at a lower rate. For example, we may choose to replot the samples in the buffer every 40 ms because that fast enough for the user, whereas plotting the whole buffer every sample would be too CPU-intensive. 
+</p>
+<p>
+A callback <span class="ttfamily">addSample()</span> is called in real-time whenever a sample has arrived: 
+</p>
+<pre class="verbatim">
+void Window::addSample( float v ) {
+    // add the new input to the plot
+    std::move( yData, yData + plotDataSize - 1, yData+1 );
+    yData[0] = v;
+}
+</pre>
+<p>
+ which stores the sample <span class="ttfamily">v</span> in the shift buffer <span class="ttfamily">yData</span>. 
+</p>
+<p>
+Then the screen refresh (which is slow) is done at a lower and unreliable rate: 
+</p>
+<pre class="verbatim">
+void Window::timerEvent( QTimerEvent * )
+{
+    curve-&gt;setSamples(xData, yData, plotDataSize);
+    plot-&gt;replot();
+    thermo-&gt;setValue( yData[0] );
+    update();
+}
+</pre>
+<p>
+<span class="ttfamily">update()</span> in the timer event-handler generates a paint event and Qt then invokes the repaint handler “as soon as possible” (which is to say, not in real-time) to repaint the canvas of the widget: 
+</p>
+<pre class="verbatim">
+void ScopeWindow::paintEvent(QPaintEvent *) {
+        QPainter paint( this );
+
+        paint.drawLine( ... )
+}
+</pre>
+<p>
+Note that neither the timer nor the <span class="ttfamily">update()</span> function is called in a reliable way but whenever Qt chooses to do it. So Qt timers cannot be used to sample data but should only be used for screen refresh and other non-time-critical reasons. 
+</p>
+</section>
+</section><section class="section">
+<h2 id="a0000000068">4.3 Conclusion</h2>
+<p>
+ Events in Qt are generated by user interaction, for example a button press or moving the mouse. As before Qt provides a callback mechanism via the <span class="ttfamily">connect()</span> method. Callbacks from Qt timers may be used for animations but must not be used for real-time events as Qt timers won’t guarantee a reliable timing. 
+</p>
+</section><!-- Latex Chapter/Part -->
+<h1 id="a0000000069">5 Realtime publisher-subscriber communication with DDS</h1>
+<figure id="dds1">
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{fastdds1}" src="images/img-0003.svg" style="width:469.755pt"/> </div>
+<figcaption>
+<span class="caption_title">Figure</span>
+<span class="caption_ref">5.1</span>
+<span class="caption_text">FastDDS.</span>
+</figcaption>
+</figure>
+<p>
+So far communication has only been between classes within the same program on the same computer. However, often data needs to be transmitted in realtime over a network. The Data Distribution Service (DDS) is a middleware protocol and API which has been developed to provide reliable and low-latency publisher-subscriber communication (see Fig. <a class="ref" href="#dds1">5.1</a>): a publisher sends a message (here a C++ <span class="ttfamily">struct</span>) through a communcation channel which is called a “topic”. The subscriber receives messages from all the topics to which it has subscribed, and then triggers callbacks delivering those messages. We focus on fastDDS which uses the RTPS (Real Time Publish Subscribe) protocol. It offers plug and play connectivity which won’t require to specify IP addresses in a local networks so that applications are automatically discovered. fastDDS is now the standard middleware of ROS2, the popular robotic operating system. 
+</p>
+<p>
+Here are the steps how to use fastDDS. A complete demo application is here: <a href="https://github.com/berndporr/fastdds_demo">https://github.com/berndporr/fastdds_demo</a>. 
+</p>
+<section class="section">
+<h2 id="a0000000070">5.1 Essential classes and their rôles</h2>
+<dl class="description">
+<dt>Domain</dt>
+<dd><p>
+refers to a collection of actors which publish and/or subscribe to topics. 
+</p>
+</dd>
+<dt>DomainParticipant</dt>
+<dd><p>
+is a factory class for publishers, subscribers and topics. 
+</p>
+</dd>
+<dt>Topic</dt>
+<dd><p>
+means a category of messages passed between actors in the domain. It’s the method by which a participant which receives messages may filter output only those that are relevant. 
+</p>
+</dd>
+<dt>Publisher</dt>
+<dd><p>
+participants send messages to every other participant which is listening for information on a given topic. 
+</p>
+</dd>
+<dt>Subscriber</dt>
+<dd><p>
+participants receieve messages on the topic(s) wo whcih they have subscribed. 
+</p>
+</dd>
+</dl>
+</section><section class="section">
+<h2 id="a0000000071">5.2 Define the data structure</h2>
+<p>
+The idea with fastDDS is to specify a data structure as a C++ style <span class="ttfamily">struct</span> which is then converted into header and cpp files. For example the template <span class="ttfamily">HelloWorldMsg.idl</span>: 
+</p>
+<pre class="verbatim">
+struct HelloWorldMsg
+{
+    unsigned long index;
+    string message;
+};
+</pre>
+<p>
+ contains an unsigned long int and a C++ string. This template file is then converted to C++ header and cpp files with the helper: 
+</p>
+<pre class="verbatim">
+fastddsgen HelloWorldMsg.idl
+</pre>
+<p>
+ which of course should be automated by your cmake build system. 
+</p>
+</section><section class="section">
+<h2 id="a0000000072">5.3 Publisher</h2>
+<p>
+ The Publisher wants to be able to send messages to every object that is subscribed to its topic. It has to do three things to achieve this: 
+</p>
+<ol class="enumerate" id="a0000000073">
+<li id="a0000000074" value="1">
+<p>
+Create a topic to which interested objects can subscribe; 
+</p>
+</li>
+<li id="a0000000075" value="2">
+<p>
+Create a <span class="ttfamily">Publisher</span> which is a factory class to create any required writers, callback handers etc.; and 
+</p>
+</li>
+<li id="a0000000076" value="3">
+<p>
+Use that Publisher to create a <span class="ttfamily">DataWriter</span> that actually sends messages on a particular topic. 
+</p>
+</li>
+</ol>
+<section class="subsection">
+<h3 id="a0000000077">5.3.1 Creating a Topic</h3>
+<p>
+<span class="ttfamily">Participant.create_topic</span> is used to associate the topic with the data structure which will be passed to that topic’s subscribers. The example program calls it like this: 
+</p>
+<pre class="verbatim">
+topic_ = participant_-&gt;create_topic("HelloWorldTopic",
+                                    "HelloWorldMsg",
+                                    TOPIC_QOS_DEFAULT);
+</pre>
+</section><section class="subsection">
+<h3 id="a0000000078">5.3.2 Creating a Publisher and a Writer</h3>
+<p>
+Message senders and receivers are created by a factory class, <span class="ttfamily">Publisher</span>. An instance of this class is required before any writers can be created. The <span class="ttfamily">Participant</span> can build Publishers for us using its <span class="ttfamily">create_datawriter</span> method. In the example program, it looks like this: 
+</p>
+<pre class="verbatim">
+publisher_ = participant_-&gt;create_publisher(PUBLISHER_QOS_DEFAULT,
+                                            nullptr);
+</pre>
+<p>
+ and with that Publisher, we can create a <span class="ttfamily">DataWriter</span>
+</p>
+<pre class="verbatim">
+writer_ = publisher_-&gt;create_datawriter(topic_,
+                                        DATAWRITER_QOS_DEFAULT,
+                                        &amp;listener_);
+</pre>
+</section><section class="subsection">
+<h3 id="a0000000079">5.3.3 Specifying the Writer’s callback function</h3>
+<p>
+<span class="ttfamily">listener_</span>, the third argument to the <span class="ttfamily">create_datawriter</span> method above, is an object implementing the callback interface spefied by the <span class="ttfamily">DataWriterListener</span> class, specifically, the <span class="ttfamily">on_publication_matched</span> method. In the example, the private class <span class="ttfamily">PubListener</span> provides this functionality. When a subscriber registers to receive messages on the topic, this is the object which will be informed. As this is a minimalistic example, all that <span class="ttfamily">listener_</span> does is to maintain a thread-safe (“atomic”) integer which counts the number of subscribers as they connect and disconnect, and prints messages to the console as they do so. Refer to the <a href="https://github.com/berndporr/fastdds_demo/blob/main/HelloWorldPublisher.cpp#L50">source code</a> in the example to see how it works. 
+</p>
+</section><section class="subsection">
+<h3 id="a0000000080">5.3.4 Sending messages</h3>
+<p>
+Having packaged this all in a class we can finally implement the method which publishes a message. The code in the example sends the <span class="ttfamily">HelloWorldMsg</span> referenced by <span class="ttfamily">hello</span> if any listners are subscribed. If there is none, it immediately returns false; otherwise it sends the message then returns true. 
+</p>
+<pre class="verbatim">
+class HelloWorldPublisher
+{
+    // ... the initialisation decribed above ... then
+    
+    //!Send a publication
+    bool publish(HelloWorldMsg&amp; hello)
+    {
+        if (listener_.matched_ &gt; 0)
+        {
+            writer_-&gt;write(&amp;hello);
+            return true;
+        }
+        return false;
+    }
+}
+</pre>
+</section>
+</section><section class="section">
+<h2 id="a0000000081">5.4 Subscriber</h2>
+<p>
+ Very similar to the publisher associate the topic with the data-structure: 
+</p>
+<pre class="verbatim">
+topic_ = participant_-&gt;create_topic("HelloWorldTopic",
+                                    "HelloWorldMsg",
+                                    TOPIC_QOS_DEFAULT);
+</pre>
+<p>
+Then create a subscriber: 
+</p>
+<pre class="verbatim">
+subscriber_ = participant_-&gt;create_subscriber(SUBSCRIBER_QOS_DEFAULT,
+                                              nullptr);
+</pre>
+<p>
+and finally the datareader: 
+</p>
+<pre class="verbatim">
+reader_ = subscriber_-&gt;create_datareader(topic_,
+                                         DATAREADER_QOS_DEFAULT,
+                                         &amp;listener_);
+</pre>
+<p>
+ where <span class="ttfamily">listener</span> is a callback interface which is called whenever data is available: 
+</p>
+<pre class="verbatim">
+class SubListener : public DataReaderListener {
+public:
+// callback
+void on_data_available(DataReader* reader) override {
+  SampleInfo info;
+  HelloWorldMsg hello;
+  if (reader-&gt;take_next_sample(&amp;hello, &amp;info) == ReturnCode_t::RETCODE_OK) {
+    if (info.valid_data) {
+      std::cout &lt;&lt; "Message: " &lt;&lt; hello.message()
+                               &lt;&lt; " with index: " &lt;&lt; hello.index()
+                               &lt;&lt; " RECEIVED." &lt;&lt; std::endl;
+    }
+  }
+}
+</pre>
+</section><!-- Latex Chapter/Part -->
+<h1 id="webserver">6 Realtime web server/client communication</h1>
+<section class="section">
+<h2 id="a0000000082">6.1 Introduction</h2>
+<p>
+There is a wide diversity of Web server / client applications ranging from shopping baskets on vendor sites to social media. 
+</p>
+<p>
+Generally it’s easy to create dynamic content (see PHP or nodejs) and this is well documented. However, feeding realtime data from C++ to a web page or realtime button presses back to C++ is a bit more difficult. 
+</p>
+<p>
+It’s important to recognise where <i class="slshape">events</i> are generated: it is always the client (web browser or mobile app) which triggers an event, be it sending data over to the server or requesting data. It’s always initiated by the client. 
+</p>
+</section><section class="section">
+<h2 id="a0000000083">6.2 REST</h2>
+<p>
+ The interface between a web client (browser or phone app) is usually implemented as a Representational State Transfer Architectural (REST) API by communicating via an URL on a web server. The requirements for this API are very general and won’t define the actual data format: 
+</p>
+<dl class="description">
+<dt>Uniform interface.</dt>
+<dd><p>
+Any device connecting to the URL should get the same reply. No matter if a web page or mobile phone requests the temperature of a sensor the returned format must always be the same. 
+</p>
+</dd>
+<dt>Client-server decoupling.</dt>
+<dd><p>
+The only information the client needs to know is the URL of the server to request data or send data. 
+</p>
+</dd>
+<dt>Statelessness.</dt>
+<dd><p>
+Each request needs to include all the information necessary and must not depend on previous requests. For example a request to a buffer must not alter the buffer but just read from it so that another user reading the buffer shortly after receives the same data. 
+</p>
+</dd>
+</dl>
+<p>
+ See <a href="https://www.ibm.com/cloud/learn/rest-apis">https://www.ibm.com/cloud/learn/rest-apis</a> for the complete list of REST design principles. 
+</p>
+</section><section class="section">
+<h2 id="a0000000084">6.3 Data format: JSON</h2>
+<p>
+ The most popular dataformat is JSON (<span class="ttfamily">application/json</span>) which is basically a map of (nestable) key/value pairs: 
+</p>
+<pre class="verbatim">
+{
+    temperature: [20, 21, 20, 19, 17],
+    steps: 100,
+    comment: "all good!"
+}
+</pre>
+<p>
+ Since JSON is human-readable text a web server can simply generate that text send it over via http or https. There is no difference except that the MIME format is application/json instead of html. 
+</p>
+</section><section class="section">
+<h2 id="a0000000085">6.4 Server</h2>
+<p>
+ On the Linux system a web server needs to be set up. There are a variety of different options available but we are focusing here on the ones which can be used for C++ communication (i.e. CGI). 
+</p>
+<section class="subsection">
+<h3 id="a0000000086">6.4.1 Web servers (http/https)</h3>
+<ul class="itemize" id="a0000000087">
+<li id="a0000000088">
+<p>
+NGINX: Easy to configure but very flexible web server. Pronounced “Engine-X”. 
+</p>
+</li>
+<li id="a0000000089">
+<p>
+Apache: Hard to configure but safe option 
+</p>
+</li>
+<li id="a0000000090">
+<p>
+lighttpd: Smaller web server with a small memory footprint. Pronounced “lighty”. 
+</p>
+</li>
+</ul>
+<p>
+ Note that it’s possible to run different web servers at the same time where they then act as proxies for a central web server visible to the outside world. In particular nginx makes it very easy to achieve this. 
+</p>
+<figure id="cgi">
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{restdataflow}" src="images/img-0004.svg" style="width:469.755pt"/> </div>
+<figcaption>
+<span class="caption_title">Figure</span>
+<span class="caption_ref">6.1</span>
+<span class="caption_text">FastCGI dataflow.</span>
+</figcaption>
+</figure>
+</section><section class="subsection">
+<h3 id="a0000000091">6.4.2 FastCGI</h3>
+<p>
+ FastCGI (see Fig <a class="ref" href="#cgi">6.1</a>) is written in C++ and generates the entire content of the http/https request. In particular here we generate JSON packets which can then be processed by client JavaScripts and vice versa. For realtime applications JSON transmission is perfect because the client-side JavaScript can request and receive JSON packages 
+</p>
+<p>
+A fast CGI program is a UNIX commandline program which communicates with the web server (nginx, Apache, …) via a UNIX socket which in turn is a pseudo file located in a temporary directory for example <span class="ttfamily">/tmp/sensorsocket</span>. 
+</p>
+<p>
+The web server then maps certain http/https requests to this socket. An example configuration for nginx looks like this: 
+</p>
+<pre class="verbatim">
+       location /sensor/ {
+          include        fastcgi_params;
+          fastcgi_pass   unix:/tmp/sensorsocket;
+        }
+</pre>
+<p>
+ If the user does a request via the URL <span class="ttfamily">www.mywebpage.com/sensor/</span> then nginx contacts the fastcgi program via this socket. The fastcgi program then needs to return the content. Internally this will be a C++ callback inside of the fastcgi program. 
+</p>
+<p>
+The C++ fastcgi API <a href="https://github.com/berndporr/fastcgi_json_cpp_api">https://github.com/berndporr/fastcgi_json_cpp_api</a> is wrapper around the quite cryptic fastcgi C library and we discuss its callback handlers now. 
+</p>
+</section><section class="subsection">
+<h3 id="a0000000092">6.4.3 Server \(\to \) client</h3>
+<p>
+ The fastCGI callback expects a JSON string (<span class="ttfamily">application/json</span>) with the data transmitted form the server to the client. Use the <span class="ttfamily">jsoncpp</span> library (standard debian/Ubuntu package) to create JSON. 
+</p>
+<pre class="verbatim">
+class JSONcallback : public JSONCGIHandler::GETCallback {
+public:
+/**
+* Gets the data and sends it to the webserver.
+* The callback creates two JSON entries. One with the
+* timestamp and an array of sensor readings.
+**/
+virtual std::string getJSONString() {
+  Json::Value root;
+  root["epoch"] = (long)time(NULL);
+  Json::Value values;
+  for(int i = 0; i &lt; datasink-&gt;values.size(); i++) {
+    values[i] = datasink-&gt;values[i];
+  }
+  root["values"]  = values;
+  Json::StreamWriterBuilder builder;
+  const std::string json_file = Json::writeString(builder, root);
+  return json_file;
+};
+</pre>
+</section><section class="subsection">
+<h3 id="a0000000093">6.4.4 Client \(\to \) server: POST</h3>
+<p>
+ Like in any GUI the client can press a button and create an event. Here, the server then receives the JSON data as a callback called “postArg”: 
+</p>
+<pre class="verbatim">
+virtual void postString(std::string postArg) {
+  const auto rawJsonLength = static_cast&lt;int&gt;(postArg.length());
+  JSONCPP_STRING err;
+  Json::Value root;
+  Json::CharReaderBuilder builder;
+  const std::unique_ptr&lt;Json::CharReader&gt; reader(builder.newCharReader());
+  reader-&gt;parse(postArg.c_str(), postArg.c_str() + rawJsonLength, &amp;root, &amp;err)
+  // do something with root
+}
+</pre>
+<p>
+ where <span class="ttfamily">root</span> is a <span class="ttfamily">std::map</span>. 
+</p>
+</section>
+</section><section class="section">
+<h2 id="a0000000094">6.5 Client code: javascript for websites</h2>
+<p>
+ Generally on the client side (= web page), HTML with embedded <i class="slshape">JavaScript</i> is used to generate realtime output/input without reloading the page. JavaScript is <i class="slshape">event driven</i> and has callbacks so it’s perfect for realtime applications. Use <span class="ttfamily">jQuery</span> to request and post JSON from/to the server. 
+</p>
+<p>
+For example here we request data from the server as a JSON packet every second: 
+</p>
+<pre class="verbatim">
+// callback when the JSON data has arrived
+function getterCallback(result) {
+  var temperatureArray = result.temperatures;
+  // plot the array here
+}
+
+// timer callback (same idea as in Qt to define a refresh rate)
+function getTemperature() {
+  // get the JSON data
+  $.getJSON("/data/:80",getterCallback);
+}
+
+// document ready callback
+function documentReady() {
+  // request new data from the server every second
+  window.intervalId = setInterval(getTemperature , 1000);
+}
+
+// called when the web page has been loaded
+$(document).ready( documentReady );
+</pre>
+<p>
+Mobile phone programming in JAVA, Kotlin or Swift is also purely callback driven as the JS code above and differs only in its syntax. 
+</p>
+</section><section class="section">
+<h2 id="a0000000095">6.6 Conclusion</h2>
+<p>
+ Events in web based communication are always triggered by the web browser or the mobile app in exactly the same way as Qt does it, for example by a button press. The same applies for animations where a client-side timer requests data from the server. Thus, these client side events either cause transmission of data from the web browser to the web server or request data from the web server. Nowadays the protocol is always http or https and a RESTful interface with JSON being the most popular data format. 
+</p>
+</section><!-- Latex Chapter/Part -->
+<h1 id="setters">7 Setters</h1>
+<p>
+ In Fig. <a class="ref" href="#gettersetters">1.2</a> we have seen that data flows from the sensors to the C++ classes via <i class="slshape">callbacks</i> then returns from the inner C++ classes to motor or display outputs is via <i class="slshape">setters</i>. Setters are also used for setting configuration parameters. 
+</p>
+<p>
+A setter is a simple method in a class, for example to set the speed of a motor: 
+</p>
+<pre class="verbatim">
+class Motor {
+  /**
+  * Set the Left Wheel Speed
+  * @param speed between -1 and +1
+  **/
+  void setLeftWheelSpeed(float speed);
+};
+</pre>
+<p>
+ Again as with callbacks it’s important to <i class="slshape">abstract</i> away from the hardware, for example normalising the speed of the motor between \(-1\) and \(+1\) and <i class="slshape">hiding</i> away the complexity of the PWM or GPIO ports in the class. 
+</p>
+<p>
+If a setter has more than one argument, in particular for configuration, it’s highly recommended to use a <i class="slshape">struct</i> to set the values. For example setting the parameters of the ADS1115: 
+</p>
+<pre class="verbatim">
+/**
+ * ADS1115 initial settings when starting the device.
+ **/
+struct ADS1115settings {
+
+	/**
+	 * I2C bus used (99% always set to one)
+	 **/
+	int i2c_bus = 1;
+
+	/**
+	 * I2C address of the ads1115
+	 **/
+	uint8_t address = DEFAULT_ADS1115_ADDRESS;
+};
+
+/**
+ * Starts the data acquisition in the background and the
+ * callback is called with new samples.
+ * \param settings A struct with the settings.
+ **/
+void start(ADS1115settings settings = ADS1115settings() );
+</pre>
+<p>
+If a setter sets large buffers then it’s highly recommended to allocate the memory in the constructor of the class and then call the setter by reference while running. Use array types which convey their length, for example std::array or a standard const array which implicitly carries their length. 
+</p>
+<p class="paragraph">
+<strong class="paragraph-title" id="a0000000096">Constant sampling rate output (audio, …)</strong>
+
+     There are many applications where the output device has a fixed sampling rate, for example digital to analogue converters. In this case the C++ driver class will again have a blocking write-loop periodically reading a buffer populated by the setter, which is ideally always ahead of time. You need to decide what happens if no fresh data has arrived, for example interpolating the output or putting it on hold. Of course you can also implement a callback by the audio write-loop to <i class="slshape">request</i> samples but ultimately the conflict between audio arriving and being dispatched needs to be resolved. 
+
+</p><section class="section">
+<h2 id="a0000000097">7.1 Conclusion</h2>
+<p>
+ Setters are simply methods which transmit an event back to the physical device. Setters should, as callbacks, always hide the low level complexity of the hardware device and receive normalised or physical units. 
+</p>
+<p>
+<br/>
+</p>
+</section><!-- Latex Chapter/Part -->
+<h1 id="a0000000098">A License</h1>
+<p>
+ This work is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License. To view a copy of this license, visit <a href="http://creativecommons.org/licenses/by-sa/4.0/">http://creativecommons.org/licenses/by-sa/4.0/</a> or send a letter to Creative Commons, PO Box 1866, Mountain View, CA. 
+</p>
+<footer id="footnotes">
+<h2 id="footnot_1">Footnotes</h2>
+<ol>
+<li id="a0000000037"><a aria-label="Jump to reference" class="footnote-jump" href="#a0000000037-reference">^</a> This code fragment’s use of designated initialisers officially requires C++2a, although most C++ compilers support it when compiling with older standards. In C it’s been fine for a while!</li>
+</ol>
+</footer>
+<script id="plastex-labels" type="application/json">{"timing": {"ref": "1.1", "url": "#timing"}, "gettersetters": {"ref": "1.2", "url": "#gettersetters"}, "drivers": {"ref": "2", "url": "#drivers"}, "videodesk": {"ref": "None", "url": "#videodesk"}, "spimodes": {"ref": "2.1", "url": "#spimodes"}, "threads": {"ref": "3", "url": "#threads"}, "qt": {"ref": "4", "url": "#qt"}, "qwtex": {"ref": "4.1", "url": "#qwtex"}, "dds1": {"ref": "5.1", "url": "#dds1"}, "webserver": {"ref": "6", "url": "#webserver"}, "cgi": {"ref": "6.1", "url": "#cgi"}, "setters": {"ref": "7", "url": "#setters"}}</script>
+    </article>
+
+        </main>
+
+		
+		<footer>
+	<hr>
+
+    <nav id="footer-nav">
+        <a href="#">Back to top</a>
+    </nav>
+
+    <div id="footer-text">
+        <p>Generated using <a target="_blank" href="https://chirun.org.uk">Chirun</a> v1.2.1, written by the Digital Learning Unit, School of Mathematics &amp; Statistics, Newcastle University</p>
+        <p>This page last generated: 2025-02-10</p>
+        
+        
+        
+    </div>
+</footer>
+		
+
+        
+
+        <svg
+   width="180"
+   height="180"
+   viewBox="0 0 180 180"
+   version="1.1"
+   id="icon-defs"
+   xml:space="preserve"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+>
+    <defs>
+        <g id="cog">
+            <path 
+                style="fill:currentColor;fill-opacity:1;stroke:none;stroke-width:2.91107"
+                d="m 97.752501,14.130132 -9.381402,13.321575 -0.875593,3.780985 0.153413,10.126218 -15.231962,2.683646 -3.320429,-9.569021 -2.115099,-3.246528 -13.372747,-9.313164 -6.817124,3.940185 1.375919,16.23265 1.756892,3.456901 6.623829,7.658625 -9.938582,11.848983 -8.693428,-5.196724 -3.712755,-1.125768 -16.226967,1.461225 -2.695014,7.397083 11.490766,11.553325 3.570636,1.518082 10.001112,1.609049 v 15.465082 l -10.001112,1.609049 -3.570636,1.51808 -11.490766,11.55333 2.695014,7.39707 16.226967,1.46124 3.712755,-1.12577 8.693428,-5.19673 9.938582,11.849 -6.623829,7.6586 -1.756892,3.4569 -1.375919,16.23267 6.817124,3.94017 13.372747,-9.31317 2.115099,-3.24651 3.320429,-9.56902 15.231962,2.68363 -0.153413,10.12623 0.875593,3.78099 9.381402,13.32157 7.749599,-1.37024 4.25858,-15.72665 -0.46624,-3.84919 -3.60472,-9.46099 13.3898,-7.73254 6.39641,7.85192 3.09872,2.33113 15.74934,4.17332 5.06027,-6.02683 -6.84557,-14.78849 -2.83716,-2.64385 -8.84125,-4.93518 5.28767,-14.532632 9.94426,1.910392 3.8777,-0.21038 14.74863,-6.925177 v -7.868995 l -14.74863,-6.925174 -3.8777,-0.210383 -9.94426,1.910392 -5.28767,-14.532629 8.84125,-4.935179 2.83716,-2.643849 6.84557,-14.788484 -5.06027,-6.026831 -15.74934,4.173298 -3.09872,2.331133 -6.39641,7.851938 -13.3898,-7.73254 3.60472,-9.460991 0.46624,-3.849211 -4.25858,-15.726624 z M 88.371099,75.44463 A 14.55537,14.55537 0 0 1 102.92647,90 14.55537,14.55537 0 0 1 88.371099,104.55537 14.55537,14.55537 0 0 1 73.815728,90 14.55537,14.55537 0 0 1 88.371099,75.44463 Z"
+            />
+        </g>
+        <g id="pdf">
+            <path
+                style="fill:var(--bg-colour);fill-opacity:1;fill-rule:nonzero;stroke:currentColor;stroke-width:5.73751;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+                d="m 115.96038,9.1011226 31.41471,31.7977544 m 0,11.232914 V 159.42386 c 0,6.35716 -5.11786,11.47502 -11.47502,11.47502 H 44.099928 c -6.35716,0 -11.475018,-5.11786 -11.475018,-11.47502 V 20.576141 c 0,-6.35716 5.117858,-11.4750184 11.475018,-11.4750184 h 71.860452 l -0.14159,20.0812814 c -0.0449,6.357008 5.11832,11.398586 11.47503,11.475018 l 20.08127,0.241455"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:4.74634;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="M 56.949794,109.50753 C 70.723931,123.86069 104.41318,45.431956 83.05466,47.805125 61.696136,50.178294 111.53269,116.62705 123.39853,100.01485 135.26439,83.402664 43.175657,95.15437 56.949794,109.50753 Z"
+            />
+        </g>
+        <g id="slides">
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,21.25 30,137.5"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="M 90,21.25 60,158.75"
+            />
+            <rect
+                style="fill:var(--bg-colour);fill-opacity:1;stroke:currentColor;stroke-width:10.4525;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+                width="119.79137"
+                height="82.273766"
+                x="30.104315"
+                y="36.476234"
+                ry="4.7737675"
+                rx="4.7737675"
+            />
+            <rect
+                style="fill:currentColor;fill-opacity:1;stroke:currentColor;stroke-width:5.90268;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+                width="140"
+                height="5.2262344"
+                x="20"
+                y="31.25"
+                ry="1.6724058"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,66.25 h 50"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,76.25 h 50"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,86.25 h 50"
+            />
+            <path
+                style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1"
+                d="m 90,56.25 h 50"
+            />
+            <path
+                style="fill:currentColor;fill-opacity:1;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+                d="M 80.000002,78.84906 A 20.099062,20.099062 0 0 1 67.592518,97.418172 20.099062,20.099062 0 0 1 45.688757,93.061243 20.099062,20.099062 0 0 1 41.331828,71.157482 20.099062,20.099062 0 0 1 59.90094,58.749998 V 78.84906 Z"
+            />
+        </g>
+
+        <g id="notebook">
+            <path
+                style="fill:var(--bg-colour);stroke:currentColor;stroke-width:4.964;stroke-linecap:butt;stroke-linejoin:round;paint-order:stroke fill markers;stroke-dasharray:none"
+                d="M 34.482063,31.89923 V 16.261703 c 0,-5.41792 4.36172,-9.7796397 9.77964,-9.7796397 H 135.7383 c 5.41792,0 9.77964,4.3617197 9.77964,9.7796397 V 163.7383 c 0,5.41792 -4.36172,9.77964 -9.77964,9.77964 H 44.261703 c -5.41792,0 -9.77964,-4.36172 -9.77964,-9.77964 v -23.96224"
+            />
+            <circle
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               cx="58.699139"
+               cy="59.503937"
+               r="3.8077738"
+            />
+            <circle
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               cx="113.59385"
+               cy="52.885151"
+               r="4.9348516"
+            />
+            <path
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               d="M 88.900432,54.782256 C 74.053011,55.067917 59.927013,65.025096 57.261258,76.89961 69.209289,67.830932 79.817786,64.804678 88.900432,64.855157 97.983077,64.804678 108.59157,67.830932 120.53961,76.89961 117.87385,65.025096 103.74785,55.067917 88.900432,54.782256 Z"
+           
+            />
+            <path
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               d="M 88.900432,121.58085 C 74.053011,121.29519 59.927013,111.33801 57.261258,99.46349 c 11.948031,9.06868 22.556528,12.09494 31.639174,12.04445 9.082643,0.0505 19.691138,-2.97577 31.639178,-12.04445 -2.66576,11.87452 -16.79176,21.8317 -31.639178,22.11736 z"
+              
+            />
+            <ellipse
+               style="fill:currentColor;stroke-width:9.43913;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill markers"
+               cx="63.813011"
+               cy="125.96338"
+               rx="6.4332962"
+               ry="6.4347191"
+            />
+            <path
+                style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+                d="m 28,40 c 2.806997,-4.320074 9.452509,-3.66881 12,0"
+            />
+            <path
+                style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+                d="M 34,46.266514 V 62.316215"
+            
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="m 28,71.583335 c 2.806997,-4.320073 9.452509,-3.668809 12,0"
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="M 34,77.849849 V 93.89955"
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="m 28,103.16667 c 2.806997,-4.320071 9.452509,-3.668807 12,0"
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:butt;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="m 34,109.43318 v 16.0497"
+            />
+            <path
+             style="fill:none;fill-opacity:1;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke fill markers"
+             d="m 28,134.75 c 2.806997,-4.32007 9.452509,-3.66881 12,0"
+            />
+        </g>
+
+        <g id="fullscreen">
+            <path
+               style="fill:none;stroke:currentColor;stroke-width:10;stroke-dasharray:none;paint-order:stroke markers fill"
+               d="M 19.402776,9.9953678 H 160.51388 c 5.2117,0 9.40741,4.1957032 9.40741,9.4074042 V 160.51388 c 0,5.2117 -4.19571,9.40741 -9.40741,9.40741 H 19.402776 c -5.211704,0 -9.4074082,-4.19571 -9.4074082,-9.40741 V 19.402772 c 0,-5.211701 4.1957042,-9.4074042 9.4074082,-9.4074042 z" />
+            />
+            <path
+               style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+               d="M 150.95833,68.801471 V 28.958332 h -39.84314"
+            />
+            <path
+               style="fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+               d="m 28.958332,111.11519 v 39.84314 h 39.843139"
+            />
+        </g>
+    </defs>
+</svg>
+    </body>
+</html>
