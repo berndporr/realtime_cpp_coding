@@ -1015,9 +1015,10 @@ transmitted in realtime over a network. The Data Distribution Service
 (DDS) is a middleware protocol and API which has been developed to
 provide reliable and low-latency publisher-subscriber communication
 (see Fig.~\ref{dds1}): a publisher sends a message (here a
-C++ \texttt{struct}) through a communcation channel which is called
-``topic''. At the subscriber side this message is received via the topic and then triggers a callback
-delivering that message.  We focus on fastDDS which uses the
+C++ \texttt{struct}) through a communcation channel which is called a ``topic''.
+The subscriber receives messages from all the topics to which
+it has subscribed, and then triggers callbacks
+delivering those messages.  We focus on fastDDS which uses the
 RTPS (Real Time Publish Subscribe) protocol. It offers plug and play
 connectivity which won't require to specify IP addresses in a local
 networks so that applications are automatically discovered. fastDDS is
@@ -1025,6 +1026,20 @@ now the standard middleware of ROS2, the popular robotic operating
 system.
 
 Here are the steps how to use fastDDS. A complete demo application is here: \url{https://github.com/berndporr/fastdds_demo}.
+
+\section{Essential classes and their r\^oles}
+
+\begin{description}
+ \item[Domain] refers to a collection of actors which publish and/or subscribe to topics.
+ \item[DomainParticipant] is a factory class for publishers, subscribers and topics.
+ \item[Topic] means a category of messages passed between actors in the domain.
+  It's the method by which a participant which receives messages may filter output
+  only those that are relevant.
+ \item[Publisher] participants send messages to every other participant
+  which is listening for information on a given topic.
+ \item[Subscriber] participants receieve messages on the topic(s) wo whcih they have
+  subscribed.
+\end{description}
 
 \section{Define the data structure}
 
@@ -1046,34 +1061,71 @@ fastddsgen HelloWorldMsg.idl
 which of course should be automated by your cmake build system.
 
 \section{Publisher}
-Create a topic which associates the struct of the message with a human readable
-name:
+The Publisher wants to be able to send messages to every object that is
+subscribed to its topic. It has to do three things to achieve this:
+\begin{enumerate}
+ \item Create a topic to which interested objects can subscribe;
+ \item Create a \texttt{Publisher} which is a factory class to create any required
+  writers, callback handers etc.; and
+ \item Use that Publisher to create a \texttt{DataWriter} that actually
+  sends messages on a particular topic.
+\end{enumerate}
+
+\subsection{Creating a Topic}
+
+\texttt{Participant.create\_topic} is used to associate the topic with the
+data structure which will be passed to that topic's subscribers.
+The example program calls it like this:
 \begin{verbatim}
 topic_ = participant_->create_topic("HelloWorldTopic",
                                     "HelloWorldMsg",
                                     TOPIC_QOS_DEFAULT);
 \end{verbatim}
 
-create a publisher
+\subsection{Creating a Publisher and a Writer}
+
+Message senders and receivers  are created by a factory class, \texttt{Publisher}.
+An instance of this class is required before any writers can be created.
+The \texttt{Participant} can build Publishers for us using its \texttt{create\_datawriter}
+method. In the example program, it looks like this:
 \begin{verbatim}
 publisher_ = participant_->create_publisher(PUBLISHER_QOS_DEFAULT,
                                             nullptr);
 \end{verbatim}
-
-and with that the datawriter:
+and with that Publisher, we can create a \texttt{DataWriter}
 \begin{verbatim}
 writer_ = publisher_->create_datawriter(topic_,
                                         DATAWRITER_QOS_DEFAULT,
                                         &listener_);
 \end{verbatim}
-where the \texttt{listener\_} is a callback interface derived from \texttt{DataWriterListener}
-which signals when a subscriber has been found matching the topic.
 
-Package this all in a class which publishes the message \texttt{HelloWorldMsg}:
+\subsection{Specifying the Writer's callback function}
+
+\texttt{listener\_}, the third argument to the \texttt{create\_datawriter} method
+above, is an object implementing the callback interface
+spefied by the \texttt{DataWriterListener} class, specifically,
+the \texttt{on\_publication\_matched} method. In the example,
+the private class \texttt{PubListener} provides this functionality.
+When a subscriber registers to receive messages on the topic, this is the object
+which will be informed. As this is a minimalistic example, all that
+\texttt{listener\_} does is to maintain a thread-safe (``atomic'') integer
+which counts the number of subscribers as they connect and disconnect,
+and prints messages to the console as they do so. Refer to the
+\href{https://github.com/berndporr/fastdds_demo/blob/main/HelloWorldPublisher.cpp#L50}{source code} in the example to see how it works.
+
+\subsection{Sending messages}
+
+Having packaged this all in a class we can finally implement the method
+which publishes a message. The code in the example sends the
+\texttt{HelloWorldMsg} referenced by \texttt{hello} if any listners are
+subscribed. If there is none, it immediately returns false; otherwise
+it sends the message then returns true.
 
 \begin{verbatim}
 class HelloWorldPublisher
 {
+    // ... the initialisation decribed above ... then
+    
     //!Send a publication
     bool publish(HelloWorldMsg& hello)
     {
@@ -1086,7 +1138,6 @@ class HelloWorldPublisher
     }
 }
 \end{verbatim}
-whenever \texttt{publish} is called.
 
 
 \section{Subscriber}
