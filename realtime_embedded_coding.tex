@@ -1146,7 +1146,7 @@ to subscribe to that topic. The process of creating
 a subscriber is similar to creating a publisher.:
 
 \begin{enumerate}
- \item Create the participant that will itneract with the topic;
+ \item Create the participant that will interact with the topic;
  \item Register the data type which the topic uses for its messages;
  \item Ask the participant to create a subscriber to that topic;
  \item Register the callback by creating a \texttt{DataReader} which
@@ -1154,8 +1154,8 @@ a subscriber is similar to creating a publisher.:
 \end{enumerate}
 
 \subsection{Implementation}
-The relevant code from the example which sets up the infrasrtucture reads
-very similarly to the pubisher, except that of course the participant is used
+The relevant code from the example which sets up the infrastructure reads
+very similarly to the publisher, except that of course the participant is used
 to create subscriber rather than a writer:
 \begin{verbatim}
 topic_ = participant_->create_topic("HelloWorldTopic",
