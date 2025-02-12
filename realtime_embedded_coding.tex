@@ -1141,26 +1141,42 @@ class HelloWorldPublisher
 
 
 \section{Subscriber}
-Very similar to the publisher associate the topic with the data-structure:
+The program which wants to receive data on a particular topic needs
+to subscribe to that topic. The process of creating
+a subscriber is similar to creating a publisher.:
+
+\begin{enumerate}
+ \item Create the participant that will itneract with the topic;
+ \item Register the data type which the topic uses for its messages;
+ \item Ask the participant to create a subscriber to that topic;
+ \item Register the callback by creating a \texttt{DataReader} which
+  implements the \texttt{DataReaderListener} interface.
+\end{enumerate}
+
+\subsection{Implementation}
+The relevant code from the example which sets up the infrasrtucture reads
+very similarly to the pubisher, except that of course the participant is used
+to create subscriber rather than a writer:
 \begin{verbatim}
 topic_ = participant_->create_topic("HelloWorldTopic",
                                     "HelloWorldMsg",
                                     TOPIC_QOS_DEFAULT);
-\end{verbatim}
-
-Then create a subscriber:
-\begin{verbatim}
 subscriber_ = participant_->create_subscriber(SUBSCRIBER_QOS_DEFAULT,
                                               nullptr);
-\end{verbatim}
-
-and finally the datareader:
-\begin{verbatim}
 reader_ = subscriber_->create_datareader(topic_,
                                          DATAREADER_QOS_DEFAULT,
                                          &listener_);
 \end{verbatim}
-where \texttt{listener} is a callback interface which is called whenever data is available:
+
+\subsection{Receiving data}
+\texttt{listener\_} in the publishing application was a callback object which was
+called whenever a subscriber joined or left the topic. In the subscribing application
+it is a callback object which receives data on the topic from a writer
+whenever any becomes available. It does this by having its
+\texttt{on\_data\_available} method called. This method will
+invoke the Reader's \texttt{take\_next\_sample} method to acquire the
+incoming message data and information, and processes it
+however the receiving program requires. In the example we just print it out.
 \begin{verbatim}
 class SubListener : public DataReaderListener {
 public:
