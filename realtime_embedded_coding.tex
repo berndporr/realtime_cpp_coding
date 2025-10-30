@@ -40,7 +40,7 @@
 
 Realtime embedded coding is all about \textsl{events}.
 These can be a binary signal such as somebody opening a door or
-an ADC signalling that a sample is ready to be picked up.
+a sensor signalling that a sample is ready to be picked up.
 Fig.~\ref{timing} shows the basic dataflow and how event timing is
 established: devices by themselves have event signals such as ``data
 ready'' or ``crash sensor has been triggered''. The Linux kernel receives
@@ -133,10 +133,72 @@ particular:
 
 
 \section{Callbacks between C++ classes}
-Events between C++ classes are transmitted via callbacks.
-There are different ways of tackling the issue of callbacks but the
-most effective way is defining a method in an \textsl{interface class} as \textsl{abstract} and asking the
-client class to implement it in a derived class.
+Events between C++ classes are transmitted via callbacks. This is basically a
+publisher / subscriber framework.
+There are different ways of tackling the issue of callbacks and we are presenting
+two approaches: functor and interface classes.
+
+\subsection{\texttt{std::function} (functors)}
+Here, the publishing class directly has a fuctor object of type \textsl{std::function}
+from the standard template class.
+A functor typically stores lambda functions which
+are here the glue between the publisher and subscriber(s). We use as an example
+an ADC which wants to publish its voltage readings via a callback, implemented with
+a functor.
+See \url{https://github.com/berndporr/rpi_ads1115} for the complete example.
+\paragraph{Publishing class}
+In the publisher class we define its type as:
+\begin{verbatim}
+using ADSCallbackInterface = std::function<void(float)>;
+\end{verbatim}
+which defines a functor which receives the voltage reading of the ADC as a float.
+Within the ADC class we create an instance variable:
+\begin{verbatim}
+class ADS1115rpi {
+  ...
+ADSCallbackInterface adsCallbackInterface;
+
+void registerCallback(ADSCallbackInterface ci) {
+	adsCallbackInterface = ci;
+  ...
+};
+\end{verbatim}
+which contains now the functor. This is called every time an ADC measurement has been taken.
+We also added the method \texttt{registerCallback} where we register a lambda function
+which the transmits the data to the subscriber.
+
+\paragraph{Subscriber}
+The class subscribing to the ADC simply needs to have a method which receives
+a floating point:
+\begin{verbatim}
+class ADS1115Printer {
+public:
+	virtual void hasADS1115Sample(float v) {
+		printf("%e\n",v);
+	}
+};
+\end{verbatim}
+which is here: \texttt{hasADS1115Sample} and just prints the ADC values as an example.
+
+\paragraph{Connecting publisher and subscriber: lambda function}
+In the main program we connect the publisher and subscriber with a
+lambda function:
+\begin{verbatim}
+ADS1115Printer ads1115Printer;
+ADS1115rpi ads1115rpi;
+ads1115rpi.registerCallback([&](float v){ads1115Printer.hasADS1115Sample(v);});
+\end{verbatim}
+The capture \texttt{\[\&\]} in the lambda function makes sure that \texttt{ads1115Printer}
+is available to the lambda function which then allows calling \texttt{hasADS1115Sample}
+of the instance \texttt{ads1115Printer} from the instance \texttt{ads1115rpi} and, thus,
+establishing elegantly the glue between these two classes. Adding more subscribers
+is now also straightforward.
+
+
+\subsection{Interface classes with abstract functions}
+Another popular approach is defining a method in an \textsl{interface
+  class} as \textsl{abstract} and asking the client class to implement
+it in a derived class.
 
 The callback is part of an interface class:
 \begin{verbatim}
@@ -150,31 +212,25 @@ The callback is part of an interface class:
 	virtual void hasADS1115Sample(float sample) = 0;
     };
 \end{verbatim}
-and then registering it in the main device driver class:
+and then registering a pointer to it:
 \begin{verbatim}
-    void registerCallback(ADSCallbackInterface* ci) {
-	adsCallbackInterfaces.push_back(ci);
-    }
+...
+
+ADSCallbackInterface* adsCallbackInterface;
+
+void registerCallback(ADSCallbackInterface* ci) {
+  adsCallbackInterface = ci;
+}
+...
 \end{verbatim}
-where \texttt{adsCallbackInterfaces} is a \texttt{std::vector} of containing instances of
+where \texttt{adsCallbackInterface} is a pointer of type
 \texttt{ADSCallbackInterface}.
 
-This then allows the C++ class to transmit an event to the receiving classes by looping through
-the interface pointers:
-\begin{verbatim}
-for(auto &cb: adsCallbackInterfaces) {
-    cb->hasADS1115Sample(v);
-}
-\end{verbatim}
-
-See \url{https://github.com/berndporr/rpi_ads1115} for a complete example.
-
-Note that an interface can also be defined by \texttt{std::function} but this is a lot
-slower than using interfaces. The reason is that interfaces are standard C++ and the
-compiler can optimise these constructs while \texttt{std::function} does a lot of trickery
-behind the scenes which a compiler won't understand and thus won't be able to optimise.
-The other reason why \texttt{std::function} is discouraged is the difficulty to provide
-proper documentation for the function arguments and return values.
+Thus, the glue between publisher and subscriber is established by
+creating an abstract type in the publisher with the help of a
+an abstract method which then needs to be implemented in the subscribing
+class. This is a very efficient way and the pure C++ way. However,
+it requires pointers which might pose a safety risk.
 
 \subsection{Callback arguments}
 Above the callbacks just delivered one floating point value. However,
