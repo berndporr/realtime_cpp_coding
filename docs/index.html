@@ -7,53 +7,53 @@
             <meta name="robots" content="noindex">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <meta name="author" content="Bernd Porr" />
-            <meta name="date" content="2025-10-30" />
+            <meta name="date" content="2025-11-08" />
         
 
         <title>realtime_embedded_coding | Realtime embedded coding in C++ under Linux</title>
 
         
-            <link rel="icon" type="image/png" href="static/favicon.png?build_time=1761814101.33249"/>
+            <link rel="icon" type="image/png" href="static/favicon.png?build_time=1762599925.545688"/>
         
 
         
     
     
-            <link rel="stylesheet" href="static/styles.css?build_time=1761814101.33249">
+            <link rel="stylesheet" href="static/styles.css?build_time=1762599925.545688">
             
             
         
-    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1761814101.33249">
+    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1762599925.545688">
 
-    <link rel="stylesheet" href="static/print.css?build_time=1761814101.33249">
+    <link rel="stylesheet" href="static/print.css?build_time=1762599925.545688">
 
 
         
     
 			<script>
-				var chirun_static_url = new URL('static?build_time=1761814101.33249', location.href);
+				var chirun_static_url = new URL('static?build_time=1762599925.545688', location.href);
 			</script>
 
             
-                <script defer src="static/mathjax_config.js?build_time=1761814101.33249"></script>
+                <script defer src="static/mathjax_config.js?build_time=1762599925.545688"></script>
                 <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
             
 
-            <script type="module" src="static/localisation.js?build_time=1761814101.33249"></script>
+            <script type="module" src="static/localisation.js?build_time=1762599925.545688"></script>
 
-            <script defer src="static/customisation.js?build_time=1761814101.33249"></script>
+            <script defer src="static/customisation.js?build_time=1762599925.545688"></script>
 
             
 
             
         
-    <script defer src="static/code.js?build_time=1761814101.33249" type="module"></script>
-    <script defer src="static/embed_numbas.js?build_time=1761814101.33249" type="module"></script>
-    <script defer src="static/embed_qrcode.js?build_time=1761814101.33249" type="module"></script>
+    <script defer src="static/code.js?build_time=1762599925.545688" type="module"></script>
+    <script defer src="static/embed_numbas.js?build_time=1762599925.545688" type="module"></script>
+    <script defer src="static/embed_qrcode.js?build_time=1762599925.545688" type="module"></script>
 
 
         <template id="runnable-code-template">
-            <link rel="stylesheet" href="static/code.css?build_time=1761814101.33249">
+            <link rel="stylesheet" href="static/code.css?build_time=1762599925.545688">
             <div class="runnable-code-wrapper">
                 <section class="fullscreenable code">
                     <div id="code"></div>
@@ -234,7 +234,7 @@
         </template>
 
         <template id="embed-numbas-template">
-            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1761814101.33249">
+            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1762599925.545688">
             <details id="wrapper" data-completion-status="incomplete">
                 <summary>
                     <h1 id="title">Test Yourself</h1>
@@ -257,143 +257,167 @@
 
         <a class="skip-to-content-link" href="#main-content">Skip to content</a>
         
-            <form id="display-options">
-    <div class="buttons">
-        <button type="button" id="reset-display-options">Reset to defaults</button>
+            <dialog id="display-options">
+    <form>
+        <div class="buttons">
+            <button type="button" id="reset-display-options">Reset to defaults</button>
 
-        <a href="https://chirun.org.uk/accessibility-statement/material">Accessibility statement</a>
+            <a href="https://chirun.org.uk/accessibility-statement/material">Accessibility statement</a>
 
-        <button type="button" aria-controls="display-options" aria-expanded="false">
-            Close
-        </button>
-    </div>
-
-    <div class="inputs">
-        <div class="input-group">
-            <label for="display-options-font-scale">
-                Text size
-            </label>
-            <input type="range" min="50" max="600" step="5" value="100" id="display-options-font-scale">
-            <output for="display-options-font-scale">100%</output>
+            <button autofocus type="button" aria-controls="display-options">
+                Close
+            </button>
         </div>
 
-        <div class="input-group">
-            <label for="display-options-spacing-factor">
-                Spacing
-            </label>
-            <input type="range" min="0" max="1200" step="5" value="100" id="display-options-spacing-factor">
-            <output for="display-options-spacing-factor">100%</output>
+        <div class="inputs">
+            <div class="input-group">
+                <label for="display-options-font-scale">
+                    Text size
+                </label>
+                <input name="font-scale" type="range" min="50" max="600" step="5" value="100" id="display-options-font-scale">
+                <output for="display-options-font-scale">100%</output>
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-font-weight">
+                    Text weight
+                </label>
+                <input name="font-weight" type="range" min="200" max="800" step="100" value="400" id="display-options-font-weight">
+                <output for="display-options-font-weight">400</output>
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-spacing-factor">
+                    Spacing
+                </label>
+                <input name="spacing-factor" type="range" min="0" max="1200" step="5" value="100" id="display-options-spacing-factor">
+                <output for="display-options-spacing-factor">100%</output>
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-font-family">
+                    Text font
+                </label>
+                <select name="font-family" id="display-options-font-family">
+                    <option value="var(--sans-serif-font)" selected>Sans-serif</option>
+                    <option value="var(--serif-font)">Serif</option>
+                    <option value="Atkinson Hyperlegible Next">Atkinson Hyperlegible</option>
+                    <option value="Comic Sans MS">Comic Sans</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="display-options-colour-scheme">
+                    Colour scheme
+                </label>
+                <select name="colour-scheme" id="display-options-colour-scheme">
+                    <option value="auto" selected>Automatic (default)</option>
+                    <option value="light">Black text on white</option>
+                    <option value="dark">White text on black</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </div>
+
+            <section id="custom-colour-scheme-options" class="inputs">
+                <div class="input-group">
+                    <label for="display-options-text-colour">
+                        Text colour
+                    </label>
+                    <input name="text-colour" type="color" value="#000000" id="display-options-text-colour">
+                </div>
+
+                <div class="input-group">
+                    <label for="display-options-link-colour">
+                        Link colour
+                    </label>
+                    <input name="link-colour" type="color" value="#0000ee" id="display-options-link-colour">
+                </div>
+
+                <div class="input-group">
+                    <label for="display-options-bg-colour">
+                        Background colour
+                    </label>
+                    <input name="bg-colour" type="color" value="#ffffff" id="display-options-bg-colour">
+                </div>
+
+                <div class="input-group">
+                    <label for="display-options-bg-colour-off">
+                        Muted background colour
+                    </label>
+                    <input name="bg-colour-off" type="color" value="#eeeeee" id="display-options-bg-colour-off">
+                </div>
+
+                <div class="input-group">
+                    <label for="display-options-bg-colour-accent-1">
+                        Accent colour 1
+                    </label>
+                    <input name="bg-colour-accent-1" type="color" value="#4caf50" id="display-options-bg-colour-accent-1">
+                </div>
+
+                <div class="input-group">
+                    <label for="display-options-bg-colour-accent-2">
+                        Accent colour 2
+                    </label>
+                    <input name="bg-colour-accent-2" type="color" value="#f6f6ff" id="display-options-bg-colour-accent-2">
+                </div>
+
+                <div class="input-group">
+                    <label for="display-options-bg-colour-accent-3">
+                        Accent colour 3
+                    </label>
+                    <input name="bg-colour-accent-3" type="color" value="#eeffd3" id="display-options-bg-colour-accent-3">
+                </div>
+
+                <div class="input-group">
+                    <label for="display-options-bg-colour-accent-4">
+                        Accent colour 4
+                    </label>
+                    <input name="bg-colour-accent-4" type="color" value="#ffeeee" id="display-options-bg-colour-accent-4">
+                </div>
+            </section>
+
+            <section id="filter-colour-scheme-options" class="inputs">
+                <div class="input-group">
+                    <label for="display-options-filter-sepia">
+                        Sepia filter
+                    </label>
+                    <input name="filter-sepia" type="range" min="0" max="100" step="1" value="0" id="display-options-filter-sepia">
+                    <output for="display-options-filter-sepia">0%</output>
+                </div>
+
+                <div class="input-group">
+                    <label for="display-options-filter-hue-rotate">
+                        Rotate hues
+                    </label>
+                    <input name="filter-hue-rotate" type="range" min="0" max="1" step="0.01" value="0" id="display-options-filter-hue-rotate">
+                    <output for="display-options-filter-hue-rotate">0 turns</output>
+                </div>
+
+                <div class="input-group">
+                    <label for="display-options-invert-images">
+                        Invert images in dark mode
+                    </label>
+                    <input name="invert-images" type="checkbox" id="display-options-invert-images">
+                </div>
+
+            </section>
+
+
         </div>
 
-        <div class="input-group">
-            <label for="display-options-font-family">
-                Text font
-            </label>
-            <select id="display-options-font-family">
-                <option value="var(--sans-serif-font)" selected>Sans-serif</option>
-                <option value="var(--serif-font)">Serif</option>
-                <option value="Atkinson Hyperlegible">Atkinson Hyperlegible</option>
-                <option value="Comic Sans MS">Comic Sans</option>
-            </select>
-        </div>
-
-        <div class="input-group">
-            <label for="display-options-colour-scheme">
-                Colour scheme
-            </label>
-            <select id="display-options-colour-scheme">
-                <option value="auto" selected>Automatic (default)</option>
-                <option value="light">Black text on white</option>
-                <option value="dark">White text on black</option>
-                <option value="custom">Custom</option>
-            </select>
-        </div>
-
-        <section id="custom-colour-scheme-options" class="inputs">
-            <div class="input-group">
-                <label for="display-options-text-colour">
-                    Text colour
-                </label>
-                <input type="color" value="#000000" id="display-options-text-colour">
-            </div>
-
-            <div class="input-group">
-                <label for="display-options-link-colour">
-                    Link colour
-                </label>
-                <input type="color" value="#0000ee" id="display-options-link-colour">
-            </div>
-
-            <div class="input-group">
-                <label for="display-options-bg-colour">
-                    Background colour
-                </label>
-                <input type="color" value="#ffffff" id="display-options-bg-colour">
-            </div>
-
-            <div class="input-group">
-                <label for="display-options-bg-colour-off">
-                    Muted background colour
-                </label>
-                <input type="color" value="#eeeeee" id="display-options-bg-colour-off">
-            </div>
-
-            <div class="input-group">
-                <label for="display-options-bg-colour-accent-1">
-                    Accent colour 1
-                </label>
-                <input type="color" value="#4caf50" id="display-options-bg-colour-accent-1">
-            </div>
-
-            <div class="input-group">
-                <label for="display-options-bg-colour-accent-2">
-                    Accent colour 2
-                </label>
-                <input type="color" value="#f6f6ff" id="display-options-bg-colour-accent-2">
-            </div>
-
-            <div class="input-group">
-                <label for="display-options-bg-colour-accent-3">
-                    Accent colour 3
-                </label>
-                <input type="color" value="#eeffd3" id="display-options-bg-colour-accent-3">
-            </div>
-
-            <div class="input-group">
-                <label for="display-options-bg-colour-accent-4">
-                    Accent colour 4
-                </label>
-                <input type="color" value="#ffeeee" id="display-options-bg-colour-accent-4">
-            </div>
-        </section>
-
-        <section id="filter-colour-scheme-options" class="inputs">
-            <div class="input-group">
-                <label for="display-options-filter-sepia">
-                    Sepia filter
-                </label>
-                <input type="range" min="0" max="100" step="1" value="0" id="display-options-filter-sepia">
-                <output for="display-options-filter-sepia">0%</output>
-            </div>
-
-            <div class="input-group">
-                <label for="display-options-filter-hue-rotate">
-                    Rotate hues
-                </label>
-                <input type="range" min="0" max="1" step="0.01" value="0" id="display-options-filter-hue-rotate">
-                <output for="display-options-filter-hue-rotate">0 turns</output>
-            </div>
-
-            <div class="input-group">
-                <label for="display-options-invert-images">
-                    Invert images in dark mode
-                </label>
-                <input type="checkbox" id="display-options-invert-images">
-            </div>
-
-        </section>
-    </div>
-</form>
+        <details id="advanced">
+            <summary>Advanced options</summary>
+            <section id="custom-css-options" class="inputs">
+                <div class="input-group">
+                    <label for="display-options-custom-css">
+                        Custom CSS code
+                    </label>
+                    <textarea name="custom-css" id="display-options-custom-css"></textarea>
+                </div>
+            </section>
+        </details>
+    </form>
+</dialog>
         
 
         <header>
@@ -1165,7 +1189,7 @@
 <!-- Latex Chapter/Part -->
 <h1 id="a0000000002">1 Introduction</h1>
 <figure id="timing">
-<div class="centered"> <div class="mbox" id="a0000000003" style="width: "><img alt="\includegraphics[width=\textwidth ]{signals-timings}" src="images/img-0001.svg" style="width:469.755pt"/></div> </div>
+<div class="centered"> <div class="mbox" id="a0000000003" style="width: "><img alt="\includegraphics[width=\textwidth ]{signals-timings}" src="images/img-0001.svg?build_time=1762599925.531178" style="width:469.755pt"/></div> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">1.1</span>
@@ -1178,7 +1202,7 @@
 Realtime embedded coding is all about <i class="slshape">events</i>. These can be a binary signal such as somebody opening a door or a sensor signalling that a sample is ready to be picked up. Fig. <a class="ref" href="#timing">1.1</a> shows the basic dataflow and how event timing is established: devices by themselves have event signals such as “data ready” or “crash sensor has been triggered”. The Linux kernel receives these as interrupt callbacks. However, userspace has no direct interrupt mechanism; instead it has <i class="slshape">blocking I/O</i> where a read or write operation blocks until a kernel-side interrupt/event has happened. A blocking I/O call returning may then be translated to callbacks between classes by waking up threads. Data is transmitted back to the hardware via methods called “setters”, which change an object’s attributes and potentially do other processing. 
 </p>
 <figure id="gettersetters">
-<div class="centered"> <div class="mbox" id="a0000000005" style="width: "><img alt="\includegraphics[width=\textwidth ]{gettersetters}" src="images/img-0002.svg" style="width:469.755pt"/></div> </div>
+<div class="centered"> <div class="mbox" id="a0000000005" style="width: "><img alt="\includegraphics[width=\textwidth ]{gettersetters}" src="images/img-0002.svg?build_time=1762599925.531178" style="width:469.755pt"/></div> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">1.2</span>
@@ -1286,16 +1310,19 @@ public:
 ADS1115Printer ads1115Printer;
 ADS1115rpi ads1115rpi;
 ads1115rpi.registerCallback([&amp;](float v){ads1115Printer.hasADS1115Sample(v);});
-</pre> The capture <span class="ttfamily"><span class="dmath">\[ \&amp;  \]</span></span> in the lambda function makes sure that <span class="ttfamily">ads1115Printer</span> is available to the lambda function which then allows calling <span class="ttfamily">hasADS1115Sample</span> of the instance <span class="ttfamily">ads1115Printer</span> from the instance <span class="ttfamily">ads1115rpi</span> and, thus, establishing elegantly the glue between these two classes. Adding more subscribers is now also straightforward. 
+</pre> The capture <span class="ttfamily">[&amp;]</span> in the lambda function makes sure that <span class="ttfamily">ads1115Printer</span> is available to the lambda function which then allows calling <span class="ttfamily">hasADS1115Sample</span> of the instance <span class="ttfamily">ads1115Printer</span> from the instance <span class="ttfamily">ads1115rpi</span> and, thus, establishing elegantly the glue between these two classes. Adding more subscribers is now also straightforward. 
 
 </p>
 </section><section class="subsection">
 <h3 id="a0000000020">2.2.2 Interface classes with abstract functions</h3>
 <p>
- Another popular approach is defining a method in an <i class="slshape">interface class</i> as <i class="slshape">abstract</i> and asking the client class to implement it in a derived class. 
+ Another popular approach is creating an additional class as a glue between publisher and subscriber which is called <i class="slshape">interface class</i>: publisher \(\to \) interface \(\to \) subscriber. 
 </p>
 <p>
-The callback is part of an interface class: 
+This class has typically only one <i class="slshape">abstract</i> method which is the event callback and then needs to be implemented by the subscriber or containing a way of calling then the specific subscriber. 
+</p>
+<p>
+Practically, such an interface class looks like this: 
 </p>
 <pre class="verbatim">
   struct ADSCallbackInterface {
@@ -1309,7 +1336,20 @@ The callback is part of an interface class:
     };
 </pre>
 <p>
- and then registering a pointer to it: 
+ which contains the abstract method <span class="ttfamily">hasADS1115Sample(float sample) = 0;</span> which is then implemented by the subscriber. As an example the subscriber could just inherit the interface class and print <span class="ttfamily">sample</span>: 
+</p>
+<pre class="verbatim">
+class ADS1115Printer : public ADS1115rpi::ADSCallbackInterface {
+	virtual void hasADS1115Sample(float v) override {
+		printf("%e\n",v);
+	}
+};
+</pre>
+<p>
+ where here the abstract method is overloaded by a simple printer. This decouples the publisher and subscriber. 
+</p>
+<p>
+The publisher on the other hand receives a pointer to the instance of the interface: 
 </p>
 <pre class="verbatim">
 ...
@@ -1325,7 +1365,7 @@ void registerCallback(ADSCallbackInterface* ci) {
  where <span class="ttfamily">adsCallbackInterface</span> is a pointer of type <span class="ttfamily">ADSCallbackInterface</span>. 
 </p>
 <p>
-Thus, the glue between publisher and subscriber is established by creating an abstract type in the publisher with the help of a an abstract method which then needs to be implemented in the subscribing class. This is a very efficient way and the pure C++ way. However, it requires pointers which might pose a safety risk. 
+Thus, the glue between publisher and subscriber is established by creating an additional interface class which contains an abstract method which then needs to be implemented being useful to the subscriber class or is the subscriber itself as in this example. This is a very efficient way and the pure C++ way. However, it requires pointers which might pose a safety risk. 
 </p>
 </section><section class="subsection">
 <h3 id="a0000000021">2.2.3 Callback arguments</h3>
@@ -2056,7 +2096,7 @@ Callbacks are also used to signal the termination of threads, which shows again 
 Elements in Qt are <i class="slshape">Widgets</i> which can contain anything form plots, buttons or text fields. They are classes. You can define your own widgets or use ready-made ones. Realtime communication within QT happens between widgets where then one widget calls another widget, for example a button the calls the main window if a button press has happened. 
 </p>
 <figure id="qwtex">
-<div class="centered"> <div class="mbox" id="a0000000069" style="width: "><img alt="\includegraphics[width=0.5\textwidth ]{qwtex}" src="images/img-0001.png" style="width:234.8775pt"/></div> </div>
+<div class="centered"> <div class="mbox" id="a0000000069" style="width: "><img alt="\includegraphics[width=0.5\textwidth ]{qwtex}" src="images/img-0001.png?build_time=1762599925.531178" style="width:234.8775pt"/></div> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">4.1</span>
@@ -2154,7 +2194,7 @@ Note that neither the timer nor the <span class="ttfamily">update()</span> funct
 </section><!-- Latex Chapter/Part -->
 <h1 id="a0000000074">5 Realtime publisher-subscriber communication with DDS</h1>
 <figure id="dds1">
-<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{fastdds1}" src="images/img-0003.svg" style="width:469.755pt"/> </div>
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{fastdds1}" src="images/img-0003.svg?build_time=1762599925.531178" style="width:469.755pt"/> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">5.1</span>
@@ -2419,7 +2459,7 @@ lighttpd: Smaller web server with a small memory footprint. Pronounced “lighty
  Note that it’s possible to run different web servers at the same time where they then act as proxies for a central web server visible to the outside world. In particular nginx makes it very easy to achieve this. 
 </p>
 <figure id="cgi">
-<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{restdataflow}" src="images/img-0004.svg" style="width:469.755pt"/> </div>
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{restdataflow}" src="images/img-0004.svg?build_time=1762599925.531178" style="width:469.755pt"/> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">6.1</span>
@@ -2621,8 +2661,8 @@ If a setter sets large buffers then it’s highly recommended to allocate the me
     </nav>
 
     <div id="footer-text">
-        <p>Generated using <a target="_blank" href="https://chirun.org.uk">Chirun</a> v1.3.0, written by the Digital Learning Unit, School of Mathematics &amp; Statistics, Newcastle University</p>
-        <p>This page last generated: 2025-10-30</p>
+        <p>Generated using <a target="_blank" href="https://chirun.org.uk">Chirun</a> v1.4.0, written by the Digital Learning Unit, School of Mathematics &amp; Statistics, Newcastle University</p>
+        <p>This page last generated: 2025-11-08</p>
         
         
         

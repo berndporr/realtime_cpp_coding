@@ -188,7 +188,7 @@ ADS1115Printer ads1115Printer;
 ADS1115rpi ads1115rpi;
 ads1115rpi.registerCallback([&](float v){ads1115Printer.hasADS1115Sample(v);});
 \end{verbatim}
-The capture \texttt{\[\&\]} in the lambda function makes sure that \texttt{ads1115Printer}
+The capture \texttt{[\&]} in the lambda function makes sure that \texttt{ads1115Printer}
 is available to the lambda function which then allows calling \texttt{hasADS1115Sample}
 of the instance \texttt{ads1115Printer} from the instance \texttt{ads1115rpi} and, thus,
 establishing elegantly the glue between these two classes. Adding more subscribers
@@ -196,11 +196,15 @@ is now also straightforward.
 
 
 \subsection{Interface classes with abstract functions}
-Another popular approach is defining a method in an \textsl{interface
-  class} as \textsl{abstract} and asking the client class to implement
-it in a derived class.
+Another popular approach is creating an additional class as a glue between
+publisher and subscriber which is called \textsl{interface
+  class}: publisher $\to$ interface $\to$ subscriber.
 
-The callback is part of an interface class:
+This class has typically only one \textsl{abstract} method which is
+the event callback and then needs to be implemented by the subscriber or containing
+a way of calling then the specific subscriber.
+
+Practically, such an interface class looks like this:
 \begin{verbatim}
   struct ADSCallbackInterface {
 	    /**
@@ -212,7 +216,21 @@ The callback is part of an interface class:
 	virtual void hasADS1115Sample(float sample) = 0;
     };
 \end{verbatim}
-and then registering a pointer to it:
+which contains the abstract method \texttt{hasADS1115Sample(float sample) = 0;}
+which is then implemented by the subscriber.
+As an example the subscriber could just inherit the interface class and print \texttt{sample}:
+\begin{verbatim}
+class ADS1115Printer : public ADS1115rpi::ADSCallbackInterface {
+	virtual void hasADS1115Sample(float v) override {
+		printf("%e\n",v);
+	}
+};
+\end{verbatim}
+where here the abstract method is overloaded by a simple printer. This
+decouples the publisher and subscriber.
+
+The publisher on the other hand
+receives a pointer to the instance of the interface:
 \begin{verbatim}
 ...
 
@@ -227,9 +245,10 @@ where \texttt{adsCallbackInterface} is a pointer of type
 \texttt{ADSCallbackInterface}.
 
 Thus, the glue between publisher and subscriber is established by
-creating an abstract type in the publisher with the help of a
-an abstract method which then needs to be implemented in the subscribing
-class. This is a very efficient way and the pure C++ way. However,
+creating an additional interface class which contains
+an abstract method which then needs to be implemented being useful to the
+subscriber class or is the subscriber itself as in this example.
+This is a very efficient way and the pure C++ way. However,
 it requires pointers which might pose a safety risk.
 
 \subsection{Callback arguments}
