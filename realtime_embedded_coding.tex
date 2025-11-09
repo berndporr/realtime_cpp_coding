@@ -142,11 +142,11 @@ There are different ways of tackling the issue of callbacks and we are presentin
 two approaches: functor and interface classes.
 
 \subsection{\texttt{std::function} (functors)}
-Here, the publishing class directly has a fuctor object of type \textsl{std::function}
+Here, the publishing class directly has a functor object of type \textsl{std::function}
 from the standard template class.
-A functor typically stores lambda functions which
-are here the glue between the publisher and subscriber(s). We use as an example
-an ADC which wants to publish its voltage readings via a callback, implemented with
+A functor typically stores lambda functions. Here, these
+are the glue between the publisher and subscriber(s). We use as an example
+an ADC which publishes its voltage readings via a callback, implemented with
 a functor.
 See \url{https://github.com/berndporr/rpi_ads1115} for the complete example.
 \paragraph{Publishing class}
@@ -199,13 +199,12 @@ is now also straightforward.
 
 
 \subsection{Interface classes with abstract functions}
-Another popular approach is creating an additional class as a glue between
+Another popular approach is creating an \textsl{additional} class as the glue between
 publisher and subscriber which is called \textsl{interface
   class}: publisher $\to$ interface $\to$ subscriber.
 
-This class has typically only one \textsl{abstract} method which is
-the event callback and then needs to be implemented by the subscriber or containing
-a way of calling then the specific subscriber.
+This class has typically only one virtual \textsl{abstract} method which is
+the event callback and needs to be implemented by the subscriber.
 
 Practically, such an interface class looks like this:
 \begin{verbatim}
@@ -220,8 +219,10 @@ Practically, such an interface class looks like this:
     };
 \end{verbatim}
 which contains the abstract method \texttt{hasADS1115Sample(float sample) = 0;}
-which is then implemented by the subscriber.
-As an example the subscriber could just inherit the interface class and print \texttt{sample}:
+which must be implemented by the subscriber.
+In the simplest case the subscriber could just inherit the interface
+class and overloads \texttt{hasADS1115Sample},
+for example:
 \begin{verbatim}
 class ADS1115Printer : public ADS1115rpi::ADSCallbackInterface {
 	virtual void hasADS1115Sample(float v) override {
@@ -229,11 +230,11 @@ class ADS1115Printer : public ADS1115rpi::ADSCallbackInterface {
 	}
 };
 \end{verbatim}
-where here the abstract method is overloaded by a simple printer. This
-decouples the publisher and subscriber.
+where here the abstract method is overloaded by a simple printer. One could
+also keep the interface class separate from the subscriber class but adding
+a reference to the subscriber which is then called from \texttt{hasADS1115Sample}.
 
-The publisher on the other hand
-receives a pointer to the instance of the interface:
+The publisher on the other hand receives a pointer to the instance of the interface:
 \begin{verbatim}
 ...
 
@@ -247,12 +248,19 @@ void registerCallback(ADSCallbackInterface* ci) {
 where \texttt{adsCallbackInterface} is a pointer of type
 \texttt{ADSCallbackInterface}.
 
-Thus, the glue between publisher and subscriber is established by
-creating an additional interface class which contains
-an abstract method which then needs to be implemented being useful to the
-subscriber class or is the subscriber itself as in this example.
-This is a very efficient way and the pure C++ way. However,
-it requires pointers which might pose a safety risk.
+The main program then creates an instance of the publisher and an instance of the subscriber
+containing the interface:
+\begin{verbatim}
+ADS1115Printer ads1115Callback;
+ADS1115rpi ads1115rpi;
+ads1115rpi.registerCallback(&ads1115Callback);
+\end{verbatim}
+
+This is a very efficient way and the pure C++ way which can easily be optimised by the C++
+compiler. However, it's more difficult to have more than one subscriber which, for example,
+would require an array of subscribers in the publisher and is not very flexible. Lambda
+functions as callbacks offer a lot more flexible way and can easily call multiple subscribers
+without adding overhead to the publisher itself.
 
 \subsection{Callback arguments}
 Above the callbacks just delivered one floating point value. However,
@@ -276,9 +284,6 @@ class ADmulti {
         ...
 };
 \end{verbatim}
-Depending on your application,
-you might consider the values not useful individually and therefore prefer
-a \texttt{std::tuple}.
 \item Arrays: Use arrays which contain the length of the arrays:
   either std::array, std::vector, etc or const arrays and then
   references to these so that the callback knows the length.
@@ -315,16 +320,15 @@ In terms of \textsl{memory management}:
 
 
 \section{Low level userspace device access}
-The following sections provide pointers of how to write
-the C++ driver classes for different hardware protocols which then emit events via callback interfaces.
+The following sections we explain of how to write
+the C++ classes using different hardware protocols which then emit events via C++ callbacks.
 
-To emulate an ``interrupt'' or event in userspace we need blocking I/O which provides the timing for example
-when waiting for a GPIO change, doing audio or video I/O.
+To emulate an ``interrupt'' or event in userspace we use
+\textsl{blocking I/O} which provides the timing, for example, when
+waiting for a GPIO change, doing audio or video I/O.
 
-Generally any userspace program talks to the kernel via pseudo files in the \texttt{/dev} or \texttt{/sys}
-directories.
-
-
+Generally any userspace program talks to the kernel via pseudo files
+in the \texttt{/dev} or \texttt{/sys} directories.
 
 \subsection{Video camera capture (openCV)}
 \subsubsection{Ubuntu / Debian Linux systems\label{videodesk}}
@@ -432,96 +436,52 @@ SPI and I2C are only blocking for their read/write operations but they don't kno
 when new data is available at a sensor so one needs to connect the DATA-READY output
 of a sensor to a GPIO port which then feeds into blocking I/O.
 
-\subsubsection{libgpiod}
-The GPIO (of the raspberry PI) can easily be controlled via
-the \texttt{/dev} filesystem and \texttt{libgpiod}.
-
 Use the commandline tool
 \texttt{gpioinfo} to print a list of all available GPIO pins.
 
-When you use the gpiod library you:
+The GPIO (of the raspberry PI) can easily be controlled via
+the \texttt{/dev} filesystem and \texttt{libgpiod} v2. Here we use its C++ API:
 \begin{enumerate}
 \item first choose the GPIO \textsl{chip} you want to use. Raspberry PIs 1-4
-  have only one chip. The Raspberry PI 5 has 4 chips.
-  Selection can be made either by number, name or pseudo-file:
+  have only one chip. The Raspberry PI 5 has 4 chips:
 \begin{verbatim}
-  struct gpiod_chip *chip = 
-             gpiod_chip_open_by_name("gpiochip0");
+chip = std::make_shared<gpiod::chip>("/dev/gpiochip0");
 \end{verbatim}
 and then,
-\item select a pin on the chip:
+\item select a pin with \texttt{pinNo} on the chip and tell it that you want to detect events on it:
 \begin{verbatim}
-  struct gpiod_line *pinRed =
-             gpiod_chip_get_line(chip, 24);
+gpiod::line_config line_cfg;
+line_cfg.add_line_settings(
+  pinNo,
+  gpiod::line_settings()
+      .set_direction(gpiod::line::direction::INPUT)
+      .set_edge_detection(gpiod::line::edge::BOTH));
 \end{verbatim}
-\end{enumerate}
-
-\subsubsection{Output}
-Once you have a pointer to the pin you can then set its direction, for example
-as an output pin, with:
-\begin{verbatim}
-gpiod_line_request_output(pinRed, "example1", 0);
+\item Build a request which deals with the events:
+\begin{verbatim}  
+auto builder = chip->prepare_request();
+builder.set_consumer("MyConsumer");
+builder.set_line_config(line_cfg);
+request = std::make_shared<gpiod::line_request>(builder.do_request());
 \end{verbatim}
-and set its value with:
-\begin{verbatim}
-gpiod_line_set_value(pinRed, 1);
-\end{verbatim}
-
-\subsubsection{Events}
-libgpiod offers all the functionality of event processing via blocking I/O!
-Here, change in level from low to high or high
-to low unblocks an I/O operation, awakening its underlying
-thread which then one can perform a callback.
-
-To request event processing on a pin simply
-requires this single
-command:
-\begin{verbatim}
-int ret =
-   gpiod_line_request_rising_edge_events(pinSwitch, "Consumer1");
-\end{verbatim}
-This will turn the GPIO pin \texttt{pinSwitch} into an input pin and enable
-blocking I/O on this pin.
-
-Then start a thread where its worker contains:
-\begin{verbatim}
+\item Start a thread containing a \texttt{worker} which waits for events:
+\begin{verbatim}  
 void worker() {
-    while (running) {
-        constexpr struct timespec ts = { 1, 0 };
-        gpiod_line_event_wait(pinSwitch, &ts);
-        struct gpiod_line_event event;
-        gpiod_line_event_read(pinSwitch, &event);
-        event_callback();
-    }
+  running = true;
+  while (running) {
+    // blocking I/O: thread goes to sleep till an event has happened.
+    bool r = request->wait_edge_events(std::chrono::milliseconds(ISR_TIMEOUT_MS));
+    if (r) {
+      gpiod::edge_event_buffer buffer;
+      request->read_edge_events(buffer, 1);
+      // callback
+      myGpioEventCallback(buffer.get_event(0));
 }
 \end{verbatim}
-The \texttt{gpiod\_line\_event\_wait} waits for a rising edge at the GPIO
-pin, or for 1~second (+ 0\,ns), whichever is longer, and then unblocks.
-The return value is 1 if a GPIO event occurred, 0 if timeout interval
-was exceeded, and -1 in the event of an error. In production code,
-you'd need to check this return value.
-Then \texttt{gpiod\_line\_event\_read} transfers the
-kernel event to userspace and clears it out of the kernel event queue.
-It's important to do the read operation
-even if the event-struct is never used. The callback is made,
-and the loop repeats until another thread requests termination
-by setting \verb!running! to \verb!false!.
-See \url{https://github.com/berndporr/libgpiod_event_demo} for a complete example.
-
-\subsubsection{Releasing the GPIO}
-Once you are finished, release the GPIO pin with:
-\begin{verbatim}
-    gpiod_line_release(pinRed);
-\end{verbatim}
-and close the chip:
-\begin{verbatim}
-    gpiod_chip_close(chip);
-\end{verbatim}
-
-
-
-
-
+which then calls the callback \texttt{myGpioEventCallback} after a rising or falling
+edge at the GPIO pin \texttt{pinNo}.
+\end{enumerate}
+See a complete example here: \href{https://github.com/berndporr/libgpiod_event_demo}.
 
 
 \subsection{SPI}
