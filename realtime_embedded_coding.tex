@@ -25,8 +25,12 @@
 \tableofcontents
 
 \chapter{Introduction}
-
-
+This handout is about Realtime Embedded Coding under Linux
+in its userspace. A lot of applications with moderate sampling
+rates such as robots but even sound or video applications
+won't need kernel based code. In these instances the userspace
+is the best choice as it provides application safety and at the
+same time still offers realtime event handling.
 
 \begin{figure}[!hbt]
 \begin{center}
@@ -37,7 +41,6 @@
 \end{figure}
 
 \section{Event based coding in the Linux userspace}
-
 Realtime embedded coding is all about \textsl{events}.
 These can be a binary signal such as somebody opening a door or
 a sensor signalling that a sample is ready to be picked up.
@@ -675,43 +678,7 @@ gives you the temperature of the CPU.
 
 
 
-
-
-
-\subsection{Accessing physical memory locations (danger!)}
-Don't.
-In case you really need to access registers you can
-also access memory directly. This should only be used as a last resort.
-For example, setting the clock for the AD converter requires
-turning a GPIO pin into a clock output pin. This is not yet
-supported by the drivers so we need to program registers
-on the RPI.
-\begin{itemize}
-\item Linux uses virtual addresses so that a pointer won't
-point to a physical memory location. It points to three page
-tables with an offset.
-\item Special device \texttt{/dev/mem} allows access to physical
-memory.
-\item The command \textbf{mmap} provides a pointer to a physical
-address by opening \texttt{/dev/mem}.
-\item Example:
-\begin{verbatim}
-int *addr;
-if ((fd = open("/dev/mem", O_RDWR|O_SYNC)) < 0 ) {
-    printf("Error opening file. \n");
-    close(fd);
-    return (-1);
-}
-addr = (int *)mmap(0, num*STRUCT_PAGE_SIZE, PROT_READ, MAP_PRIVATE,
-            fd, 0x0000620000000000);
-printf("addr: %p \n",addr);
-printf("addr: %d \n",*addr);
-\end{verbatim}
-\item Use this with care! It's dangerous if not used properly.
-\end{itemize}
-
-
-\section{Kernel driver programming}
+\subsection{Kernel driver programming}
 You can also create your own \texttt{/dev/mydevice} in the \texttt{/dev} filesystem
 by writing a kernel driver and a matching userspace library. For
 example the USB mouse has a driver in kernel space and translates
