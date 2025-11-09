@@ -13,47 +13,47 @@
         <title>realtime_embedded_coding | Realtime embedded coding in C++ under Linux</title>
 
         
-            <link rel="icon" type="image/png" href="static/favicon.png?build_time=1762684786.047731"/>
+            <link rel="icon" type="image/png" href="static/favicon.png?build_time=1762685263.909659"/>
         
 
         
     
     
-            <link rel="stylesheet" href="static/styles.css?build_time=1762684786.047731">
+            <link rel="stylesheet" href="static/styles.css?build_time=1762685263.909659">
             
             
         
-    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1762684786.047731">
+    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1762685263.909659">
 
-    <link rel="stylesheet" href="static/print.css?build_time=1762684786.047731">
+    <link rel="stylesheet" href="static/print.css?build_time=1762685263.909659">
 
 
         
     
 			<script>
-				var chirun_static_url = new URL('static?build_time=1762684786.047731', location.href);
+				var chirun_static_url = new URL('static?build_time=1762685263.909659', location.href);
 			</script>
 
             
-                <script defer src="static/mathjax_config.js?build_time=1762684786.047731"></script>
+                <script defer src="static/mathjax_config.js?build_time=1762685263.909659"></script>
                 <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
             
 
-            <script type="module" src="static/localisation.js?build_time=1762684786.047731"></script>
+            <script type="module" src="static/localisation.js?build_time=1762685263.909659"></script>
 
-            <script defer src="static/customisation.js?build_time=1762684786.047731"></script>
+            <script defer src="static/customisation.js?build_time=1762685263.909659"></script>
 
             
 
             
         
-    <script defer src="static/code.js?build_time=1762684786.047731" type="module"></script>
-    <script defer src="static/embed_numbas.js?build_time=1762684786.047731" type="module"></script>
-    <script defer src="static/embed_qrcode.js?build_time=1762684786.047731" type="module"></script>
+    <script defer src="static/code.js?build_time=1762685263.909659" type="module"></script>
+    <script defer src="static/embed_numbas.js?build_time=1762685263.909659" type="module"></script>
+    <script defer src="static/embed_qrcode.js?build_time=1762685263.909659" type="module"></script>
 
 
         <template id="runnable-code-template">
-            <link rel="stylesheet" href="static/code.css?build_time=1762684786.047731">
+            <link rel="stylesheet" href="static/code.css?build_time=1762685263.909659">
             <div class="runnable-code-wrapper">
                 <section class="fullscreenable code">
                     <div id="code"></div>
@@ -234,7 +234,7 @@
         </template>
 
         <template id="embed-numbas-template">
-            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1762684786.047731">
+            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1762685263.909659">
             <details id="wrapper" data-completion-status="incomplete">
                 <summary>
                     <h1 id="title">Test Yourself</h1>
@@ -1141,7 +1141,7 @@
  This handout is about Realtime Embedded Coding under Linux in its userspace. A lot of applications with moderate sampling rates such as robots but even sound or video applications won’t need kernel based code. In these instances the userspace is the best choice as it provides application safety and at the same time still offers realtime event handling. 
 </p>
 <figure id="timing">
-<div class="centered"> <div class="mbox" id="a0000000003" style="width: "><img alt="\includegraphics[width=\textwidth ]{signals-timings}" src="images/img-0001.svg?build_time=1762684786.034392" style="width:469.755pt"/></div> </div>
+<div class="centered"> <div class="mbox" id="a0000000003" style="width: "><img alt="\includegraphics[width=\textwidth ]{signals-timings}" src="images/img-0001.svg?build_time=1762685263.895577" style="width:469.755pt"/></div> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">1.1</span>
@@ -1154,7 +1154,7 @@
  Realtime embedded coding is all about <i class="slshape">events</i>. These can be a binary signal such as somebody opening a door or a sensor signalling that a sample is ready to be picked up. Fig. <a class="ref" href="#timing">1.1</a> shows the basic dataflow and how event timing is established: devices by themselves have event signals such as “data ready” or “crash sensor has been triggered”. The Linux kernel receives these as interrupt callbacks. However, userspace has no direct interrupt mechanism; instead it has <i class="slshape">blocking I/O</i> where a read or write operation blocks until a kernel-side interrupt/event has happened. A blocking I/O call returning may then be translated to callbacks between classes by waking up threads. Data is transmitted back to the hardware via methods called “setters”, which change an object’s attributes and potentially do other processing. 
 </p>
 <figure id="gettersetters">
-<div class="centered"> <div class="mbox" id="a0000000005" style="width: "><img alt="\includegraphics[width=\textwidth ]{gettersetters}" src="images/img-0002.svg?build_time=1762684786.034392" style="width:469.755pt"/></div> </div>
+<div class="centered"> <div class="mbox" id="a0000000005" style="width: "><img alt="\includegraphics[width=\textwidth ]{gettersetters}" src="images/img-0002.svg?build_time=1762685263.895577" style="width:469.755pt"/></div> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">1.2</span>
@@ -1480,18 +1480,18 @@ Here the <span class="ttfamily">recv</span> command blocks until new data has ar
 </section><section class="subsection">
 <h3 id="a0000000033">2.3.4 General purpose I/O (GPIO)</h3>
 <p>
- GPIO pins are not just simple digital ports but they can be used to turn non-blocking I/O into blocking I/O, or in other words: events! SPI and I2C are only blocking for their read/write operations but they don’t know when new data is available at a sensor so one needs to connect the DATA-READY output of a sensor to a GPIO port which then feeds into blocking I/O. 
+ GPIO pins are not just simple digital ports but they can be used to detect events! These are basically falling or rising edges at a GPIO pin. GPIO is useful to turn non-blocking I/O operations into blocking ones: SPI and I2C are only blocking for their read/write operations but they don’t know when new data is available at a sensor. However, most sensors have a DATA-READY output which is then used to create events which are detected via the GPIO. 
 </p>
 <p>
 Use the commandline tool <span class="ttfamily">gpioinfo</span> to print a list of all available GPIO pins. 
 </p>
 <p>
-The GPIO (of the raspberry PI) can easily be controlled via the <span class="ttfamily">/dev</span> filesystem and <span class="ttfamily">libgpiod</span> v2. Here we use its C++ API: 
+The GPIO can easily be accessed via the <span class="ttfamily">/dev</span> filesystem and the <span class="ttfamily">libgpiod</span> v2. Here we use its C++ API: 
 </p>
 <ol class="enumerate" id="a0000000034">
 <li id="a0000000035" value="1">
 <p>
-first choose the GPIO <i class="slshape">chip</i> you want to use. Raspberry PIs 1-4 have only one chip. The Raspberry PI 5 has 4 chips: 
+First choose the GPIO <i class="slshape">chip</i> you want to use. Raspberry PIs 1-4 have only one chip. The Raspberry PI 5 has 4 chips: 
 </p>
 <pre class="verbatim">
 chip = std::make_shared&lt;gpiod::chip&gt;("/dev/gpiochip0");
@@ -1547,7 +1547,7 @@ void worker() {
 </li>
 </ol>
 <p>
- See a complete example here: <a href="https://github.com/berndporr/libgpiod_event_demo">.</a>
+ See a complete example here: <a href="https://github.com/berndporr/libgpiod_event_demo">https://github.com/berndporr/libgpiod_event_demo</a>. 
 </p>
 </section><section class="subsection">
 <h3 id="a0000000039">2.3.5 SPI</h3>
@@ -1981,7 +1981,7 @@ Callbacks are also used to signal the termination of threads, which shows again 
 Elements in Qt are <i class="slshape">Widgets</i> which can contain anything form plots, buttons or text fields. They are classes. You can define your own widgets or use ready-made ones. Realtime communication within QT happens between widgets where then one widget calls another widget, for example a button the calls the main window if a button press has happened. 
 </p>
 <figure id="qwtex">
-<div class="centered"> <div class="mbox" id="a0000000060" style="width: "><img alt="\includegraphics[width=0.5\textwidth ]{qwtex}" src="images/img-0001.png?build_time=1762684786.034392" style="width:234.8775pt"/></div> </div>
+<div class="centered"> <div class="mbox" id="a0000000060" style="width: "><img alt="\includegraphics[width=0.5\textwidth ]{qwtex}" src="images/img-0001.png?build_time=1762685263.895577" style="width:234.8775pt"/></div> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">4.1</span>
@@ -2079,7 +2079,7 @@ Note that neither the timer nor the <span class="ttfamily">update()</span> funct
 </section><!-- Latex Chapter/Part -->
 <h1 id="a0000000065">5 Realtime publisher-subscriber communication with DDS</h1>
 <figure id="dds1">
-<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{fastdds1}" src="images/img-0003.svg?build_time=1762684786.034392" style="width:469.755pt"/> </div>
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{fastdds1}" src="images/img-0003.svg?build_time=1762685263.895577" style="width:469.755pt"/> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">5.1</span>
@@ -2344,7 +2344,7 @@ lighttpd: Smaller web server with a small memory footprint. Pronounced “lighty
  Note that it’s possible to run different web servers at the same time where they then act as proxies for a central web server visible to the outside world. In particular nginx makes it very easy to achieve this. 
 </p>
 <figure id="cgi">
-<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{restdataflow}" src="images/img-0004.svg?build_time=1762684786.034392" style="width:469.755pt"/> </div>
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{restdataflow}" src="images/img-0004.svg?build_time=1762685263.895577" style="width:469.755pt"/> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">6.1</span>

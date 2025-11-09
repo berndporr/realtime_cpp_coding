@@ -431,18 +431,19 @@ Here the \texttt{recv} command blocks until new data has arrived.
 
 \subsection{General purpose I/O (GPIO)}
 GPIO pins are not just simple digital ports but they
-can be used to turn non-blocking I/O into blocking I/O, or in other words: events!
+can be used to detect events! These are basically falling or rising edges at a GPIO pin.
+GPIO is useful to turn non-blocking I/O operations into blocking ones:
 SPI and I2C are only blocking for their read/write operations but they don't know
-when new data is available at a sensor so one needs to connect the DATA-READY output
-of a sensor to a GPIO port which then feeds into blocking I/O.
+when new data is available at a sensor. However, most sensors have a DATA-READY output
+which is then used to create events which are detected via the GPIO.
 
 Use the commandline tool
 \texttt{gpioinfo} to print a list of all available GPIO pins.
 
-The GPIO (of the raspberry PI) can easily be controlled via
-the \texttt{/dev} filesystem and \texttt{libgpiod} v2. Here we use its C++ API:
+The GPIO can easily be accessed via
+the \texttt{/dev} filesystem and the \texttt{libgpiod} v2. Here we use its C++ API:
 \begin{enumerate}
-\item first choose the GPIO \textsl{chip} you want to use. Raspberry PIs 1-4
+\item First choose the GPIO \textsl{chip} you want to use. Raspberry PIs 1-4
   have only one chip. The Raspberry PI 5 has 4 chips:
 \begin{verbatim}
 chip = std::make_shared<gpiod::chip>("/dev/gpiochip0");
@@ -481,7 +482,7 @@ void worker() {
 which then calls the callback \texttt{myGpioEventCallback} after a rising or falling
 edge at the GPIO pin \texttt{pinNo}.
 \end{enumerate}
-See a complete example here: \href{https://github.com/berndporr/libgpiod_event_demo}.
+See a complete example here: \url{https://github.com/berndporr/libgpiod_event_demo}.
 
 
 \subsection{SPI}
