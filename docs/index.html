@@ -7,53 +7,53 @@
             <meta name="robots" content="noindex">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
             <meta name="author" content="Bernd Porr" />
-            <meta name="date" content="2025-11-09" />
+            <meta name="date" content="2026-05-06" />
         
 
         <title>realtime_embedded_coding | Realtime embedded coding in C++ under Linux</title>
 
         
-            <link rel="icon" type="image/png" href="static/favicon.png?build_time=1762685263.909659"/>
+            <link rel="icon" type="image/png" href="static/favicon.png?build_time=1778088132.133134"/>
         
 
         
     
     
-            <link rel="stylesheet" href="static/styles.css?build_time=1762685263.909659">
+            <link rel="stylesheet" href="static/styles.css?build_time=1778088132.133134">
             
             
         
-    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1762685263.909659">
+    <link rel="stylesheet" id="customiseCodeCSS" href="static/pygmentize.css?build_time=1778088132.133134">
 
-    <link rel="stylesheet" href="static/print.css?build_time=1762685263.909659">
+    <link rel="stylesheet" href="static/print.css?build_time=1778088132.133134">
 
 
         
     
 			<script>
-				var chirun_static_url = new URL('static?build_time=1762685263.909659', location.href);
+				var chirun_static_url = new URL('static?build_time=1778088132.133134', location.href);
 			</script>
 
             
-                <script defer src="static/mathjax_config.js?build_time=1762685263.909659"></script>
+                <script defer src="static/mathjax_config.js?build_time=1778088132.133134"></script>
                 <script type="text/javascript" id="MathJax-script" defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
             
 
-            <script type="module" src="static/localisation.js?build_time=1762685263.909659"></script>
+            <script type="module" src="static/localisation.js?build_time=1778088132.133134"></script>
 
-            <script defer src="static/customisation.js?build_time=1762685263.909659"></script>
+            <script defer src="static/customisation.js?build_time=1778088132.133134"></script>
 
             
 
             
         
-    <script defer src="static/code.js?build_time=1762685263.909659" type="module"></script>
-    <script defer src="static/embed_numbas.js?build_time=1762685263.909659" type="module"></script>
-    <script defer src="static/embed_qrcode.js?build_time=1762685263.909659" type="module"></script>
+    <script defer src="static/code.js?build_time=1778088132.133134" type="module"></script>
+    <script defer src="static/embed_numbas.js?build_time=1778088132.133134" type="module"></script>
+    <script defer src="static/embed_qrcode.js?build_time=1778088132.133134" type="module"></script>
 
 
         <template id="runnable-code-template">
-            <link rel="stylesheet" href="static/code.css?build_time=1762685263.909659">
+            <link rel="stylesheet" href="static/code.css?build_time=1778088132.133134">
             <div class="runnable-code-wrapper">
                 <section class="fullscreenable code">
                     <div id="code"></div>
@@ -234,7 +234,7 @@
         </template>
 
         <template id="embed-numbas-template">
-            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1762685263.909659">
+            <link rel="stylesheet" href="static/embed_numbas.css?build_time=1778088132.133134">
             <details id="wrapper" data-completion-status="incomplete">
                 <summary>
                     <h1 id="title">Test Yourself</h1>
@@ -1141,7 +1141,7 @@
  This handout is about Realtime Embedded Coding under Linux in its userspace. A lot of applications with moderate sampling rates such as robots but even sound or video applications won’t need kernel based code. In these instances the userspace is the best choice as it provides application safety and at the same time still offers realtime event handling. 
 </p>
 <figure id="timing">
-<div class="centered"> <div class="mbox" id="a0000000003" style="width: "><img alt="\includegraphics[width=\textwidth ]{signals-timings}" src="images/img-0001.svg?build_time=1762685263.895577" style="width:469.755pt"/></div> </div>
+<div class="centered"> <div class="mbox" id="a0000000003" style="width: "><img alt="\includegraphics[width=\textwidth ]{signals-timings}" src="images/img-0001.svg?build_time=1778088132.1253" style="width:469.755pt"/></div> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">1.1</span>
@@ -1154,7 +1154,7 @@
  Realtime embedded coding is all about <i class="slshape">events</i>. These can be a binary signal such as somebody opening a door or a sensor signalling that a sample is ready to be picked up. Fig. <a class="ref" href="#timing">1.1</a> shows the basic dataflow and how event timing is established: devices by themselves have event signals such as “data ready” or “crash sensor has been triggered”. The Linux kernel receives these as interrupt callbacks. However, userspace has no direct interrupt mechanism; instead it has <i class="slshape">blocking I/O</i> where a read or write operation blocks until a kernel-side interrupt/event has happened. A blocking I/O call returning may then be translated to callbacks between classes by waking up threads. Data is transmitted back to the hardware via methods called “setters”, which change an object’s attributes and potentially do other processing. 
 </p>
 <figure id="gettersetters">
-<div class="centered"> <div class="mbox" id="a0000000005" style="width: "><img alt="\includegraphics[width=\textwidth ]{gettersetters}" src="images/img-0002.svg?build_time=1762685263.895577" style="width:469.755pt"/></div> </div>
+<div class="centered"> <div class="mbox" id="a0000000005" style="width: "><img alt="\includegraphics[width=\textwidth ]{gettersetters}" src="images/img-0002.svg?build_time=1778088132.1253" style="width:469.755pt"/></div> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">1.2</span>
@@ -1981,7 +1981,7 @@ Callbacks are also used to signal the termination of threads, which shows again 
 Elements in Qt are <i class="slshape">Widgets</i> which can contain anything form plots, buttons or text fields. They are classes. You can define your own widgets or use ready-made ones. Realtime communication within QT happens between widgets where then one widget calls another widget, for example a button the calls the main window if a button press has happened. 
 </p>
 <figure id="qwtex">
-<div class="centered"> <div class="mbox" id="a0000000060" style="width: "><img alt="\includegraphics[width=0.5\textwidth ]{qwtex}" src="images/img-0001.png?build_time=1762685263.895577" style="width:234.8775pt"/></div> </div>
+<div class="centered"> <div class="mbox" id="a0000000060" style="width: "><img alt="\includegraphics[width=0.5\textwidth ]{qwtex}" src="images/img-0001.png?build_time=1778088132.1253" style="width:234.8775pt"/></div> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">4.1</span>
@@ -2079,7 +2079,7 @@ Note that neither the timer nor the <span class="ttfamily">update()</span> funct
 </section><!-- Latex Chapter/Part -->
 <h1 id="a0000000065">5 Realtime publisher-subscriber communication with DDS</h1>
 <figure id="dds1">
-<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{fastdds1}" src="images/img-0003.svg?build_time=1762685263.895577" style="width:469.755pt"/> </div>
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{fastdds1}" src="images/img-0003.svg?build_time=1778088132.1253" style="width:469.755pt"/> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">5.1</span>
@@ -2344,7 +2344,7 @@ lighttpd: Smaller web server with a small memory footprint. Pronounced “lighty
  Note that it’s possible to run different web servers at the same time where they then act as proxies for a central web server visible to the outside world. In particular nginx makes it very easy to achieve this. 
 </p>
 <figure id="cgi">
-<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{restdataflow}" src="images/img-0004.svg?build_time=1762685263.895577" style="width:469.755pt"/> </div>
+<div class="centered"> <img alt="\includegraphics[width=\linewidth ]{restdataflow}" src="images/img-0004.svg?build_time=1778088132.1253" style="width:469.755pt"/> </div>
 <figcaption>
 <span class="caption_title">Figure</span>
 <span class="caption_ref">6.1</span>
@@ -2547,7 +2547,7 @@ If a setter sets large buffers then it’s highly recommended to allocate the me
 
     <div id="footer-text">
         <p>Generated using <a target="_blank" href="https://chirun.org.uk">Chirun</a> v1.4.0, written by the Digital Learning Unit, School of Mathematics &amp; Statistics, Newcastle University</p>
-        <p>This page last generated: 2025-11-09</p>
+        <p>This page last generated: 2026-05-06</p>
         
         
         
